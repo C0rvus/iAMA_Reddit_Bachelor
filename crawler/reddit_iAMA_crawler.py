@@ -21,6 +21,8 @@ subreddit = r.get_subreddit("iAma")
 # Iterate every thread here
 # for submission in subreddit.get_hot(limit = 4):
 
+# com
+
 ## Testing with the Grammy Thread, because it contains lots of comments
 for submission in subreddit.get_hot(limit = 4):
 	# print (dir(submission))                                       # <<<<<<- (object)  not necessary any more.. showed the amount of possible anchorpoints for accessing data
@@ -43,8 +45,8 @@ for submission in subreddit.get_hot(limit = 4):
 
 	print ("Author: ",  submission.author)                          # <<<<<<- (string)  the authors name
 	print ("Title: ",   submission.title)                           # <<<<<<- (string)  the title of the thread
-	# print ("comments: ", submission.comments)                       # <<<<<<- (list)    the comments, which need to be iterated seperately
-	print ("num_comments: ", submission.num_comments)               # <<<<<<- (int)     the amount of comments done to this thread
+	# print ("comments: ", submission.comments)                     # <<<<<<- (list)    the comments, which need to be iterated seperately
+	print ("num_comments: ", submission.num_comments)               # <<<<<<- (int)     the amount of comments done to this thread ..... newer goes down, because deleted posts will be kept
 	print ("downs: ", submission.downs)                             # <<<<<<- (int)     the amount of downvotes to this thread
 	print ("id: ", submission.id)                                   # <<<<<<- (string)  the unique id of that thread.. extremly necessary for writing into the database
 	print ("url: ", submission.url)                                 # <<<<<<- (string)  the url to the thread
