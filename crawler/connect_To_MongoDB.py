@@ -1,66 +1,96 @@
-from pymongo import MongoClient                         # necessary to interact with MongoDB
-# TODO: Connect PRAW with this DB connection script
-# TODO: Comment all that stuff in a better way
 # TODO: Create HTTP-Server containing test site with refresh button to start PRAW-Gathering
 # TODO: Create REST-Server with FLASK for that stuf
 
-client = MongoClient                                # will be modified by connect_To_MongoDB()
-mongo_DB_Reddit = MongoClient                       # will be modified by get_DB_Instance()
-mongo_DB_Collections = ""                           # will be modified by get_DB_Collections()
-mongo_DataSet_Row = {}                              # will be modified by generate_DataSet_To_Be_Written_To_DB()
+
+from pymongo        import MongoClient                                                                                                  # necessary to interact with MongoDB
+from crawl_Threads  import crawl_Threads                                                                                                # necessary for crawling threads
+import praw
 
 
+client                              =               MongoClient('localhost', 27017)                                                     # the mongo client, necessary to connect to mongoDB
+mongo_DB_Reddit                     =               client.iAMA_Reddit                                                                  # the collection (table), in which reddit information will be stored
+mongo_DB_Test_Row                   =               {}                                                                                  # will be modified by generate_DataSet_To_Be_Written_To_DB()
 
-# <editor-fold desc="Connects to MongoDB-Server">
-# Connects to the specified MongoDB-Server
-# We can replace localhost with an IP-Adress, whenever the database runs somewhere else
-# Alternative connect method: client = MongoClient('mongodb://localhost:27017/')
-# Source: http://api.mongodb.org/python/current/tutorial.html                   @ 28.01.2016 ~ 20:15
-#
+
+reddit_Instance                     =               praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")                # main reddit functionality
+reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddit("iAma")                                                        # the subreddit, which is to be crawled
+reddit_Amount_Of_Threads_To_Crawl   =               8                                                                                   # the amount of threads during crawling
+reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_hot(limit = reddit_Amount_Of_Threads_To_Crawl)          # the used metric of crawling.. See foled comment for options
+
+# <editor-fold desc="Possible metric variants of reddit are defined inside here">
+# get_controversial
+# get_controversial_from_all
+# get_controversial_from_day
+# get_controversial_from_hour
+# get_controversial_from_month
+# get_controversial_from_week
+# get_controversial_from_year
+# get_hot
+# get_random_submission
+# get_rising
+# get_new
+# get_edited            ( << only works while logged in)
+# get_spam              ( << only works while logged in)
+# get_top
+# get_top_from_all
+# get_top_from_day
+# get_top_from_hour
+# get_top_from_month
+# get_top_from_week
+# get_top_from_year
 # </editor-fold>
-def connect_To_MongoDB():
-	global client                                   # references the global variable to make use of it locally
 
-	client = MongoClient('localhost', 27017)        # filles the global variable with corrrect values, according to the mongoDB we want to connect to
+cr_T = crawl_Threads()                              # defines the method for creation of the extra table 'arrest'
 
-# <editor-fold desc="Retrieves the data base instance "iAMA_Reddit">
-# The method below retrieves the correct database instace here "iAMA_Reddit"
-# </editor-fold>
-def get_DB_Instance():
-	global mongo_DB_Reddit                          # references the global variable to make use of it locally
 
-	mongo_DB_Reddit = client.iAMA_Reddit            # refers to the local iAMA_Reddit database and creates it if non existent
 
-# <editor-fold desc="Retrieves all collections / tables">
-# Stores all mongoDB collections (tables) into mongo_DB_Collections
-# </editor-fold>
-def get_DB_Collections():
-	global mongo_DB_Reddit                             # references the global variable to make use of it locally
-	global mongo_DB_Collections                        # references the global variable to make use of it locally
-
-	mongo_DB_Collections = mongo_DB_Reddit.collection_names()          # stores all collections / tables into that array. Necessary for crawler -> mongoDB writing checking
 
 # <editor-fold desc="Writes test data into the database iAMA_Reddit">
-# Writes generated data into all tables
+# Writes some data into the collection "example_Table"
 # </editor-fold>
-def write_DB_Test_Data():
-	global mongo_DataSet_Row                        # references the global variable to make use of it locally
-	global mongo_DB_Reddit                          # references the global variable to make use of it locally
+def test_Write_DB_Test_Data():
+	global mongo_DB_Test_Row                       # references the global variable to make use of it locally
+	global mongo_DB_Reddit                         # references the global variable to make use of it locally
 	# noinspection PyTypeChecker
 
-	mongo_DataSet_Row = dict({
-		"sepp"  :   "Hans_1",
-		"sepp2" :   "Hans_2"
+	mongo_DB_Test_Row = dict({
+		"column_1" :   "Hans_1",
+		"column_2" :   "Hans_2"
 	})
 
 	mongo_Collection_To_Be_Written_Into = mongo_DB_Reddit["example_Table"]
-	mongo_Collection_To_Be_Written_Into.insert_one(mongo_DataSet_Row)
+	mongo_Collection_To_Be_Written_Into.insert_one(mongo_DB_Test_Row)
 
 	print('Test data has been successfully written into example_Table')
 
+# <editor-fold desc="Tests, whether the reddit settings are still correct">
+# Simply fetches a few threads from within the iAMA-Subreddit and iterates over them
+# </editor-fold>
+def test_Reddit_Settings():
+	global reddit_Chosen_Subreddit                                              # references the global variable to make use of it locally
+	global reddit_Metric_Of_Crawling                                           # references the global variable to make use of it locally
+
+	for submission in reddit_Metric_Of_Crawling:
+
+		print(submission.id, submission.url)                                                    # prints the id of the iterated thread
+
+# <editor-fold desc="Crawls threads and stores them inside the mongoDB">
+# Crawls a few threads and stores them inside the mongoDB "iAMA" called colelction
+# </editor-fold>
+def crawl_Threads():
+	global mongo_DB_Reddit                                                      # references the global variable to make use of it locally
+	global reddit_Chosen_Subreddit                                              # references the global variable to make use of it locally
+
+	return cr_T.main_Method(mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling)
 
 
-connect_To_MongoDB()                                    # Connects to the mongoDB
-get_DB_Instance()                                       # Gets and declares the mongoDB-Instance
-get_DB_Collections()                                    # Gets all existent collections (necessary to skip unnecessary / redundant writes into mongoDB)
-write_DB_Test_Data()                                    # Writes test data into the database, to check whether the connection is working or not
+
+
+
+
+# test_Write_DB_Test_Data()                           # Writes test data into the database, to check whether the connection is working or not
+# test_Reddit_Settings()                              # Tests some basic reddit settings
+
+crawl_Threads()                                       # Crawls threads and writes them into the database
+
+
