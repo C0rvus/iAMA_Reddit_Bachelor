@@ -92,5 +92,3 @@ def crawl_Threads():
 # test_Reddit_Settings()                              # Tests some basic reddit settings
 
 crawl_Threads()                                       # Crawls threads and writes them into the database
-
-

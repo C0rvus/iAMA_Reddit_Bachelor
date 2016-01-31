@@ -27,7 +27,7 @@ class crawl_Threads:
 			data_To_Write_Into_DB = dict({
 				'author'        : str(submission.author),
 				'downs'         : int(downs),
-				'num_comments'  : str(submission.num_comments),
+				'num_Comments'  : str(submission.num_comments),
 				'selftext'      : str(submission.selftext),
 				'title'         : str(submission.title),
 				'total_Votes'   : int(total_Votes),
