@@ -4,7 +4,7 @@ import unicodedata                                      # necessary for converti
 
 client                              =               MongoClient('localhost', 27017)                                                     # the mongo client, necessary to connect to mongoDB
 mongo_DB_Reddit                     =               client.iAMA_Reddit
-mongo_DB_Collections                =               mongo_DB_Reddit.collection_names()
+mongo_DB_Collection                 =               mongo_DB_Reddit.collection_names()
 
 # Source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exist-in-a-list
 
@@ -17,12 +17,12 @@ mongo_DB_Collections                =               mongo_DB_Reddit.collection_n
 # TODO: Dieser Befehl ginge sicherlich schneller....
 
 # Iterate overy every single object within the mongo_DB_Collections
-for j in range (0, len(mongo_DB_Collections)):
+for j in range (0, len(mongo_DB_Collection)):
 
 	#collection_Name_Converted_To_String = unicodedata.normalize('NFKD', mongo_DB_Collections[j])
 	collection_Name_Converted_To_String = "43gy5n"
 
-	if collection_Name_Converted_To_String in mongo_DB_Collections:
+	if collection_Name_Converted_To_String in mongo_DB_Collection:
 		print("ich existiere schon !")
 		print("pruefe ob ich mich geaendert habe - zwischenzeitlich")
 

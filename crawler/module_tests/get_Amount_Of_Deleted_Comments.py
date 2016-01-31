@@ -1,0 +1,1 @@
+# TODO: try to receive the amount of deleted comments .. when we have that amount we can subtract it from the num_comments, and with this information we can check, wether comments_Collection ned too be rebuilt or not

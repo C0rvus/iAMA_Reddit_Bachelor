@@ -1,112 +1,108 @@
-# TODO: Implement posting answer mechanism by using the following tutorial: https://github.com/shantnu/RedditBot (in Part 2)
 # TODO: Get comments to work (py using that tutorial [comments are stored as tree] https://praw.readthedocs.org/en/stable/pages/comment_parsing.html
-# TODO: Parse all that stuff into the mongoDB with an appropriate logic to reduce redundancy
-# TODO: Rework data to make it all int, bool and string
-# TODO: Spezifischen Thread parsen und dort auf MoreComment-Object checken (das dort erstmal modulweise testen!)
-# TODO: IF Exist crawled Thread in DB
 
-import collections                                      # necessary for sorting dictionaries
+#   Tutorials used within this class:
+#   1. (28.01.2015 @ 12:28) - http://pythonforengineers.com/build-a-reddit-bot-part-1/
+#   2. (31.01.2016 @ 12:02) - https://www.reddit.com/r/redditdev/comments/2e2q2l/praw_downvote_count_always_zero/
 
+# necessary for sorting dictionaries
+import collections
+from datetime import datetime
 class crawl_Threads:
 	def __init__(self):
 		print ("...Initializing iAMA-Thread-Crawler...")
 
-	def main_Method(self, mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling):
-		self.is_Not_Used()                              # Removes the 'not static' warning
+	def main_Method(self, mongo_DB_Client_Instance, mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling):
+
+		# Removes the 'not static' warning
+		self.is_Not_Used()
 
 		for submission in reddit_Metric_Of_Crawling:    # Iterates of every thread found in "reddit_Metric_Of_Crwaling"
 
-			# Source        : https://www.reddit.com/r/redditdev/comments/2e2q2l/praw_downvote_count_always_zero/
-			# Accessed on   : 31.01.2016 @ 12:02
+			# Whenever the thread is already stored in mongoDB and up2date      (True)
+			if self.check_If_Coll_In_DB_Already_Exists_Up2Date(mongo_DB_Client_Instance, reddit_Instance, submission):
+				print ("++ Thread " + str(submission.id) + " already exists in mongoDB and is up2date")
 
-			ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
-			total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
-			downs = total_Votes - submission.score
+			# Whenever the thread does not exist within the mongoDB (anymore)   (False)
+			else:
+				print ("    -- Thread " + str(submission.id) + " will be created now")
 
-			# noinspection PyTypeChecker
-			data_To_Write_Into_DB = dict({
-				'author'        : str(submission.author),
-				'downs'         : int(downs),
-				'num_Comments'  : str(submission.num_comments),
-				'selftext'      : str(submission.selftext),
-				'title'         : str(submission.title),
-				'total_Votes'   : int(total_Votes),
-				'ups'           : int(submission.ups),
-				'url'           : str(submission.url)
-			})
+				# Because down votes are no accessable via reddit API, we have calculated it by our own here
+				ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
+				total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
+				downs = total_Votes - submission.score
 
-			data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))              # Sorts that dictionary alphabetically ordered
+				# noinspection PyTypeChecker
+				data_To_Write_Into_DB = dict({
+					'author'        : str(submission.author),
+					'created_utc'   : str(submission.created_utc),
+					'downs'         : int(downs),
+					'num_Comments'  : str(submission.num_comments),
+					'selftext'      : str(submission.selftext),
+					'title'         : str(submission.title),
+					#'total_Votes'   : int(total_Votes),    # not necessary to write it into the database, because we can add 'ups' and 'downs' ourselfes
+					'ups'           : int(submission.ups)   #,
+					#'url'           : str(submission.url)  # not necessary to crawl that url, because we can build it by using the id
+				})
 
-			collection = mongo_DB_Reddit[str(submission.id)]
-			collection.insert_one(data_To_Write_Into_DB)             # write it now
-
-		#Tutorials used:
-	#   1. (28.01.2015 @ 12:28) - http://pythonforengineers.com/build-a-reddit-bot-part-1/
-
-
-
-
+				# Sorts that dictionary alphabetically ordered
+				data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
 
 
+				temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
+				temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
+				mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
 
-	# Iterate every thread here
-	# for submission in subreddit.get_hot(limit = 4):
+				# Writes the crawled information into the mongoDB
+				collection = mongo_DB_Reddit[str(submission.id)]
 
-	# com
+				# Write it now !
+				collection.insert_one(data_To_Write_Into_DB)
 
-	## Testing with the Grammy Thread, because it contains lots of comments
-	#
-	# print (dir(submission))                                       # <<<<<<- (object)  not necessary any more.. showed the amount of possible anchorpoints for accessing data
-
-	# print ("Approved_by: ", submission.approved_by)               # <<<<<<- (object)  not necessary to be known by us.
-	# print ("Author_flair_text: ", submission.author_flair_text)   # <<<<<<- (object)  not necessary to be known by us.
-	# print ("Clicked: ", submission.clicked)                       # <<<<<<- (bool)    not necessary because this will be handled via javascript later on
-	# print ("domain: ", submission.domain)                         # <<<<<<- (string)  not necessary because domain is always iAMA
-	# print ("from_api_response: ", submission.from_api_response)   # <<<<<<- (?)       not necessary because of error message
-	# print ("saved: ", submission.saved)                           # <<<<<<- (bool)    retrieves boolean whether it is saved under the used user_agent
-	# print ("upvote: ", submission.upvote)                         # <<<<<<- (?)       not necessary because of error message
-	# print ("permalink: ", submission.permalink)                   # <<<<<<- (string)  not necessary because it's the same as url
-	# print ("user_reports: ", submission.user_reports)             # <<<<<<- (array)   not necessary because it returns an empty list
-	# print ("sticky: ", submission.sticky)                         # <<<<<<- (?)       not necessary because of error message
-	# print ("thumbnail: ", submission.thumbnail)                   # <<<<<<- (object)  not necessary because it returns 'self'
-	# print ("visited: ", submission.visited)                       # <<<<<<- (bool)    not necessary because this will be handled via javascript later on
-	# print ("vote: ", submission.vote)                             # <<<<<<- (?)       not necessary because of error message
-
-
-
-
-
-
-	# expands all (!!!) comments.. takes about 5 minutes for 4 threads
-	#submission.replace_more_comments(limit=None, threshold=0)
-	#all_comments = submission.comments
-
-
-
-
-	# # Iterates every top comment
-	# for idx, val in enumerate(submission.comments):
-	# 	print (idx, val.id)
-	# 	print (idx, val.name)
-	# 	print (idx, val.parent_id)
-	#
-	# 	print ("AUSGABE TYPE")
-	# 	print (idx, type(val))
-	#
-	# 	print (idx, val.author)             # Funzt ned, wenn man auf ein "More Comments" object stoesst !!!
-	# 	print (idx, val.downs)
-	# 	print (idx, val.score)
-	# 	print (idx, val.created_utc)
-	# 	print (idx, val.body)                               # <<<<<<- (string)  the full comment post
-	# 	# print (idx, val.json_dict)
-	# 	# print (idx, dir(val))
-	#
-	#
-	# 	#print (val.replies) #<<< contains subobjects, which needs to be parsed additionally
-	# 	print ("------------------\n")
-
+	# Necessary to remove static warning in __init__ method
 	def is_Not_Used(self):                                                  # Necessary to remove 'not static' warning
 		pass
 
+	# Checks whether a thread already exists within the database
+	def check_If_Coll_In_DB_Already_Exists_Up2Date(self, mongo_DB_Client_Instance, reddit_Instance, submission):
+		# Had to use "self" here to circumvent the "may not be static" warning
+		self
 
+		temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
+		temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
 
+		print (submission.id, temp_Submission_Creation_Year)
+
+		mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
+
+		mongo_DB_Collection = mongo_DB_Reddit.collection_names()
+
+		# If it already exists, check whether it is up to date or not!
+		if (str(submission.id)) in mongo_DB_Collection:
+
+			# Select the appropriate collection within the database
+			collection = mongo_DB_Reddit[str(submission.id)]
+			# And store the selection in a cursor
+			cursor = collection.find()
+
+			# Because down votes are no accessable via reddit API, we have calculated it by our own here
+			ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
+			total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
+
+			# Check various details to validate wether there is a need to recreate that collection or not
+			if ( cursor[0].get("author") != str(submission.author) ) or ( cursor[0].get("num_Comments") != str(submission.num_comments) ) or ( cursor[0].get("selftext") != str(submission.selftext) ) or ( cursor[0].get("title") != str(submission.title) ) or ( cursor[0].get("total_Votes") != int(total_Votes) ) or ( cursor[0].get("ups") != int(submission.ups) ) or ( cursor[0].get("url") != str(submission.url) ):
+
+				# Delete that collection so that it gets recreated again
+				mongo_DB_Reddit.drop_collection(str(submission.id))
+
+				print ("--- Thread " + str(submission.id) + " was not up2date and therefore has been dropped")
+
+				# Because the information in the database were old we dropped it and therefore we return False
+				return False
+
+			# Whenever the collection already exists and it is already up to date
+			else :
+				return True
+
+		# Whenever the collection does not yet exist
+		else:
+			return False

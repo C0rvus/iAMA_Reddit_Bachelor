@@ -37,7 +37,7 @@ for idx, val in enumerate(flat_comments):
 	returned_JSON_Data = dict({
 		'author' : str(val.author),
 		'body' : str(val.body),
-		'created_utc' : int(val.created_utc),
+		'created_utc' : str(val.created_utc),
 	    'name' : str(val.name),
 	    'parent_id': str(val.parent_id),
 	    'score' : int(val.score)

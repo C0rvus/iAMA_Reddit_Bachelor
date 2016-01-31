@@ -1,21 +1,27 @@
 # TODO: Create HTTP-Server containing test site with refresh button to start PRAW-Gathering
 # TODO: Create REST-Server with FLASK for that stuf
 
+# TODO: Extra DB fuer REQUESTS
+# TODO: Extra DB fuer Commentare
+# TODO: Extra DB fuer Requests aus dem Jahre 2012, etc.. (hierbei beim Parsen die Zeit umwandeln..)
+
+# TODO: num_comments ist die einzige int die konstant ist
+#       Hierbei schwierig, weil mal steht [AMA Request] mal AMA Request da..
 
 from pymongo        import MongoClient                                                                                                  # necessary to interact with MongoDB
 from crawl_Threads  import crawl_Threads                                                                                                # necessary for crawling threads
-import praw
+import praw                                                                                                                             # necessary for praw usage
 
 
-client                              =               MongoClient('localhost', 27017)                                                     # the mongo client, necessary to connect to mongoDB
-mongo_DB_Reddit                     =               client.iAMA_Reddit                                                                  # the collection (table), in which reddit information will be stored
+mongo_DB_Client_Instance            =               MongoClient('localhost', 27017)                                                     # the mongo client, necessary to connect to mongoDB
+mongo_DB_Reddit                     =               mongo_DB_Client_Instance.iAMA_Reddit                                                                  # the collection (table), in which reddit information will be stored
 mongo_DB_Test_Row                   =               {}                                                                                  # will be modified by generate_DataSet_To_Be_Written_To_DB()
 
 
 reddit_Instance                     =               praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")                # main reddit functionality
-reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddit("iAma")                                                        # the subreddit, which is to be crawled
-reddit_Amount_Of_Threads_To_Crawl   =               8                                                                                   # the amount of threads during crawling
-reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_hot(limit = reddit_Amount_Of_Threads_To_Crawl)          # the used metric of crawling.. See foled comment for options
+reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddit("iAma")                                               # the subreddit, which is to be crawled
+reddit_Amount_Of_Threads_To_Crawl   =               500000                                                                                 # the amount of threads during crawling
+reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_top_from_all(limit = reddit_Amount_Of_Threads_To_Crawl)          # the used metric of crawling.. See foled comment for options
 
 # <editor-fold desc="Possible metric variants of reddit are defined inside here">
 # get_controversial
@@ -40,9 +46,7 @@ reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_
 # get_top_from_year
 # </editor-fold>
 
-cr_T = crawl_Threads()                              # defines the method for creation of the extra table 'arrest'
-
-
+cr_T = crawl_Threads()                                                                                                                  # defines the method for crawling of tables
 
 
 # <editor-fold desc="Writes test data into the database iAMA_Reddit">
@@ -81,10 +85,7 @@ def crawl_Threads():
 	global mongo_DB_Reddit                                                      # references the global variable to make use of it locally
 	global reddit_Chosen_Subreddit                                              # references the global variable to make use of it locally
 
-	return cr_T.main_Method(mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling)
-
-
-
+	return cr_T.main_Method(mongo_DB_Client_Instance, mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling)
 
 
 
