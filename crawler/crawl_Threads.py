@@ -11,7 +11,8 @@ class crawl_Threads:
 	def __init__(self):
 		print ("...Initializing iAMA-Thread-Crawler...")
 
-	def main_Method(self, mongo_DB_Client_Instance, mongo_DB_Reddit, reddit_Instance, reddit_Metric_Of_Crawling):
+	# Crawls thread data, checks whether it has already been crawled / it is up to date and acts appropriately
+	def main_Method(self, mongo_DB_Client_Instance, reddit_Instance, reddit_Metric_Of_Crawling):
 
 		# Removes the 'not static' warning
 		self.is_Not_Used()
@@ -47,9 +48,11 @@ class crawl_Threads:
 				# Sorts that dictionary alphabetically ordered
 				data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
 
-
+				# Converts the unix utc_time into a date format and converts it to string afterwards
 				temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
 				temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
+
+				# This method says to look into the appropriate database, depending on the year the thread was created
 				mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
 
 				# Writes the crawled information into the mongoDB
@@ -67,13 +70,16 @@ class crawl_Threads:
 		# Had to use "self" here to circumvent the "may not be static" warning
 		self
 
+		# Converts the unix utc_time into a date format and converts it to string afterwards
 		temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
 		temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
 
 		print (submission.id, temp_Submission_Creation_Year)
 
+		# This method says to look into the appropriate database, depending on the year the thread was created
 		mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
 
+		# Get all collections within that database
 		mongo_DB_Collection = mongo_DB_Reddit.collection_names()
 
 		# If it already exists, check whether it is up to date or not!
