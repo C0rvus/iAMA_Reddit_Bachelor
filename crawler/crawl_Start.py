@@ -1,9 +1,10 @@
 # TODO: Create HTTP-Server containing test site with refresh button to start PRAW-Gathering
 # TODO: Create REST-Server with FLASK for that stuf
 
-# TODO: Extra DB fuer REQUESTS
 # TODO: Extra DB fuer Commentare
-# TODO: Extra DB fuer Requests aus dem Jahre 2012, etc.. (hierbei beim Parsen die Zeit umwandeln..)
+
+# Selftext bei Threads ist abgeschnitten !
+
 #       Hierbei schwierig, weil mal steht [AMA Request] mal AMA Request da..
 # !!!!!!!!!!! man muss sich authenticaten, dann kriegt man alles richtig !!!!!
 # https://www.reddit.com/r/redditdev/comments/3bit3y/prawoauth_how_do_i_make_an_automated_bot/
