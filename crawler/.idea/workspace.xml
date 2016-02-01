@@ -16,12 +16,13 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_crawler.coverage" NAME="reddit_iAMA_crawler Coverage Results" MODIFIED="1453998765296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$test.coverage" NAME="test Coverage Results" MODIFIED="1454361691575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="T:/getRedditDataset-master/getRedditDataset-master" />
-    <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454363720004" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
+    <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454364783205" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_Single_Thread_Crawler.coverage" NAME="reddit_iAMA_Single_Thread_Crawler Coverage Results" MODIFIED="1454179180170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_pyCharm_Settings" />
     <SUITE FILE_PATH="coverage/crawler$check_If_Coll_Already_Exists.coverage" NAME="check_If_Coll_Already_Exists Coverage Results" MODIFIED="1454251228438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Start.coverage" NAME="crawl_Start Coverage Results" MODIFIED="1454360857706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$connect_To_MongoDB.coverage" NAME="connect_To_MongoDB Coverage Results" MODIFIED="1454255304044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$get_First_Comment_UTC.coverage" NAME="get_First_Comment_UTC Coverage Results" MODIFIED="1454261523993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
+    <SUITE FILE_PATH="coverage/crawler$timestamp_github.coverage" NAME="timestamp_github Coverage Results" MODIFIED="1454364152459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -60,9 +61,35 @@
       <file leaf-file-name="time_Search.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38141027">
-              <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.02724359">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="timestamp_github.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module_tests/timestamp_github.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+              <folding>
+                <element signature="e#17#32#0" expanded="true" />
+                <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
+                <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
+                <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
+                <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
+                <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
+                <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
+                <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
+                <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
+                <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
+                <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
+                <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
+                <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
+                <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
+                <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -158,6 +185,7 @@
         <option value="$PROJECT_DIR$/crawl_Start.py" />
         <option value="T:/getRedditDataset-master/getRedditDataset-master/redditDataset.py" />
         <option value="T:/getRedditDataset-master/getRedditDataset-master/redditDB.py" />
+        <option value="$PROJECT_DIR$/module_tests/timestamp_github.py" />
         <option value="$PROJECT_DIR$/module_tests/time_Search.py" />
       </list>
     </option>
@@ -273,24 +301,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.time_Search">
-    <configuration default="false" name="connect_To_MongoDB" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="crawler" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/connect_To_MongoDB.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="get_First_Comment_UTC" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -359,6 +369,24 @@
       <module name="crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module_tests/time_Search.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="timestamp_github" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module_tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="crawler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module_tests/timestamp_github.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -557,19 +585,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.connect_To_MongoDB" />
-      <item index="1" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
-      <item index="2" class="java.lang.String" itemvalue="Python.crawl_Start" />
-      <item index="3" class="java.lang.String" itemvalue="Python.test" />
-      <item index="4" class="java.lang.String" itemvalue="Python.time_Search" />
+      <item index="0" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
+      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Start" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.time_Search" />
+      <item index="4" class="java.lang.String" itemvalue="Python.timestamp_github" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.time_Search" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.crawl_Start" />
-        <item index="3" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
-        <item index="4" class="java.lang.String" itemvalue="Python.connect_To_MongoDB" />
+        <item index="1" class="java.lang.String" itemvalue="Python.timestamp_github" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.crawl_Start" />
+        <item index="4" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
       </list>
     </recent_temporary>
   </component>
@@ -878,10 +906,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/timestamp_github.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding>
+            <element signature="e#17#32#0" expanded="true" />
+            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
+            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
+            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
+            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
+            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
+            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
+            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
+            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
+            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
+            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
+            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
+            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
+            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
+            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38141027">
-          <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.02724359">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
