@@ -2,8 +2,11 @@
 # TODO: Create REST-Server with FLASK for that stuf
 
 # TODO: Extra DB fuer Commentare
-
-# Selftext bei Threads ist abgeschnitten !
+# TODO: All after Threads X : https://www.reddit.com/r/redditdev/comments/1uwg82/what_is_the_problem_of_praw/
+# https://stackoverflow.com/questions/31000892/reddit-search-api-not-giving-all-results                  <<<<<<<<<<<<
+# https://unsupervisedlearning.wordpress.com/2012/08/26/weekend-project-reddit-comment-scraper-in-python/
+# https://redditjs.com/r/redditdev/comments/2o7y7d/praw_getting_all_submissions_to_a_subreddit/
+# https://github.com/arimorcos/getRedditDataset                                                         <<<<<<<<<<<<<<<
 
 #       Hierbei schwierig, weil mal steht [AMA Request] mal AMA Request da..
 # !!!!!!!!!!! man muss sich authenticaten, dann kriegt man alles richtig !!!!!
@@ -11,6 +14,7 @@
 # fuzzed ints (spam prevention):  https://praw.readthedocs.org/en/latest/pages/faq.html#why-does-the-karma-change-from-run-to-run
 
 # TODO: num_comments ist die einzige int die konstant ist (https://www.reddit.com/r/redditdev/comments/3tgmm9/reddit_api_seemingly_very_inconsistent/)
+# TODO: von total comments, die amount of deleted abziehen == Anzahl von allen Comments in der DB bei entsprechender Collection?
 # http://minimaxir.com/2015/10/reddit-bigquery/
 
 from pymongo        import MongoClient                                                                                                  # necessary to interact with MongoDB
@@ -25,8 +29,8 @@ mongo_DB_Test_Row                   =               {}                          
 
 reddit_Instance                     =               praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")                # main reddit functionality
 reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddit("iAma")                                               # the subreddit, which is to be crawled
-reddit_Amount_Of_Threads_To_Crawl   =               500000                                                                              # the amount of threads during crawling
-reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_top_from_all(limit = reddit_Amount_Of_Threads_To_Crawl) # the used metric of crawling.. See foled comment for options
+reddit_Amount_Of_Threads_To_Crawl   =               1000                                                                              # the amount of threads during crawling (Maximum is 1000)
+reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_top_from_year(limit = reddit_Amount_Of_Threads_To_Crawl) # the used metric of crawling.. See foled comment for options
 
 # <editor-fold desc="Possible metric variants of reddit are defined inside here">
 # get_controversial
@@ -38,7 +42,7 @@ reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_
 # get_controversial_from_year
 # get_hot
 # get_random_submission
-# get_rising
+# get_rising            ( << only gets the first rising one not more)
 # get_new
 # get_edited            ( << only works while logged in)
 # get_spam              ( << only works while logged in)
