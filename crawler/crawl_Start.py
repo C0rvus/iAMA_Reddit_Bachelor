@@ -30,7 +30,7 @@ mongo_DB_Test_Row                   =               {}                          
 reddit_Instance                     =               praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")                # main reddit functionality
 reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddit("iAma")                                               # the subreddit, which is to be crawled
 reddit_Amount_Of_Threads_To_Crawl   =               1000                                                                              # the amount of threads during crawling (Maximum is 1000)
-reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_top_from_year(limit = reddit_Amount_Of_Threads_To_Crawl) # the used metric of crawling.. See foled comment for options
+reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_new(limit = reddit_Amount_Of_Threads_To_Crawl) # the used metric of crawling.. See foled comment for options
 
 # <editor-fold desc="Possible metric variants of reddit are defined inside here">
 # get_controversial
