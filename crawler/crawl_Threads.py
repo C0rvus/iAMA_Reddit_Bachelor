@@ -1,7 +1,7 @@
 # TODO: Get comments to work (py using that tutorial [comments are stored as tree] https://praw.readthedocs.org/en/stable/pages/comment_parsing.html
 
 #   Tutorials used within this class:
-#   1. (28.01.2015 @ 12:28) - http://pythonforengineers.com/build-a-reddit-bot-part-1/
+#   1. (28.01.2016 @ 12:28) - http://pythonforengineers.com/build-a-reddit-bot-part-1/
 #   2. (31.01.2016 @ 12:02) - https://www.reddit.com/r/redditdev/comments/2e2q2l/praw_downvote_count_always_zero/
 
 # necessary for sorting dictionaries
