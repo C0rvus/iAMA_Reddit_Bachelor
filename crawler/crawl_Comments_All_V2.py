@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 mongo_DB_Client_Instance            =               MongoClient('localhost', 27017)                                                     # the mongo client, necessary to connect to mongoDB
 reddit_Instance                     =               praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")                # main reddit functionality
 
-# TODO: IM kleineren Intervall (12h) nochmal drüber gehen mit höherem limit
-
+# TODO: Better checking for comments whenever they have to be updated
+# TODO: Crawling for new comments in normal standard crawling routine
 
 #   Tutorials used within this class:
 #   1. (06.02.2016 @ 15:23) - http://www.esqsoft.com/javascript_examples/date-to-epoch.htm
@@ -29,56 +29,53 @@ x                   = 1243469026            # Starting time of the first iAMA po
 y                   = int(round(time.mktime((datetime.fromtimestamp(x) + timedelta(hours=hours_To_Move_On)).timetuple())))
 
 
-def crawlwholedb():
+def crawl_Whole_Reddit_For_Comments():
 	global x, y
 
 	# added_8_Hours_To_X = datetime.fromtimestamp(x) + timedelta(hours=8)     # Adds 4 hours to epoch time and converts it to string (2008-02-01 20:12:16)
 	# y = time.mktime(added_8_Hours_To_X.timetuple())                                     # Converts the string back to epoch time
 
-	posts = reddit_Instance.search('timestamp:' + str(x) + '..' + str(y), subreddit='iAMA', sort="new", limit=100, syntax="cloudsearch")
+	posts = reddit_Instance.search('timestamp:' + str(x) + '..' + str(y), subreddit='iAMA', sort="new", limit=200, syntax="cloudsearch")
 	for submission in posts:
 		# print (submission.id, submission.created_utc, datetime.fromtimestamp(submission.created_utc))
 
 		if check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
-			print ("++ Thread " + str(submission.id) + " already exists in mongoDB and is up2date")
+			print ("++ Comments for " + str(submission.id) + " already exist in mongoDB and is up2date")
 
 			# Whenever the thread does not exist within the mongoDB (anymore)   (False)
 		else:
-			print ("    -- Thread " + str(submission.id) + " will be created now")
+			print ("    -- Comments for " + str(submission.id) + " will be created now")
 
-			# Because down votes are no accessable via reddit API, we have calculated it by our own here
-			ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
-			total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
-			downs = total_Votes - submission.score
+			submission.replace_more_comments(limit=None, threshold=0)
 
-			# noinspection PyTypeChecker
-			data_To_Write_Into_DB = dict({
-				'author'        : str(submission.author),
-				'created_utc'   : str(submission.created_utc),
-				'downs'         : int(downs),
-				'num_Comments'  : str(submission.num_comments),
-				'selftext'      : str(submission.selftext),
-				'title'         : str(submission.title),
-				#'total_Votes'   : int(total_Votes),    # not necessary to write it into the database, because we can add 'ups' and 'downs' ourselfes
-				'ups'           : int(submission.ups)   #,
-				#'url'           : str(submission.url)  # not necessary to crawl that url, because we can build it by using the id
-			})
+			flat_comments = praw.helpers.flatten_tree(submission.comments)
 
-			# Sorts that dictionary alphabetically ordered
-			data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
+			for idx, val in enumerate(flat_comments):
 
-			# Converts the unix utc_time into a date format and converts it to string afterwards
-			temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
-			temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
+				# noinspection PyTypeChecker
+				data_To_Write_Into_DB = dict({
+					'author'        : str(val.author),
+					'body'          : str(val.body),
+					'created_utc'   : str(val.created_utc),
+	                'name'          : str(val.name),
+	                'parent_id'     : str(val.parent_id),
+	                'ups'           : int(val.ups)
+				})
 
-			# This method says to look into the appropriate database, depending on the year the thread was created
-			mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
+				data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))              # Sorts that dictionary alphabetically ordered
 
-			# Writes the crawled information into the mongoDB
-			collection = mongo_DB_Reddit[str(submission.id)]
+				# Converts the unix utc_time into a date format and converts it to string afterwards
+				temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
+				temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
 
-			# Write it now !
-			collection.insert_one(data_To_Write_Into_DB)
+				# This method says to look into the appropriate database, depending on the year the thread was created
+				mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_Submission_Creation_Year]
+
+				# Writes the crawled information into the mongoDB
+				collection = mongo_DB_Reddit[str(submission.id)]
+
+				# Write it now !
+				collection.insert_one(data_To_Write_Into_DB)
 
 	print ("------------ completed crawling data for " + str(hours_To_Move_On) + " hours.. Continuing to the next time frame now")
 
@@ -96,7 +93,7 @@ def crawlwholedb():
 
 	# Continue crawling
 	else:
-		crawlwholedb() # with locally defined x it won't work i think
+		crawl_Whole_Reddit_For_Comments() # with locally defined x it won't work i think
 
 
 def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
@@ -110,7 +107,7 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 	temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
 
 	# This method says to look into the appropriate database, depending on the year the thread was created
-	mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
+	mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_Submission_Creation_Year]
 
 	# Get all collections within that database
 	mongo_DB_Collection = mongo_DB_Reddit.collection_names()
@@ -118,37 +115,37 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 	# If it already exists, check whether it is up to date or not!
 	if (str(submission.id)) in mongo_DB_Collection:
 
-		# Select the appropriate collection within the database
-		collection = mongo_DB_Reddit[str(submission.id)]
-		# And store the selection in a cursor
-		cursor = collection.find()
-
-		# Check various details to validate wether there is a need to recreate that collection or not
-		if ( cursor[0].get("author") != str(submission.author) ) \
-				or ( cursor[0].get("num_Comments") != str(submission.num_comments) ) \
-				or ( cursor[0].get("selftext") != str(submission.selftext) ) \
-				or ( cursor[0].get("title") != str(submission.title) ) \
-				or ( cursor[0].get("ups") + tolerance_Factor < int(submission.ups)) \
-				or ( cursor[0].get("ups") - tolerance_Factor > int(submission.ups)) \
-				:
-			# Delete that collection so that it gets recreated again
-			mongo_DB_Reddit.drop_collection(str(submission.id))
-
-			print ("--- Thread " + str(submission.id) + " was not up2date and therefore has been dropped")
-
-			# Because the information in the database were old we dropped it and therefore we return False
-			return False
-
-		# Whenever the collection already exists and it is already up to date
-		else :
-			return True
+		# # Select the appropriate collection within the database
+		# collection = mongo_DB_Reddit[str(submission.id)]
+		# # And store the selection in a cursor
+		# cursor = collection.find()
+		#
+		# # Check various details to validate wether there is a need to recreate that collection or not
+		# if ( cursor[0].get("author") != str(submission.author) ) \
+		# 		or ( cursor[0].get("num_Comments") != str(submission.num_comments) ) \
+		# 		or ( cursor[0].get("selftext") != str(submission.selftext) ) \
+		# 		or ( cursor[0].get("title") != str(submission.title) ) \
+		# 		or ( cursor[0].get("ups") + tolerance_Factor < int(submission.ups)) \
+		# 		or ( cursor[0].get("ups") - tolerance_Factor > int(submission.ups)) \
+		# 		:
+		# 	# Delete that collection so that it gets recreated again
+		# 	mongo_DB_Reddit.drop_collection(str(submission.id))
+		#
+		# 	print ("--- Thread " + str(submission.id) + " was not up2date and therefore has been dropped")
+		#
+		# 	# Because the information in the database were old we dropped it and therefore we return False
+		# 	return False
+		#
+		# # Whenever the collection already exists and it is already up to date
+		# else :
+		return True
 
 	# Whenever the collection does not yet exist
 	else:
 		return False
 
 
-crawlwholedb()
+crawl_Whole_Reddit_For_Comments()
 
 
 
