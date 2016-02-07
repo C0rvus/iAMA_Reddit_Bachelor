@@ -14,12 +14,13 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/crawler$crawl_Threads_All.coverage" NAME="crawl_Threads_All Coverage Results" MODIFIED="1454859771987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_crawler.coverage" NAME="reddit_iAMA_crawler Coverage Results" MODIFIED="1453998765296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$test.coverage" NAME="test Coverage Results" MODIFIED="1454361691575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="T:/getRedditDataset-master/getRedditDataset-master" />
     <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454776706556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_Single_Thread_Crawler.coverage" NAME="reddit_iAMA_Single_Thread_Crawler Coverage Results" MODIFIED="1454179180170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_pyCharm_Settings" />
     <SUITE FILE_PATH="coverage/crawler$check_If_Coll_Already_Exists.coverage" NAME="check_If_Coll_Already_Exists Coverage Results" MODIFIED="1454251228438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
-    <SUITE FILE_PATH="coverage/crawler$crawl_Start.coverage" NAME="crawl_Start Coverage Results" MODIFIED="1454771488950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crawler$crawl_Start.coverage" NAME="crawl_Start Coverage Results" MODIFIED="1454858441636" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$connect_To_MongoDB.coverage" NAME="connect_To_MongoDB Coverage Results" MODIFIED="1454255304044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$get_First_Comment_UTC.coverage" NAME="get_First_Comment_UTC Coverage Results" MODIFIED="1454261523993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$timestamp_github.coverage" NAME="timestamp_github Coverage Results" MODIFIED="1454364152459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
@@ -40,45 +41,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="crawl_Start.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/crawl_Start.py">
+      <file leaf-file-name="crawl_Threads_All.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/crawl_Threads_All.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
+              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
               <folding>
-                <element signature="e#1440#1612#0" expanded="true" />
-                <element signature="e#4116#4185#0" expanded="false" />
-                <element signature="e#4290#4838#0" expanded="false" />
-                <element signature="e#4840#4915#0" expanded="false" />
-                <element signature="e#5047#5495#0" expanded="false" />
-                <element signature="e#5495#5567#0" expanded="false" />
-                <element signature="e#5691#5784#0" expanded="false" />
+                <element signature="e#0#30#0" expanded="true" />
+                <element signature="e#1311#1362#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="time_Search.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
+      <file leaf-file-name="get_Amount_Of_Deleted_Comments.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module_tests/get_Amount_Of_Deleted_Comments.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5425532">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#17#0" expanded="true" />
-                <element signature="e#820#871#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="190" selection-start-line="0" selection-start-column="190" selection-end-line="0" selection-end-column="190" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_First_Comment_UTC.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
+      <file leaf-file-name="check_If_Coll_Already_Exists.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="-0.6930894">
+              <caret line="10" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -87,11 +78,10 @@
         <entry file="file://$PROJECT_DIR$/crawl_Threads.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
+              <caret line="7" column="18" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="18" />
               <folding>
-                <element signature="e#427#445#0" expanded="true" />
-                <element signature="e#520#568#0" expanded="false" />
-                <element signature="e#3348#3352#0" expanded="false" />
+                <element signature="e#3313#5414#0" expanded="false" />
+                <element signature="e#5588#5592#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -120,9 +110,10 @@
         <option value="T:/getRedditDataset-master/getRedditDataset-master/redditDataset.py" />
         <option value="T:/getRedditDataset-master/getRedditDataset-master/redditDB.py" />
         <option value="$PROJECT_DIR$/module_tests/timestamp_github.py" />
-        <option value="$PROJECT_DIR$/crawl_Start.py" />
-        <option value="$PROJECT_DIR$/crawl_Threads.py" />
         <option value="$PROJECT_DIR$/module_tests/time_Search.py" />
+        <option value="$PROJECT_DIR$/crawl_Threads.py" />
+        <option value="$PROJECT_DIR$/crawl_Start.py" />
+        <option value="$PROJECT_DIR$/crawl_Threads_All.py" />
       </list>
     </option>
   </component>
@@ -236,25 +227,7 @@
       <recent name="Z:\iAMA_Reddit_Bachelor\crawler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.time_Search">
-    <configuration default="false" name="get_First_Comment_UTC" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module_tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="crawler" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.crawl_Threads_All">
     <configuration default="false" name="crawl_Start" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -323,6 +296,24 @@
       <module name="crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module_tests/timestamp_github.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="crawl_Threads_All" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="crawler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/crawl_Threads_All.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -521,19 +512,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
-      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Start" />
-      <item index="2" class="java.lang.String" itemvalue="Python.test" />
-      <item index="3" class="java.lang.String" itemvalue="Python.time_Search" />
-      <item index="4" class="java.lang.String" itemvalue="Python.timestamp_github" />
+      <item index="0" class="java.lang.String" itemvalue="Python.crawl_Start" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test" />
+      <item index="2" class="java.lang.String" itemvalue="Python.time_Search" />
+      <item index="3" class="java.lang.String" itemvalue="Python.timestamp_github" />
+      <item index="4" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.time_Search" />
+        <item index="0" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
         <item index="1" class="java.lang.String" itemvalue="Python.crawl_Start" />
-        <item index="2" class="java.lang.String" itemvalue="Python.timestamp_github" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test" />
-        <item index="4" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
+        <item index="2" class="java.lang.String" itemvalue="Python.time_Search" />
+        <item index="3" class="java.lang.String" itemvalue="Python.timestamp_github" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -563,13 +554,13 @@
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1076759" sideWeight="0.4952251" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18123667" sideWeight="0.4952251" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13486141" sideWeight="0.50477487" order="3" side_tool="false" content_ui="tabs" x="114" y="98" width="234" height="733" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3131202" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32855567" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3472988" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42668137" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26343518" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -633,26 +624,63 @@
     <entry file="file://$PROJECT_DIR$/crawl_Start.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="97" column="97" selection-start-line="97" selection-start-column="97" selection-end-line="97" selection-end-column="97" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
+    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <caret line="16" column="62" selection-start-line="16" selection-start-column="62" selection-end-line="16" selection-end-column="62" />
           <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#820#871#0" expanded="false" />
+            <element signature="e#0#11#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawl_Threads.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="131" column="85" selection-start-line="131" selection-start-column="85" selection-end-line="131" selection-end-column="85" />
+          <folding>
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawl_Threads_All.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#1311#1362#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawl_Start.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#1440#1612#0" expanded="true" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -661,23 +689,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#32#0" expanded="true" />
-            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
-            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
-            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
-            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -686,7 +697,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -696,9 +707,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -709,23 +719,12 @@
           <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#820#871#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -734,23 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#32#0" expanded="true" />
-            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
-            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
-            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
-            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -759,7 +741,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -769,9 +751,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -782,23 +763,12 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#820#871#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -807,23 +777,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#32#0" expanded="true" />
-            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
-            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
-            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
-            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -832,7 +785,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -842,9 +795,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -855,23 +807,12 @@
           <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="95" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#820#871#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -880,23 +821,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#32#0" expanded="true" />
-            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
-            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
-            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
-            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -905,7 +829,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -915,9 +839,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -928,12 +851,12 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -943,7 +866,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -953,9 +876,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -966,12 +888,12 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -981,7 +903,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -991,9 +913,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1047,66 +968,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/get_Amount_Of_Deleted_Comments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="190" selection-start-line="0" selection-start-column="190" selection-end-line="0" selection-end-column="190" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2652106">
-          <caret line="10" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="74" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module_tests/timestamp_github.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.030141843">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#32#0" expanded="true" />
-            <marker date="1454364116910" expanded="true" signature="2747:2842" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="2933:2973" placeholder="SELECT idstr..posts..." />
-            <marker date="1454364116910" expanded="true" signature="7126:7173" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="9974:10004" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="10753:11134" placeholder="CREATE TABLE..IF..." />
-            <marker date="1454364116910" expanded="true" signature="16992:17025" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="19145:19217" placeholder="INSERT INTO posts..." />
-            <marker date="1454364116910" expanded="true" signature="19780:19861" placeholder="UPDATE posts..." />
-            <marker date="1454364116910" expanded="true" signature="22310:22336" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22360:22379" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22427:22477" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22501:22544" placeholder="SELECT * FRO..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22589:22639" placeholder="SELECT COUNT..posts..." />
-            <marker date="1454364116910" expanded="true" signature="22663:22706" placeholder="SELECT * FRO..posts..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/crawl_Start.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
+        <state vertical-scroll-proportion="0.46537843">
+          <caret line="26" column="50" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
           <folding>
             <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#4116#4185#0" expanded="false" />
-            <element signature="e#4290#4838#0" expanded="false" />
-            <element signature="e#4840#4915#0" expanded="false" />
-            <element signature="e#5047#5495#0" expanded="false" />
-            <element signature="e#5495#5567#0" expanded="false" />
-            <element signature="e#5691#5784#0" expanded="false" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30273753">
+          <caret line="16" column="62" selection-start-line="16" selection-start-column="62" selection-end-line="16" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1114,23 +1004,38 @@
     <entry file="file://$PROJECT_DIR$/crawl_Threads.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
+          <caret line="7" column="18" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="18" />
           <folding>
-            <element signature="e#427#445#0" expanded="true" />
-            <element signature="e#520#568#0" expanded="false" />
-            <element signature="e#3348#3352#0" expanded="false" />
+            <element signature="e#3313#5414#0" expanded="false" />
+            <element signature="e#5588#5592#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/time_Search.py">
+    <entry file="file://$PROJECT_DIR$/crawl_Threads_All.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5425532">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
           <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#820#871#0" expanded="false" />
+            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#1311#1362#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/get_Amount_Of_Deleted_Comments.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="190" selection-start-line="0" selection-start-column="190" selection-end-line="0" selection-end-column="190" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6930894">
+          <caret line="10" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

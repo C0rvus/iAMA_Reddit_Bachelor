@@ -32,6 +32,7 @@ reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddi
 reddit_Amount_Of_Threads_To_Crawl   =               1000                                                                              # the amount of threads during crawling (Maximum is 1000)
 reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_new(limit = reddit_Amount_Of_Threads_To_Crawl) # the used metric of crawling.. See foled comment for options
 
+
 # <editor-fold desc="Possible metric variants of reddit are defined inside here">
 # get_controversial
 # get_controversial_from_all
@@ -55,7 +56,9 @@ reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_
 # get_top_from_year
 # </editor-fold>
 
-cr_T = crawl_Threads()                                                                                                                  # defines the method for crawling of tables
+cr_T    = crawl_Threads()                                                                                                                  # defines the method for crawling of tables
+                                                                                                            # defines the method for crawling of tables
+
 
 
 # <editor-fold desc="Writes test data into the database iAMA_Reddit">
@@ -93,7 +96,6 @@ def test_Reddit_Settings():
 def crawl_Threads():
 
 	return cr_T.main_Method(mongo_DB_Client_Instance, reddit_Instance, reddit_Metric_Of_Crawling)
-
 
 
 # test_Write_DB_Test_Data()                           # Writes test data into the database, to check whether the connection is working or not
