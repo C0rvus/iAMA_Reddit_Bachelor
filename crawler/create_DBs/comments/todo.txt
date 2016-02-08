@@ -1,0 +1,2 @@
+1. Methodik wie Erkennungsmerkmal, dass Commentare upgedated werden müssen
+	1.1. das zusätzlich für den regulären Check Mechanismus

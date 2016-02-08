@@ -12,8 +12,8 @@ from datetime import datetime, timedelta                                        
 mongo_DB_Client_Instance    =       MongoClient('localhost', 27017)                                             # The mongo client, necessary to connect to mongoDB
 reddit_Instance             =       praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")        # The Main reddit functionality
 hours_To_Move_On            =       96                                                                          # Defines the crawling time frame in hours
-x                           =       1243469026                                                                  # Starting time of the first iAMA post of Reddit 	[ 2009-05-28 02:03:46 ]
-end_Value			        =       1262300400		                                                            # Ending time where crawling should be stopped		[ 2010-01-01 00:00:00 ]
+x                           =       1356994800                                                                  # Starting time of the first iAMA post of Reddit 	[ 2013-01-01 00:00:00 ]
+end_Value			        =       1388530800		                                                            # Ending time where crawling should be stopped		[ 2014-01-01 00:00:00 ]
 
 # <editor-fold desc="Description of y inside here">
 # 1. At first 8 hours are added to the epoch format of x
@@ -25,8 +25,8 @@ end_Value			        =       1262300400		                                        
 # </editor-fold>
 y                   = int(round(time.mktime((datetime.fromtimestamp(x) + timedelta(hours=hours_To_Move_On)).timetuple())))
 
-# This method crawls the data base for the year 2009
-def crawl_Whole_DB():
+# This method crawls the data base for the year 2013
+def crawl_Whole_Reddit_For_Threads():
 	global x, y
 
 	# Below is the crawl command to search within a dedicated time span from x to y. Time is used in epoch format
@@ -92,9 +92,9 @@ def crawl_Whole_DB():
 
 	# Continue crawling
 	else:
-		crawl_Whole_DB()
+		crawl_Whole_Reddit_For_Threads()
 
-# This method checks whether a collection already exists in the database or not
+# This method checks whether a collection already exists in the database or not and updates it if necessary
 def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 
 	# This is a tolerance factor because Reddit screws the "ups" - value. The "num_comments" - value remains consistent
@@ -143,4 +143,4 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 		return False
 
 # Execute the method to crawl all data
-crawl_Whole_DB()
+crawl_Whole_Reddit_For_Threads()

@@ -1,0 +1,2 @@
+1. Crawler für alle neuen Threads bauen, welcher als Dienst läuft
+2. Zugleich REST-Service mit diesem Script starten lassen
