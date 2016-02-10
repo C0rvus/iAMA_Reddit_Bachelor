@@ -1,0 +1,2 @@
+crawls threads and comments backwards to improve crawling performance..
+So it does not check the first missing collection and recreates it because it begins with the last one continuing to the first one..
