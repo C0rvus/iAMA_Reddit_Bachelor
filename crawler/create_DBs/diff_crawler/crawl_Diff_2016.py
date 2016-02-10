@@ -6,12 +6,12 @@ import collections                                                              
 
 mongo_DB_Client_Instance            =               MongoClient('localhost', 27017)                             # The mongo client, necessary to connect to mongoDB
 
-mongo_DB_Threads_Instance_2009      =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2009           # The data base instance for the threads
-mongo_DB_Thread_Collection_2009     =               mongo_DB_Threads_Instance_2009.collection_names()           # Contains all collection names of the thread database
+mongo_DB_Threads_Instance_2016      =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2016           # The data base instance for the threads
+mongo_DB_Thread_Collection_2016     =               mongo_DB_Threads_Instance_2016.collection_names()           # Contains all collection names of the thread database
 
 
-mongo_DB_Comments_Instance_2009     =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2009          # The data base instance for the comments
-mongo_DB_Comments_Collection_2009   =               mongo_DB_Comments_Instance_2009.collection_names()          # Contains all collection names of the comments database
+mongo_DB_Comments_Instance_2016     =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2016          # The data base instance for the comments
+mongo_DB_Comments_Collection_2016   =               mongo_DB_Comments_Instance_2016.collection_names()          # Contains all collection names of the comments database
 
 
 # Retrieves the missing post from reddit and write its comments into the comments database
@@ -91,18 +91,18 @@ def crawl_Missing_Collection_Into_Comments_Database(name_Of_Missing_Collection):
 			# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
 			collection.insert_one(data_To_Write_Into_DB)
 
-		print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_2009" + "\n")
+		print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_2016" + "\n")
 
 # Checks whether every collection, which exists in thread database, is also available in the comments database
 def check_If_Collection_Is_Missing_In_Comments_Database():
 
 	# Iterate over every collection within the thread database
-	for j in range (0, len(mongo_DB_Thread_Collection_2009)):
+	for j in range (0, len(mongo_DB_Thread_Collection_2016)):
 
 		# If that iterated collection does not exist within the comments database - get that data and create that collection
-		if not mongo_DB_Thread_Collection_2009[j] in mongo_DB_Comments_Collection_2009:
-			print ("The following collection is missing in iAMA_Reddit_Comments_2009 : " + mongo_DB_Thread_Collection_2009[j])
-			crawl_Missing_Collection_Into_Comments_Database(str(mongo_DB_Thread_Collection_2009[j]))
+		if not mongo_DB_Thread_Collection_2016[j] in mongo_DB_Comments_Collection_2016:
+			print ("The following collection is missing in iAMA_Reddit_Comments_2016 : " + mongo_DB_Thread_Collection_2016[j])
+			crawl_Missing_Collection_Into_Comments_Database(str(mongo_DB_Thread_Collection_2016[j]))
 
 
 
@@ -149,16 +149,36 @@ def crawl_Missing_Collection_Into_Threads_Database(name_Of_Missing_Collection):
 
 	print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Threads_" + temp_Submission_Creation_Year + "\n")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	print ("FUCK IT")
+
 # Checks whether every collection, which exists in comments database, is also available in the threads database
 def check_If_Collection_Is_Missing_In_Threads_Database():
 
 	# Iterate over every collection within the comments database
-	for j in range (0, len(mongo_DB_Comments_Collection_2009)):
+	for j in range (0, len(mongo_DB_Comments_Collection_2016)):
 
 		# If that iterated collection does not exist within the thread database - get that data and create that collection
-		if not mongo_DB_Comments_Collection_2009[j] in mongo_DB_Thread_Collection_2009:
-			print ("The following collection is missing in iAMA_Reddit_Threads_2009 : " + mongo_DB_Comments_Collection_2009[j])
-			crawl_Missing_Collection_Into_Threads_Database(str(mongo_DB_Comments_Collection_2009[j]))
+		if not mongo_DB_Comments_Collection_2016[j] in mongo_DB_Thread_Collection_2016:
+			print ("The following collection is missing in iAMA_Reddit_Threads_2016 : " + mongo_DB_Comments_Collection_2016[j])
+			crawl_Missing_Collection_Into_Threads_Database(str(mongo_DB_Comments_Collection_2016[j]))
 
 
 
