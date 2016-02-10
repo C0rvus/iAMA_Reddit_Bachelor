@@ -14,16 +14,17 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/crawler$crawl_Threads_All.coverage" NAME="crawl_Threads_All Coverage Results" MODIFIED="1454930696385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_crawler.coverage" NAME="reddit_iAMA_crawler Coverage Results" MODIFIED="1453998765296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$test.coverage" NAME="test Coverage Results" MODIFIED="1454361691575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="T:/getRedditDataset-master/getRedditDataset-master" />
     <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454776706556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Comments_All_V2.coverage" NAME="crawl_Comments_All_V2 Coverage Results" MODIFIED="1454906800739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_Single_Thread_Crawler.coverage" NAME="reddit_iAMA_Single_Thread_Crawler Coverage Results" MODIFIED="1454179180170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_pyCharm_Settings" />
-    <SUITE FILE_PATH="coverage/crawler$check_If_Coll_Already_Exists.coverage" NAME="check_If_Coll_Already_Exists Coverage Results" MODIFIED="1454251228438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
-    <SUITE FILE_PATH="coverage/crawler$crawl_Start.coverage" NAME="crawl_Start Coverage Results" MODIFIED="1454858441636" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$connect_To_MongoDB.coverage" NAME="connect_To_MongoDB Coverage Results" MODIFIED="1454255304044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Comments_All.coverage" NAME="crawl_Comments_All Coverage Results" MODIFIED="1454865472747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crawler$crawl_Threads_All.coverage" NAME="crawl_Threads_All Coverage Results" MODIFIED="1454930696385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2009.coverage" NAME="crawl_Diff_2009 Coverage Results" MODIFIED="1455124924985" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler" />
+    <SUITE FILE_PATH="coverage/crawler$check_If_Coll_Already_Exists.coverage" NAME="check_If_Coll_Already_Exists Coverage Results" MODIFIED="1454251228438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
+    <SUITE FILE_PATH="coverage/crawler$crawl_Start.coverage" NAME="crawl_Start Coverage Results" MODIFIED="1454858441636" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$get_First_Comment_UTC.coverage" NAME="get_First_Comment_UTC Coverage Results" MODIFIED="1454939946835" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$timestamp_github.coverage" NAME="timestamp_github Coverage Results" MODIFIED="1454364152459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
   </component>
@@ -42,37 +43,16 @@
     <favorites_list name="crawler" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="crawl_Comments_All_2009.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
+    <leaf>
+      <file leaf-file-name="crawl_Diff_2009.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="15" column="46" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.9191759">
+              <caret line="87" column="87" selection-start-line="87" selection-start-column="87" selection-end-line="87" selection-end-column="87" />
               <folding>
-                <element signature="e#504#694#0" expanded="true" />
-                <element signature="e#1847#1898#0" expanded="false" />
-                <element signature="e#5827#7942#0" expanded="false" />
+                <element signature="e#0#172#0" expanded="true" />
+                <element signature="e#5036#5488#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_crawl_Comments_All_2009_Until_Now.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31082982">
-              <caret line="15" column="202" selection-start-line="15" selection-start-column="202" selection-end-line="15" selection-end-column="202" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_crawl_Threads_All_2009_Until_Now.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="202" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -126,6 +106,7 @@
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2016.py" />
         <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py" />
         <option value="$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py" />
+        <option value="$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py" />
       </list>
     </option>
   </component>
@@ -165,6 +146,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -263,8 +246,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -289,25 +270,7 @@
       <recent name="Z:\iAMA_Reddit_Bachelor\crawler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.get_First_Comment_UTC">
-    <configuration default="false" name="crawl_Start" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="crawler" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/crawl_Start.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.crawl_Diff_2009">
     <configuration default="false" name="crawl_Threads_All" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -376,6 +339,24 @@
       <module name="crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="crawl_Diff_2009" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/create_DBs/diff_crawler" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="crawler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -574,19 +555,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.crawl_Start" />
-      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
-      <item index="2" class="java.lang.String" itemvalue="Python.crawl_Comments_All" />
-      <item index="3" class="java.lang.String" itemvalue="Python.crawl_Comments_All_V2" />
-      <item index="4" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
+      <item index="0" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
+      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Comments_All" />
+      <item index="2" class="java.lang.String" itemvalue="Python.crawl_Comments_All_V2" />
+      <item index="3" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
+      <item index="4" class="java.lang.String" itemvalue="Python.crawl_Diff_2009" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
-        <item index="1" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
-        <item index="2" class="java.lang.String" itemvalue="Python.crawl_Comments_All_V2" />
-        <item index="3" class="java.lang.String" itemvalue="Python.crawl_Comments_All" />
-        <item index="4" class="java.lang.String" itemvalue="Python.crawl_Start" />
+        <item index="0" class="java.lang.String" itemvalue="Python.crawl_Diff_2009" />
+        <item index="1" class="java.lang.String" itemvalue="Python.get_First_Comment_UTC" />
+        <item index="2" class="java.lang.String" itemvalue="Python.crawl_Threads_All" />
+        <item index="3" class="java.lang.String" itemvalue="Python.crawl_Comments_All_V2" />
+        <item index="4" class="java.lang.String" itemvalue="Python.crawl_Comments_All" />
       </list>
     </recent_temporary>
   </component>
@@ -613,7 +594,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18123667" sideWeight="0.4952251" order="0" side_tool="false" content_ui="tabs" />
@@ -622,9 +603,9 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32855567" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18522602" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2734289" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26332623" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.110341154" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15298508" sideWeight="0.50477487" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -661,16 +642,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="62" selection-start-line="16" selection-start-column="62" selection-end-line="16" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crawl_Threads.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -686,11 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#30#0" expanded="false" />
-            <element signature="e#1405#1456#0" expanded="false" />
-            <element signature="e#5520#7581#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -993,35 +959,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crawl_Start.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46537843">
-          <caret line="26" column="50" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
-          <folding>
-            <element signature="e#1440#1612#0" expanded="true" />
-            <element signature="e#3279#3360#0" expanded="false" />
-            <element signature="e#4273#4342#0" expanded="false" />
-            <element signature="e#4447#4995#0" expanded="false" />
-            <element signature="e#4997#5072#0" expanded="false" />
-            <element signature="e#5204#5652#0" expanded="false" />
-            <element signature="e#5652#5724#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module_tests/get_Amount_Of_Deleted_Comments.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="190" selection-start-line="0" selection-start-column="190" selection-end-line="0" selection-end-column="190" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.6930894">
-          <caret line="10" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1029,9 +970,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1039,20 +977,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="34" column="38" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#30#0" expanded="false" />
-            <element signature="e#2109#5195#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1071,11 +995,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="91" column="27" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#30#0" expanded="false" />
-            <element signature="e#1405#1456#0" expanded="false" />
-            <element signature="e#5520#7581#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1083,10 +1002,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding>
-            <element signature="e#504#694#0" expanded="false" />
-            <element signature="e#1847#1898#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1094,7 +1009,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1102,7 +1016,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1110,7 +1023,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1118,7 +1030,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1126,7 +1037,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.21097046">
           <caret line="96" column="107" selection-start-line="96" selection-start-column="107" selection-end-line="96" selection-end-column="107" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1134,7 +1044,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3305204">
           <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1142,16 +1051,63 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.81997186">
           <caret line="72" column="12" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="202" selection-start-line="15" selection-start-column="202" selection-end-line="15" selection-end-column="202" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25142208">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="202" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="66" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawl_Start.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="109" selection-start-line="30" selection-start-column="109" selection-end-line="30" selection-end-column="175" />
           <folding>
-            <element signature="e#5699#7689#0" expanded="false" />
+            <element signature="e#1440#1612#0" expanded="true" />
+            <element signature="e#3279#3360#0" expanded="false" />
+            <element signature="e#4273#4342#0" expanded="false" />
+            <element signature="e#4447#4995#0" expanded="false" />
+            <element signature="e#4997#5072#0" expanded="false" />
+            <element signature="e#5204#5652#0" expanded="false" />
+            <element signature="e#5652#5724#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="46" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.5869854">
+          <caret line="33" column="18" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="18" />
           <folding>
             <element signature="e#504#694#0" expanded="true" />
             <element signature="e#1847#1898#0" expanded="false" />
@@ -1160,19 +1116,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
+    <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="202" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31082982">
-          <caret line="15" column="202" selection-start-line="15" selection-start-column="202" selection-end-line="15" selection-end-column="202" />
-          <folding />
+        <state vertical-scroll-proportion="0.9191759">
+          <caret line="87" column="87" selection-start-line="87" selection-start-column="87" selection-end-line="87" selection-end-column="87" />
+          <folding>
+            <element signature="e#0#172#0" expanded="true" />
+            <element signature="e#5036#5488#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
