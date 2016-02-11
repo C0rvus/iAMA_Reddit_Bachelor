@@ -17,62 +17,39 @@ mongo_DB_Comments_Collection_2014   =               mongo_DB_Comments_Instance_2
 # Retrieves the missing post from reddit and write its comments into the comments database
 def crawl_Missing_Collection_Into_Comments_Database(name_Of_Missing_Collection):
 
-	# The Main reddit functionality
-	reddit_Instance = praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")
-	# The thread which is to be crawled
-	submission_Thread = reddit_Instance.get_submission(submission_id='' + name_Of_Missing_Collection)
+	# Because crawling could take many hours / days the previously assigned variables could be old and therefore values could be written twice into the database.
+	# Therefore we reassign the actual collection name to double check we do not write data twice
 
-	# Replaces the objects of Type praw.MoreComments with comments (i.e. iterates their tree to the end / expands all comments)
-	submission_Thread.replace_more_comments(limit=None, threshold=0)
+	temp_Mongo_DB_Client_Instance            =               MongoClient('localhost', 27017)                             # The mongo client, necessary to connect to mongoDB
+	temp_Mongo_DB_Comments_Instance_2014     =               temp_Mongo_DB_Client_Instance.iAMA_Reddit_Comments_2014          # The data base instance for the comments
+	temp_Mongo_DB_Comments_Collection_2014   =               temp_Mongo_DB_Comments_Instance_2014.collection_names()     # Contains all collection names of the comments database
 
-	# Breaks the tree hierarchy and returns a plain straight aligned list containing all fulltext comments
-	flat_comments = praw.helpers.flatten_tree(submission_Thread.comments)
+	# Double checks that data so that not both crawler overwrite each other
+	if not name_Of_Missing_Collection in temp_Mongo_DB_Comments_Collection_2014:
 
-	# Whenever a thread does not contain a single comment -> create a null entry collection inside the database
-	if len(flat_comments) == 0:
-		print ("    ----- " + str(name_Of_Missing_Collection) + " does not contain single comment. Creation empty collection now")
+		# The Main reddit functionality
+		reddit_Instance = praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")
+		# The thread which is to be crawled
+		submission_Thread = reddit_Instance.get_submission(submission_id='' + name_Of_Missing_Collection)
 
-		# noinspection PyTypeChecker
-		data_To_Write_Into_DB = dict({
-			'author'        : None,
-			'body'          : None,
-			'created_utc'   : None,
-			'name'          : None,
-			'parent_id'     : None,
-			'ups'           : None
-		})
+		# Replaces the objects of Type praw.MoreComments with comments (i.e. iterates their tree to the end / expands all comments)
+		submission_Thread.replace_more_comments(limit=None, threshold=0)
 
-		# Sorts that dictionary alphabetically ordered
-		data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
+		# Breaks the tree hierarchy and returns a plain straight aligned list containing all fulltext comments
+		flat_comments = praw.helpers.flatten_tree(submission_Thread.comments)
 
-		# Converts the unix utc_time into a date format and converts it to string afterwards
-		temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission_Thread.created_utc))
-		temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
-
-		# This method says to look into the appropriate database, depending on the year the thread was created
-		mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_Submission_Creation_Year]
-
-		# Writes the crawled information into the mongoDB
-		collection = mongo_DB_Reddit[str(submission_Thread.id)]
-
-		# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
-		collection.insert_one(data_To_Write_Into_DB)
-		print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_" + temp_Submission_Creation_Year + "\n")
-
-	# Whenever there were comments / answers within that crawled thread
-	else:
-
-		# Iterates over every single comment within the thread [and write it into the appropriate collection in the comments database]
-		for idx, val in enumerate(flat_comments):
+		# Whenever a thread does not contain a single comment -> create a null entry collection inside the database
+		if len(flat_comments) == 0:
+			print ("    ----- " + str(name_Of_Missing_Collection) + " does not contain single comment. Creation empty collection now")
 
 			# noinspection PyTypeChecker
 			data_To_Write_Into_DB = dict({
-				'author'        : str(val.author),
-				'body'          : str(val.body),
-				'created_utc'   : str(val.created_utc),
-				'name'          : str(val.name),
-				'parent_id'     : str(val.parent_id),
-				'ups'           : int(val.ups)
+				'author'        : None,
+				'body'          : None,
+				'created_utc'   : None,
+				'name'          : None,
+				'parent_id'     : None,
+				'ups'           : None
 			})
 
 			# Sorts that dictionary alphabetically ordered
@@ -90,8 +67,41 @@ def crawl_Missing_Collection_Into_Comments_Database(name_Of_Missing_Collection):
 
 			# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
 			collection.insert_one(data_To_Write_Into_DB)
+			print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_" + temp_Submission_Creation_Year + "\n")
 
-		print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_2014" + "\n")
+		# Whenever there were comments / answers within that crawled thread
+		else:
+
+			# Iterates over every single comment within the thread [and write it into the appropriate collection in the comments database]
+			for idx, val in enumerate(flat_comments):
+
+				# noinspection PyTypeChecker
+				data_To_Write_Into_DB = dict({
+					'author'        : str(val.author),
+					'body'          : str(val.body),
+					'created_utc'   : str(val.created_utc),
+					'name'          : str(val.name),
+					'parent_id'     : str(val.parent_id),
+					'ups'           : int(val.ups)
+				})
+
+				# Sorts that dictionary alphabetically ordered
+				data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
+
+				# Converts the unix utc_time into a date format and converts it to string afterwards
+				temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission_Thread.created_utc))
+				temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
+
+				# This method says to look into the appropriate database, depending on the year the thread was created
+				mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_Submission_Creation_Year]
+
+				# Writes the crawled information into the mongoDB
+				collection = mongo_DB_Reddit[str(submission_Thread.id)]
+
+				# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
+				collection.insert_one(data_To_Write_Into_DB)
+
+			print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Comments_2014" + "\n")
 
 # Checks whether every collection, which exists in thread database, is also available in the comments database
 def check_If_Collection_Is_Missing_In_Comments_Database():
@@ -110,44 +120,54 @@ def check_If_Collection_Is_Missing_In_Comments_Database():
 # Retrieves the missing post from reddit and write its properties into the threads database
 def crawl_Missing_Collection_Into_Threads_Database(name_Of_Missing_Collection):
 
-	# The Main reddit functionality
-	reddit_Instance = praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")
-	# The thread which is to be crawled
-	submission = reddit_Instance.get_submission(submission_id='' + name_Of_Missing_Collection)
+	# Because crawling could take many hours / days the previously assigned variables could be old and therefore values could be written twice into the database.
+	# Therefore we reassign the actual collection name to double check we do not write data twice
 
-	# Because down votes are not accessable via reddit API, we have calculated it by our own here
-	ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
-	total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
-	downs = total_Votes - submission.score
+	temp_Mongo_DB_Client_Instance            =               MongoClient('localhost', 27017)                             # The mongo client, necessary to connect to mongoDB
+	temp_Mongo_DB_Threads_Instance_2014      =               temp_Mongo_DB_Client_Instance.iAMA_Reddit_Threads_2014           # The data base instance for the threads
+	temp_Mongo_DB_Thread_Collection_2014     =               temp_Mongo_DB_Threads_Instance_2014.collection_names()      # Contains all collection names of the thread database
 
-	# noinspection PyTypeChecker
-	data_To_Write_Into_DB = dict({
-		'author'        : str(submission.author),
-		'created_utc'   : str(submission.created_utc),
-		'downs'         : int(downs),
-		'num_Comments'  : str(submission.num_comments),
-		'selftext'      : str(submission.selftext),
-		'title'         : str(submission.title),
-		'ups'           : int(submission.ups)
-	})
+	# Double checks that data so that not both crawler overwrite each other
+	if not name_Of_Missing_Collection in temp_Mongo_DB_Thread_Collection_2014:
 
-	# Sorts that dictionary alphabetically ordered
-	data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
+		# The Main reddit functionality
+		reddit_Instance = praw.Reddit(user_agent = "University_Regensburg_iAMA_Crawler_0.001")
+		# The thread which is to be crawled
+		submission = reddit_Instance.get_submission(submission_id='' + name_Of_Missing_Collection)
 
-	# Converts the unix utc_time into a date format and converts it to string afterwards
-	temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
-	temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
+		# Because down votes are not accessable via reddit API, we have calculated it by our own here
+		ratio = reddit_Instance.get_submission(submission.permalink).upvote_ratio
+		total_Votes = int(round((ratio*submission.score)/(2*ratio - 1)) if ratio != 0.5 else round(submission.score/2))
+		downs = total_Votes - submission.score
 
-	# This method says to look into the appropriate database, depending on the year the thread was created
-	mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
+		# noinspection PyTypeChecker
+		data_To_Write_Into_DB = dict({
+			'author'        : str(submission.author),
+			'created_utc'   : str(submission.created_utc),
+			'downs'         : int(downs),
+			'num_Comments'  : str(submission.num_comments),
+			'selftext'      : str(submission.selftext),
+			'title'         : str(submission.title),
+			'ups'           : int(submission.ups)
+		})
 
-	# Writes the crawled information into the mongoDB
-	collection = mongo_DB_Reddit[str(submission.id)]
+		# Sorts that dictionary alphabetically ordered
+		data_To_Write_Into_DB = collections.OrderedDict(sorted(data_To_Write_Into_DB.items()))
 
-	# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
-	collection.insert_one(data_To_Write_Into_DB)
+		# Converts the unix utc_time into a date format and converts it to string afterwards
+		temp_Submission_Creation_Year = str(datetime.fromtimestamp(submission.created_utc))
+		temp_Submission_Creation_Year = temp_Submission_Creation_Year[:4]
 
-	print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Threads_" + temp_Submission_Creation_Year + "\n")
+		# This method says to look into the appropriate database, depending on the year the thread was created
+		mongo_DB_Reddit = mongo_DB_Client_Instance["iAMA_Reddit_Threads_" + temp_Submission_Creation_Year]
+
+		# Writes the crawled information into the mongoDB
+		collection = mongo_DB_Reddit[str(submission.id)]
+
+		# Write the dictionary "data_To_Write_Into_DB" into the mongo db right now!
+		collection.insert_one(data_To_Write_Into_DB)
+
+		print ("    +++++ Finished writing " + str(name_Of_Missing_Collection) + " into " + "iAMA_Reddit_Threads_" + temp_Submission_Creation_Year + "\n")
 
 # Checks whether every collection, which exists in comments database, is also available in the threads database
 def check_If_Collection_Is_Missing_In_Threads_Database():
