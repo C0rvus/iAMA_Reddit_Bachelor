@@ -1,6 +1,9 @@
 Dieser Ordner beinhaltet einen diff-crawler, welcher die Anzahl der Kollektionen der Kommentar-DB auf das Niveau der Thread-DB bringt.
-Bedingt durch inkonsistente Daten, welche der Crawler erhält sind die Datenbanken von Kommentaren / Threads unterschiedlich groß.
-So enthält
+Bedingt durch inkonsistente Daten, welche der Crawler erhält sind die Datenbanken von Kommentaren / Threads unterschiedlich groß (hinsichtlich der Anzahl ihrer Kollektionen)
+
+So enthält bei gewöhnlichem Crawlen
 
 o	iAMA_Reddit_Threads_2009:	5585 collections
 o	iAMA_Reddit_Comments_2009:	5455 collections
+
+Die Scripte gleichen jene Missstände aus und crawlen, anhand der fehlenden Collectionen in den entsprechenden Datenbanken, die noch fehlenden Threads nach.

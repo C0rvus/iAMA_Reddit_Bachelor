@@ -9,7 +9,7 @@ reddit_Chosen_Subreddit             =               reddit_Instance.get_subreddi
 reddit_Amount_Of_Threads_To_Crawl   =               2                                                                                 # the amount of threads during crawling
 # reddit_Metric_Of_Crawling           =               reddit_Chosen_Subreddit.get_hot(limit = reddit_Amount_Of_Threads_To_Crawl)          # the used metric of crawling.. See foled comment for options
 
-submission_Thread = reddit_Instance.get_submission(submission_id='1olomt')
+submission_Thread = reddit_Instance.get_submission(submission_id='vg1og')
 
 print (dir(submission_Thread))
 

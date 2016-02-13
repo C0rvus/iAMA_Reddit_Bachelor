@@ -1,2 +1,11 @@
-crawls threads and comments backwards to improve crawling performance..
-So it does not check the first missing collection and recreates it because it begins with the last one continuing to the first one..
+Dieser Ordner beinhaltet einen diff-crawler, welcher die Anzahl der Kollektionen der Kommentar-DB auf das Niveau der Thread-DB bringt.
+Bedingt durch inkonsistente Daten, welche der Crawler erhält sind die Datenbanken von Kommentaren / Threads unterschiedlich groß (hinsichtlich der Anzahl ihrer Kollektionen)
+
+So enthält bei gewöhnlichem Crawlen
+
+o	iAMA_Reddit_Threads_2009:	5585 collections
+o	iAMA_Reddit_Comments_2009:	5455 collections
+
+Die Scripte gleichen jene Missstände aus und crawlen, anhand der fehlenden Collectionen in den entsprechenden Datenbanken, die noch fehlenden Threads nach.
+
+Der Unterschied zum gewöhnlichen Diff-Crawler ist jener, dass diese Crawler hier von hinten anfangen, wodurch es möglich ist zwei Crawler für eine Datenbank gleichzeitig laufen zu lassen, was die Crawlingzeit um ein Wesentliches reduziert.
