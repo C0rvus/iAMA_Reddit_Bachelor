@@ -119,7 +119,7 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 
 		# There is no proper checking method available to check whether all comments are up to date or not
 		# We have to do this sideways by iterating over all threads and whenever a change in the amount of comments
-		# is recognized the comments-collection for that thread gets dropped and recrawled.
+		# is recognized the comments-collection for that thread gets dropped and has to be recrawled.
 
 		return True
 

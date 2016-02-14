@@ -48,91 +48,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="crawl_Comments_All_2009.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="121" selection-end-column="91" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="crawl_Threads_All_2009.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+              <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="133" selection-end-column="142" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="crawl_Threads_All_2010.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2010.py">
+      <file leaf-file-name="_crawl_Threads_All_2009_Until_Now.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2011.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2011.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2012.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2012.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2013.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2013.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2014.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2014.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2015.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2015.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crawl_Threads_All_2016.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2016.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40936556">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.48640484">
+              <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -164,8 +94,6 @@
         <option value="$PROJECT_DIR$/create_DBs/crawl_Threads_All_2015.py" />
         <option value="$PROJECT_DIR$/create_DBs/crawl_Threads_All_2016.py" />
         <option value="$PROJECT_DIR$/create_DBs/_crawl_Threads_All_2009_Until_Now.py" />
-        <option value="$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py" />
         <option value="T:/crawl_Diff_2012_inverse.py" />
         <option value="$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py" />
         <option value="$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2010.py" />
@@ -185,14 +113,6 @@
         <option value="$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2016.py" />
         <option value="$PROJECT_DIR$/create_DBs/diff_crawler/inverse/failure/crawl_Diff_2011_inverse.py" />
         <option value="$PROJECT_DIR$/module_tests/get_First_Comment_UTC.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2011.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2012.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2013.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2014.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2015.py" />
-        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2016.py" />
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py" />
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2010.py" />
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2011.py" />
@@ -201,6 +121,16 @@
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2014.py" />
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2015.py" />
         <option value="$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2016.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2011.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2012.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2013.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2014.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2015.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2016.py" />
+        <option value="$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py" />
+        <option value="$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py" />
       </list>
     </option>
   </component>
@@ -302,6 +232,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="create_DBs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="create_DBs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="comments" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -809,20 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="202" selection-start-line="15" selection-start-column="202" selection-end-line="15" selection-end-column="202" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25142208">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="202" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module_tests/check_If_Coll_Already_Exists.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -975,78 +909,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2012.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2013.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2014.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2015.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2016.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="122" column="8" selection-start-line="122" selection-start-column="8" selection-end-line="122" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6589506">
-          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2011.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71141976">
-          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="121" selection-end-column="91" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2010.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1097,8 +959,96 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2016.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40936556">
-          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.25528702">
+          <caret line="137" column="60" selection-start-line="137" selection-start-column="60" selection-end-line="137" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2011.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2012.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2013.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2014.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2015.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2016.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6148036">
+          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/_crawl_Comments_All_2009_Until_Now.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.3595166">
+          <caret line="123" column="19" selection-start-line="123" selection-start-column="19" selection-end-line="123" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61933535">
+          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="123" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="133" selection-end-column="142" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/threads/_crawl_Threads_All_2009_Until_Now.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48640484">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
           <folding />
         </state>
       </provider>
