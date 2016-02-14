@@ -118,7 +118,23 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 		# And store the selection in a cursor
 		cursor = collection.find()
 
+		# Because the amount of comments crawled (comments db) will always differ (due to api restrictions) from the num_comments value
+		# we check here wether the num_comments value has changed.. Whenever that is true the comments collection in the comments database gets dropped
+		# and has to be crawled anew by using the appropriate diff-crawler script
+		if cursor[0].get("num_Comments") != str(submission.num_comments) :
+
+			# Creates a new connect to the mongoDB
+			comments_Mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+
+			# References to the appropriate year
+			comments_Mongo_DB_Reddit = comments_Mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_Submission_Creation_Year]
+
+			# Tells mongoDB to drop that collection within the comments DB
+			comments_Mongo_DB_Reddit.drop_collection(str(submission.id))
+			print ("--- Comments for " + str(submission.id) + " have changed and therefore that collection has been dropped from comments DB")
+
 		# Check various details to validate wether there is a need to recreate that collection or not
+		# We are checking the ups by calculating some tolerance factor because reddit scews that data
 		if ( cursor[0].get("author") != str(submission.author) ) \
 				or ( cursor[0].get("num_Comments") != str(submission.num_comments) ) \
 				or ( cursor[0].get("selftext") != str(submission.selftext) ) \

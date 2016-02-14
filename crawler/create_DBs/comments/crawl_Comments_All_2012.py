@@ -117,29 +117,10 @@ def check_If_Coll_In_DB_Already_Exists_Up2Date(submission):
 	# If it already exists, check whether it is up to date or not!
 	if (str(submission.id)) in mongo_DB_Collection:
 
-		# # Select the appropriate collection within the database
-		# collection = mongo_DB_Reddit[str(submission.id)]
-		# # And store the selection in a cursor
-		# cursor = collection.find()
-		#
-		# # Check various details to validate wether there is a need to recreate that collection or not
-		# if ( cursor[0].get("author") != str(submission.author) ) \
-		# 		or ( cursor[0].get("num_Comments") != str(submission.num_comments) ) \
-		# 		or ( cursor[0].get("selftext") != str(submission.selftext) ) \
-		# 		or ( cursor[0].get("title") != str(submission.title) ) \
-		# 		or ( cursor[0].get("ups") + tolerance_Factor < int(submission.ups)) \
-		# 		or ( cursor[0].get("ups") - tolerance_Factor > int(submission.ups)) \
-		# 		:
-		# 	# Delete that collection so that it gets recreated again
-		# 	mongo_DB_Reddit.drop_collection(str(submission.id))
-		#
-		# 	print ("--- Thread " + str(submission.id) + " was not up2date and therefore has been dropped")
-		#
-		# 	# Because the information in the database were old we dropped it and therefore we return False
-		# 	return False
-		#
-		# # Whenever the collection already exists and it is already up to date
-		# else :
+		# There is no proper checking method available to check whether all comments are up to date or not
+		# We have to do this sideways by iterating over all threads and whenever a change in the amount of comments
+		# is recognized the comments-collection for that thread gets dropped and recrawled.
+
 		return True
 
 	# Whenever the collection does not yet exist
