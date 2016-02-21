@@ -20,6 +20,7 @@
     <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454776706556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2011.coverage" NAME="crawl_Diff_2011 Coverage Results" MODIFIED="1455733878551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Comments_All_V2.coverage" NAME="crawl_Comments_All_V2 Coverage Results" MODIFIED="1454906800739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crawler$analyze_Time_For_2009.coverage" NAME="analyze_Time_For_2009 Coverage Results" MODIFIED="1456066709274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
     <SUITE FILE_PATH="coverage/crawler$analyze_Stuff.coverage" NAME="analyze_Stuff Coverage Results" MODIFIED="1455468282864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2011_inverse__2_.coverage" NAME="crawl_Diff_2011_inverse (2) Coverage Results" MODIFIED="1455733983574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler/inverse" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_Single_Thread_Crawler.coverage" NAME="reddit_iAMA_Single_Thread_Crawler Coverage Results" MODIFIED="1454179180170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_pyCharm_Settings" />
@@ -28,7 +29,7 @@
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2011_inverse__1_.coverage" NAME="crawl_Diff_2011_inverse (1) Coverage Results" MODIFIED="1455733042876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Desktop/todo_iama" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Comments_All.coverage" NAME="crawl_Comments_All Coverage Results" MODIFIED="1454865472747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Threads_All_2009.coverage" NAME="crawl_Threads_All_2009 Coverage Results" MODIFIED="1455464792072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/threads" />
-    <SUITE FILE_PATH="coverage/crawler$analyze_Time_Creation_First_Last.coverage" NAME="analyze_Time_Creation_First_Last Coverage Results" MODIFIED="1456051487316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
+    <SUITE FILE_PATH="coverage/crawler$analyze_Time_Creation_First_Last.coverage" NAME="analyze_Time_Creation_First_Last Coverage Results" MODIFIED="1456059849157" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Threads_All.coverage" NAME="crawl_Threads_All Coverage Results" MODIFIED="1454930696385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2009.coverage" NAME="crawl_Diff_2009 Coverage Results" MODIFIED="1455126496709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2016.coverage" NAME="crawl_Diff_2016 Coverage Results" MODIFIED="1455131341147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler" />
@@ -53,14 +54,18 @@
     <favorites_list name="crawler" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="analyze_Time_Creation_First_Last.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py">
+    <leaf>
+      <file leaf-file-name="analyze_Time_For_2009.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.08252427">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6996951">
+              <caret line="184" column="23" selection-start-line="184" selection-start-column="23" selection-end-line="184" selection-end-column="23" />
               <folding>
-                <element signature="e#364#395#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#1015#1092#0" expanded="false" />
+                <element signature="e#1309#7898#0" expanded="false" />
+                <element signature="e#7900#7975#0" expanded="false" />
+                <element signature="e#8508#9951#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -78,7 +83,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/crawl_Comments_All_V2.py" />
         <option value="$PROJECT_DIR$/crawl_Threads_All.py" />
         <option value="$PROJECT_DIR$/create_DBs/crawl_Threads_All_2009.py" />
         <option value="$PROJECT_DIR$/create_DBs/crawl_Threads_All_2010.py" />
@@ -129,6 +133,7 @@
         <option value="$PROJECT_DIR$/create_DBs/diff_crawler/inverse/crawl_Diff_2011_inverse.py" />
         <option value="$PROJECT_DIR$/analyze_Reddit/analyze_Stuff.py" />
         <option value="$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py" />
+        <option value="$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py" />
       </list>
     </option>
   </component>
@@ -226,6 +231,42 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="create_DBs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="diff_crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="create_DBs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="comments" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="analyze_Reddit" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -270,7 +311,7 @@
       <recent name="Z:\iAMA_Reddit_Bachelor\crawler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.analyze_Time_Creation_First_Last">
+  <component name="RunManager" selected="Python.analyze_Time_For_2009">
     <configuration default="false" name="crawl_Diff_2011_inverse" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -285,24 +326,6 @@
       <module name="crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/create_DBs/diff_crawler/inverse/failure/crawl_Diff_2011_inverse.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="crawl_Diff_2011_inverse (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/todo_iama" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="crawler" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/todo_iama/crawl_Diff_2011_inverse.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -357,6 +380,24 @@
       <module name="crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="analyze_Time_For_2009" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/analyze_Reddit" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="crawler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -556,18 +597,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse" />
-      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (1)" />
-      <item index="2" class="java.lang.String" itemvalue="Python.crawl_Diff_2011" />
-      <item index="3" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (2)" />
-      <item index="4" class="java.lang.String" itemvalue="Python.analyze_Time_Creation_First_Last" />
+      <item index="1" class="java.lang.String" itemvalue="Python.crawl_Diff_2011" />
+      <item index="2" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (2)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.analyze_Time_Creation_First_Last" />
+      <item index="4" class="java.lang.String" itemvalue="Python.analyze_Time_For_2009" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.analyze_Time_Creation_First_Last" />
-        <item index="1" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (2)" />
-        <item index="2" class="java.lang.String" itemvalue="Python.crawl_Diff_2011" />
-        <item index="3" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse" />
-        <item index="4" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (1)" />
+        <item index="0" class="java.lang.String" itemvalue="Python.analyze_Time_For_2009" />
+        <item index="1" class="java.lang.String" itemvalue="Python.analyze_Time_Creation_First_Last" />
+        <item index="2" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse (2)" />
+        <item index="3" class="java.lang.String" itemvalue="Python.crawl_Diff_2011" />
+        <item index="4" class="java.lang.String" itemvalue="Python.crawl_Diff_2011_inverse" />
       </list>
     </recent_temporary>
   </component>
@@ -594,7 +635,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1705757" sideWeight="0.4952251" order="0" side_tool="false" content_ui="tabs" />
@@ -603,9 +644,9 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32855567" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28776187" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2458655" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15317287" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15298508" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15298508" sideWeight="0.50477487" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -642,14 +683,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2009.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="187" column="51" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -745,13 +778,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2014.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.660584">
-          <caret line="180" column="96" selection-start-line="180" selection-start-column="96" selection-end-line="180" selection-end-column="96" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2013.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.660584">
           <caret line="180" column="96" selection-start-line="180" selection-start-column="96" selection-end-line="180" selection-end-column="96" />
@@ -863,13 +889,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="121" column="101" selection-start-line="121" selection-start-column="101" selection-end-line="121" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2011.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -977,14 +996,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-37.517242">
-          <caret line="66" column="40" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/create_DBs/threads/crawl_Threads_All_2009.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.5113268">
@@ -1001,12 +1012,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2010.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/diff_crawler/crawl_Diff_2013.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="166" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08252427">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5330033">
+          <caret line="19" column="79" selection-start-line="19" selection-start-column="56" selection-end-line="19" selection-end-column="79" />
           <folding>
-            <element signature="e#364#395#0" expanded="true" />
+            <element signature="e#425#456#0" expanded="true" />
+            <element signature="e#6073#6652#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_DBs/comments/crawl_Comments_All_2009.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16831683">
+          <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6996951">
+          <caret line="184" column="23" selection-start-line="184" selection-start-column="23" selection-end-line="184" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#1015#1092#0" expanded="false" />
+            <element signature="e#1309#7898#0" expanded="false" />
+            <element signature="e#7900#7975#0" expanded="false" />
+            <element signature="e#8508#9951#0" expanded="false" />
           </folding>
         </state>
       </provider>
