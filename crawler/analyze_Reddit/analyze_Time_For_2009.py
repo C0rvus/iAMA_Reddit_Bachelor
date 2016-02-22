@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 import collections
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 # TODO: Noch difference einbauen, dass die Requests nicht mitgecountet werden.. Also keine Antwortzeiten für Requests mitzählen !!
 
@@ -182,10 +183,29 @@ def generate_Data_To_Be_Plotted():
 
 
 def plot_The_Generated_Data():
-	print ("i bin doo")
+	y = []              # Contains the arithmetic_Mean_Response_Time
+	z = []              # Contains the median Response Time
+
+	for i, val in enumerate(list_To_Be_Plotted):
+		y.append(val.get("arithmetic_Mean_Response_Time"))
+		z.append(val.get("median_Response_Time"))
+
+	# TODO: Leere Entries rauskicken -> die verzerren nur den Graphen (so dass rechts freier Rand ist !)
+	N = len(y)          # Defines the amount of elements for range calculation
+	x = range(N)        # Defines the length of the x scale
 
 
-# generate_Data_To_Be_Plotted()
+	plt.bar(x, y, 0.2, color="blue")                                                # Adds a blue bar to the graph
+	plt.bar(x, z, 0.1, color="green")                                               # Adds a green bar to the graph
+	blue_Patch = mpatches.Patch(color='blue', label='Kommentarzeit Durchschnitt')   # Contains information for the legend
+	green_Patch = mpatches.Patch(color='green', label='Kommentarzeit Median')       # Contains information for the legend
+	plt.legend(handles=[blue_Patch, green_Patch])                                   # Assign the defined patches to the graph to be plotted
+
+	plt.show()                                                                      # Shows the graph
+
+
+
+generate_Data_To_Be_Plotted()
 
 plot_The_Generated_Data()
 

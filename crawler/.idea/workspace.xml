@@ -20,7 +20,7 @@
     <SUITE FILE_PATH="coverage/crawler$time_Search.coverage" NAME="time_Search Coverage Results" MODIFIED="1454776706556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module_tests" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2011.coverage" NAME="crawl_Diff_2011 Coverage Results" MODIFIED="1455733878551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Comments_All_V2.coverage" NAME="crawl_Comments_All_V2 Coverage Results" MODIFIED="1454906800739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/crawler$analyze_Time_For_2009.coverage" NAME="analyze_Time_For_2009 Coverage Results" MODIFIED="1456066709274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
+    <SUITE FILE_PATH="coverage/crawler$analyze_Time_For_2009.coverage" NAME="analyze_Time_For_2009 Coverage Results" MODIFIED="1456170378799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
     <SUITE FILE_PATH="coverage/crawler$analyze_Stuff.coverage" NAME="analyze_Stuff Coverage Results" MODIFIED="1455468282864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/analyze_Reddit" />
     <SUITE FILE_PATH="coverage/crawler$crawl_Diff_2011_inverse__2_.coverage" NAME="crawl_Diff_2011_inverse (2) Coverage Results" MODIFIED="1455733983574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/create_DBs/diff_crawler/inverse" />
     <SUITE FILE_PATH="coverage/crawler$reddit_iAMA_Single_Thread_Crawler.coverage" NAME="reddit_iAMA_Single_Thread_Crawler Coverage Results" MODIFIED="1454179180170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_pyCharm_Settings" />
@@ -54,18 +54,30 @@
     <favorites_list name="crawler" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="analyze_Time_For_2009.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6996951">
-              <caret line="184" column="23" selection-start-line="184" selection-start-column="23" selection-end-line="184" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.5594512">
+              <caret line="192" column="104" selection-start-line="192" selection-start-column="104" selection-end-line="192" selection-end-column="104" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#1015#1092#0" expanded="false" />
-                <element signature="e#1309#7898#0" expanded="false" />
-                <element signature="e#7900#7975#0" expanded="false" />
-                <element signature="e#8508#9951#0" expanded="false" />
+                <element signature="e#1053#1130#0" expanded="false" />
+                <element signature="e#1347#7936#0" expanded="false" />
+                <element signature="e#7938#8013#0" expanded="false" />
+                <element signature="e#8546#9989#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="analyze_Time_Creation_First_Last.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="127" selection-end-column="38" />
+              <folding>
+                <element signature="e#425#456#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -644,7 +656,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32855567" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2458655" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2458655" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15298508" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -687,7 +699,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="90" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -695,7 +706,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="107" column="19" selection-start-line="107" selection-start-column="4" selection-end-line="107" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -703,7 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="144" column="12" selection-start-line="144" selection-start-column="12" selection-end-line="144" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -984,7 +993,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="72" selection-start-line="31" selection-start-column="72" selection-end-line="31" selection-end-column="72" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -992,7 +1000,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="180" column="96" selection-start-line="180" selection-start-column="96" selection-end-line="180" selection-end-column="96" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1000,7 +1007,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.5113268">
           <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="90" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1008,7 +1014,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.558574">
           <caret line="169" column="141" selection-start-line="169" selection-start-column="133" selection-end-line="169" selection-end-column="141" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1016,7 +1021,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="24" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1024,18 +1028,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="166" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5330033">
-          <caret line="19" column="79" selection-start-line="19" selection-start-column="56" selection-end-line="19" selection-end-column="79" />
-          <folding>
-            <element signature="e#425#456#0" expanded="true" />
-            <element signature="e#6073#6652#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1043,20 +1035,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16831683">
           <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="31" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_Creation_First_Last.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="127" selection-end-column="38" />
+          <folding>
+            <element signature="e#425#456#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/analyze_Reddit/analyze_Time_For_2009.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6996951">
-          <caret line="184" column="23" selection-start-line="184" selection-start-column="23" selection-end-line="184" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.5594512">
+          <caret line="192" column="104" selection-start-line="192" selection-start-column="104" selection-end-line="192" selection-end-column="104" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#1015#1092#0" expanded="false" />
-            <element signature="e#1309#7898#0" expanded="false" />
-            <element signature="e#7900#7975#0" expanded="false" />
-            <element signature="e#8508#9951#0" expanded="false" />
+            <element signature="e#1053#1130#0" expanded="false" />
+            <element signature="e#1347#7936#0" expanded="false" />
+            <element signature="e#7938#8013#0" expanded="false" />
+            <element signature="e#8546#9989#0" expanded="false" />
           </folding>
         </state>
       </provider>
