@@ -126,6 +126,7 @@ def draw_Graph():
 	x = range(N)
 	width = 1/1.5
 	plt.bar(x, y, width, color="blue")
+
 	#Y2 = (1 - X / float(n)) * np.random.uniform(0.5, 1.0, n)
 
 	#plt.bar(X, +Y1, facecolor='#9999ff', edgecolor='white')

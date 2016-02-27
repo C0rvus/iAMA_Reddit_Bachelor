@@ -183,8 +183,13 @@ def generate_Data_To_Be_Plotted():
 
 
 def plot_The_Generated_Data():
-	y = []              # Contains the arithmetic_Mean_Response_Time
-	z = []              # Contains the median Response Time
+	#y = []              # Contains the arithmetic_Mean_Response_Time
+	#z = []              # Contains the median Response Time
+
+	y = [1,2,3,4,5,6,7,8,9,10,12,123,123,345,456645,3244532,231,324453,4563,324,2431,3124,3245,4532,453,3245,45324532,3245,4532,45324532,4532,4532,4532,4532]
+	z = [1,2,3,4,5,6,7,8,9,10,12,123,123,345,456645,3244532,231,324453,4563,324,2431,3124,3245,4532,453,3245,45324532,3245,4532,45324532,4532,4532,4532,4532]
+
+
 
 	for i, val in enumerate(list_To_Be_Plotted):
 		y.append(val.get("arithmetic_Mean_Response_Time"))
@@ -192,20 +197,24 @@ def plot_The_Generated_Data():
 
 	# TODO: Leere Entries rauskicken -> die verzerren nur den Graphen (so dass rechts freier Rand ist !)
 	N = len(y)          # Defines the amount of elements for range calculation
-	x = range(N)        # Defines the length of the x scale
+	X = np.random.normal(0,1,N)
+	Y = np.random.normal(0,1,N)
 
 
-	plt.bar(x, y, 0.2, color="blue")                                                # Adds a blue bar to the graph
-	plt.bar(x, z, 0.1, color="green")                                               # Adds a green bar to the graph
-	blue_Patch = mpatches.Patch(color='blue', label='Kommentarzeit Durchschnitt')   # Contains information for the legend
-	green_Patch = mpatches.Patch(color='green', label='Kommentarzeit Median')       # Contains information for the legend
-	plt.legend(handles=[blue_Patch, green_Patch])                                   # Assign the defined patches to the graph to be plotted
+	T = np.arctan2(Y, X)
 
-	plt.show()                                                                      # Shows the graph
+	plt.axes([0.025, 0.025, 0.95, 0.95])
+	plt.scatter(X, Y, s=75, c=T, alpha=.5)
+
+	plt.xlim(-1.5, 1.5)
+	plt.xticks(())
+	plt.ylim(-1.5, 1.5)
+	plt.yticks(())
+
+	plt.show()
 
 
-
-generate_Data_To_Be_Plotted()
+# generate_Data_To_Be_Plotted()
 
 plot_The_Generated_Data()
 
