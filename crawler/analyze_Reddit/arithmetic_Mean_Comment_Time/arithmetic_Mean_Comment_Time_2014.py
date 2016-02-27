@@ -1,21 +1,21 @@
-from pymongo import MongoClient
-import datetime
-import numpy as np
-import collections
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-
-# TODO: Noch difference einbauen, dass die Requests nicht mitgecountet werden.. Also keine Antwortzeiten für Requests mitzählen !!
+#   Tutorials used within this class:
+#   1. (27.02.2016 @ 14:10) - http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
+#   2. (27.02.2016 @ 14:22) - https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
+#   3. (27.02.2016 @ 16:30) - http://www.programiz.com/python-programming/break-continue
+#   This script is developed with PRAW 3.3.0
 
 
-mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)
+from pymongo import MongoClient                                                                                 # Necessary to make use of MongoDB
+import datetime                                                                                                 # Necessary to do time calculation
+import numpy as np                                                                                              # Necessary to do further time calculation
+import collections                                                                                              # Necessary to sort collections alphabetically
+import matplotlib.pyplot as plt                                                                                 # Necessary to plot graphs with the data calculated
 
-mongo_DB_Threads_Instance_2009          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2009           # The data base instance for the threads
-mongo_DB_Thread_Collection_2009         =               mongo_DB_Threads_Instance_2009.collection_names()           # Contains all collection names of the thread database
-
-mongo_DB_Comments_Instance_2009         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2009          # The data base instance for the comments
-
-list_To_Be_Plotted                      =               []                                                          # Will contain all analyzed time information for threads & comments
+mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)                         # The mongo client, necessary to connect to mongoDB
+mongo_DB_Threads_Instance_2014          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2014       # The data base instance for the threads
+mongo_DB_Thread_Collection_2014         =               mongo_DB_Threads_Instance_2014.collection_names()       # Contains all collection names of the thread database
+mongo_DB_Comments_Instance_2014         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2014      # The data base instance for the comments
+list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
 
 # <editor-fold desc="Analyses data of threads and comments in terms of time">
@@ -23,9 +23,9 @@ list_To_Be_Plotted                      =               []                      
 # </editor-fold>
 def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 	# Makes the global comments instance locally available here
-	global mongo_DB_Comments_Instance_2009
+	global mongo_DB_Comments_Instance_2014
 
-	comments_Collection = mongo_DB_Comments_Instance_2009[id_Of_Thread]
+	comments_Collection = mongo_DB_Comments_Instance_2014[id_Of_Thread]
 	comments_Cursor = comments_Collection.find()
 
 	# Contains the creation date of every comment in epoch time format
@@ -43,7 +43,8 @@ def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 		"thread_Livespan"                       :   0,                  # The difference between thread creation date and the timestamp of the last comment -> live span
 		"arithmetic_Mean_Response_Time"         :   0,                  # The arithmetic mean response time between the comments
 		"median_Response_Time"                  :   0,                  # The median response time between the comments
-		"id"                                    :   str(id_Of_Thread)   # The thread id. Not really necessary but perhaps interesting for postprocessing threads (i.E. looking up, which threads have most comments)
+		"id"                                    :   str(id_Of_Thread),  # The thread id. Not really necessary but perhaps interesting for postprocessing threads (i.E. looking up, which threads have most comments)
+		"thread_Num_Comments"                   :   0                   # The amount of comments for the iterated thread
 	}
 
 	# Iterates over every time stamp and writes it into time_List
@@ -131,6 +132,7 @@ def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 
 		dict_To_Be_Returned["arithmetic_Mean_Response_Time"] = int(np.mean(time_Difference))
 		dict_To_Be_Returned["median_Response_Time"] = int(np.median(time_Difference))
+		dict_To_Be_Returned["thread_Num_Comments"] = len(time_List)
 
 		# Sorts that dictionary so the dictionary structure is standardized
 		dict_To_Be_Returned = collections.OrderedDict(sorted(dict_To_Be_Returned.items()))
@@ -152,23 +154,32 @@ def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 # 4. That List will be iterated later on and the appropriate graph will be plotted
 # </editor-fold>
 def generate_Data_To_Be_Plotted():
-	for j, val in enumerate(mongo_DB_Thread_Collection_2009):
+	for j, val in enumerate(mongo_DB_Thread_Collection_2014):
 
 		# Skips the system.indexes-table which is automatically created by mongodb itself
 		if not val == "system.indexes":
 			# References the actual iterated thread
-			temp_Thread = mongo_DB_Threads_Instance_2009[val]
+			temp_Thread = mongo_DB_Threads_Instance_2014[val]
 
 			# Gets the creation date of that iterated thread
 			temp_Thread_Creation_Time = temp_Thread.find()[0].get("created_utc")
 
-			# print (val, temp_Thread_Creation_Time)
 
+			# printe mir hier alles wo request im Selftext drinsteht
+			temp_Thread_Title = temp_Thread.find()[0].get("title")
+
+			# removes iAMA-Requests out of our selection
+			if "request" in temp_Thread_Title.lower() \
+					and not "as requested" in temp_Thread_Title.lower() \
+					and not "by request" in temp_Thread_Title.lower() \
+					and not "per request" in temp_Thread_Title.lower() \
+					and not "request response" in temp_Thread_Title.lower():
+				# Continue skips processing of those elements which are requests here
+				# print ("ID of Thread : " + str(val) + "  || Title description: " + str(temp_Thread_Title) ) # won't be printed yet, but if we would switch this line with continue, we would see which ID is a request
+				continue
+
+			# Will contain information about time calculation methods
 			returned_Dict = calculate_Time_Difference(val, temp_Thread_Creation_Time)
-			# TODO: Check einbauen, dass wenn returned_Dict einfach leer ist, das dann nicht ans große Dict hängen!
-			# TODO: Wenn {'median_Response_Time': 0, 'first_Comment_After_Thread_Started': 0, 'thread_Livespan': 0, 'arithmetic_Mean_Response_Time': 0}
-
-			# print (returned_Dict)
 
 			# Whenever the thread has only one comment, or null comments, or is somehow faulty it won't be added to the global list which is to be plotted later on
 			if returned_Dict.get("median_Response_Time") == 0 \
@@ -177,45 +188,42 @@ def generate_Data_To_Be_Plotted():
 				or returned_Dict.get("arithmetic_Mean_Response_Time") == 0 :
 
 				print ("Thread '" + val + "' will not be added to global list. Therefore it won't be in the plotted graph.")
+			else:
+				# Add that analyzed data dictionary to the global list which will be plotted later on
+				list_To_Be_Plotted.append(returned_Dict)
 
-			# Add that analyzed data dictionary to the global list which will be plotted later on
-			list_To_Be_Plotted.append(returned_Dict)
+# <editor-fold desc="Plots the data of the arithmetic mean for that threads">
+# Plotts the arithmetic mean - extrema are not filtered here
+# </editor-fold>
+def plot_The_Generated_Data_Arithmetic_Mean(extrema_Filter_Value):
+	# Contains the arithmetic_Mean_Response_Time
+	y = []
 
-
-def plot_The_Generated_Data():
-	#y = []              # Contains the arithmetic_Mean_Response_Time
-	#z = []              # Contains the median Response Time
-
-	y = [1,2,3,4,5,6,7,8,9,10,12,123,123,345,456645,3244532,231,324453,4563,324,2431,3124,3245,4532,453,3245,45324532,3245,4532,45324532,4532,4532,4532,4532]
-	z = [1,2,3,4,5,6,7,8,9,10,12,123,123,345,456645,3244532,231,324453,4563,324,2431,3124,3245,4532,453,3245,45324532,3245,4532,45324532,4532,4532,4532,4532]
-
-
-
+	# Iterates over every value within the list and calculates the arithmetic mean response time in minutes
 	for i, val in enumerate(list_To_Be_Plotted):
-		y.append(val.get("arithmetic_Mean_Response_Time"))
-		z.append(val.get("median_Response_Time"))
+		if val.get("arithmetic_Mean_Response_Time") / 60 < extrema_Filter_Value:
+			y.append(val.get("arithmetic_Mean_Response_Time") / 60)
 
-	# TODO: Leere Entries rauskicken -> die verzerren nur den Graphen (so dass rechts freier Rand ist !)
-	N = len(y)          # Defines the amount of elements for range calculation
-	X = np.random.normal(0,1,N)
-	Y = np.random.normal(0,1,N)
+	# Contains the number of elements, which is necessary for correct horizontal graph scaling
+	N = len(y)
+	x = range(N)
 
+	# The type of graph which is to be plotted.. 'ro' means scatter diagram
+	plt.title('iAMA 2014 - Ø Antwortzeit per Thread in Minuten' + '\n' + 'Filterung: Extrema mit über ' + str(extrema_Filter_Value) + ' Minuten Antwortzeit')
+	plt.xlabel('Threadnummer')
+	plt.ylabel('Ø Antworzeit (min)')
 
-	T = np.arctan2(Y, X)
+	# Necessary to remove annyoing white space on the right side of the graph
+	plt.xlim(0, len(y))
 
-	plt.axes([0.025, 0.025, 0.95, 0.95])
-	plt.scatter(X, Y, s=75, c=T, alpha=.5)
+	# Plots the appropriate bar within the graph
+	plt.bar(x, y, 1, color="green", edgecolor="none")
 
-	plt.xlim(-1.5, 1.5)
-	plt.xticks(())
-	plt.ylim(-1.5, 1.5)
-	plt.yticks(())
-
+	# Show that plotted graph
 	plt.show()
 
+# Generates the data which will be plotted later on
+generate_Data_To_Be_Plotted()
 
-# generate_Data_To_Be_Plotted()
-
-plot_The_Generated_Data()
-
-
+# Filters extrema in minutes
+plot_The_Generated_Data_Arithmetic_Mean(5000)

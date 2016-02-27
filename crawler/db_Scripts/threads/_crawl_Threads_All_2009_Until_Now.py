@@ -3,6 +3,7 @@
 #   2. (06.02.2016 @ 15:48) - https://www.reddit.com/r/redditdev/comments/2zdyy2/praw_continue_getting_posts_after_given_post_id/
 #   3. (06.02.2016 @ 16:20) - https://www.linuxquestions.org/questions/programming-9/python-datetime-to-epoch-4175520007/
 #   4. (06.02.2016 @ 16:30) - https://stackoverflow.com/questions/11743019/convert-python-datetime-to-epoch-with-strftime
+#   This script is developed with PRAW 3.3.0
 
 import praw, time, collections                                                                                  # Necessary to make use of Reddit-API, time calculation and dictionary sorting
 from pymongo  import MongoClient                                                                                # Necessary to interact with MongoDB

@@ -1,3 +1,5 @@
+#   This script is developed with PRAW 3.3.0
+
 from pymongo        import MongoClient                                                                          # Necessary to interact with MongoDB
 from datetime       import datetime                                                                             # Necessary to create the year out of the thread utc [better than hardcoding the db info here]
 import praw                                                                                                     # Necessary for praw usage
