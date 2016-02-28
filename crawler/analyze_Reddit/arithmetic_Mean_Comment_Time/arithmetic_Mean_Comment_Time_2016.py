@@ -55,6 +55,9 @@ def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 		if (collection.get("author")) != "AutoModerator":
 			time_List.append(collection.get("created_utc"))
 
+	# Whenever only "Automoderator" responded and no real comments were given, return an empty dictionary, which will be discarded later on
+	if len(time_List) == 0: return dict_To_Be_Returned
+
 	# This sorts the time in an ascending way
 	time_List.sort()
 
