@@ -133,8 +133,8 @@ def calculate_Time_Difference(id_Of_Thread, creation_Date_Of_Thread):
 		# Resorts the time_Difference - List , which is necessary to correctly calculate the median of it
 		time_Difference.sort()
 
-		dict_To_Be_Returned["arithmetic_Mean_Response_Time"] = int(np.mean(time_Difference))
-		dict_To_Be_Returned["median_Response_Time"] = int(np.median(time_Difference))
+		dict_To_Be_Returned["arithmetic_Mean_Response_Time"] = float(np.mean(time_Difference))
+		dict_To_Be_Returned["median_Response_Time"] = float(np.median(time_Difference))
 		dict_To_Be_Returned["thread_Num_Comments"] = len(time_List)
 
 		# Sorts that dictionary so the dictionary structure is standardized
@@ -202,10 +202,17 @@ def plot_The_Generated_Data_Arithmetic_Mean(extrema_Filter_Value):
 	# Contains the arithmetic_Mean_Response_Time
 	y = []
 
+	# Defines the highest y value so the y axis gets scaled correctly
+	highest_Y_Value = 0
+
 	# Iterates over every value within the list and calculates the arithmetic mean response time in minutes
 	for i, val in enumerate(list_To_Be_Plotted):
 		if val.get("arithmetic_Mean_Response_Time") / 60 < extrema_Filter_Value:
 			y.append(val.get("arithmetic_Mean_Response_Time") / 60)
+
+			if (val.get("arithmetic_Mean_Response_Time") / 60) > highest_Y_Value :
+				highest_Y_Value = (val.get("arithmetic_Mean_Response_Time") / 60)
+
 
 	# Contains the number of elements, which is necessary for correct horizontal graph scaling
 	N = len(y)
@@ -218,9 +225,12 @@ def plot_The_Generated_Data_Arithmetic_Mean(extrema_Filter_Value):
 
 	# Necessary to remove annyoing white space on the right side of the graph
 	plt.xlim(0, len(y))
+	plt.ylim(0, highest_Y_Value)
 
 	# Plots the appropriate bar within the graph
 	plt.bar(x, y, 1, color="green", edgecolor="none")
+
+	print ("Durchschnittliche Antwortzeit : " + str(sum(y) / float(len(y))) + " Minuten")
 
 	# Show that plotted graph
 	plt.show()
@@ -229,4 +239,4 @@ def plot_The_Generated_Data_Arithmetic_Mean(extrema_Filter_Value):
 generate_Data_To_Be_Plotted()
 
 # Filters extrema in minutes
-plot_The_Generated_Data_Arithmetic_Mean(5000)
+plot_The_Generated_Data_Arithmetic_Mean(10080)
