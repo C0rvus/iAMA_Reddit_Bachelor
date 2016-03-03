@@ -5,15 +5,12 @@
 #   This script is developed with PRAW 3.3.0
 
 
-from pymongo import MongoClient                                                                                 # Necessary to make use of MongoDB
-import datetime                                                                                                 # Necessary to do time calculation
-import numpy as np                                                                                              # Necessary to do further time calculation
 import collections                                                                                              # Necessary to sort collections alphabetically
+import datetime                                                                                                 # Necessary to do time calculation
+
 import matplotlib.pyplot as plt                                                                                 # Necessary to plot graphs with the data calculated
-import plotly.plotly as py
-import plotly.graph_objs as go
-
-
+import numpy as np                                                                                              # Necessary to do further time calculation
+from pymongo import MongoClient                                                                                 # Necessary to make use of MongoDB
 
 mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)                         # The mongo client, necessary to connect to mongoDB
 mongo_DB_Threads_Instance_2016          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2016       # The data base instance for the threads

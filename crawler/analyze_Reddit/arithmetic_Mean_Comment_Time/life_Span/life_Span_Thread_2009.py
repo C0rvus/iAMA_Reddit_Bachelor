@@ -204,49 +204,45 @@ def plot_The_Generated_Data_Arithmetic_Mean():
 	# The dictionary which is necessary to count the amount of response times
 	dict_Time_Amount_Counter = {
 		"0_To_1"    :   0,
-		"1_To_6"    :   0,
-		"6_To_12"   :   0,
-		"12_To_24"  :   0,
-		"24_To_48"  :   0,
-		"greater_Than_48": 0
+		"1_To_3"    :   0,
+		"3_To_7"   :   0,
+		"7_To_14"  :   0,
+		"greater_Than_14": 0
 	}
 
 	# Iterates over every element and checks if that value is between some given values
 	for i, val in enumerate(list_To_Be_Plotted):
-		if (val.get("arithmetic_Mean_Response_Time") / 3600) <= 1:
+
+		if (val.get("thread_Livespan") / 86400) <= 1:
 			dict_Time_Amount_Counter["0_To_1"] += 1
 
-		elif ((val.get("arithmetic_Mean_Response_Time") / 3600) > 1) and ((val.get("arithmetic_Mean_Response_Time") / 3600) <= 6):
-			dict_Time_Amount_Counter["1_To_6"] += 1
+		elif ((val.get("thread_Livespan") / 86400) > 1) and ((val.get("thread_Livespan") / 86400) <= 3):
+			dict_Time_Amount_Counter["1_To_3"] += 1
 
-		elif ((val.get("arithmetic_Mean_Response_Time") / 3600) > 6) and ((val.get("arithmetic_Mean_Response_Time") / 3600) <= 12):
-			dict_Time_Amount_Counter["6_To_12"] += 1
+		elif ((val.get("thread_Livespan") / 86400) > 3) and ((val.get("thread_Livespan") / 86400) <= 7):
+			dict_Time_Amount_Counter["3_To_7"] += 1
 
-		elif ((val.get("arithmetic_Mean_Response_Time") / 3600) > 12) and ((val.get("arithmetic_Mean_Response_Time") / 3600) <= 24):
-			dict_Time_Amount_Counter["12_To_24"] += 1
+		elif ((val.get("thread_Livespan") / 86400) > 7) and ((val.get("thread_Livespan") / 86400) <= 14):
+			dict_Time_Amount_Counter["7_To_14"] += 1
 
-		elif ((val.get("arithmetic_Mean_Response_Time") / 3600) > 24) and ((val.get("arithmetic_Mean_Response_Time") / 3600) <= 48):
-			dict_Time_Amount_Counter["24_To_48"] += 1
-
-		elif (val.get("arithmetic_Mean_Response_Time") / 3600) > 48:
-			dict_Time_Amount_Counter["greater_Than_48"] += 1
+		elif (val.get("thread_Livespan") / 86400) > 14:
+			dict_Time_Amount_Counter["greater_Than_14"] += 1
 
 	plt.figure()
 	# The slices will be ordered and plotted counter-clockwise.
-	labels = ['0 bis 1 h', '1 bis 6 h', '6 bis 12 h', '12 bis 24 h', '24 bis 48 h', '> 48 h']
-	colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'mediumpurple', 'orange']
+	labels = ['0 bis 1 d', '1 bis 3 d', '3 bis 7 d', '7 bis 14 d', '> 14 d']
+	colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'orange']
 	values = [dict_Time_Amount_Counter['0_To_1'],
-	         dict_Time_Amount_Counter['1_To_6'],
-	         dict_Time_Amount_Counter['6_To_12'],
-	         dict_Time_Amount_Counter['12_To_24'],
-	         dict_Time_Amount_Counter['24_To_48'],
-	         dict_Time_Amount_Counter['greater_Than_48']]
+	         dict_Time_Amount_Counter['1_To_3'],
+	         dict_Time_Amount_Counter['3_To_7'],
+	         dict_Time_Amount_Counter['7_To_14'],
+	         dict_Time_Amount_Counter['greater_Than_14']]
 
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
 	plt.legend(patches, labels, loc="best")
-	plt.title('iAMA 2009 - Verteilung Ø Antwortzeit per Thread in Stunden')
+	plt.title('iAMA 2009 - Ø Lebensspanne eines Threads in Tagen')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
