@@ -169,7 +169,7 @@ def generate_Data_To_Be_Plotted():
 			temp_Thread_Creation_Time = temp_Thread.find()[0].get("created_utc")
 
 
-			# printe mir hier alles wo request im Selftext drinsteht
+			# Gets the title of that iterated thread
 			temp_Thread_Title = temp_Thread.find()[0].get("title")
 
 			# removes iAMA-Requests out of our selection
