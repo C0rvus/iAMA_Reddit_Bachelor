@@ -1,4 +1,0 @@
-1. String -> Textblob : [Frage / oder Aussage?]
-2. Bei jedem Child-Element fragen, ob der author der IAMA-Host-Author ist
-	2.1. wenn ja für den Comment zwei Arrays erstellen [yes] [no], und die hochcounten
-	2.2.	^^ das für jeden Comment machen [so sieht man Frage / Antwort - Verhältnis]

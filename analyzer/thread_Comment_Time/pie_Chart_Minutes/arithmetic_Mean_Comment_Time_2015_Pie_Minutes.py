@@ -245,7 +245,7 @@ def plot_The_Generated_Data_Arithmetic_Mean():
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
-	plt.legend(patches, labels, loc="best")
+	plt.legend(patches, labels, loc="upper right")
 	plt.title('iAMA 2015 - Verteilung Ø Antwortzeit per Thread in Minuten')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.

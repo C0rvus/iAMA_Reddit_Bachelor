@@ -1,41 +1,15 @@
 import collections                                                                                              # Necessary to sort collections alphabetically
-
 import matplotlib.pyplot as plt                                                                                 # Necessary to plot graphs with the data calculated
 from pymongo import MongoClient                                                                                 # Necessary to make use of MongoDB
-from functools import reduce
-from scipy import stats as scistats
-
-# How to check wether it is a question or not
-# TODO: ? am Ende eines Satze4s
-# TODO: Filterung nach Tier / Hierarchie der Frage möglich?
-
-# 1. Wenn im Commentar ein Fragezeichen drin ist && der Author nicht der iAMA-Ersteller ist --> Frage (und merke dir die commentar_id, und die utc)
-
-# 2. Durchsuche alle Comments, die jene commentar_id als parent_id haben (und wenn die Länge aller Kommentare größer 1 ist)
-
-#   2.1. Wenn es einen entsprechenden Folgekommentar gibt und der Author der iAMA-Ersteller ist --> Antwort
-
-#          2.1.1. Dann merke dir die UTC des iAMA-Hosts-Kommentars
-#          2.1.2. Berechne die Difference seit Frage-Erstellung mit Antwort-Erstellung des Hosts (dadurch können wir die Response-Time berechnen)
-#          2.1.3. Counte hoch, dass HOST geantwortet hat
-
-#   2.2. Wenn nach allen Iterationen kein Folgekommentar des iAMA-Erstellers gefunden werden kann, welcher sich auf jenen Kommentar bezieht, dann counte hoch, dass Host NICHT geantwortet hat.
-
-# Was können wir dadurch insgesamt berechnen?
-
-# 1.1. Die allgemeine Reaktionszeit des iAMA-Erstellers
-# 1.2. Das Verhältnis zu gestellten Fragen und Antworten hierauf durch den iAMA-Host
-# 1.3. Das Verhältnis gestellter Fragen zu restlichen (Tier 1 gegen Rest)
-
-
-# Host Response time
+import numpy as np
 
 mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)                         # The mongo client, necessary to connect to mongoDB
-mongo_DB_Threads_Instance_2009          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2009       # The data base instance for the threads
-mongo_DB_Thread_Collection_2009         =               mongo_DB_Threads_Instance_2009.collection_names()       # Contains all collection names of the thread database
-mongo_DB_Comments_Instance_2009         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2009      # The data base instance for the comments
+mongo_DB_Threads_Instance_2013          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2013       # The data base instance for the threads
+mongo_DB_Thread_Collection_2013         =               mongo_DB_Threads_Instance_2013.collection_names()       # Contains all collection names of the thread database
+mongo_DB_Comments_Instance_2013         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2013      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
+# Calculates the distribution of tier 1 questions in contrast to questions which are not tier 1 in percent
 def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier_X_Questions):
 
 	full_Percent = amount_Of_Tier_1_Questions + amount_Of_Tier_X_Questions
@@ -49,9 +23,9 @@ def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier
 
 	return dict_To_Be_Returned
 
-
 # Checks whether the postet comment is not from the thread creator
 def check_If_Comment_Is_From_Thread_Author(author_Of_Thread, comment_Author):
+
 	if author_Of_Thread != comment_Author:
 		return True
 	else:
@@ -78,9 +52,9 @@ def amount_Of_Tier_1_Questions_Percentage(id_Of_Thread, author_Of_Thread):
 	# print ("Processsing : " + str(id_Of_Thread) + " ... author: " + str(author_Of_Thread))
 
 	# Makes the global comments instance locally available here
-	global mongo_DB_Comments_Instance_2009
+	global mongo_DB_Comments_Instance_2013
 
-	comments_Collection = mongo_DB_Comments_Instance_2009[id_Of_Thread]
+	comments_Collection = mongo_DB_Comments_Instance_2013[id_Of_Thread]
 	comments_Cursor = comments_Collection.find()
 
 	# Contains the amount of questions done on the first level of a thread
@@ -139,20 +113,20 @@ def amount_Of_Tier_1_Questions_Percentage(id_Of_Thread, author_Of_Thread):
 
 	# Whenever there were no tier X questions asked.. so all questions remained on tier 1
 	else:
-		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions on any Tier greater Tier 1")
+		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions on any tier greater than tier 1")
 		return None
 
+# Generates the data which will be analyzed later on
 def generate_Data_To_Analyze():
-	for j, val in enumerate(mongo_DB_Thread_Collection_2009):
+	for j, val in enumerate(mongo_DB_Thread_Collection_2013):
 
 		# Skips the system.indexes-table which is automatically created by mongodb itself
 		if not val == "system.indexes":
 			# References the actual iterated thread
-			temp_Thread = mongo_DB_Threads_Instance_2009[val]
+			temp_Thread = mongo_DB_Threads_Instance_2013[val]
 
 			# Gets the creation date of that iterated thread
 			temp_Thread_Author = temp_Thread.find()[0].get("author")
-
 
 			# Gets the title of that iterated thread
 			temp_Thread_Title = temp_Thread.find()[0].get("title")
@@ -163,75 +137,51 @@ def generate_Data_To_Analyze():
 					and not "by request" in temp_Thread_Title.lower() \
 					and not "per request" in temp_Thread_Title.lower() \
 					and not "request response" in temp_Thread_Title.lower():
-				# Continue skips processing of those elements which are requests here
-				# print ("ID of Thread : " + str(val) + "  || Title description: " + str(temp_Thread_Title) ) # won't be printed yet, but if we would switch this line with continue, we would see which ID is a request
 				continue
 
 			returned_Value = amount_Of_Tier_1_Questions_Percentage(val, temp_Thread_Author)
 
+			# Value could be none if it has i.E. no values
 			if returned_Value is not None:
 				list_To_Be_Plotted.append(returned_Value)
 
-
-
-
-
-
-
-
-
-
-# <editor-fold desc="Plots the data of the geometric mean for that threads">
-# Plotts the arithmetic mean - extrema are not filtered here
-# </editor-fold>
+# Plots the data of the question distribution for that year
 def plot_The_Generated_Data_Percentage_Mean():
 
-	list_Of_X_Tier_Values = []
+	# Will contain the amount of questions which are not tier 1 questions
+	list_Of_Tier_X_Values = []
 
+	# Iterates over every value and gets the tier_X value
 	for i, val in enumerate(list_To_Be_Plotted):
-		list_Of_X_Tier_Values.append(val.get("percentage_Tier_1"))
+		list_Of_Tier_X_Values.append(val.get("percentage_Tier_X"))
 
-	print (list_Of_X_Tier_Values)
+	# Contains the amount of questions which are asked, but not on tier 1
+	percentage_Mean_Of_Tier_X = np.mean(list_Of_Tier_X_Values)
 
-	geomean = lambda n: reduce(lambda x,y: x*y, list_Of_X_Tier_Values) ** (1.0 / len(list_Of_X_Tier_Values))
-	print (geomean)
-
-	# 35.9407537813 - tier X
-	# 56.8270911005 - tier 1
-
-	print (str(scistats.gmean(list_Of_X_Tier_Values)))
-
-	print ((reduce(lambda x, y: x*y, list_Of_X_Tier_Values))**(1.0/len(list_Of_X_Tier_Values)))
-
+	# Prints the average percentage amount of Tier X questions
+	print ("Percentage of questions on Tier_1: " + str(100 - percentage_Mean_Of_Tier_X) + " %")
+	print ("Percentage of questions on Tier_X: " + str(percentage_Mean_Of_Tier_X) + " %")
 
 	plt.figure()
+
 	# The slices will be ordered and plotted counter-clockwise.
-	labels = ['0 bis 1 d', '1 bis 3 d', '3 bis 7 d', '7 bis 14 d', '> 14 d']
-	colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'orange']
-	values = []
+	labels = ['Rang 1', 'Andere Ränge']
+	colors = ['yellowgreen', 'gold']
+	values = [100 - percentage_Mean_Of_Tier_X, percentage_Mean_Of_Tier_X]
 
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
-	plt.legend(patches, labels, loc="best")
-	plt.title('iAMA 2009 - Ø Lebensspanne eines Threads in Tagen')
+	plt.legend(patches, labels, loc="upper right")
+	plt.title('iAMA 2013 - Ø Verteilung von Fragen in Threadhierarchie')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
 	plt.tight_layout()
 	plt.show()
 
-
-
-
-
-
-
-
-
-
-
-
+# Generates the data which will be plotted later on
 generate_Data_To_Analyze()
 
+# Plots a pie chart containing the tier 1 question distribution
 plot_The_Generated_Data_Percentage_Mean()
