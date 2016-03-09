@@ -24,7 +24,7 @@ def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier
 	return dict_To_Be_Returned
 
 # Checks whether the postet comment is not from the thread creator
-def check_If_Comment_Is_From_Thread_Author(author_Of_Thread, comment_Author):
+def check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author):
 
 	if author_Of_Thread != comment_Author:
 		return True
@@ -81,7 +81,7 @@ def amount_Of_Tier_1_Questions_Percentage(id_Of_Thread, author_Of_Thread):
 
 				bool_Comment_Is_Question = check_If_Comment_Is_A_Question(comment_Text)
 				bool_Comment_Is_Question_On_Tier_1 = check_If_Comment_Is_On_Tier_1(comment_Parent_Id)
-				bool_Comment_Is_Not_From_Thread_Author = check_If_Comment_Is_From_Thread_Author(author_Of_Thread, comment_Author)
+				bool_Comment_Is_Not_From_Thread_Author = check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author)
 
 				# If the posted comment is a question and is not from the thread author and is on Tier 1
 				if (bool_Comment_Is_Question == True) \
