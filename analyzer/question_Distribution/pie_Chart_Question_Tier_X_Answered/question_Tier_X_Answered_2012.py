@@ -1,5 +1,5 @@
+import collections                                                                                              # Necessary to sort collections alphabetically
 import matplotlib.pyplot as plt                                                                                 # Necessary to plot graphs with the data calculated
-import datetime                                                                                                 # Necessary to do time calculation
 from pymongo import MongoClient                                                                                 # Necessary to make use of MongoDB
 import numpy as np
 
@@ -9,31 +9,21 @@ mongo_DB_Thread_Collection_2012         =               mongo_DB_Threads_Instanc
 mongo_DB_Comments_Instance_2012         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2012      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
-# Calculates the time difference between to time stamps in seconds
-def calculate_Time_Difference(comment_Time_Stamp, answer_Time_Stamp_IAMA_Host):
+# Calculates how many tier X questions have been answered
+def calculate_Percentage_Distribution(amount_Of_Tier_X_Questions, amount_Of_Tier_X_Questions_Answered):
 
-	# Converts the time_Value into float, otherwise it could not be processed any further...
-	comment_Time_Value = float(comment_Time_Stamp)
-	comment_Time_Converted = datetime.datetime.fromtimestamp(comment_Time_Value).strftime('%d-%m-%Y %H:%M:%S')
-	comment_Time_Converted_For_Subtraction = datetime.datetime.strptime(comment_Time_Converted, '%d-%m-%Y %H:%M:%S')
+	percentage_Tier_X_Answered      = (amount_Of_Tier_X_Questions_Answered / amount_Of_Tier_X_Questions) * 100
+	percentage_Tier_X_Not_Answered  = (100 - percentage_Tier_X_Answered)
 
-	# Converts the time_Value into float, otherwise it could not be processed any further...
-	answer_Time_IAMA_Host = float(answer_Time_Stamp_IAMA_Host)
-	answer_Time_IAMA_Host_Converted = datetime.datetime.fromtimestamp(answer_Time_IAMA_Host).strftime('%d-%m-%Y %H:%M:%S')
-	answer_Time_IAMA_Host_Converted_For_Subtraction = datetime.datetime.strptime(answer_Time_IAMA_Host_Converted, '%d-%m-%Y %H:%M:%S')
+	dict_To_Be_Returned = {
+		"percentage_Tier_X_Answered"    :   percentage_Tier_X_Answered,
+		"percentage_Tier_X_Not_Answered":   percentage_Tier_X_Not_Answered
+	}
 
-	# Calculates the time difference between the comment and the iAMA hosts answer
-	time_Difference_In_Seconds = (answer_Time_IAMA_Host_Converted_For_Subtraction - comment_Time_Converted_For_Subtraction).total_seconds()
-
-	return time_Difference_In_Seconds
+	return dict_To_Be_Returned
 
 # Checks whether the thread host has answered a given question
 def check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acutal_Id, comments_Cursor):
-
-	dict_To_Be_Returned = {
-		"question_Answered_From_Host"   :   False,
-		"time_Stamp_Answer"             :   0
-	}
 
 	# Iterates over every comment
 	for collection in comments_Cursor:
@@ -46,18 +36,11 @@ def check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acut
 			# Whenever the iterated comment is from the iAMA-Host and that comment has the question as parent_id
 			if (check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, actual_Comment_Author) == False) \
 					and (check_Comment_Parent_Id == comment_Acutal_Id):
-
-				dict_To_Be_Returned["question_Answered_From_Host"] = True
-				dict_To_Be_Returned["time_Stamp_Answer"] = collection.get("created_utc")
-
-				return dict_To_Be_Returned
+				return True
 			else:
-				return dict_To_Be_Returned
+				return False
 		else:
-			return dict_To_Be_Returned
-
-	# This is the case whenever a comment has not a single thread
-	return dict_To_Be_Returned
+			return False
 
 # Checks whether the postet comment is not from the thread creator
 def check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author):
@@ -67,7 +50,7 @@ def check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author)
 	else:
 		return False
 
-# Checks whether the question is on Tier-1 Hierarchy or not
+# Checks wether the question is on Tier-1 Hierarchy or not
 def check_If_Comment_Is_On_Tier_1(comment_Parent_Id):
 
 	if "t3_" in  comment_Parent_Id:
@@ -83,8 +66,8 @@ def check_If_Comment_Is_A_Question(given_String):
 	else:
 		return False
 
-# Calculates the amount of Tier 1 questions in contrast to the other Tiers
-def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_Thread):
+# Calculates the amount of questions on tier x which have been answered by the iAMA host
+def amount_Of_Tier_X_Questions_Answered_By_Host(id_Of_Thread, author_Of_Thread):
 	# print ("Processsing : " + str(id_Of_Thread) + " ... author: " + str(author_Of_Thread))
 
 	# Makes the global comments instance locally available here
@@ -93,10 +76,9 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 	comments_Collection = mongo_DB_Comments_Instance_2012[id_Of_Thread]
 	comments_Cursor = comments_Collection.find()
 
-	amount_Of_Answer_Times = []
 
-	amount_Of_Tier_1_Questions = 0
-	amount_Of_Tier_1_Questions_Answered = 0
+	amount_Of_Tier_X_Questions = 0
+	amount_Of_Tier_X_Questions_Answered = 0
 
 
 	# Iterates over every comment within that thread
@@ -110,7 +92,6 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 			comment_Author = collection.get("author")
 			comment_Parent_Id = collection.get("parent_id")
 			comment_Acutal_Id = collection.get("name")
-			comment_Time_Stamp = collection.get("created_utc")
 
 			# Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
 			if comment_Text is not None \
@@ -121,24 +102,19 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 				bool_Comment_Is_Question_On_Tier_1 = check_If_Comment_Is_On_Tier_1(comment_Parent_Id)
 				bool_Comment_Is_Not_From_Thread_Author = check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author)
 
-				# If the posted comment is a question and is not from the thread author and is on Tier 1
+				# If the posted comment is a question and is not from the thread author and is on Tier X
 				if (bool_Comment_Is_Question == True) \
-					and (bool_Comment_Is_Question_On_Tier_1 == True) \
+					and (bool_Comment_Is_Question_On_Tier_1 == False) \
 					and (bool_Comment_Is_Not_From_Thread_Author == True):
 
-					amount_Of_Tier_1_Questions += 1
+					amount_Of_Tier_X_Questions += 1
 
 					# Check whether that iterated comment is answered by the host
 					answer_Is_From_Thread_Author = check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acutal_Id, comments_Cursor)
 
 					# Whenever the answer to that comment is from the author (boolean == True)
-					if answer_Is_From_Thread_Author["question_Answered_From_Host"] is True:
-						answer_Time_Stamp_IAMA_Host = answer_Is_From_Thread_Author["time_Stamp_Answer"]
-
-						# Adds the calculated answer time to a local list
-						amount_Of_Answer_Times.append(calculate_Time_Difference(comment_Time_Stamp, answer_Time_Stamp_IAMA_Host))
-						
-						amount_Of_Tier_1_Questions_Answered += 1
+					if answer_Is_From_Thread_Author:
+						amount_Of_Tier_X_Questions_Answered += 1
 
 				# Skip that comment
 				else:
@@ -149,15 +125,16 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 				# print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation due to null values")
 				continue
 
-	# Whenever there were some questions aksed on tier 1 and those questions have been answered by the iAMA host on tier 1
-	if amount_Of_Tier_1_Questions != 0 and amount_Of_Tier_1_Questions_Answered != 0:
+	# Checks if there has been done some calculation or not
+	if amount_Of_Tier_X_Questions != 0:
 
-		# Returns the arithmetic mean of answer time by the iAMA host
-		return np.mean(amount_Of_Answer_Times)
+		dict_To_Be_Returned_Percentage_Answered_Questions = calculate_Percentage_Distribution(amount_Of_Tier_X_Questions, amount_Of_Tier_X_Questions_Answered)
+		dict_To_Be_Returned_Percentage_Answered_Questions = collections.OrderedDict(sorted(dict_To_Be_Returned_Percentage_Answered_Questions.items()))
+		return dict_To_Be_Returned_Percentage_Answered_Questions
 
-	#Whenever there were no tier X questions asked.. so all questions remained on tier 1
+	# Whenever there were no tier X questions asked.. so all questions remained on tier 1
 	else:
-		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier 1")
+		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier X")
 		return None
 
 
@@ -184,7 +161,7 @@ def generate_Data_To_Analyze():
 					and not "request response" in temp_Thread_Title.lower():
 				continue
 
-			returned_Value = calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(val, temp_Thread_Author)
+			returned_Value = amount_Of_Tier_X_Questions_Answered_By_Host(val, temp_Thread_Author)
 
 			# Value could be none if it has i.E. no values
 			if returned_Value is not None:
@@ -193,55 +170,32 @@ def generate_Data_To_Analyze():
 # Plots the data of the question distribution for that year
 def plot_The_Generated_Data_Percentage_Mean():
 
-	# The dictionary which is necessary to count the amount of response times in Minutes
-	dict_Time_Amount_Counter = {
-		"0_To_5"    :   0,
-		"5_To_15"   :   0,
-		"15_To_30"  :   0,
-		"30_To_60"  :   0,
-		"60_To_120" :   0,
-		"greater_Than_120" :   0,
-	}
+	# Will contain the amount of questions which are not tier x questions
+	list_Of_Tier_X_Answered_Questions = []
 
-	# Iterates over every value and fills the dict_Time_Amount_Counter appropriate
+	# Iterates over every value and gets the tier_X value
 	for i, val in enumerate(list_To_Be_Plotted):
+		list_Of_Tier_X_Answered_Questions.append(val.get("percentage_Tier_X_Answered"))
 
-		if 0 < (val / 60) <= 5:
-			dict_Time_Amount_Counter["0_To_5"] += 1
+	# Contains the amount of questions which have been answered by the iAMA-Host an tier x in percentage
+	percentage_Mean_Of_Tier_X_Answered_Questions = np.mean(list_Of_Tier_X_Answered_Questions)
 
-		elif 5 < (val / 60) <= 15:
-			dict_Time_Amount_Counter["5_To_15"] += 1
-
-		elif 15 < (val / 60) <= 30:
-			dict_Time_Amount_Counter["15_To_30"] += 1
-
-		elif 30 < (val / 60) <= 60:
-			dict_Time_Amount_Counter["30_To_60"] += 1
-
-		elif 60 < (val / 60) <= 120:
-			dict_Time_Amount_Counter["60_To_120"] += 1
-
-		elif (val / 60) > 120:
-			dict_Time_Amount_Counter["greater_Than_120"] += 1
-
+	# Prints the average percentage amount of Tier X questions
+	print ("Percentage of questions answered by iAMA-Host on Tier_X: " + str(percentage_Mean_Of_Tier_X_Answered_Questions) + " %")
+	print ("Percentage of questions NOT answered by iAMA-Host on on Tier_X: " + str(100 - percentage_Mean_Of_Tier_X_Answered_Questions) + " %")
 
 	plt.figure()
 
 	# The slices will be ordered and plotted counter-clockwise.
-	labels = ['0 bis 5 min', '5 bis 15 min', '15 bis 30 min', '30 bis 60 min', '60 bis 120 min', '> 120 min']
-	colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'mediumpurple', 'orange']
-	values = [dict_Time_Amount_Counter['0_To_5'],
-	         dict_Time_Amount_Counter['5_To_15'],
-	         dict_Time_Amount_Counter['15_To_30'],
-	         dict_Time_Amount_Counter['30_To_60'],
-	         dict_Time_Amount_Counter['60_To_120'],
-	         dict_Time_Amount_Counter['greater_Than_120']]
+	labels = ['Beantwortet','Unbeantwortet' ]
+	colors = ['yellowgreen', 'gold']
+	values = [percentage_Mean_Of_Tier_X_Answered_Questions, 100 - percentage_Mean_Of_Tier_X_Answered_Questions]
 
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
-	plt.legend(patches, labels, loc="lower right", bbox_to_anchor=(1.2, 0.25))
-	plt.title('iAMA 2012 - Ø Reaktionszeit des iAMA-Host auf Fragen auf Ebene 1 in Minuten')
+	plt.legend(patches, labels, loc="upper right")
+	plt.title('iAMA 2012 - Ø Quote von beantworteten Fragen auf Ebene X durch iAMA-Host')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
@@ -251,5 +205,5 @@ def plot_The_Generated_Data_Percentage_Mean():
 # Generates the data which will be plotted later on
 generate_Data_To_Analyze()
 
-# Plots a pie chart containing the tier 1 question distribution
+# Plots a pie chart containing the tier x question distribution
 plot_The_Generated_Data_Percentage_Mean()

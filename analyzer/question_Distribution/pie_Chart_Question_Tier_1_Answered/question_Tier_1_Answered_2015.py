@@ -9,7 +9,7 @@ mongo_DB_Thread_Collection_2015         =               mongo_DB_Threads_Instanc
 mongo_DB_Comments_Instance_2015         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2015      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
-# Calculates the distribution of tier 1 questions in contrast to questions which are not tier 1 in percent
+# Calculates how many questions on tier 1 have been answered by the iAMA-Host
 def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier_1_Questions_Answered):
 
 	percentage_Tier_1_Answered      = (amount_Of_Tier_1_Questions_Answered / amount_Of_Tier_1_Questions) * 100

@@ -4,20 +4,20 @@ from pymongo import MongoClient                                                 
 import numpy as np
 
 mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)                         # The mongo client, necessary to connect to mongoDB
-mongo_DB_Threads_Instance_2010          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2010       # The data base instance for the threads
-mongo_DB_Thread_Collection_2010         =               mongo_DB_Threads_Instance_2010.collection_names()       # Contains all collection names of the thread database
-mongo_DB_Comments_Instance_2010         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2010      # The data base instance for the comments
+mongo_DB_Threads_Instance_2013          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2013       # The data base instance for the threads
+mongo_DB_Thread_Collection_2013         =               mongo_DB_Threads_Instance_2013.collection_names()       # Contains all collection names of the thread database
+mongo_DB_Comments_Instance_2013         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2013      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
-# Calculates how many questions on tier 1 have been answered by the iAMA-Host
-def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier_1_Questions_Answered):
+# Calculates how many tier X questions have been answered
+def calculate_Percentage_Distribution(amount_Of_Tier_X_Questions, amount_Of_Tier_X_Questions_Answered):
 
-	percentage_Tier_1_Answered      = (amount_Of_Tier_1_Questions_Answered / amount_Of_Tier_1_Questions) * 100
-	percentage_Tier_1_Not_Answered  = (100 - percentage_Tier_1_Answered)
+	percentage_Tier_X_Answered      = (amount_Of_Tier_X_Questions_Answered / amount_Of_Tier_X_Questions) * 100
+	percentage_Tier_X_Not_Answered  = (100 - percentage_Tier_X_Answered)
 
 	dict_To_Be_Returned = {
-		"percentage_Tier_1_Answered"    :   percentage_Tier_1_Answered,
-		"percentage_Tier_1_Not_Answered":   percentage_Tier_1_Not_Answered
+		"percentage_Tier_X_Answered"    :   percentage_Tier_X_Answered,
+		"percentage_Tier_X_Not_Answered":   percentage_Tier_X_Not_Answered
 	}
 
 	return dict_To_Be_Returned
@@ -66,19 +66,19 @@ def check_If_Comment_Is_A_Question(given_String):
 	else:
 		return False
 
-# Calculates the amount of Tier 1 questions in contrast to the other Tiers
-def amount_Of_Tier_1_Questions_Answered_By_Host(id_Of_Thread, author_Of_Thread):
+# Calculates the amount of questions on tier x which have been answered by the iAMA host
+def amount_Of_Tier_X_Questions_Answered_By_Host(id_Of_Thread, author_Of_Thread):
 	# print ("Processsing : " + str(id_Of_Thread) + " ... author: " + str(author_Of_Thread))
 
 	# Makes the global comments instance locally available here
-	global mongo_DB_Comments_Instance_2010
+	global mongo_DB_Comments_Instance_2013
 
-	comments_Collection = mongo_DB_Comments_Instance_2010[id_Of_Thread]
+	comments_Collection = mongo_DB_Comments_Instance_2013[id_Of_Thread]
 	comments_Cursor = comments_Collection.find()
 
 
-	amount_Of_Tier_1_Questions = 0
-	amount_Of_Tier_1_Questions_Answered = 0
+	amount_Of_Tier_X_Questions = 0
+	amount_Of_Tier_X_Questions_Answered = 0
 
 
 	# Iterates over every comment within that thread
@@ -102,19 +102,19 @@ def amount_Of_Tier_1_Questions_Answered_By_Host(id_Of_Thread, author_Of_Thread):
 				bool_Comment_Is_Question_On_Tier_1 = check_If_Comment_Is_On_Tier_1(comment_Parent_Id)
 				bool_Comment_Is_Not_From_Thread_Author = check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author)
 
-				# If the posted comment is a question and is not from the thread author and is on Tier 1
+				# If the posted comment is a question and is not from the thread author and is on Tier X
 				if (bool_Comment_Is_Question == True) \
-					and (bool_Comment_Is_Question_On_Tier_1 == True) \
+					and (bool_Comment_Is_Question_On_Tier_1 == False) \
 					and (bool_Comment_Is_Not_From_Thread_Author == True):
 
-					amount_Of_Tier_1_Questions += 1
+					amount_Of_Tier_X_Questions += 1
 
 					# Check whether that iterated comment is answered by the host
 					answer_Is_From_Thread_Author = check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acutal_Id, comments_Cursor)
 
 					# Whenever the answer to that comment is from the author (boolean == True)
 					if answer_Is_From_Thread_Author:
-						amount_Of_Tier_1_Questions_Answered += 1
+						amount_Of_Tier_X_Questions_Answered += 1
 
 				# Skip that comment
 				else:
@@ -126,26 +126,26 @@ def amount_Of_Tier_1_Questions_Answered_By_Host(id_Of_Thread, author_Of_Thread):
 				continue
 
 	# Checks if there has been done some calculation or not
-	if amount_Of_Tier_1_Questions != 0:
+	if amount_Of_Tier_X_Questions != 0:
 
-		dict_To_Be_Returned_Percentage_Answered_Questions = calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier_1_Questions_Answered)
+		dict_To_Be_Returned_Percentage_Answered_Questions = calculate_Percentage_Distribution(amount_Of_Tier_X_Questions, amount_Of_Tier_X_Questions_Answered)
 		dict_To_Be_Returned_Percentage_Answered_Questions = collections.OrderedDict(sorted(dict_To_Be_Returned_Percentage_Answered_Questions.items()))
 		return dict_To_Be_Returned_Percentage_Answered_Questions
 
-	#Whenever there were no tier X questions asked.. so all questions remained on tier 1
+	# Whenever there were no tier X questions asked.. so all questions remained on tier 1
 	else:
-		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier 1")
+		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier X")
 		return None
 
 
 # Generates the data which will be analyzed later on
 def generate_Data_To_Analyze():
-	for j, val in enumerate(mongo_DB_Thread_Collection_2010):
+	for j, val in enumerate(mongo_DB_Thread_Collection_2013):
 
 		# Skips the system.indexes-table which is automatically created by mongodb itself
 		if not val == "system.indexes":
 			# References the actual iterated thread
-			temp_Thread = mongo_DB_Threads_Instance_2010[val]
+			temp_Thread = mongo_DB_Threads_Instance_2013[val]
 
 			# Gets the creation date of that iterated thread
 			temp_Thread_Author = temp_Thread.find()[0].get("author")
@@ -161,7 +161,7 @@ def generate_Data_To_Analyze():
 					and not "request response" in temp_Thread_Title.lower():
 				continue
 
-			returned_Value = amount_Of_Tier_1_Questions_Answered_By_Host(val, temp_Thread_Author)
+			returned_Value = amount_Of_Tier_X_Questions_Answered_By_Host(val, temp_Thread_Author)
 
 			# Value could be none if it has i.E. no values
 			if returned_Value is not None:
@@ -170,32 +170,32 @@ def generate_Data_To_Analyze():
 # Plots the data of the question distribution for that year
 def plot_The_Generated_Data_Percentage_Mean():
 
-	# Will contain the amount of questions which are not tier 1 questions
-	list_Of_Tier_1_Answered_Questions = []
+	# Will contain the amount of questions which are not tier x questions
+	list_Of_Tier_X_Answered_Questions = []
 
 	# Iterates over every value and gets the tier_X value
 	for i, val in enumerate(list_To_Be_Plotted):
-		list_Of_Tier_1_Answered_Questions.append(val.get("percentage_Tier_1_Answered"))
+		list_Of_Tier_X_Answered_Questions.append(val.get("percentage_Tier_X_Answered"))
 
-	# Contains the amount of questions which have been answered by the iAMA-Host an tier 1 in percentage
-	percentage_Mean_Of_Tier_1_Answered_Questions = np.mean(list_Of_Tier_1_Answered_Questions)
+	# Contains the amount of questions which have been answered by the iAMA-Host an tier x in percentage
+	percentage_Mean_Of_Tier_X_Answered_Questions = np.mean(list_Of_Tier_X_Answered_Questions)
 
 	# Prints the average percentage amount of Tier X questions
-	print ("Percentage of questions answered by iAMA-Host on Tier_1: " + str(percentage_Mean_Of_Tier_1_Answered_Questions) + " %")
-	print ("Percentage of questions NOT answered by iAMA-Host on on Tier_1: " + str(100 - percentage_Mean_Of_Tier_1_Answered_Questions) + " %")
+	print ("Percentage of questions answered by iAMA-Host on Tier_X: " + str(percentage_Mean_Of_Tier_X_Answered_Questions) + " %")
+	print ("Percentage of questions NOT answered by iAMA-Host on on Tier_X: " + str(100 - percentage_Mean_Of_Tier_X_Answered_Questions) + " %")
 
 	plt.figure()
 
 	# The slices will be ordered and plotted counter-clockwise.
 	labels = ['Beantwortet','Unbeantwortet' ]
 	colors = ['yellowgreen', 'gold']
-	values = [percentage_Mean_Of_Tier_1_Answered_Questions, 100 - percentage_Mean_Of_Tier_1_Answered_Questions]
+	values = [percentage_Mean_Of_Tier_X_Answered_Questions, 100 - percentage_Mean_Of_Tier_X_Answered_Questions]
 
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
 	plt.legend(patches, labels, loc="upper right")
-	plt.title('iAMA 2010 - Ø Quote von beantworteten Fragen auf Ebene 1 durch iAMA-Host')
+	plt.title('iAMA 2013 - Ø Quote von beantworteten Fragen auf Ebene X durch iAMA-Host')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
@@ -205,5 +205,5 @@ def plot_The_Generated_Data_Percentage_Mean():
 # Generates the data which will be plotted later on
 generate_Data_To_Analyze()
 
-# Plots a pie chart containing the tier 1 question distribution
+# Plots a pie chart containing the tier x question distribution
 plot_The_Generated_Data_Percentage_Mean()

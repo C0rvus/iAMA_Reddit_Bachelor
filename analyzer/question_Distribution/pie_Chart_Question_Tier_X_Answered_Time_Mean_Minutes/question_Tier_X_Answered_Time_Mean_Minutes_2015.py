@@ -4,9 +4,9 @@ from pymongo import MongoClient                                                 
 import numpy as np
 
 mongo_DB_Client_Instance                =               MongoClient('localhost', 27017)                         # The mongo client, necessary to connect to mongoDB
-mongo_DB_Threads_Instance_2011          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2011       # The data base instance for the threads
-mongo_DB_Thread_Collection_2011         =               mongo_DB_Threads_Instance_2011.collection_names()       # Contains all collection names of the thread database
-mongo_DB_Comments_Instance_2011         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2011      # The data base instance for the comments
+mongo_DB_Threads_Instance_2015          =               mongo_DB_Client_Instance.iAMA_Reddit_Threads_2015       # The data base instance for the threads
+mongo_DB_Thread_Collection_2015         =               mongo_DB_Threads_Instance_2015.collection_names()       # Contains all collection names of the thread database
+mongo_DB_Comments_Instance_2015         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2015      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
 # Calculates the time difference between to time stamps in seconds
@@ -84,19 +84,19 @@ def check_If_Comment_Is_A_Question(given_String):
 		return False
 
 # Calculates the amount of Tier 1 questions in contrast to the other Tiers
-def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_Thread):
+def calculate_Ar_Mean_Answer_Time_For_Tier_X_Questions(id_Of_Thread, author_Of_Thread):
 	# print ("Processsing : " + str(id_Of_Thread) + " ... author: " + str(author_Of_Thread))
 
 	# Makes the global comments instance locally available here
-	global mongo_DB_Comments_Instance_2011
+	global mongo_DB_Comments_Instance_2015
 
-	comments_Collection = mongo_DB_Comments_Instance_2011[id_Of_Thread]
+	comments_Collection = mongo_DB_Comments_Instance_2015[id_Of_Thread]
 	comments_Cursor = comments_Collection.find()
 
 	amount_Of_Answer_Times = []
 
-	amount_Of_Tier_1_Questions = 0
-	amount_Of_Tier_1_Questions_Answered = 0
+	amount_Of_Tier_X_Questions = 0
+	amount_Of_Tier_X_Questions_Answered = 0
 
 
 	# Iterates over every comment within that thread
@@ -123,10 +123,10 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 
 				# If the posted comment is a question and is not from the thread author and is on Tier 1
 				if (bool_Comment_Is_Question == True) \
-					and (bool_Comment_Is_Question_On_Tier_1 == True) \
+					and (bool_Comment_Is_Question_On_Tier_1 == False) \
 					and (bool_Comment_Is_Not_From_Thread_Author == True):
 
-					amount_Of_Tier_1_Questions += 1
+					amount_Of_Tier_X_Questions += 1
 
 					# Check whether that iterated comment is answered by the host
 					answer_Is_From_Thread_Author = check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acutal_Id, comments_Cursor)
@@ -138,7 +138,7 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 						# Adds the calculated answer time to a local list
 						amount_Of_Answer_Times.append(calculate_Time_Difference(comment_Time_Stamp, answer_Time_Stamp_IAMA_Host))
 						
-						amount_Of_Tier_1_Questions_Answered += 1
+						amount_Of_Tier_X_Questions_Answered += 1
 
 				# Skip that comment
 				else:
@@ -149,26 +149,26 @@ def calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(id_Of_Thread, author_Of_T
 				# print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation due to null values")
 				continue
 
-	# Whenever there were some questions aksed on tier 1 and those questions have been answered by the iAMA host on tier 1
-	if amount_Of_Tier_1_Questions != 0 and amount_Of_Tier_1_Questions_Answered != 0:
+	# Whenever there were some questions aksed on tier X and those questions have been answered by the iAMA host on tier X
+	if amount_Of_Tier_X_Questions != 0 and amount_Of_Tier_X_Questions_Answered != 0:
 
 		# Returns the arithmetic mean of answer time by the iAMA host
 		return np.mean(amount_Of_Answer_Times)
 
-	#Whenever there were no tier X questions asked.. so all questions remained on tier 1
+	# Whenever there were no tier X questions asked.. so all questions remained on tier 1
 	else:
-		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier 1")
+		print ("Thread '" + str(id_Of_Thread) + "' will not be included in the calculation because there are no questions asked on tier X")
 		return None
 
 
 # Generates the data which will be analyzed later on
 def generate_Data_To_Analyze():
-	for j, val in enumerate(mongo_DB_Thread_Collection_2011):
+	for j, val in enumerate(mongo_DB_Thread_Collection_2015):
 
 		# Skips the system.indexes-table which is automatically created by mongodb itself
 		if not val == "system.indexes":
 			# References the actual iterated thread
-			temp_Thread = mongo_DB_Threads_Instance_2011[val]
+			temp_Thread = mongo_DB_Threads_Instance_2015[val]
 
 			# Gets the creation date of that iterated thread
 			temp_Thread_Author = temp_Thread.find()[0].get("author")
@@ -184,7 +184,7 @@ def generate_Data_To_Analyze():
 					and not "request response" in temp_Thread_Title.lower():
 				continue
 
-			returned_Value = calculate_Ar_Mean_Answer_Time_For_Tier_1_Questions(val, temp_Thread_Author)
+			returned_Value = calculate_Ar_Mean_Answer_Time_For_Tier_X_Questions(val, temp_Thread_Author)
 
 			# Value could be none if it has i.E. no values
 			if returned_Value is not None:
@@ -195,53 +195,53 @@ def plot_The_Generated_Data_Percentage_Mean():
 
 	# The dictionary which is necessary to count the amount of response times in Minutes
 	dict_Time_Amount_Counter = {
-		"0_To_1"    :   0,
-		"1_To_6"    :   0,
-		"6_To_12"   :   0,
-		"12_To_24"  :   0,
-		"24_To_48"  :   0,
-		"greater_Than_48": 0
+		"0_To_5"    :   0,
+		"5_To_15"   :   0,
+		"15_To_30"  :   0,
+		"30_To_60"  :   0,
+		"60_To_120" :   0,
+		"greater_Than_120" :   0,
 	}
 
 	# Iterates over every value and fills the dict_Time_Amount_Counter appropriate
 	for i, val in enumerate(list_To_Be_Plotted):
 
-		if 0 < (val / 3600) <= 1:
-			dict_Time_Amount_Counter["0_To_1"] += 1
+		if 0 < (val / 60) <= 5:
+			dict_Time_Amount_Counter["0_To_5"] += 1
 
-		elif 1 < (val / 3600) <= 6:
-			dict_Time_Amount_Counter["1_To_6"] += 1
+		elif 5 < (val / 60) <= 15:
+			dict_Time_Amount_Counter["5_To_15"] += 1
 
-		elif 6 < (val / 3600) <= 12:
-			dict_Time_Amount_Counter["6_To_12"] += 1
+		elif 15 < (val / 60) <= 30:
+			dict_Time_Amount_Counter["15_To_30"] += 1
 
-		elif 12 < (val / 3600) <= 24:
-			dict_Time_Amount_Counter["12_To_24"] += 1
+		elif 30 < (val / 60) <= 60:
+			dict_Time_Amount_Counter["30_To_60"] += 1
 
-		elif 24 < (val / 3600) <= 48:
-			dict_Time_Amount_Counter["24_To_48"] += 1
+		elif 60 < (val / 60) <= 120:
+			dict_Time_Amount_Counter["60_To_120"] += 1
 
-		elif (val / 3600) > 48:
-			dict_Time_Amount_Counter["greater_Than_48"] += 1
+		elif (val / 60) > 120:
+			dict_Time_Amount_Counter["greater_Than_120"] += 1
 
 
 	plt.figure()
 
 	# The slices will be ordered and plotted counter-clockwise.
-	labels = ['0 bis 1 h', '1 bis 6 h', '6 bis 12 h', '12 bis 24 h', '24 bis 48 h', '> 48 h']
+	labels = ['0 bis 5 min', '5 bis 15 min', '15 bis 30 min', '30 bis 60 min', '60 bis 120 min', '> 120 min']
 	colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'mediumpurple', 'orange']
-	values = [dict_Time_Amount_Counter['0_To_1'],
-	         dict_Time_Amount_Counter['1_To_6'],
-	         dict_Time_Amount_Counter['6_To_12'],
-	         dict_Time_Amount_Counter['12_To_24'],
-	         dict_Time_Amount_Counter['24_To_48'],
-	         dict_Time_Amount_Counter['greater_Than_48']]
+	values = [dict_Time_Amount_Counter['0_To_5'],
+	         dict_Time_Amount_Counter['5_To_15'],
+	         dict_Time_Amount_Counter['15_To_30'],
+	         dict_Time_Amount_Counter['30_To_60'],
+	         dict_Time_Amount_Counter['60_To_120'],
+	         dict_Time_Amount_Counter['greater_Than_120']]
 
 	patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
 	plt.pie(values, colors=colors, autopct='%.2f%%')
 
-	plt.legend(patches, labels, loc="upper left")
-	plt.title('iAMA 2011 - Ø Reaktionszeit des iAMA-Host auf Fragen auf Ebene 1 in Stunden')
+	plt.legend(patches, labels, loc="lower right", bbox_to_anchor=(1.2, 0.25))
+	plt.title('iAMA 2015 - Ø Reaktionszeit des iAMA-Host auf Fragen auf Ebene X in Minuten')
 
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
@@ -251,5 +251,5 @@ def plot_The_Generated_Data_Percentage_Mean():
 # Generates the data which will be plotted later on
 generate_Data_To_Analyze()
 
-# Plots a pie chart containing the tier 1 question distribution
+# Plots a pie chart containing the tier X question distribution
 plot_The_Generated_Data_Percentage_Mean()

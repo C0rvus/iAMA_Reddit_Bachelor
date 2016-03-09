@@ -9,6 +9,7 @@ mongo_DB_Thread_Collection_2013         =               mongo_DB_Threads_Instanc
 mongo_DB_Comments_Instance_2013         =               mongo_DB_Client_Instance.iAMA_Reddit_Comments_2013      # The data base instance for the comments
 list_To_Be_Plotted                      =               []                                                      # Will contain all analyzed time information for threads & comments
 
+# Calculates the time difference between to time stamps in seconds
 def calculate_Time_Difference(comment_Time_Stamp, answer_Time_Stamp_IAMA_Host):
 
 	# Converts the time_Value into float, otherwise it could not be processed any further...
@@ -25,19 +26,6 @@ def calculate_Time_Difference(comment_Time_Stamp, answer_Time_Stamp_IAMA_Host):
 	time_Difference_In_Seconds = (answer_Time_IAMA_Host_Converted_For_Subtraction - comment_Time_Converted_For_Subtraction).total_seconds()
 
 	return time_Difference_In_Seconds
-
-# Calculates the distribution of tier 1 questions in contrast to questions which are not tier 1 in percent
-def calculate_Percentage_Distribution(amount_Of_Tier_1_Questions, amount_Of_Tier_1_Questions_Answered):
-
-	percentage_Tier_1_Answered      = (amount_Of_Tier_1_Questions_Answered / amount_Of_Tier_1_Questions) * 100
-	percentage_Tier_1_Not_Answered  = (100 - percentage_Tier_1_Answered)
-
-	dict_To_Be_Returned = {
-		"percentage_Tier_1_Answered"    :   percentage_Tier_1_Answered,
-		"percentage_Tier_1_Not_Answered":   percentage_Tier_1_Not_Answered
-	}
-
-	return dict_To_Be_Returned
 
 # Checks whether the thread host has answered a given question
 def check_If_Comment_Is_Answer_From_Thread_Author(author_Of_Thread, comment_Acutal_Id, comments_Cursor):
@@ -79,7 +67,7 @@ def check_If_Comment_Is_Not_From_Thread_Author(author_Of_Thread, comment_Author)
 	else:
 		return False
 
-# Checks wether the question is on Tier-1 Hierarchy or not
+# Checks whether the question is on Tier-1 Hierarchy or not
 def check_If_Comment_Is_On_Tier_1(comment_Parent_Id):
 
 	if "t3_" in  comment_Parent_Id:
