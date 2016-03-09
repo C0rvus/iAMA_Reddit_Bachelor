@@ -165,7 +165,7 @@ def plot_The_Generated_Data_Percentage_Mean():
 	plt.figure()
 
 	# The slices will be ordered and plotted counter-clockwise.
-	labels = ['Rang 1', 'Andere Ränge']
+	labels = ['Ebene 1', 'Andere Ebene']
 	colors = ['yellowgreen', 'gold']
 	values = [100 - percentage_Mean_Of_Tier_X, percentage_Mean_Of_Tier_X]
 

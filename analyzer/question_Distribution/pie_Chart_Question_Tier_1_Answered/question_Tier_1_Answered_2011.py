@@ -177,7 +177,7 @@ def plot_The_Generated_Data_Percentage_Mean():
 	for i, val in enumerate(list_To_Be_Plotted):
 		list_Of_Tier_1_Answered_Questions.append(val.get("percentage_Tier_1_Answered"))
 
-	# Contains the amount of questions which are asked, but not on tier 1
+	# Contains the amount of questions which have been answered by the iAMA-Host an tier 1 in percentage
 	percentage_Mean_Of_Tier_1_Answered_Questions = np.mean(list_Of_Tier_1_Answered_Questions)
 
 	# Prints the average percentage amount of Tier X questions
