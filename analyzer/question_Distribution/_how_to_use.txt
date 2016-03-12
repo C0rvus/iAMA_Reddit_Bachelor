@@ -1,0 +1,15 @@
+This file contains information about how to use the scripts..
+
+------------------
+------------------
+Plots a pie chart containing the top 100 / worst 100 questions of the year and the proportion to the answers thei received from the iAMA host.
+
+top100_pieChart.py {year} {true / false}
+	
+	{year} 		(int) 		= 	the year which is to be used for the calculation
+	{true / false) 	(bool) 		= 	true [top 100] || false [worst 100]
+
+Usage example: python top100_pieChart.py 2009 false
+
+------------------
+------------------

@@ -80,7 +80,6 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
     Returns:
         time_difference_in_seconds (int) : The time difference of the comment and its answer by the iAMA host in seconds
     """
-    print(type(comment_time_stamp))
 
     # Converts the time_Value into float, otherwise it could not be processed any further...
     comment_time_value = float(comment_time_stamp)
@@ -219,7 +218,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
     Args:
         id_of_thread (str) : Contains the id of the thread which is to be iterated
         author_of_thread (str) : Contains the name of the thread author
-        thread_creation_date (int): Contains the time
+        thread_creation_date (str): Contains the time
     Returns:
         amount_of_questions_not_answered (int) : The amount of questions which have not been answered
     """
@@ -238,8 +237,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
     # Iterates over every comment within that thread
     for collection in comments_cursor:
 
-        # Whenever the iterated comment was created by user "AutoModerator"
-        # skip it
+        # Whenever the iterated comment was created by user "AutoModerator" skip it
         if (collection.get("author")) != "AutoModerator":
 
             # References the text of the comment
@@ -249,6 +247,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
             comment_acutal_id = collection.get("name")
             comment_time_stamp = collection.get("created_utc")
             comment_upvotes = collection.get("ups")
+
             # A dictionary containing the results necessary for the calculation here
             dict_result = {
                 "id_thread": str(id_of_thread),
@@ -273,8 +272,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
                     author_of_thread, comment_author)
 
                 # If the posted comment is a question and is not from the thread author
-                if bool_comment_is_question \
-                        and bool_comment_is_not_from_thread_author:
+                if bool_comment_is_question and bool_comment_is_not_from_thread_author:
 
                     amount_of_tier_any_questions += 1
 
@@ -338,8 +336,7 @@ def generate_data_to_analyze():
     print("Generating data now...")
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
-        # Skips the system.indexes-table which is automatically created by
-        # mongodb itself
+        # Skips the system.indexes-table which is automatically created by mongodb itself
         if not val == "system.indexes":
             # References the actual iterated thread
             temp_thread = mongo_DB_Threads_Instance[val]
@@ -436,8 +433,7 @@ def prepare_and_print_data_to_be_plotted():
 def plot_generated_data(amount_of_questions_not_answered):
     """Plots the data which is to be generated
 
-    This method plots the data which has been calculated before by using
-    matplotlib.pyplot-library
+    1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
 
     Args:
         amount_of_questions_not_answered (int): The amount of questions which have not been answered.
