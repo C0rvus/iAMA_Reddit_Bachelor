@@ -2,7 +2,8 @@
 # 1. (12.03.2016 @ 16:53) -
 # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
 
-import collections               # Necessary to sort collections alphabetically
+import collections                  # Necessary to sort collections alphabetically
+import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
 import datetime                     # Necessary to do time calculation
 from pymongo import MongoClient     # Necessary to make use of MongoDB
 
@@ -142,7 +143,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
             comment_upvotes = collection.get("ups")
             # A dictionary containing the results necessary for the calculation here
             dict_result = {
-                "id_thread": id_of_thread,
+                "id_thread": str(id_of_thread),
                 "id_question": comment_acutal_id,
                 "question_ups": comment_upvotes,
                 "time_since_thread_started": 0,
@@ -253,7 +254,7 @@ def generate_data_to_analyze():
 # Prepares the data which will be plotted later. (Does some sorting)
 
 
-def prepare_data_to_be_plotted():
+def prepare_and_print_data_to_be_plotted():
 
     # Will contain all comments later on
     all_comments = []
@@ -273,26 +274,57 @@ def prepare_data_to_be_plotted():
     # Creates a "sorted" which contains all comments of that year, sorted by upvotes in descending order
     new_list = sorted(all_comments, key=lambda k: k['question_ups'], reverse=True)
 
+    print("---- Printing top 100 comments now")
+
     # Iterates over that generated sorted and counts the amount of questions which have not been answered
     for item in new_list[0:100]:
+        print(
+            "Has Question been answered ?: " +
+            str(item.get("question_answered")) +
+
+            "| ID-Thread: " +
+            str(item.get("id_thread")) +
+
+            "| ID-Question: " +
+            str(item.get("id_question")) +
+
+            "| Amount of question upvotes: " +
+            str(item.get("question_ups")) +
+
+            "| Time (sec) since thread has started: " +
+            str(item.get("time_since_thread_started")) +
+
+            "| Link to thread: https://www.reddit.com/r/IAma/" +
+            str(item.get("id_thread"))
+            )
+
         if item.get("question_answered") is False:
             amount_of_questions_not_answered += 1
 
-    print(amount_of_questions_not_answered)
+    print("------------------------------")
+    return amount_of_questions_not_answered
 
 
+def plot_generated_data(amount_of_questions_not_answered):
+    plt.figure()
+    labels = ['Nicht beantwortet', 'Beantwortet']
+    colors = ['yellowgreen', 'gold']
+    values = [amount_of_questions_not_answered, 100 - amount_of_questions_not_answered]
 
+    patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
+    plt.pie(values, colors=colors, autopct='%.2f%%')
 
+    plt.legend(patches, labels, loc="upper right")
+    plt.title('iAMA 2009 - Beantwortung der TOP 100 Fragen')
 
-
-
-
-
-
+    # Set aspect ratio to be equal so that pie is drawn as a circle.
+    plt.axis('equal')
+    plt.tight_layout()
+    plt.show()
 
 
 # Generates the data which will be plotted later on
 generate_data_to_analyze()
 
-# Plots the generated data
-prepare_data_to_be_plotted()
+# Sorts, prepares the data and finally plots it
+plot_generated_data(prepare_and_print_data_to_be_plotted())
