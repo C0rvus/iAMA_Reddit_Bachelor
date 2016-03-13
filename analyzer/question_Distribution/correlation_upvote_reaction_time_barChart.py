@@ -1,8 +1,15 @@
-import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
-import datetime                     # Necessary to do time calculation
-import sys                          # Necessary to use script arguments
-from pymongo import MongoClient     # Necessary to make use of MongoDB
-import numpy as np                  # Necessary for mean calculation
+# Tutorials used within this class:
+# 1. (13.03.2016 @ 15:41) -
+# https://stackoverflow.com/questions/19428029/how-to-get-correlation-of-two-vectors-in-python
+# 2. (13.03.2016 @ 16.11) -
+# https://stackoverflow.com/questions/13964872/pyplot-tab-character
+
+
+import matplotlib.pyplot as plt         # Necessary to plot graphs with the data calculated
+import datetime                         # Necessary to do time calculation
+import sys                              # Necessary to use script arguments
+from pymongo import MongoClient         # Necessary to make use of MongoDB
+from scipy.stats.stats import pearsonr  # Necessary for correlation calculation
 
 
 def initialize_mongo_db_parameters():
@@ -37,7 +44,7 @@ def check_script_arguments():
         -
     """
 
-    global argument_year, argument_tier_in_scope, argument_plot_time_unit
+    global argument_year, argument_tier_in_scope, argument_plot_time_unit, argument_plot_x_limiter
 
     # Whenever not enough arguments were given
     if len(sys.argv) <= 3:
@@ -49,6 +56,7 @@ def check_script_arguments():
         argument_year = str(sys.argv[1])
         argument_tier_in_scope = str(sys.argv[2]).lower()
         argument_plot_time_unit = str(sys.argv[3]).lower()
+        argument_plot_x_limiter = int(sys.argv[4])
 
 
 def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
@@ -444,8 +452,6 @@ def plot_the_generated_data_correlation():
         -
     """
 
-    print("ICH BIN DRIN !")
-
     # Contains all answered questions with their upvotes and response time by the iama host
     # This is also the y axis limiter of the graph, which is to be plotted
 
@@ -455,8 +461,11 @@ def plot_the_generated_data_correlation():
     x_values = []
     y_values = []
 
+    text_pearson = 'Pearson-korrelationskoeffizient: \t \t'.expandtabs()
+    text_p_value = ' p-Wert: \t \t \t \t \t \t \t'.expandtabs()
+
     # Whenever the given time argument is minutes..
-    if argument_plot_time_unit == "min":
+    if argument_plot_time_unit.lower() in "minutes" or argument_plot_time_unit.lower() in "minuten":
 
         for i, val in enumerate(list_To_Be_Plotted):
             for j, val_2 in enumerate(val):
@@ -470,31 +479,61 @@ def plot_the_generated_data_correlation():
                 if val_2.get("comment_upvotes") > highest_y_value:
                     highest_y_value = val_2.get("comment_upvotes")
 
-        # Contains the number of elements, which is necessary for correct horizontal graph scaling
-
-        plt.title("SACKL!")
-
-        plt.xlabel('Antworzeit')
-        plt.ylabel('upvotes')
-
-        plt.xlim(0, 360)
-
-        # Necessary to remove annyoing white space on the right side of the graph
-        # plt.xlim(0, len(y))
-        # plt.ylim(0, highest_y_value)
-
-        # Plots the appropriate bar within the graph
-        plt.plot(x_values, y_values, 'ro')
-        plt.show()
-
-        # X und Y Werte überdenken, da momentan nicht beide verwendet werden...
-
-        # TODO: X-Limiter kann mitgegeben werden
-        # TODO: Mittels numpy checken, ob werte wirklich korrelieren / kausalität darstellen
-        # TODO: Linie einzeichnen (Kurve)
+        plt.title('Zusammenhang zwischen der Voteanzahl einer Frage und dessen Antwortzeit' +
+                  ' durch den iAMA Host in Minuten' +
+                  ' auf der Ebene "' +
+                  str(argument_tier_in_scope) +
+                  '"' +
+                  '\n' +
+                  '\n' +
+                  text_pearson +
+                  "%.4f" % pearsonr(x_values, y_values)[0] +
+                  '\n' +
+                  text_p_value +
+                  "%.4f" % pearsonr(x_values, y_values)[1]
+                  )
+        plt.xlabel('Antworzeit in Minuten')
 
     else:
-        print("FUCK")
+        for i, val in enumerate(list_To_Be_Plotted):
+            for j, val_2 in enumerate(val):
+
+                temp_answer_time_host = val_2.get("answer_time_host") / 3600
+                temp_amount_upvotes = val_2.get("comment_upvotes")
+
+                x_values.append(temp_answer_time_host)
+                y_values.append(temp_amount_upvotes)
+
+                if val_2.get("comment_upvotes") > highest_y_value:
+                    highest_y_value = val_2.get("comment_upvotes")
+
+        plt.title('Zusammenhang zwischen der Voteanzahl einer Frage und dessen Antwortzeit' +
+                  'durch den iAMA Host in Stunden' +
+                  ' auf der Ebene "' +
+                  str(argument_tier_in_scope) +
+                  '"' +
+                  '\n' +
+                  '\n' +
+                  text_pearson +
+                  "%.4f" % pearsonr(x_values, y_values)[0] +
+                  '\n' +
+                  text_p_value +
+                  "%.4f" % pearsonr(x_values, y_values)[1]
+                  )
+        plt.xlabel('Antworzeit in Stunden')
+
+    if argument_plot_x_limiter == 0:
+        plt.xlim(0, len(y_values))
+    else:
+        plt.xlim(0, argument_plot_x_limiter)
+        plt.ylim(0, highest_y_value)
+
+    # Plots the appropriate bar within the graph
+    plt.ylabel('Anzahl Votes pro beantworteter Frage')
+    plt.plot(x_values, y_values, 'ro')
+    plt.show()
+
+
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
@@ -505,6 +544,9 @@ argument_tier_in_scope = ""
 
 # Contains the time unit in which the graphs will be plotted later on
 argument_plot_time_unit = ""
+
+# Contains the amount of x elements the plotted graph should be limited to
+argument_plot_x_limiter = 0
 
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = None
