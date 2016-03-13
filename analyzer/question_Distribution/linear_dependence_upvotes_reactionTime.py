@@ -1,12 +1,8 @@
-# Tutorials used within this class:
-# 1. (12.03.2016 @ 16:53) -
-# https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
-
-import collections                  # Necessary to sort collections alphabetically
 import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
 import datetime                     # Necessary to do time calculation
 import sys                          # Necessary to use script arguments
 from pymongo import MongoClient     # Necessary to make use of MongoDB
+import numpy as np                  # Necessary for mean calculation
 
 
 def initialize_mongo_db_parameters():
@@ -33,8 +29,7 @@ def check_script_arguments():
     """Checks if enough and correct arguments have been given to run this script adequate
 
     1. It checks in the first instance if enough arguments have been given
-    2. Afterwards it fills 'argument_year' with the first argument (str) and 'argument_sorting' with a boolean value,
-        by previously parsing and checking that value.
+    2. Then necessary variables will be filled with appropriate values
 
     Args:
         -
@@ -42,27 +37,18 @@ def check_script_arguments():
         -
     """
 
-    global argument_year, argument_sorting
+    global argument_year, argument_tier_in_scope, argument_plot_time_unit
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 2:
+    if len(sys.argv) <= 3:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
-
     else:
-
-        # Simple bool checker
-        bool_checker = ['top', 'best']
-
         # Parses the first argument to the variable
         argument_year = str(sys.argv[1])
-
-        # Whenever the second argument is in the bool_checker list
-        if sys.argv[2] in bool_checker:
-            argument_sorting = True
-        else:
-            argument_sorting = False
+        argument_tier_in_scope = str(sys.argv[2]).lower()
+        argument_plot_time_unit = str(sys.argv[3]).lower()
 
 
 def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
@@ -178,6 +164,22 @@ def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author)
         return False
 
 
+def check_if_comment_is_on_tier_1(comment_parent_id):
+    """Checks whether a comment relies on the first tier or any other tier
+
+    Args:
+        comment_parent_id (str) : The name id of the comments parent
+    Returns:
+        True (bool): Whenever the comment lies on tier 1
+        False (bool): Whenever the comment lies on any other tier
+    """
+
+    if "t3_" in comment_parent_id:
+        return True
+    else:
+        return False
+
+
 def check_if_comment_is_a_question(given_string):
     """Simply checks whether a given string is a question or not
 
@@ -199,40 +201,33 @@ def check_if_comment_is_a_question(given_string):
         return False
 
 
-def calculate_answered_question_upvote_correlation(id_of_thread, author_of_thread, thread_creation_date):
-    """ Checks whether an iterated question has been answered by the iama host or not
+def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_thread):
+    """Calculates the arithmetic mean of the answer time by the iama host in minutes
 
-    1. This method checks at first whether an iterated comment contains values (e.g. is not none)
-        1.1. If not: That comment will be skipped / if no comment is remaining None will be returned
-        1.2. If yes: That comment will be processed
-    2. Now it will be checked whether that iterated comment is a question or not
-    3. Afterwards it will be checked wether that comment is a comment from the iAMA Host or not
-        3.1. If this is not the case the next comment will be processed
-    4. Whenever that processed comment is a question and not (!!) from the thread author:
-        amount_of_tier_any_questions (int) will be increased by one
-    5. Now it will be checked whether that comment has a comment ( answer ) below it which is from the iAMA-host
-        5.1. If yes: amount_of_tier_any_questions_answered (int) will be increased by one and the dictionary, which
-            is to be returned will be filled with values
-        5.2. If no: the dictionary, which is to be returned will be filled with values
+    In dependence of the given tier argument (second argument) the processing of tiers will be filtered
 
     Args:
-        id_of_thread (str) : Contains the id of the thread which is to be iterated
-        author_of_thread (str) : Contains the name of the thread author
-        thread_creation_date (str): Contains the time
+        id_of_thread (str): The id of the thread which is actually processed. (Necessary for checking if a question
+            lies on tier 1 or any other tier)
+        author_of_thread (str): The name of the thread author. (Necessary for checking if a given answer is from the
+            iama host or not)
     Returns:
-        amount_of_questions_not_answered (int) : The amount of questions which have not been answered
+        Whenever there was a minimum of 1 question asked and 1 answer from the iama host:
+            amount_of_upvotes_reaction_time (int) : The amount of the arithmetic mean time of
+        Whenever there no questions have been asked for that thread / or no answers were given /
+            or all values in the database were null:
+            None:   Returns an empty object of the type None
     """
 
-    # Makes the global comments instance locally available here
     global mongo_DB_Comments_Instance
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
     comments_cursor = comments_collection.find()
 
-    amount_of_results = []
+    amount_of_upvotes_reaction_time = []
 
-    amount_of_tier_any_questions = 0
-    amount_of_tier_any_questions_answered = 0
+    amount_of_questions = 0
+    amount_of_questions_answered = 0
 
     # Iterates over every comment within that thread
     for collection in comments_cursor:
@@ -248,69 +243,144 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
             comment_time_stamp = collection.get("created_utc")
             comment_upvotes = collection.get("ups")
 
-            # A dictionary containing the results necessary for the calculation here
-            dict_result = {
-                "id_thread": str(id_of_thread),
-                "id_question": comment_acutal_id,
-                "question_ups": comment_upvotes,
-                "time_since_thread_started": 0,
-                "question_answered": bool
-            }
-
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
             if comment_text is not None \
                     and comment_author is not None \
                     and comment_parent_id is not None:
 
-                # Calculation of time since thread has been started can only happen here, because of previous checks
-                dict_result["time_since_thread_started"] = \
-                    calculate_time_difference(thread_creation_date, comment_time_stamp),
-
                 bool_comment_is_question = check_if_comment_is_a_question(comment_text)
+
+                bool_comment_is_question_on_tier_1 = check_if_comment_is_on_tier_1(comment_parent_id)
 
                 bool_comment_is_not_from_thread_author = check_if_comment_is_not_from_thread_author(
                     author_of_thread, comment_author)
 
-                # If the posted comment is a question and is not from the thread author
-                if bool_comment_is_question and bool_comment_is_not_from_thread_author:
+                # Whenever the scope lies on the first tier
+                if argument_tier_in_scope == "1":
 
-                    amount_of_tier_any_questions += 1
+                    if bool_comment_is_question \
+                            and bool_comment_is_question_on_tier_1 \
+                            and bool_comment_is_not_from_thread_author:
 
-                    # Check whether that iterated comment is answered by the host
-                    answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
-                        author_of_thread, comment_acutal_id, comments_cursor)
+                        amount_of_questions += 1
 
-                    # Whenever the answer to that comment is from the author
-                    if answer_is_from_thread_author["question_Answered_From_Host"] is True:
+                        # Check whether that iterated comment is answered by the host
+                        answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
+                            author_of_thread, comment_acutal_id, comments_cursor)
 
-                        amount_of_tier_any_questions_answered += 1
+                        # Whenever the answer to that comment is from the author
+                        if answer_is_from_thread_author["question_Answered_From_Host"] is True:
 
-                        # Whenever the question has been answered by the iAMA-Host
-                        dict_result["question_answered"] = True
-                        dict_result = collections.OrderedDict(sorted(dict_result.items()))
-                        amount_of_results.append(dict_result)
+                            answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
 
-                    # Whenever the question has not been answered by the iAMA-Host
+                            # Adds the calculated answer time to a local list
+                            answer_time_iama_host_in_seconds = calculate_time_difference(
+                                    comment_time_stamp,
+                                    answer_time_stamp_iama_host
+                            )
+
+                            # Contains the amount of upvotes of a question which has been answered by the iama host
+                            # with the reaction time of the iama host in seconds
+                            dict_upvotes_response_time = {
+                                "comment_upvotes": comment_upvotes,
+                                "answer_time_host": answer_time_iama_host_in_seconds
+                            }
+
+                            amount_of_upvotes_reaction_time.append(dict_upvotes_response_time)
+
+                            amount_of_questions_answered += 1
+
+                    # Skip that comment
                     else:
-                        dict_result["question_answered"] = False
-                        dict_result = collections.OrderedDict(sorted(dict_result.items()))
-                        amount_of_results.append(dict_result)
+                        continue
 
-                # Skip that comment
+                # Whenever the scope lies on any other tier except tier 1
+                elif argument_tier_in_scope == "x":
+
+                    # If the posted comment is a question and is not from the thread author and is not on Tier 1
+                    if bool_comment_is_question \
+                            and bool_comment_is_question_on_tier_1 is False \
+                            and bool_comment_is_not_from_thread_author is True:
+
+                        amount_of_questions += 1
+
+                        # Check whether that iterated comment is answered by the host
+                        answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
+                            author_of_thread, comment_acutal_id, comments_cursor)
+
+                        # Whenever the answer to that comment is from the author
+                        if answer_is_from_thread_author["question_Answered_From_Host"] is True:
+
+                            answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
+
+                            # Adds the calculated answer time to a local list
+                            answer_time_iama_host_in_seconds = calculate_time_difference(
+                                    comment_time_stamp,
+                                    answer_time_stamp_iama_host
+                            )
+
+                            # Contains the amount of upvotes of a question which has been answered by the iama host
+                            # with the reaction time of the iama host in seconds
+                            dict_upvotes_response_time = {
+                                "comment_upvotes": comment_upvotes,
+                                "answer_time_host": answer_time_iama_host_in_seconds
+                            }
+
+                            amount_of_upvotes_reaction_time.append(dict_upvotes_response_time)
+
+                            amount_of_questions_answered += 1
+
+                    # Skip that comment
+                    else:
+                        continue
+
+                # Whenever the scope lies on all tiers (any tier)
                 else:
-                    continue
+
+                    if bool_comment_is_question and bool_comment_is_not_from_thread_author is True:
+
+                        amount_of_questions += 1
+
+                        # Check whether that iterated comment is answered by the host
+                        answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
+                            author_of_thread, comment_acutal_id, comments_cursor)
+
+                        # Whenever the answer to that comment is from the author
+                        if answer_is_from_thread_author["question_Answered_From_Host"] is True:
+                            answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
+
+                            # Adds the calculated answer time to a local list
+                            answer_time_iama_host_in_seconds = calculate_time_difference(
+                                    comment_time_stamp,
+                                    answer_time_stamp_iama_host
+                            )
+
+                            # Contains the amount of upvotes of a question which has been answered by the iama host
+                            # with the reaction time of the iama host in seconds
+                            dict_upvotes_response_time = {
+                                "comment_upvotes": comment_upvotes,
+                                "answer_time_host": answer_time_iama_host_in_seconds
+                            }
+
+                            amount_of_upvotes_reaction_time.append(dict_upvotes_response_time)
+
+                            amount_of_questions_answered += 1
+
+                    # Skip that comment
+                    else:
+                        continue
 
             # Whenever a comment has been deleted or has, somehow, null values in it.. do not process it
             else:
                 continue
 
-    # Whenever there were some questions aksed at alland those questions have been answered by the iAMA host on any tier
-    if amount_of_tier_any_questions != 0 and amount_of_tier_any_questions_answered != 0:
+    # Whenever some questions have been asked and they have received an answer
+    if amount_of_questions != 0 and amount_of_questions_answered != 0:
 
-        # Returns the arithmetic mean of answer time by the iAMA host
-        return amount_of_results
+        # Returns the dictionary containing uptimes of comments and the hosts response time
+        return amount_of_upvotes_reaction_time
 
-    # Whenever no questions have been asked at all
+    # Whenever no questions have been asked at all !
     else:
         return None
 
@@ -322,11 +392,8 @@ def generate_data_to_analyze():
         1.1. It filters if that iterated thread is an iAMA-request or not
             1.1.1. If yes: this thread gets skipped and the next one will be processed
             1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive an ordered dictionary containing information about every question
-        whether it has been answered or not
-    3. This ordered dictionary will be applied to a global list, which will be processed after wards for the generation
-        of plots
-
+    2. If the thread gets processed it will receive the arithmetic mean of answer time
+    3. This value will be added to a global list and will be plotted later on
     Args:
         -
     Returns:
@@ -334,18 +401,18 @@ def generate_data_to_analyze():
     """
 
     print("Generating data now...")
+
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
-        # Skips the system.indexes-table which is automatically created by mongodb itself
+
+        # Skips the system.indexes-table which is automatically created by
+        # mongodb itself
         if not val == "system.indexes":
             # References the actual iterated thread
             temp_thread = mongo_DB_Threads_Instance[val]
 
-            # Gets the authors name of the iterated thread
+            # Gets the creation date of that iterated thread
             temp_thread_author = temp_thread.find()[0].get("author")
-
-            # Gets the creation date of the iterated thread
-            temp_thread_creation_date = temp_thread.find()[0].get("created_utc")
 
             # Gets the title of that iterated thread
             temp_thread_title = temp_thread.find()[0].get("title")
@@ -358,118 +425,86 @@ def generate_data_to_analyze():
                     and "request response" not in temp_thread_title.lower():
                 continue
 
-            returned_value = calculate_answered_question_upvote_correlation(
-                val, temp_thread_author, temp_thread_creation_date
-            )
+            returned_value = calculate_comment_upvotes_and_response_time_by_host(val, temp_thread_author)
 
             # Value could be none if it has i.E. no values
             if returned_value is not None:
                 list_To_Be_Plotted.append(returned_value)
 
 
-def prepare_and_print_data_to_be_plotted():
-    """Prepares data and prints data into the command line
-
-    1. This method prepares the data, in kind of sorting and counting amount of questions not being answered
-    2. Afterwards it prints, in dependency of the second argument given of this script, whether the
-        TOP or WORST 100 questions have been answered or not
-
-    Args:
-        -
-    Returns:
-        amount_of_questions_not_answered (int) : The amount of questions which have not been answered
-    """
-
-    # Will contain all comments later on
-    all_comments = []
-
-    # Defines the amount of the top 100 questions (by upvotes) which have not been answered
-    amount_of_questions_not_answered = 0
-
-    # Iterates over every ordered list
-    for i, val in enumerate(list_To_Be_Plotted):
-
-        # Iterates over the sub elements within that iterated object
-        for j, val_2 in enumerate(val):
-
-            # breaks comment hierarchy und creates a flat list of all comments
-            all_comments.append(val_2)
-
-    # Creates a "sorted" which contains all comments of that year, sorted by upvotes in descending order
-    # In dependence of given sort parameter..
-    new_list = sorted(all_comments, key=lambda k: k['question_ups'], reverse=argument_sorting)
-
-    print("---- Printing top 100 comments now")
-
-    # Iterates over that generated sorted and counts the amount of questions which have not been answered
-    for item in new_list[0:100]:
-        print(
-            "Has Question been answered ?: " +
-            str(item.get("question_answered")) +
-
-            "| ID-Thread: " +
-            str(item.get("id_thread")) +
-
-            "| ID-Question: " +
-            str(item.get("id_question")) +
-
-            "| Amount of question upvotes: " +
-            str(item.get("question_ups")) +
-
-            "| Time (sec) since thread has started: " +
-            str(item.get("time_since_thread_started")) +
-
-            "| Link to thread: https://www.reddit.com/r/IAma/" +
-            str(item.get("id_thread"))
-            )
-
-        if item.get("question_answered") is False:
-            amount_of_questions_not_answered += 1
-
-    print("------------------------------")
-    return amount_of_questions_not_answered
-
-
-def plot_generated_data(amount_of_questions_not_answered):
+def plot_the_generated_data_correlation():
     """Plots the data which is to be generated
 
     1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
+    2. In dependence of the chosen time unit the values will be seperated in either minutes or hours
 
     Args:
-        amount_of_questions_not_answered (int): The amount of questions which have not been answered.
+        -
     Returns:
         -
     """
 
-    plt.figure()
-    labels = ['Nicht beantwortet', 'Beantwortet']
-    colors = ['yellowgreen', 'gold']
-    values = [amount_of_questions_not_answered, 100 - amount_of_questions_not_answered]
+    print("ICH BIN DRIN !")
 
-    patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
-    plt.pie(values, colors=colors, autopct='%.2f%%')
+    # Contains all answered questions with their upvotes and response time by the iama host
+    # This is also the y axis limiter of the graph, which is to be plotted
 
-    plt.legend(patches, labels, loc="upper right")
+    # Defines the highest y value so the y axis gets scaled correctly
+    highest_y_value = 0
 
-    if argument_sorting is True:
-        plt.title('iAMA ' + argument_year + ' - Beantwortung der TOP 100 Fragen')
+    x_values = []
+    y_values = []
+
+    # Whenever the given time argument is minutes..
+    if argument_plot_time_unit == "min":
+
+        for i, val in enumerate(list_To_Be_Plotted):
+            for j, val_2 in enumerate(val):
+
+                temp_answer_time_host = val_2.get("answer_time_host") / 60
+                temp_amount_upvotes = val_2.get("comment_upvotes")
+
+                x_values.append(temp_answer_time_host)
+                y_values.append(temp_amount_upvotes)
+
+                if val_2.get("comment_upvotes") > highest_y_value:
+                    highest_y_value = val_2.get("comment_upvotes")
+
+        # Contains the number of elements, which is necessary for correct horizontal graph scaling
+
+        plt.title("SACKL!")
+
+        plt.xlabel('Antworzeit')
+        plt.ylabel('upvotes')
+
+        plt.xlim(0, 360)
+
+        # Necessary to remove annyoing white space on the right side of the graph
+        # plt.xlim(0, len(y))
+        # plt.ylim(0, highest_y_value)
+
+        # Plots the appropriate bar within the graph
+        plt.plot(x_values, y_values, 'ro')
+        plt.show()
+
+        # X und Y Werte überdenken, da momentan nicht beide verwendet werden...
+
+        # TODO: X-Limiter kann mitgegeben werden
+        # TODO: Mittels numpy checken, ob werte wirklich korrelieren / kausalität darstellen
+        # TODO: Linie einzeichnen (Kurve)
+
     else:
-        plt.title('iAMA ' + argument_year + ' - Beantwortung der WORST 100 Fragen')
-
-    # Set aspect ratio to be equal so that pie is drawn as a circle.
-    plt.axis('equal')
-    plt.tight_layout()
-    plt.show()
-
-
+        print("FUCK")
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
 argument_year = ""
 
-# Contains the information wether the first top 100 (highest upvotes) or the last 100 (lowest upvotes [negative]
-# should be calculated
-argument_sorting = bool
+# Contains the tiers which will be in scope for the calculation
+argument_tier_in_scope = ""
+
+# Contains the time unit in which the graphs will be plotted later on
+argument_plot_time_unit = ""
 
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = None
@@ -498,5 +533,5 @@ initialize_mongo_db_parameters()
 # Generates the data which will be plotted later on
 generate_data_to_analyze()
 
-# Sorts, prepares the data and finally plots it
-plot_generated_data(prepare_and_print_data_to_be_plotted())
+# Plots a pie chart containing the tier question distribution
+plot_the_generated_data_correlation()

@@ -9,7 +9,7 @@ top100_pieChart.py {year} {true / false}
 	{year} 		= 	the year which is to be used for the calculation
 			=	2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 
-	{true / false)	= 	true [top 100] || false [worst 100]
+	{top / worst)	= 	top [top 100] || worst [worst 100]
 
 Usage example: python top100_pieChart.py 2009 false
 
