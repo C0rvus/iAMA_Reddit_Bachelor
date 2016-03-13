@@ -461,7 +461,7 @@ def plot_the_generated_data_correlation():
     x_values = []
     y_values = []
 
-    text_pearson = 'Pearson-korrelationskoeffizient: \t \t'.expandtabs()
+    text_pearson = 'Pearson-Korrelationskoeffizient: \t \t'.expandtabs()
     text_p_value = ' p-Wert: \t \t \t \t \t \t \t'.expandtabs()
 
     # Whenever the given time argument is minutes..
