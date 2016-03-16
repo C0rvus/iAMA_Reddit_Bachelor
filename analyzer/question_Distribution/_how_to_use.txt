@@ -55,7 +55,7 @@ Arguments:
 Usage example: correlation_upvote_reaction_time_barChart.py 2009 any min 300
 ------------------
 ------------------
-Filename:		tier_answered_percentage_pieChart {year} {tier}
+Filename:		tier_answered_percentage_pieChart.py {year} {tier}
 Description:		Plots a pieChart which contains the distribution of questions answered per tier for the given year.
 
 Arguments:
@@ -70,6 +70,20 @@ Arguments:
 Usage example: tier_answered_percentage_pieChart.py 2009 any
 ------------------
 ------------------
+Filename:		tier_question_distribution_pieChart.py {year}
+Description:		Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest
+
+Arguments:
+
+			{year}		=		the year which is to be used for the calculation
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+Usage example: tier_question_distribution_pieChart.py 2009
+------------------
+------------------
+
+
+
 
 
 

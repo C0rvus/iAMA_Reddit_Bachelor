@@ -67,7 +67,7 @@ def calculate_percentage_distribution(amount_of_questions, amount_of_questions_a
     """
 
     percentage_answered = (
-        amount_of_questions_answered / amount_of_questions) * 100
+                              amount_of_questions_answered / amount_of_questions) * 100
     percentage_not_answered = (100 - percentage_answered)
 
     dict_to_be_returned = {
@@ -131,10 +131,10 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
             # Whenever the iterated comment is from the iAMA-Host and that
             # comment has the question as parent_id
             if (
-                    check_if_comment_is_not_from_thread_author(
-                        author_of_thread,
-                        actual_comment_author) == False) and (
-                    check_comment_parent_id == comment_actual_id):
+                        check_if_comment_is_not_from_thread_author(
+                            author_of_thread,
+                            actual_comment_author) == False) and (
+                        check_comment_parent_id == comment_actual_id):
                 return True
             else:
                 return False
@@ -180,7 +180,24 @@ def check_if_comment_is_a_question(given_string):
         return False
 
 
+# noinspection PyIncorrectDocstring
 def amount_of_questions_answered_by_host(id_of_thread, author_of_thread):
+    """Generates the data which will be analyzed
+
+    1. It iterates over every comment and
+         1.1. checks if the iterated comment is a question
+         1.2. checks if the iterated comment has been posted on tier 1 level
+         1.3. checks if that comment is from the iAMA-Host himself or not
+    2. Now the distribution of questions answered / not answered will be calculated depending on the commited tier level
+        3. A dictionary containing the amounts in percentage will be returned
+
+    id_of_thread (str) : Contains the id of the processed thread
+    author_of_thread (str) : Contains the iAMA-Hosts name
+
+    Returns:
+    dict_to_be_returned_percentage_answered_questions (dict) : Containing the percentage amount of questions
+    which have been answered and which have not been answered
+     """
 
     # Makes the global comments instance locally available here
     global mongo_DB_Comments_Instance
@@ -374,6 +391,7 @@ def plot_the_generated_data_percentage_mean():
     # Prints the average percentage amount questions answered by the iAMA Host
     print("Percentage of questions answered by iAMA-Host: " +
           str(percentage_mean_of_tier_any_answered_questions) + " %")
+
     print("Percentage of questions NOT answered by iAMA-Host: " +
           str(100 - percentage_mean_of_tier_any_answered_questions) + " %")
 
