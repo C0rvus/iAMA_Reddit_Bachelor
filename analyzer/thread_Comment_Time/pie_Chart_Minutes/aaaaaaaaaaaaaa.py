@@ -1,50 +1,44 @@
-#   Tutorials used within this class:
-#   1. (27.02.2016 @ 14:10) -
+# Tutorials used within this class:
+# 1. (27.02.2016 @ 14:10) -
 #       http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
-#   2. (27.02.2016 @ 14:22) -
+# 2. (27.02.2016 @ 14:22) -
 #       https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
-#   3. (27.02.2016 @ 16:30) -
+# 3. (27.02.2016 @ 16:30) -
 #       http://www.programiz.com/python-programming/break-continue
-#   This script is developed with PRAW 3.3.0
+# This script has been developed with PRAW 3.3.0
 
-
-# Necessary to sort collections alphabetically
-import collections
-# Necessary to do time calculation
-import datetime
-
-# Necessary to plot graphs with the data calculated
-import matplotlib.pyplot as plt
-# Necessary to do further time calculation
-import numpy as np
-# Necessary to make use of MongoDB
-from pymongo import MongoClient
+from pymongo import MongoClient     # Necessary to make use of MongoDB
+import datetime                     # Necessary to do time calculation
+import numpy as np                  # Necessary to do further time calculation
+import collections                  # Necessary to sort collections alphabetically
+import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
 
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = MongoClient('localhost', 27017)
 
 # The data base instance for the threads
-mongo_DB_Threads_Instance_2014 = mongo_DB_Client_Instance.iAMA_Reddit_Threads_2014
+mongo_DB_Threads_Instance_2009 = mongo_DB_Client_Instance.iAMA_Reddit_Threads_2009
 
 # Contains all collection names of the thread database
-mongo_DB_Thread_Collection_2014 = mongo_DB_Threads_Instance_2014.collection_names()
+mongo_DB_Thread_Collection_2009 = mongo_DB_Threads_Instance_2009.collection_names()
 
 # The data base instance for the comments
-mongo_DB_Comments_Instance_2014 = mongo_DB_Client_Instance.iAMA_Reddit_Comments_2014
+mongo_DB_Comments_Instance_2009 = mongo_DB_Client_Instance.iAMA_Reddit_Comments_2009
 
 # Will contain all analyzed time information for threads & comments
 list_To_Be_Plotted = []
 
 
 # <editor-fold desc="Analyses data of threads and comments in terms of time">
-# Calculates the average & median comment time, the thread livespan,
+# Calculates the average & medan comment time, the thread livespan,
 # and the timespan after which the first comment is submitted
 # </editor-fold>
 def calculate_time_difference(id_of_thread, creation_date_of_thread):
-    # Makes the global comments instance locally available here
-    global mongo_DB_Comments_Instance_2014
 
-    comments_collection = mongo_DB_Comments_Instance_2014[id_of_thread]
+    # Makes the global comments instance locally available here
+    global mongo_DB_Comments_Instance_2009
+
+    comments_collection = mongo_DB_Comments_Instance_2009[id_of_thread]
     comments_cursor = comments_collection.find()
 
     # Contains the creation date of every comment in epoch time format
@@ -53,12 +47,11 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     # Contains the time difference between every comment in seconds
     time_difference = []
 
-    # This gets used, whenever there is a thread with no comments in it (i.E.  all values are null)
+    # This gets used, whenever there is a thread with no comments in it (i.E. all values are null)
     are_comments_null = bool
 
     # The dictionary which will be returned later on, containing all necessary and analyzed time data
     dict_to_be_returned = {
-
         # The time between thread creation date and the first comment submitted to it
         "first_Comment_After_Thread_Started": 0,
 
@@ -79,12 +72,10 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         "thread_Num_Comments": 0
     }
 
-    # Iterates over every time stamp and writes it into time_list
-    # Additionally comments from AutoModerator-Bot are beeing ingored because
-    # they skew our statistics and would be created with the same timestamp
-    # like the thread itself
+    # Iterates over every time stamp and writes it into time_list. Additionally comments from AutoModerator-Bot
+    # are beeing ingored because they skew our statistics and would be created with the same timestamp like the thread
+    # itself
     for collection in comments_cursor:
-
         # Whenever the iterated comment was created by user "AutoModerator" skip it
         if (collection.get("author")) != "AutoModerator":
             time_list.append(collection.get("created_utc"))
@@ -98,22 +89,18 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     time_list.sort()
 
     # Calculate the time difference within here
-    for i, time_Value in enumerate(time_list):
-
-        # Whenever the comments are not null (comments could be null / NoneType
-        # when there is not a single comment created for that thread..)
-        if time_Value is None:
-
+    for i, time_value in enumerate(time_list):
+        # Whenever the comments are not null (comments could be null / NoneType when there is not a single comment
+        # created for that thread..)
+        if time_value is None:
             are_comments_null = True
 
         # Whenever a thread contains more than one comment and that comment is not null
         else:
-            # Convert the time_Value into float, otherwise it could not be converted...
-            time_value_current = float(time_Value)
-
+            # Convert the time_value into float, otherwise it could not be converted...
+            time_value_current = float(time_value)
             current_time_converted = datetime.datetime.fromtimestamp(
                 time_value_current).strftime('%d-%m-%Y %H:%M:%S')
-
             current_time_converted_for_subtraction = datetime.datetime.strptime(
                 current_time_converted, '%d-%m-%Y %H:%M:%S')
 
@@ -125,34 +112,34 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
                     temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
 
-                # Subtracts the comment creation time from the thread creation
-                # time
+                # Subtracts the comment creation time from the thread creation time
                 temp_thread_time = datetime.datetime.strptime(
                     temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
 
-                # Add the difference between those two times, in seconds, to that list
-                time_difference.append(
-                    (current_time_converted_for_subtraction - temp_thread_time).total_seconds())
-
+                # Add the difference between those two times, in seconds, to
+                # that list
+                time_difference.append((current_time_converted_for_subtraction - temp_thread_time).total_seconds())
                 dict_to_be_returned["thread_Livespan"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
             # Whenever the last list object is iterated over skip anything because there will be no future object
             elif i != len(time_list) - 1:
-                # Convers the next time_Value into float
+
+                # Converts the next time_value into float
                 time_value_next = float(time_list[i + 1])
+
                 next_time_converted = datetime.datetime.fromtimestamp(
                     time_value_next).strftime('%d-%m-%Y %H:%M:%S')
 
                 next_time_converted_for_subtraction = datetime.datetime.strptime(
                     next_time_converted, '%d-%m-%Y %H:%M:%S')
 
-                # Whenever the first commented gets iterated over, build the
-                # difference between thread and 1st comment creation date
+                # Whenever the first commented gets iterated over, build the difference between thread and 1st
+                # comment creation date
                 if i == 0:
                     # Converts the thread creation date into a comparable time format
-                    temp_creation_date_of_thread = float(creation_date_of_thread)
-
+                    temp_creation_date_of_thread = float(
+                        creation_date_of_thread)
                     temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
                         temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
 
@@ -169,7 +156,8 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                     # Add the difference between the time of the current and next comment into the time_difference
                     # variable
                     time_difference.append(
-                        (next_time_converted_for_subtraction - current_time_converted_for_subtraction).total_seconds())
+                        (next_time_converted_for_subtraction -
+                         current_time_converted_for_subtraction).total_seconds())
 
             # Whenever the last comment time stamp gets iterated over ->
             # calculate the time difference between thread creation date and that last comment (seconds)
@@ -183,8 +171,8 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 temp_thread_time = datetime.datetime.strptime(
                     temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
 
-                # Write the time difference (seconds) between the time the thread has been created and the
-                # time the last comment was created
+                # Write the time difference (seconds) between the time the thread has been created and the time the
+                # last comment was created
                 dict_to_be_returned["thread_Livespan"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
@@ -221,16 +209,14 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
 
 def generate_data_to_be_plotted():
-    for j, val in enumerate(mongo_DB_Thread_Collection_2014):
-
-        # Skips the system.indexes-table which is automatically created by  mongodb itself
+    for j, val in enumerate(mongo_DB_Thread_Collection_2009):
+        # Skips the system.indexes-table which is automatically created by mongodb itself
         if not val == "system.indexes":
             # References the actual iterated thread
-            temp_thread = mongo_DB_Threads_Instance_2014[val]
+            temp_thread = mongo_DB_Threads_Instance_2009[val]
 
             # Gets the creation date of that iterated thread
-            temp_thread_creation_time = temp_thread.find()[
-                0].get("created_utc")
+            temp_thread_creation_time = temp_thread.find()[0].get("created_utc")
 
             # Gets the title of that iterated thread
             temp_thread_title = temp_thread.find()[0].get("title")
@@ -246,19 +232,17 @@ def generate_data_to_be_plotted():
 
             # Will contain information about time calculation methods
             returned_dict = calculate_time_difference(val, temp_thread_creation_time)
-
-            # Whenever the thread has only one comment, or null comments, or is somehow faulty it won't be added
-            # to the global list which is to be plotted later on
+            # Whenever the thread has only one comment, or null comments, or is
+            # somehow faulty it won't be added to the global list which is to be plotted later on
             if returned_dict.get("median_Response_Time") == 0 \
                     or returned_dict.get("first_Comment_After_Thread_Started") == 0 \
                     or returned_dict.get("thread_Livespan") == 0 \
                     or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
-
-                print(
-                    "Thread '" + val +
-                    "' will not be added to global list. Therefore it won't be in the plotted graph.")
+                print("Thread '" + val +
+                      "' will not be added to global list. Therefore it won't be in the plotted graph.")
             else:
-                # Add that analyzed data dictionary to the global list which will be plotted later on
+                # Add that analyzed data dictionary to the global list which
+                # will be plotted later on
                 list_To_Be_Plotted.append(returned_dict)
 
 # <editor-fold desc="Plots the data of the arithmetic mean for that threads">
@@ -271,46 +255,55 @@ def plot_the_generated_data_arithmetic_mean():
     # The dictionary which is necessary to count the amount of response times
     dict_time_amount_counter = {
         "0_To_1": 0,
-        "1_To_3": 0,
-        "3_To_7": 0,
-        "7_To_14": 0,
-        "greater_Than_14": 0
+        "1_To_5": 0,
+        "5_To_10": 0,
+        "10_To_15": 0,
+        "15_To_30": 0,
+        "greater_Than_30": 0
     }
 
     # Iterates over every element and checks if that value is between some given values
     for i, val in enumerate(list_To_Be_Plotted):
-
-        if (val.get("thread_Livespan") / 86400) <= 1:
+        if (val.get("arithmetic_Mean_Response_Time") / 60) <= 1:
             dict_time_amount_counter["0_To_1"] += 1
 
-        elif ((val.get("thread_Livespan") / 86400) > 1) and ((val.get("thread_Livespan") / 86400) <= 3):
-            dict_time_amount_counter["1_To_3"] += 1
+        elif ((val.get("arithmetic_Mean_Response_Time") / 60) > 1)\
+                and ((val.get("arithmetic_Mean_Response_Time") / 60) <= 5):
+            dict_time_amount_counter["1_To_5"] += 1
 
-        elif ((val.get("thread_Livespan") / 86400) > 3) and ((val.get("thread_Livespan") / 86400) <= 7):
-            dict_time_amount_counter["3_To_7"] += 1
+        elif ((val.get("arithmetic_Mean_Response_Time") / 60) > 5)\
+                and ((val.get("arithmetic_Mean_Response_Time") / 60) <= 10):
+            dict_time_amount_counter["5_To_10"] += 1
 
-        elif ((val.get("thread_Livespan") / 86400) > 7) and ((val.get("thread_Livespan") / 86400) <= 14):
-            dict_time_amount_counter["7_To_14"] += 1
+        elif ((val.get("arithmetic_Mean_Response_Time") / 60) > 10)\
+                and ((val.get("arithmetic_Mean_Response_Time") / 60) <= 15):
+            dict_time_amount_counter["10_To_15"] += 1
 
-        elif (val.get("thread_Livespan") / 86400) > 14:
-            dict_time_amount_counter["greater_Than_14"] += 1
+        elif ((val.get("arithmetic_Mean_Response_Time") / 60) > 15)\
+                and ((val.get("arithmetic_Mean_Response_Time") / 60) <= 30):
+            dict_time_amount_counter["15_To_30"] += 1
+
+        elif (val.get("arithmetic_Mean_Response_Time") / 60) > 30:
+            dict_time_amount_counter["greater_Than_30"] += 1
 
     plt.figure()
-
     # The slices will be ordered and plotted counter-clockwise.
-    labels = ['0 bis 1 d', '1 bis 3 d', '3 bis 7 d', '7 bis 14 d', '> 14 d']
-    colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'orange']
-    values = [dict_time_amount_counter['0_To_1'],
-              dict_time_amount_counter['1_To_3'],
-              dict_time_amount_counter['3_To_7'],
-              dict_time_amount_counter['7_To_14'],
-              dict_time_amount_counter['greater_Than_14']]
+    labels = ['0 bis 1 Min', '1 bis 5 Min', '5 bis 10 Min', '10 bis 15 Min', '15 bis 30 Min', '> 30 Min']
+    colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'mediumpurple', 'orange']
+    values = [
+        dict_time_amount_counter['0_To_1'],
+        dict_time_amount_counter['1_To_5'],
+        dict_time_amount_counter['5_To_10'],
+        dict_time_amount_counter['10_To_15'],
+        dict_time_amount_counter['15_To_30'],
+        dict_time_amount_counter['greater_Than_30']
+    ]
 
     patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
     plt.pie(values, colors=colors, autopct='%.2f%%')
 
-    plt.legend(patches, labels, loc="upper right")
-    plt.title('iAMA 2014 - Ø Lebensspanne eines Threads in Tagen')
+    plt.legend(patches, labels, loc="lower left")
+    plt.title('iAMA 2009 - Verteilung Ø Antwortzeit per Thread in Minuten')
 
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
@@ -320,5 +313,5 @@ def plot_the_generated_data_arithmetic_mean():
 # Generates the data which will be plotted later on
 generate_data_to_be_plotted()
 
-# Plots the data wich has been calculated before
+# Filters extrema in minutes
 plot_the_generated_data_arithmetic_mean()

@@ -5,46 +5,86 @@
 #       https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
 #   3. (27.02.2016 @ 16:30) -
 #       http://www.programiz.com/python-programming/break-continue
-#   This script is developed with PRAW 3.3.0
+
+import collections               # Necessary to sort collections alphabetically
+import matplotlib.pyplot as plt  # Necessary to plot graphs with the data calculated
+import sys                       # Necessary to use script arguments
+import numpy as np               # Necessary for mean calculation
+import datetime                  # Necessary for calculating time differences
+from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
-# Necessary to sort collections alphabetically
-import collections
-# Necessary to do time calculation
-import datetime
+def initialize_mongo_db_parameters():
+    """Instantiates all necessary variables for the correct usage of the mongoDB-Client
 
-# Necessary to plot graphs with the data calculated
-import matplotlib.pyplot as plt
-# Necessary to do further time calculation
-import numpy as np
-# Necessary to make use of MongoDB
-from pymongo import MongoClient
+    Args:
+        -
+    Returns:
+        -
+    """
 
-# The mongo client, necessary to connect to mongoDB
-mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+    global mongo_DB_Client_Instance
+    global mongo_DB_Threads_Instance
+    global mongo_DB_Thread_Collection
+    global mongo_DB_Comments_Instance
 
-# The data base instance for the threads
-mongo_DB_Threads_Instance_2009 = mongo_DB_Client_Instance.iAMA_Reddit_Threads_2009
-
-# Contains all collection names of the thread database
-mongo_DB_Thread_Collection_2009 = mongo_DB_Threads_Instance_2009.collection_names()
-
-# The data base instance for the comments
-mongo_DB_Comments_Instance_2009 = mongo_DB_Client_Instance.iAMA_Reddit_Comments_2009
-
-# Will contain all analyzed time information for threads & comments
-list_To_Be_Plotted = []
+    mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + argument_year]
+    mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + argument_year]
 
 
-# <editor-fold desc="Analyses data of threads and comments in terms of time">
-# Calculates the average & median comment time, the thread livespan,
-# and the timespan after which the first comment is submitted
-# </editor-fold>
+def check_script_arguments():
+    """Checks if enough and correct arguments have been given to run this script adequate
+
+    1. It checks in the first instance if enough arguments have been given
+    2. Then necessary variables will be filled with appropriate values
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global argument_year
+
+    # Whenever not enough arguments were given
+    if len(sys.argv) <= 0:
+        print("Not enough arguments were given...")
+        print("Terminating script now!")
+        sys.exit()
+    else:
+        # Parses the first argument to the variable
+        argument_year = str(sys.argv[1])
+
+
 def calculate_time_difference(id_of_thread, creation_date_of_thread):
-    # Makes the global comments instance locally available here
-    global mongo_DB_Comments_Instance_2009
+    """Calculates the difference between thread creation date and the last comment found in that thread
 
-    comments_collection = mongo_DB_Comments_Instance_2009[id_of_thread]
+    1. The creation date of a thread gets determined
+    2. Then the comments will be iterated over, creating a dictionary which is structured as follows:
+      {
+          ('first_Comment_After_Thread_Started', int),
+          ('thread_Livespan', int),
+          ('arithmetic_Mean_Response_Time', int),
+          ('median_Response_Time', int),
+          ('id')
+      }
+    3. That returned dictionary will be appended to a global list
+    4. That List will be iterated later on and the appropriate graph will be plotted
+
+    Args:
+        id_of_thread (str) : The string which contains the id of the actually processed thread
+        creation_date_of_thread (str) : The string which contains the creation date of the thread (in epoch formatation)
+    Returns:
+        dict_to_be_returned (dict) : Containing information about the time difference
+
+    """
+
+    # Makes the global comments instance locally available here
+    global mongo_DB_Comments_Instance
+
+    comments_collection = mongo_DB_Comments_Instance[id_of_thread]
     comments_cursor = comments_collection.find()
 
     # Contains the creation date of every comment in epoch time format
@@ -166,7 +206,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                          temp_thread_time).total_seconds())
 
                 else:
-                    # Add the difference between the time of the current and next comment into the time_difference
+                    # Appends the difference between the time of the current and next comment into the time_difference
                     # variable
                     time_difference.append(
                         (next_time_converted_for_subtraction - current_time_converted_for_subtraction).total_seconds())
@@ -205,28 +245,32 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     # Return that processed dictionary
     return dict_to_be_returned
 
-# <editor-fold desc="Generates data which is about to be plotted later on">
-# 1. The creation date of a thread gets determined
-# 2. Then the comments will be iterated over, creating a dictionary which is structured as follows:
-#   {
-#       ('first_Comment_After_Thread_Started', int),
-#       ('thread_Livespan', int),
-#       ('arithmetic_Mean_Response_Time', int),
-#       ('median_Response_Time', int),
-#       ('id')
-#   }
-# 3. That returned dictionary will be appended to a global list
-# 4. That List will be iterated later on and the appropriate graph will be plotted
-# </editor-fold>
-
 
 def generate_data_to_be_plotted():
-    for j, val in enumerate(mongo_DB_Thread_Collection_2009):
+    """Generates the data which will be analyzed
+
+    1. This method iterates over every thread
+        1.1. It filters if that iterated thread is an iAMA-request or not
+            1.1.1. If yes: this thread gets skipped and the next one will be processed
+            1.1.2. If no: this thread will be processed
+    2. If the thread gets processed it will receive the life span of the thread as dictionary
+    3. This dictionary will be added to a global list and will be plotted later on
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    print("Generating data now...")
+
+    # noinspection PyTypeChecker
+    for j, val in enumerate(mongo_DB_Thread_Collection):
 
         # Skips the system.indexes-table which is automatically created by  mongodb itself
         if not val == "system.indexes":
             # References the actual iterated thread
-            temp_thread = mongo_DB_Threads_Instance_2009[val]
+            temp_thread = mongo_DB_Threads_Instance[val]
 
             # Gets the creation date of that iterated thread
             temp_thread_creation_time = temp_thread.find()[
@@ -254,19 +298,25 @@ def generate_data_to_be_plotted():
                     or returned_dict.get("thread_Livespan") == 0 \
                     or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
 
-                print(
-                    "Thread '" + val +
-                    "' will not be added to global list. Therefore it won't be in the plotted graph.")
+                continue
+
             else:
                 # Add that analyzed data dictionary to the global list which will be plotted later on
                 list_To_Be_Plotted.append(returned_dict)
 
-# <editor-fold desc="Plots the data of the arithmetic mean for that threads">
-# Plotts the arithmetic mean - extrema are not filtered here
-# </editor-fold>
-
 
 def plot_the_generated_data_arithmetic_mean():
+    """Plots the data which is to be generated
+
+    1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
+    2. Depending on the committed year the title will be adapted appropriate
+    3. Time units will be separated into days, because this gives us the best overview
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     # The dictionary which is necessary to count the amount of response times
     dict_time_amount_counter = {
@@ -298,24 +348,93 @@ def plot_the_generated_data_arithmetic_mean():
     plt.figure()
 
     # The slices will be ordered and plotted counter-clockwise.
-    labels = ['0 bis 1 d', '1 bis 3 d', '3 bis 7 d', '7 bis 14 d', '> 14 d']
-    colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'orange']
-    values = [dict_time_amount_counter['0_To_1'],
-              dict_time_amount_counter['1_To_3'],
-              dict_time_amount_counter['3_To_7'],
-              dict_time_amount_counter['7_To_14'],
-              dict_time_amount_counter['greater_Than_14']]
+    labels = [
+        '0 bis 1 d',
+        '1 bis 3 d',
+        '3 bis 7 d',
+        '7 bis 14 d',
+        '> 14 d'
+    ]
 
-    patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
-    plt.pie(values, colors=colors, autopct='%.2f%%')
+    # Contains the colors, used for the plot
+    colors = [
+        'yellowgreen',
+        'gold',
+        'lightskyblue',
+        'lightcoral',
+        'orange'
+    ]
 
-    plt.legend(patches, labels, loc="upper right")
-    plt.title('iAMA 2009 - Ø Lebensspanne eines Threads in Tagen')
+    # Contains the values, used for the plot
+    values = [
+        dict_time_amount_counter['0_To_1'],
+        dict_time_amount_counter['1_To_3'],
+        dict_time_amount_counter['3_To_7'],
+        dict_time_amount_counter['7_To_14'],
+        dict_time_amount_counter['greater_Than_14']
+    ]
+
+    # Defines the way the patches and texts will be printed
+    patches, texts = plt.pie(
+        values,
+        colors=colors,
+        startangle=90,
+        shadow=True
+    )
+
+    # Defines the design of the plots legend
+    plt.pie(
+        values,
+        colors=colors,
+        autopct='%.2f%%'
+    )
+
+    # Defines the design of the plots legend
+    plt.legend(
+        patches,
+        labels,
+        loc="upper right"
+    )
+
+    # Defines the title of the plot
+    plt.title('iAMA ' +
+              argument_year +
+              '- Ø Lebensspanne eines Threads in Tagen'
+              )
 
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
     plt.tight_layout()
     plt.show()
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
+
+# Contains the year which is given as an argument
+argument_year = ""
+
+# The mongo client, necessary to connect to mongoDB
+mongo_DB_Client_Instance = None
+
+# The data base instance for the threads
+mongo_DB_Threads_Instance = None
+
+# Contains all collection names of the thread database
+mongo_DB_Thread_Collection = None
+
+# The data base instance for the comments
+mongo_DB_Comments_Instance = None
+
+# Will contain all analyzed time information for threads & comments
+list_To_Be_Plotted = []
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Methods which are to be called are here
+
+
+# Executes necessary checks
+check_script_arguments()
+
+# Initializes the mongoDB with the arguments given via command line
+initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
 generate_data_to_be_plotted()
