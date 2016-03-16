@@ -2,13 +2,26 @@ This file contains information about how to use the scripts..
 
 ------------------
 ------------------
-Filename:		thread_lifeSpan_pieChart.py {year} {top / worst}
-Description: 		Plots a pie chart containing an overview how long a thread lasted in days.. The duration is calculated by sutracting the threads creation timestamp with the timestamp of the last comment made to this thread
+Filename:		thread_lifeSpan_n_commentTime_pieChart.py {year} {calc} {time}
+Description: 		This script allows you to calculate two things.
+			1. The amount of time how long a thread lasted (Difference between thread creation time stamp and the time stamp of the last comment)
+			2. The average mean of comment time.. Means, how long it takes until a comment (regardless whether it is a question or not) has been posted within the thread
+
 Arguments:
 	
-			{year} 		= 	the year which is to be used for the calculation
-					=	2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+			{year} 		= 		the year which is to be used for the calculation
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 
-Usage example: 		python thread_lifeSpan_pieChart.py 2009 false
+			{calc}		= 		the data you want to calculate
+					=		lifespan || comment
+					=		lifespan if you want to calculate the lifespan of a thread, comment is when you want to calculate the average mean comment time within the thread
+
+
+			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+					=		min || hours || days
+					=		min is for minutes, hours is for separation into hours, days is for seperation into days
+
+
+Usage example: 		python thread_lifeSpan_n_commentTime_pieChart.py 2009 lifespan days
 ------------------
 ------------------

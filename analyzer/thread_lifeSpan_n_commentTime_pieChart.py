@@ -325,6 +325,7 @@ def prepare_dict_by_time_separation_for_life_span():
     if argument_plot_time_unit == "min":
         divider = 60
 
+        # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_To_Be_Plotted):
 
             value = val.get("thread_Lifespan")
@@ -547,7 +548,7 @@ def plot_the_generated_data_arithmetic_mean():
     # noinspection PyUnusedLocal
     dict_to_be_used = {}
 
-    if argument_calculation == "livespan":
+    if argument_calculation == "lifespan":
         # The dictionary which is necessary to count the amount of response times
         dict_to_be_used = prepare_dict_by_time_separation_for_life_span()
 
@@ -564,12 +565,12 @@ def plot_the_generated_data_arithmetic_mean():
     if argument_plot_time_unit == "min":
         plot_title += "Minuten"
         labels = [
-            '0 bis 5 min',
-            '5 bis 15 min',
+            '0 bis 1 min',
+            '1 bis 5 min',
+            '5 bis 10 min',
+            '10 bis 15 min',
             '15 bis 30 min',
-            '30 bis 60 min',
-            '60 bis 120 min',
-            '> 120 min'
+            '> 30 min'
         ]
 
     elif argument_plot_time_unit == "hours":
