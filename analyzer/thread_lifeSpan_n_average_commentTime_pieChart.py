@@ -255,7 +255,7 @@ def generate_data_to_be_plotted():
         1.1. It filters if that iterated thread is an iAMA-request or not
             1.1.1. If yes: this thread gets skipped and the next one will be processed
             1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive the life span of the thread as dictionary
+    2. If the thread gets processed it will receive the life span and other information about the thread as dictionary
     3. This dictionary will be added to a global list and will be plotted later on
 
     Args:
@@ -275,8 +275,7 @@ def generate_data_to_be_plotted():
             temp_thread = mongo_DB_Threads_Instance[val]
 
             # Gets the creation date of that iterated thread
-            temp_thread_creation_time = temp_thread.find()[
-                0].get("created_utc")
+            temp_thread_creation_time = temp_thread.find()[0].get("created_utc")
 
             # Gets the title of that iterated thread
             temp_thread_title = temp_thread.find()[0].get("title")
@@ -308,6 +307,15 @@ def generate_data_to_be_plotted():
 
 
 def prepare_dict_by_time_separation_for_life_span():
+    """Restructures the dictionary which is to be plotted for the display of the life span
+
+    1. This method processes the data in dependence of the commited time
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     # noinspection PyUnusedLocal
     divider = 0
@@ -418,6 +426,15 @@ def prepare_dict_by_time_separation_for_life_span():
 
 
 def prepare_dict_by_time_separation_for_comment_time():
+    """Restructures the dictionary which is to be plotted for the display of the average mean comment time
+
+    1. This method processes the data in dependence of the commited time
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     # noinspection PyUnusedLocal
     divider = 0
@@ -528,7 +545,7 @@ def prepare_dict_by_time_separation_for_comment_time():
     return dict_time_amount_counter
 
 
-def plot_the_generated_data_arithmetic_mean():
+def plot_the_generated_data():
     """Plots the data which is to be generated
 
     1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
@@ -644,6 +661,7 @@ def plot_the_generated_data_arithmetic_mean():
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
     plt.tight_layout()
+
     plt.show()
 
 
@@ -686,4 +704,4 @@ initialize_mongo_db_parameters()
 generate_data_to_be_plotted()
 
 # Plots the data wich has been calculated before
-plot_the_generated_data_arithmetic_mean()
+plot_the_generated_data()
