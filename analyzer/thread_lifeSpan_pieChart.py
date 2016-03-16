@@ -46,16 +46,18 @@ def check_script_arguments():
         -
     """
 
-    global argument_year
+    global argument_year, argument_calculation, argument_plot_time_unit
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 0:
+    if len(sys.argv) <= 2:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
     else:
-        # Parses the first argument to the variable
+        # Writes necessary values into the variables
         argument_year = str(sys.argv[1])
+        argument_calculation = str(sys.argv[2])
+        argument_plot_time_unit = str(sys.argv[3]).lower()
 
 
 def calculate_time_difference(id_of_thread, creation_date_of_thread):
@@ -65,7 +67,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     2. Then the comments will be iterated over, creating a dictionary which is structured as follows:
       {
           ('first_Comment_After_Thread_Started', int),
-          ('thread_Livespan', int),
+          ('thread_Lifespan', int),
           ('arithmetic_Mean_Response_Time', int),
           ('median_Response_Time', int),
           ('id')
@@ -103,7 +105,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         "first_Comment_After_Thread_Started": 0,
 
         # The difference between thread creation date and the timestamp of the last comment -> live span
-        "thread_Livespan": 0,
+        "thread_Lifespan": 0,
 
         # The arithmetic mean response time between the comments
         "arithmetic_Mean_Response_Time": 0,
@@ -174,7 +176,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 time_difference.append(
                     (current_time_converted_for_subtraction - temp_thread_time).total_seconds())
 
-                dict_to_be_returned["thread_Livespan"] = int(
+                dict_to_be_returned["thread_Lifespan"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
             # Whenever the last list object is iterated over skip anything because there will be no future object
@@ -225,7 +227,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
                 # Write the time difference (seconds) between the time the thread has been created and the
                 # time the last comment was created
-                dict_to_be_returned["thread_Livespan"] = int(
+                dict_to_be_returned["thread_Lifespan"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
     # Whenever not a single comment was null.. concrete: Whenever everything is normal and the thread contains answers
@@ -295,7 +297,7 @@ def generate_data_to_be_plotted():
             # to the global list which is to be plotted later on
             if returned_dict.get("median_Response_Time") == 0 \
                     or returned_dict.get("first_Comment_After_Thread_Started") == 0 \
-                    or returned_dict.get("thread_Livespan") == 0 \
+                    or returned_dict.get("thread_Lifespan") == 0 \
                     or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
 
                 continue
@@ -303,6 +305,226 @@ def generate_data_to_be_plotted():
             else:
                 # Add that analyzed data dictionary to the global list which will be plotted later on
                 list_To_Be_Plotted.append(returned_dict)
+
+
+def prepare_dict_by_time_separation_for_life_span():
+
+    # noinspection PyUnusedLocal
+    divider = 0
+
+    dict_time_amount_counter = {
+        "first": 0,
+        "second": 0,
+        "third": 0,
+        "fourth": 0,
+        "fifth": 0,
+        "sixth": 0
+    }
+
+    # minutes
+    if argument_plot_time_unit == "min":
+        divider = 60
+
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("thread_Lifespan")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1)\
+                    and ((value / 60) <= 5):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 5)\
+                    and ((value / 60) <= 10):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 10)\
+                    and ((value / 60) <= 15):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif ((value / divider) > 15)\
+                    and ((value / 60) <= 30):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 30:
+                dict_time_amount_counter["sixth"] += 1
+
+    # hours
+    elif argument_plot_time_unit == "hours":
+        divider = 3600
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("thread_Lifespan")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1)\
+                    and ((val.get("thread_Lifespan") / divider) <= 6):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 6)\
+                    and ((value / divider) <= 12):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 12)\
+                    and ((value / divider) <= 24):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif ((value / divider) > 24)\
+                    and ((value / divider) <= 48):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 48:
+                dict_time_amount_counter["sixth"] += 1
+
+    # days
+    else:
+        divider = 86400
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("thread_Lifespan")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) and \
+                    ((value / divider) <= 3):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 3) and \
+                    ((value / divider) <= 7):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 7) and \
+                    ((value / divider) <= 14):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) > 14 and \
+                    ((value / divider) <= 28):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 28:
+                dict_time_amount_counter["sixth"] += 1
+
+    return dict_time_amount_counter
+
+
+def prepare_dict_by_time_separation_for_comment_time():
+
+    # noinspection PyUnusedLocal
+    divider = 0
+
+    dict_time_amount_counter = {
+        "first": 0,
+        "second": 0,
+        "third": 0,
+        "fourth": 0,
+        "fifth": 0,
+        "sixth": 0
+    }
+
+    # minutes
+    if argument_plot_time_unit == "min":
+        print("")
+        divider = 60
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("arithmetic_Mean_Response_Time")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1)\
+                    and ((value / 60) <= 5):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 5)\
+                    and ((value / 60) <= 10):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 10)\
+                    and ((value / 60) <= 15):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif ((value / divider) > 15)\
+                    and ((value / 60) <= 30):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 30:
+                dict_time_amount_counter["sixth"] += 1
+
+    # hours
+    elif argument_plot_time_unit == "hours":
+        divider = 3600
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("arithmetic_Mean_Response_Time")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1)\
+                    and ((value / divider) <= 6):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 6)\
+                    and ((value / divider) <= 12):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 12)\
+                    and ((value / divider) <= 24):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif ((value / divider) > 24)\
+                    and ((value / divider) <= 48):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 48:
+                dict_time_amount_counter["sixth"] += 1
+
+    # days
+    else:
+        divider = 86400
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_To_Be_Plotted):
+
+            value = val.get("arithmetic_Mean_Response_Time")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) and \
+                    ((value / divider) <= 3):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 3) and \
+                    ((value / divider) <= 7):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 7) and \
+                    ((value / divider) <= 14):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) > 14 and \
+                    ((value / divider) <= 28):
+                dict_time_amount_counter["fifth"] += 1
+
+            elif (value / divider) > 28:
+                dict_time_amount_counter["sixth"] += 1
+
+    return dict_time_amount_counter
 
 
 def plot_the_generated_data_arithmetic_mean():
@@ -318,43 +540,61 @@ def plot_the_generated_data_arithmetic_mean():
         -
     """
 
-    # The dictionary which is necessary to count the amount of response times
-    dict_time_amount_counter = {
-        "0_To_1": 0,
-        "1_To_3": 0,
-        "3_To_7": 0,
-        "7_To_14": 0,
-        "greater_Than_14": 0
-    }
+    # noinspection PyUnusedLocal
+    labels = []
+    plot_title = ""
 
-    # Iterates over every element and checks if that value is between some given values
-    for i, val in enumerate(list_To_Be_Plotted):
+    # noinspection PyUnusedLocal
+    dict_to_be_used = {}
 
-        if (val.get("thread_Livespan") / 86400) <= 1:
-            dict_time_amount_counter["0_To_1"] += 1
+    if argument_calculation == "livespan":
+        # The dictionary which is necessary to count the amount of response times
+        dict_to_be_used = prepare_dict_by_time_separation_for_life_span()
 
-        elif ((val.get("thread_Livespan") / 86400) > 1) and ((val.get("thread_Livespan") / 86400) <= 3):
-            dict_time_amount_counter["1_To_3"] += 1
+        plot_title += 'iAMA ' +\
+                      argument_year +\
+                      '- Ø Lebensspanne eines Threads in '
+    else:
+        dict_to_be_used = prepare_dict_by_time_separation_for_comment_time()
 
-        elif ((val.get("thread_Livespan") / 86400) > 3) and ((val.get("thread_Livespan") / 86400) <= 7):
-            dict_time_amount_counter["3_To_7"] += 1
+        plot_title += 'iAMA ' + \
+                      argument_year + \
+                      '- Verteilung Ø Antwortzeit per Thread in '
 
-        elif ((val.get("thread_Livespan") / 86400) > 7) and ((val.get("thread_Livespan") / 86400) <= 14):
-            dict_time_amount_counter["7_To_14"] += 1
+    if argument_plot_time_unit == "min":
+        plot_title += "Minuten"
+        labels = [
+            '0 bis 5 min',
+            '5 bis 15 min',
+            '15 bis 30 min',
+            '30 bis 60 min',
+            '60 bis 120 min',
+            '> 120 min'
+        ]
 
-        elif (val.get("thread_Livespan") / 86400) > 14:
-            dict_time_amount_counter["greater_Than_14"] += 1
+    elif argument_plot_time_unit == "hours":
+        plot_title += "Stunden"
+        labels = [
+            '0 bis 1 h',
+            '1 bis 6 h',
+            '6 bis 12 h',
+            '12 bis 24 h',
+            '24 bis 48 h',
+            '> 48 h'
+        ]
+
+    else:
+        plot_title += "Tagen"
+        labels = [
+            '0 bis 1 d',
+            '1 bis 3 d',
+            '3 bis 7 d',
+            '7 bis 14 d',
+            '14 bis 28 d',
+            '> 28 d'
+        ]
 
     plt.figure()
-
-    # The slices will be ordered and plotted counter-clockwise.
-    labels = [
-        '0 bis 1 d',
-        '1 bis 3 d',
-        '3 bis 7 d',
-        '7 bis 14 d',
-        '> 14 d'
-    ]
 
     # Contains the colors, used for the plot
     colors = [
@@ -362,16 +602,18 @@ def plot_the_generated_data_arithmetic_mean():
         'gold',
         'lightskyblue',
         'lightcoral',
-        'orange'
+        'mediumpurple',
+        'orange',
     ]
 
     # Contains the values, used for the plot
     values = [
-        dict_time_amount_counter['0_To_1'],
-        dict_time_amount_counter['1_To_3'],
-        dict_time_amount_counter['3_To_7'],
-        dict_time_amount_counter['7_To_14'],
-        dict_time_amount_counter['greater_Than_14']
+        dict_to_be_used['first'],
+        dict_to_be_used['second'],
+        dict_to_be_used['third'],
+        dict_to_be_used['fourth'],
+        dict_to_be_used['fifth'],
+        dict_to_be_used['sixth']
     ]
 
     # Defines the way the patches and texts will be printed
@@ -396,21 +638,24 @@ def plot_the_generated_data_arithmetic_mean():
         loc="upper right"
     )
 
-    # Defines the title of the plot
-    plt.title('iAMA ' +
-              argument_year +
-              '- Ø Lebensspanne eines Threads in Tagen'
-              )
+    plt.title(plot_title)
 
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
     plt.tight_layout()
     plt.show()
 
+
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
 argument_year = ""
+
+# Contains information what data you want to be calculated
+argument_calculation = ""
+
+# Contains the time unit in which the graphs will be plotted later on
+argument_plot_time_unit = ""
 
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = None
