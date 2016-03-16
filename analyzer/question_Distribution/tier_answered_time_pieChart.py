@@ -90,7 +90,7 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
     return time_difference_in_seconds
 
 
-def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acutal_id, comments_cursor):
+def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actual_id, comments_cursor):
     """Checks whether both strings are equal or not
 
     1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp will
@@ -102,7 +102,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
 
     Args:
         author_of_thread (str) : The name of the thread author (iAMA-Host)
-        comment_acutal_id (str) : The id of the actually processed comment
+        comment_actual_id (str) : The id of the actually processed comment
         comments_cursor (Cursor) : The cursor which shows to the amount of comments which can be iterated
     Returns:
         True (bool): Whenever the strings do not match
@@ -128,7 +128,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
             if (check_if_comment_is_not_from_thread_author(
                         author_of_thread,
                         actual_comment_author) == False) and (
-                    check_comment_parent_id == comment_acutal_id):
+                    check_comment_parent_id == comment_actual_id):
 
                 dict_to_be_returned["question_Answered_From_Host"] = True
                 dict_to_be_returned[
@@ -239,7 +239,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
             comment_text = collection.get("body")
             comment_author = collection.get("author")
             comment_parent_id = collection.get("parent_id")
-            comment_acutal_id = collection.get("name")
+            comment_actual_id = collection.get("name")
             comment_time_stamp = collection.get("created_utc")
 
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
@@ -265,7 +265,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
 
                         # Check whether that iterated comment is answered by the host
                         answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
-                            author_of_thread, comment_acutal_id, comments_cursor)
+                            author_of_thread, comment_actual_id, comments_cursor)
 
                         # Whenever the answer to that comment is from the author
                         # (boolean == True)
@@ -298,7 +298,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
 
                         # Check whether that iterated comment is answered by the host
                         answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
-                            author_of_thread, comment_acutal_id, comments_cursor)
+                            author_of_thread, comment_actual_id, comments_cursor)
 
                         # Whenever the answer to that comment is from the author
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
@@ -326,7 +326,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
 
                         # Check whether that iterated comment is answered by the host
                         answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
-                            author_of_thread, comment_acutal_id, comments_cursor)
+                            author_of_thread, comment_actual_id, comments_cursor)
 
                         # Whenever the answer to that comment is from the author
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
