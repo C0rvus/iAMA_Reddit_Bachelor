@@ -44,23 +44,27 @@ def check_script_arguments():
         -
     """
 
-    global argument_year_beginning, argument_year_end, argument_hours_to_shift
+    global argument_year_beginning, argument_year_end, argument_hours_to_shift, argument_crawl_type
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 2:
+    if len(sys.argv) <= 3:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
     else:
+
+        # Decides what to crawl here. Comments or threads
+        argument_crawl_type = str(sys.argv[1])
+
         # Writes necessary values into the variables
-        argument_year_beginning = convert_argument_year_to_epoch(str(sys.argv[1]))
+        argument_year_beginning = convert_argument_year_to_epoch(str(sys.argv[2]))
 
         # It is necessary to add + 1 here, otherwise it would only crawl the amount "argument_hours_to_shift" for the
         # given year and it would end after one crawl attempt..
-        argument_year_end = convert_argument_year_to_epoch(str(int(sys.argv[2]) + 1))
+        argument_year_end = convert_argument_year_to_epoch(str(int(sys.argv[3]) + 1))
 
         # The amount of hours the crawler will shift into the "future"
-        argument_hours_to_shift = int(sys.argv[3])
+        argument_hours_to_shift = int(sys.argv[4])
 
 
 def convert_argument_year_to_epoch(year):
@@ -113,6 +117,25 @@ def convert_argument_year_to_epoch(year):
         return int(time.time())
 
 
+def crawl_data():
+    """Crawls data from reddit, depending on the first argument (threads / comments) you give the script
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    if argument_crawl_type == "threads":
+        crawl_threads()
+    elif argument_crawl_type == "comments":
+        crawl_comments()
+    else:
+        print("Can not understand what you want me to crawl..")
+        print("Terminating script now !")
+        sys.exit()
+
+
 def crawl_threads():
     """Crawls thread information and writes them into the mongoDB storage
     It works as follwoing:
@@ -153,8 +176,6 @@ def crawl_threads():
         sort="new",
         limit=900,
         syntax="cloudsearch")
-
-    print(type(posts))
 
     for submission in posts:
 
@@ -231,6 +252,121 @@ def crawl_threads():
     # Continue crawling
     else:
         crawl_threads()
+
+
+def crawl_comments():
+    """Crawls thread information and writes them into the mongoDB storage
+    It works as follwoing:
+
+    1. At first an attempt to the amazon cloud search will be made, with necessary parameters which returns an object,
+        of the class "Generator" which contains all comments for the given / crawled time windows
+
+    2. After that the "Generator"s elements will be iterated over
+
+        2.1. It will be checked if that iterated collection already exists within the database or not
+
+            2.2.1. If it already exists, it will be checked whether if it is up to date or not
+                2.2.1.1. If up2date: do nothing
+                2.2.1.2. If not up2date: drop that collection within the database and crawl the collection anew
+
+            2.2.2. If it does not yet exist: create that collection in the database with the necessary information
+
+    3. Whenever there are no elements left to iterate over the time crawling window will be shifted into the future by
+        using the given amount in hours (fourth argument), whenever the ending year (third argument) is not reached yet
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global argument_year_beginning, time_shift_difference
+
+    # Below is the crawl command to search within a dedicated time span from argument_year_beginning
+    # to time_shift_difference. Time is used in epoch format
+    posts = reddit_Instance.search(
+        'timestamp:' +
+        str(argument_year_beginning) +
+        '..' +
+        str(time_shift_difference),
+        subreddit='iAMA',
+        sort="new",
+        limit=1000,
+        syntax="cloudsearch"
+    )
+
+    for submission in posts:
+        # Whenver the collection already exists in the database (True)
+        if check_if_coll_in_db_already_exists_up2date(submission):
+            print("++ Comments for " + str(submission.id) + " already exist in mongoDB and are up2date")
+
+        # Whenever the thread does not yet exist within the mongoDB (anymore) (False)
+        else:
+            print("    -- Comments for " + str(submission.id) + " will be created now")
+
+            # Replaces the objects of Type praw.MoreComments with comments
+            # (i.e. iterates their tree to the end / expands all comments)
+            submission.replace_more_comments(limit=None, threshold=0)
+
+            # Breaks the tree hierarchy and returns a plan straight aligned
+            # list containing all fulltext comments
+            flat_comments = praw.helpers.flatten_tree(submission.comments)
+
+            # Iterates over every single comment within the thread
+            for idx, val in enumerate(flat_comments):
+
+                # noinspection PyTypeChecker
+                data_to_write_into_db = dict({
+                    'author': str(val.author),
+                    'body': str(val.body),
+                    'created_utc': str(val.created_utc),
+                    'name': str(val.name),
+                    'parent_id': str(val.parent_id),
+                    'ups': int(val.ups)
+                })
+
+                # Sorts that dictionary alphabetically ordered
+                data_to_write_into_db = collections.OrderedDict(sorted(data_to_write_into_db.items()))
+
+                # Converts the unix utc_time into a date format and converts it to string afterwards
+                temp_submission_creation_year = str(datetime.fromtimestamp(submission.created_utc))
+                temp_submission_creation_year = temp_submission_creation_year[:4]
+
+                # This method says to look into the appropriate database,
+                # depending on the year the thread was created
+                mongo_db_reddit = mongo_DB_Client_Instance["iAMA_Reddit_Comments_" + temp_submission_creation_year]
+
+                # Writes the crawled information into the mongoDB
+                collection = mongo_db_reddit[str(submission.id)]
+
+                # Write the dictionary "data_to_write_into_db" into the mongo db right now!
+                collection.insert_one(data_to_write_into_db)
+
+    print(
+        "------------ completed crawling data for " + str(argument_hours_to_shift) +
+        " hours.. Continuing to the next time frame now")
+
+    # Shifts argument_year_beginning with "argument_hours_to_shift" hours into the future
+    argument_year_beginning = int(round(time.mktime((datetime.fromtimestamp(argument_year_beginning) +
+                                                     timedelta(hours=argument_hours_to_shift)).timetuple())))
+
+    # Shifts time_shift_difference with "argument_hours_to_shift" hours into the future
+    time_shift_difference = int(round(time.mktime((datetime.fromtimestamp(time_shift_difference) +
+                                                   timedelta(hours=argument_hours_to_shift)).timetuple())))
+
+    # Whenever the destination time (time_shift_difference) to be crawled is newer than the
+    # defined ending time:      set time_shift_difference to the argument_year_end
+    if time_shift_difference > argument_year_end:
+        time_shift_difference = argument_year_end
+
+    # Whenever the starting time (argument_year_beginning) to be crawled is newer than the defined
+    # ending time   :      end this method here
+    elif argument_year_beginning > argument_year_end:
+        return
+
+    # Continue crawling
+    else:
+        crawl_comments()
 
 
 def check_if_coll_in_db_already_exists_up2date(submission):
@@ -339,6 +475,9 @@ mongo_DB_Client_Instance = None
 # The Main reddit functionality
 reddit_Instance = None
 
+# Will contain the type - what we want to crawl.. threads or comments
+argument_crawl_type = None
+
 # Will contain the starting year to crawl data for in epoch time
 argument_year_beginning = None
 
@@ -355,6 +494,7 @@ argument_year_end = None
 # </editor-fold>
 argument_hours_to_shift = None
 
+
 # Executes necessary checks
 check_script_arguments()
 
@@ -364,7 +504,7 @@ initialize_mongo_db_parameters()
 
 
 # <editor-fold desc="Description of time_shift_difference inside here">
-# 1. At first 8 hours are added to the epoch format of argument_year_beginning
+# 1. At first x hours are added to the epoch format of argument_year_beginning
 #   1.1. At this step epoch gets converted to String
 # 2. String gets converted back to epoch time
 #   2.1. Due to conversion the time is in float format [1201907536.0]
@@ -383,5 +523,5 @@ time_shift_difference = int(
 )
 
 
-# Execute the method to crawl all data
-crawl_threads()
+# Executes the crawling, depending on the argument given.
+crawl_data()
