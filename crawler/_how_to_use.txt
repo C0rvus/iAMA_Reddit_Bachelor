@@ -1,0 +1,41 @@
+This file contains information about how to use the scripts..
+
+------------------
+------------------
+Filename:		thread_crawler.py {year_begin} {year_end} {shift_hours}
+
+Description: 		This script crawls threads from the reddit API and writes them into the mongoDB.
+			This works the way, that you define a beginning year to crawl from an ending year where the crawl ends and the amount of hours the crawler should move on after every successfull query against the reddit servers.
+			Whenever the crawler receives an positive response and gets threads in return this script will iterate over them, checks, if they already exist within the mongoDB (and if they are up to date) and (re)creates them if necessary.
+			This script will automatically generate the database(s) which will store the crawled information.
+			I.e. if the crawler processes information with the timestamp of the year 2009 it will write the information into the database with the name "iAMA_Reddit_Threads_{the appropriate year}".
+			The {appropriate year} is calculated from the timestamp of a post.
+			I.e. you want to crawl information from 2009 - 2012: In the year of 2009 the script will write data into "iAMA_Reddit_Threads_2009" database.. If it processes threads from year 2010 it will write the data into "iAMA_Reddit_Threads_2010" and so on.. Note: If you crawl from 2009 - any year : That "any year" will also be crawled..
+			A document within the database has the name of the actually processed thread. Looking inside the document you will only see one collection which holds the following information:
+			Be aware ! Crawling takes very long (many days !!) and eats a lot of RAM resources... I suggest you to pick up my already crawled dataset :)
+
+			"_id"		=		The dynamically generated id from the mongo db
+			"author"	=		The author of the thread
+			"created_utc"	=		The timestamp when that thread has been created (timestamp is in unix epoch formatation)
+			"downs"		=		The amount of downvotes that thread has received
+			"num_Comments"	=		The amount of comments that thread has received.. (This number differs from the actually parsed comments [this is because reddit does not allow you to crawl already deleted comments...]
+			"selftext"	=		The selftext of the thread. In the early years of reddit there were no selftext, therefore that value may be empty in some databases
+			"title"		=		The iAMAs title
+			"ups"		=		The amount of upvotes
+
+
+Arguments:
+	
+			{year_begin}	= 		The year you want the start the crawling process on
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{shift_hours}	=		The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good
+					=		{int}
+
+
+Usage example: 		python thread_crawler.py 2009 2014 96
+------------------
+------------------
