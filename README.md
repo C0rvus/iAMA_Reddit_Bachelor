@@ -69,20 +69,13 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
     code python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
     
 >	{crawl_type}	= 		the type of data you want to be crawled and written into the database
-
->			=		threads || comments
-
+>			        =		threads || comments
 >	{year_begin}	= 		The year you want the start the crawling process on
-
->			=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
->	{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
-
->	  		=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
+>			        =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+>	{year_end}	    = 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+>	  		        =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 >	{shift_hours}	=		The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good
-
->			=		{int}
+>			        =		{int}
 
 *Usage examples shown down below*
 
