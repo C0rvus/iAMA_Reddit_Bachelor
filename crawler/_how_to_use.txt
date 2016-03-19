@@ -25,7 +25,7 @@ Description: 		This script crawls threads / comments from the reddit API and wri
 			"title"		=		The iAMAs title
 			"ups"		=		The amount of upvotes
 
-			DB values for comments [iAMA_Reddit_Threads_{year}]:
+			DB values for comments [iAMA_Reddit_Comments_{year}]:
 			
 			"_id"		=		The dynamically generated id from the mongo db
 			"author"	=		The author of the thread
@@ -53,5 +53,29 @@ Arguments:
 
 
 Usage example: 		python thread_n_comment_crawler.py threads 2009 2014 96
+------------------
+------------------
+
+------------------
+------------------
+Filename:		crawl_that_diff.py {year_begin} {year_end} {direction}
+
+Description: 		This script crawls missing threads / collections from the reddit servers. Because by regular crawling some threads will be missed due to some limitions of the amazon cloudsearch (which will be used for crawling that data) the [iAMA_Reddit_Threads_{year}] and [iAMA_Reddit_Comments_{year}] do not contain the same amount of collections. To "fix" this issue this script compares the collections of both databases [according to the given year] and crawls the missing data.
+
+
+Arguments:
+
+			{year_begin}	= 		The year you want the start the crawling process on
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{direction}	=		Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
+
+					=		forward || backward
+
+
+Usage example: 		python crawl_that_diff.py 2009 2010 backward
 ------------------
 ------------------

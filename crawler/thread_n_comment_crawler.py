@@ -7,7 +7,7 @@
 #           https://www.linuxquestions.org/questions/programming-9/python-datetime-to-epoch-4175520007/
 #   4. (06.02.2016 @ 16:30) -#
 #           https://stackoverflow.com/questions/11743019/convert-python-datetime-to-epoch-with-strftime
-#   This script is developed with PRAW 3.3.0
+#   This script has been developed by using PRAW 3.3.0
 
 import praw                                 # Necessary for crawling data from reddit
 import time                                 # Necessary to do some time calculations
