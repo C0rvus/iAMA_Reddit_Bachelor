@@ -64,18 +64,25 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
 
 #### crawl\_threads\_n\_comments.py
 
-* Crawls threads and comments into the regarding databases*
+Crawls threads and comments into the regarding databases
 
     code python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
     
->	{crawl_type}	= 		the type of data you want to be crawled and written into the database
->			        =		threads || comments
->	{year_begin}	= 		The year you want the start the crawling process on
->			        =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
->	{year_end}	    = 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
->	  		        =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
->	{shift_hours}	=		The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good
->			        =		{int}
+>	crawl_type	= 		the type of data you want to be crawled and written into the database
+
+>		        =		threads || comments
+
+>	year_begin	= 		The year you want the start the crawling process on
+
+>               =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+>	year_end	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+
+>  		        =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+>	shift_hours	=		The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good
+
+>			    =		int
 
 *Usage examples shown down below*
 
@@ -85,22 +92,22 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
     
 #### crawl\_differences.py
 
-* Compares regarding threads and comments databases and crawls missing collections* 
+Compares regarding threads and comments databases and crawls missing collections
 
     code python crawl_differences.py {year_begin} {year_end} {direction}
     
     
->	{year_begin}	= 		The year you want the start the crawling process on
+>	year_begin	= 		The year you want the start the crawling process on
 
->			=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+>			    =		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 
->	{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+>	year_end	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
 
->			=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+>   			=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 
->	{direction}	=		Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
+>	direction	=		Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
 
->			=		forward || backward
+>			    =		forward || backward
 
 *Usage examples shown down below*
 
@@ -118,21 +125,21 @@ The analyzing scripts iterates over the documents / collections within the datab
 
 #### analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 
 
-* Calculates how long a thread lives and the average comment time - for the given year
+Calculates how long a thread lives and the average comment time - for the given year
 
-    code python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
+    code  python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
     
->		{year} 		= 		the year which is to be used for the calculation
+>	year	= 		the year which is to be used for the calculation
 
 >			=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
 
->	{calc}		= 		the data you want to calculate
+>   calc	= 		the data you want to calculate
 
 >			=		lifespan || comment
 
 >			=		lifespan if you want to calculate the lifespan of a thread, comment is when you want to calculate the average mean comment time within the thread
 
->	{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+>	time	=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
 
 >			=		min || hours || days
 
