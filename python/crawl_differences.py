@@ -409,14 +409,6 @@ def start_crawling_for_diffs():
 
     global argument_year_beginning
 
-    # Whenever the user only wants to crawl one year
-    if argument_year_beginning == argument_year_beginning:
-        # Creates missing collections within the comments database
-        check_if_collection_is_missing_in_comments_database()
-
-        # Creates missing collections within the threads database
-        check_if_collection_is_missing_in_threads_database()
-
     # Whenever the user wants to crawl many years at all
     while argument_year_beginning != argument_year_end:
 
@@ -426,9 +418,25 @@ def start_crawling_for_diffs():
         # Creates missing collections within the threads database
         check_if_collection_is_missing_in_threads_database()
 
+        # Increase the year counter by one so the data for the next year can be crawled
         argument_year_beginning = str(int(argument_year_beginning) + 1)
 
-    print("Crawling for diffs has been finished!")
+        # Database variables need to be refreshed because the year has changed
+        initialize_mongo_db_parameters()
+
+    # Whenever the user only wants to crawl one year
+    if argument_year_beginning == argument_year_end:
+
+        # Database variables need to be refreshed because the year has changed
+        initialize_mongo_db_parameters()
+
+        # Creates missing collections within the comments database
+        check_if_collection_is_missing_in_comments_database()
+
+        # Creates missing collections within the threads database
+        check_if_collection_is_missing_in_threads_database()
+
+    print("Crawling for diffs has finished!")
     print("Terminating script now!")
     sys.exit()
 
