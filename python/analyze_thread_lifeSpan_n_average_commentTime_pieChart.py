@@ -330,7 +330,7 @@ def prepare_dict_by_time_separation_for_life_span():
     }
 
     # minutes
-    if argument_plot_time_unit == "min":
+    if argument_plot_time_unit == "minutes":
         divider = 60
 
         # Iterates over every element and checks if that value is between some given values
@@ -449,7 +449,7 @@ def prepare_dict_by_time_separation_for_comment_time():
     }
 
     # minutes
-    if argument_plot_time_unit == "min":
+    if argument_plot_time_unit == "minutes":
         print("")
         divider = 60
 
@@ -579,7 +579,7 @@ def plot_the_generated_data():
                       argument_year + \
                       '- Verteilung Ø Antwortzeit per Thread in '
 
-    if argument_plot_time_unit == "min":
+    if argument_plot_time_unit == "minutes":
         plot_title += "Minuten"
         labels = [
             '0 bis 1 min',

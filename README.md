@@ -14,12 +14,13 @@ Python, HTML5, CoffeeScript, LESS, MongoDB
 
 ### Prerequisites
 
-1. Install mongoDB on your client (localhost) and do not set up any special permissions. Also make sure you have enough disk space available (~50 GB)
-2. Install Python 3.5.1
+1. Install mongoDB on your client (localhost) and do not set up any special permissions (so everbody can access it). Also make sure you have enough disk space available (~50 GB)
+2. Install Python 3.5.1 on your client
+3. Make sure having needed python modules (praw, numpy, pymongo) installed on your client
 
 ### Crawling data:
 
-1. Run the scripts with the prefix "crawl" within ./python/ - Folder.
+1. Run the scripts with the prefix "***crawl***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
 You will be having database of two types:
@@ -66,29 +67,29 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
 
 Crawls threads and comments into the regarding databases
 
-    code python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
+    python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
 
     
-* **crawl_type** = **[threads || comments]** The type of data you want to be crawled and written into the database
+* **crawl_type** = **[threads || comments]** *The type of data you want to be crawled and written into the database*
  
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start the crawling process on
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the start the crawling process on*
 
-* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..*
 
-* **shift_hours**	= **[int]** The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good
+* **shift_hours**	= **[int]** *The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good*
 
 *Usage examples shown down below*
 
-    code python crawl_threads_n_comments.py threads 2009 2014 96
-    code python crawl_threads_n_comments.py threads 2009 2014 96
-    code python crawl_threads_n_comments.py threads 2009 today 128
+    python crawl_threads_n_comments.py threads 2009 2014 96
+    python crawl_threads_n_comments.py threads 2009 2014 96
+    python crawl_threads_n_comments.py threads 2009 today 128
 
     
 #### crawl\_differences.py
 
 Compares regarding threads and comments databases and crawls missing collections
 
-    code python crawl_differences.py {year_begin} {year_end} {direction}
+    python crawl_differences.py {year_begin} {year_end} {direction}
     
     
 * **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start the crawling process on 
@@ -99,14 +100,14 @@ Compares regarding threads and comments databases and crawls missing collections
 
 *Usage examples shown down below*
 
-    code python crawl_differences.py 2009 2010 backward
-    code python crawl_differences.py 2009 2016 forward
-    code python crawl_differences.py 2009 2009 forward
+    python crawl_differences.py 2009 2010 backward
+    python crawl_differences.py 2009 2016 forward
+    python crawl_differences.py 2009 2009 forward
 
 
 ### Analyzing data:
 
-1. Run the scripts with the prefix "analyze" within ./python/ - Folder.
+1. Run the scripts with the prefix ***"analyze"*** within **./python/** - folder.
 
 The analyzing scripts iterates over the documents / collections within the databases and calculate various things which will be explained down below:
 
@@ -115,7 +116,7 @@ The analyzing scripts iterates over the documents / collections within the datab
 
 Calculates how long a thread lives and the average comment time - for the given year
 
-    code  python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
+    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
 
     
 * **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
@@ -123,3 +124,87 @@ Calculates how long a thread lives and the average comment time - for the given 
 * **calc** = **[lifespan || comment]** The data you want to calculate 
 
 * **time** = **[min || hours || days]** The time units in which the calculated values will be seperated into for plotting.. 
+
+*Usage examples shown down below*
+
+    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
+    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2014 comment hours
+    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2012 lifespan minutes
+
+
+#### analyze\_top100\_pieChart.py 
+
+Calculates how many of the top / worst 100 questions have been answered. A top / worst question is a question with the highest / lowest amount of votes.
+
+    python analyze_top100_pieChart.py {year} {rate}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+* **rate** = **[top || worst]** The best or worst voted questions you want to have a look at 
+
+*Usage examples shown down below*
+
+    python analyze_top100_pieChart.py 2009 top
+    python analyze_top100_pieChart.py 2011 worst
+    python analyze_top100_pieChart.py 2010 worst
+
+    
+#### analyze\_tier\_answered\_time\_pieChart.py 
+
+Calculates the arithmetic mean of the iAMA hosts response time to questions depending on the tier and the time_value given
+
+    python analyze_tier_answered_time_pieChart.py {year} {tier} {time}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+
+* **time** = **[min || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting) 
+
+*Usage examples shown down below*
+
+    python analyze_tier_answered_time_pieChart.py 2011 1 minutes
+    python analyze_tier_answered_time_pieChart.py 2012 x hours
+    python analyze_tier_answered_time_pieChart.py 2009 any hours    
+    
+    
+#### analyze\_tier\_answered\_percentage\_pieChart.py
+
+Plots a pieChart which contains the distribution of questions answered per tier for the given year.
+
+    python analyze_tier_answered_percentage_pieChart.py {year} {tier}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+
+*Usage examples shown down below*
+
+    python analyze_tier_answered_percentage_pieChart.py 2009 1
+    python analyze_tier_answered_percentage_pieChart.py 2011 x
+    python analyze_tier_answered_percentage_pieChart.py 2015 any    
+
+
+#### analyze\_tier\_question\_distribution\_pieChart
+
+Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest - how many questions rely on the first tier and how mana rely on the remaining tiers.
+
+    python analyze_tier_question_distribution_pieChart.py {year}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+
+*Usage examples shown down below*
+
+    python analyze_tier_question_distribution_pieChart.py 2009
+    python analyze_tier_question_distribution_pieChart.py 2011
+    python analyze_tier_question_distribution_pieChart.py 2014
+
+
+### Usage of overhaul:
+
+This is actually not in development yet.

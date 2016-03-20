@@ -429,7 +429,7 @@ def plot_the_generated_data_percentage_mean():
     ]
 
     # Whenever the given time argument is minutes..
-    if argument_plot_time_unit == "min":
+    if argument_plot_time_unit == "minutes":
 
         # The dictionary which is necessary to count the amount of response times in minutes
         dict_time_amount_counter = {

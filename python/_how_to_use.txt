@@ -19,14 +19,14 @@ Arguments:
 
 
 			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
-					=		min || hours || days
-					=		min is for minutes, hours is for separation into hours, days is for seperation into days
+					=		minutes || hours || days
+					=		minutes is for minutes, hours is for separation into hours, days is for seperation into days
 
 
 Usage example: 		python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
 ------------------
 ------------------
-Filename:		top100_pieChart.py {year} {top / worst}
+Filename:		analyze_top100_pieChart.py {year} {top / worst}
 
 Description: 		Plots a pie chart containing the top 100 / worst 100 questions of the year and the proportion to the answers they have received from the iAMA host.
 Arguments:
@@ -36,7 +36,7 @@ Arguments:
 
 			{top / worst)	= 	top [top 100] || worst [worst 100]
 
-Usage example: 		python top100_pieChart.py 2009 false
+Usage example: 		python analyze_top100_pieChart.py 2009 false
 ------------------
 ------------------
 Filename:		analyze_tier_answered_time_pieChart.py {year} {tier} {time}
@@ -52,13 +52,13 @@ Arguments:
 					=		1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
 
 			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
-					=		min || hours
+					=		
 					=		min is for minutes, hours is for separation into hours
 
 Usage example: 		python analyze_tier_answered_time_pieChart.py 2009 x min
 ------------------
 ------------------
-Filename:		analyze_thread_lifeSpan_n_average_commentTime_pieChart.py.py {year} {tier} {time} {plot_x_limit}
+Filename:		analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {tier} {time} {plot_x_limit}
 
 Description:		Plots a scatter chart which contains values of the upvotes of answered questions (by the iAMA host) and the repsonse time of the iAma host to those questions
 			Additionally Pearsons Ro will be calculated and printed into the plots title bar.
@@ -72,7 +72,7 @@ Arguments:
 					=		1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
 
 			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
-					=		min || hours
+					=		minutes || hours
 					=		min is for minutes, hours is for separation into hours
 
 			{plot_x_limit}	=		limits the plot on the x scale.. Useful if you only want to look at given response times..
@@ -98,7 +98,7 @@ Arguments:
 Usage example: 		python analyze_tier_answered_percentage_pieChart.py 2009 any
 ------------------
 ------------------
-Filename:		tier_question_distribution_pieChart.py {year}
+Filename:		analyze_tier_question_distribution_pieChart.py {year}
 
 Description:		Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest
 
