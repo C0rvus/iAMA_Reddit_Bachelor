@@ -315,7 +315,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
         return None
 
 
-def generate_data_to_analyze():
+def generate_data_to_be_analyzed():
     """Generates the data which will be analyzed
 
     1. This method iterates over every thread
@@ -496,7 +496,7 @@ check_script_arguments()
 initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
-generate_data_to_analyze()
+generate_data_to_be_analyzed()
 
 # Sorts, prepares the data and finally plots it
 plot_generated_data(prepare_and_print_data_to_be_plotted())

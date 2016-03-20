@@ -360,7 +360,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
         return None
 
 
-def generate_data_to_analyze():
+def generate_data_to_be_analyzed():
     """Generates the data which will be analyzed
 
     1. This method iterates over every thread
@@ -407,7 +407,7 @@ def generate_data_to_analyze():
                 list_To_Be_Plotted.append(returned_value)
 
 
-def plot_the_generated_data_percentage_mean():
+def plot_the_generated_data():
     """Plots the data which is to be generated
 
     1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
@@ -587,7 +587,7 @@ check_script_arguments()
 initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
-generate_data_to_analyze()
+generate_data_to_be_analyzed()
 
 # Plots a pie chart containing the tier question distribution
-plot_the_generated_data_percentage_mean()
+plot_the_generated_data()

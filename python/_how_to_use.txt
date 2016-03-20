@@ -2,62 +2,8 @@ This file contains information about how to use the scripts..
 
 ------------------
 ------------------
-Filename:		analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
-
-Description: 		This script allows you to calculate two things.
-			1. The amount of time how long a thread lasted (Difference between thread creation time stamp and the time stamp of the last comment)
-			2. The average mean of comment time.. Means, how long it takes until a comment (regardless whether it is a question or not) has been posted within the thread
-
-Arguments:
-	
-			{year} 		= 		the year which is to be used for the calculation
-					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
-			{calc}		= 		the data you want to calculate
-					=		lifespan || comment
-					=		lifespan if you want to calculate the lifespan of a thread, comment is when you want to calculate the average mean comment time within the thread
 
 
-			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
-					=		minutes || hours || days
-					=		minutes is for minutes, hours is for separation into hours, days is for seperation into days
-
-
-Usage example: 		python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
-------------------
-------------------
-Filename:		analyze_top100_pieChart.py {year} {top / worst}
-
-Description: 		Plots a pie chart containing the top 100 / worst 100 questions of the year and the proportion to the answers they have received from the iAMA host.
-Arguments:
-	
-			{year} 		= 	the year which is to be used for the calculation
-					=	2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
-			{top / worst)	= 	top [top 100] || worst [worst 100]
-
-Usage example: 		python analyze_top100_pieChart.py 2009 false
-------------------
-------------------
-Filename:		analyze_tier_answered_time_pieChart.py {year} {tier} {time}
-
-Description:		Plots a pie chart containing the arithmetic mean of the iama hosts response time to given questions for tier 1 / tier x / tier any in minutes / hours.
-Arguments:
-
-			{year}		=		the year which is to be used for the calculation
-					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
-			{tier}		=		the tier which will be looked at for calculation
-					=		1 || x || any
-					=		1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
-
-			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
-					=		
-					=		minutes is for minutes, hours is for separation into hours
-
-Usage example: 		python analyze_tier_answered_time_pieChart.py 2009 x min
-------------------
-------------------
 Filename:		analyze_correlation_upvote_reaction_time_pieChart.py {year} {tier} {time} {plot_x_limit}
 
 Description:		Plots a scatter chart which contains values of the upvotes of answered questions (by the iAMA host) and the repsonse time of the iAma host to those questions
@@ -82,6 +28,34 @@ Arguments:
 Usage example: 		python analyze_correlation_upvote_reaction_time_pieChart.py 2009 any min 300
 ------------------
 ------------------
+
+
+Filename:		analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
+
+Description: 		This script allows you to calculate two things.
+			1. The amount of time how long a thread lasted (Difference between thread creation time stamp and the time stamp of the last comment)
+			2. The average mean of comment time.. Means, how long it takes until a comment (regardless whether it is a question or not) has been posted within the thread
+
+Arguments:
+	
+			{year} 		= 		the year which is to be used for the calculation
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{calc}		= 		the data you want to calculate
+					=		lifespan || comment
+					=		lifespan if you want to calculate the lifespan of a thread, comment is when you want to calculate the average mean comment time within the thread
+
+
+			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+					=		minutes || hours || days
+					=		minutes is for minutes, hours is for separation into hours, days is for seperation into days
+
+
+Usage example: 		python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
+------------------
+------------------
+
+
 Filename:		analyze_tier_answered_percentage_pieChart.py {year} {tier}
 
 Description:		Plots a pieChart which contains the distribution of questions answered per tier for the given year.
@@ -98,6 +72,29 @@ Arguments:
 Usage example: 		python analyze_tier_answered_percentage_pieChart.py 2009 any
 ------------------
 ------------------
+
+
+Filename:		analyze_tier_answered_time_pieChart.py {year} {tier} {time}
+
+Description:		Plots a pie chart containing the arithmetic mean of the iama hosts response time to given questions for tier 1 / tier x / tier any in minutes / hours.
+Arguments:
+
+			{year}		=		the year which is to be used for the calculation
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{tier}		=		the tier which will be looked at for calculation
+					=		1 || x || any
+					=		1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+
+			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+					=		
+					=		minutes is for minutes, hours is for separation into hours
+
+Usage example: 		python analyze_tier_answered_time_pieChart.py 2009 x min
+------------------
+------------------
+
+
 Filename:		analyze_tier_question_distribution_pieChart.py {year}
 
 Description:		Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest
@@ -111,10 +108,47 @@ Usage example: 		python analyze_tier_question_distribution_pieChart.py 2009
 ------------------
 ------------------
 
-This file contains information about how to use the scripts..
 
+Filename:		analyze_top100_pieChart.py {year} {top / worst}
+
+Description: 		Plots a pie chart containing the top 100 / worst 100 questions of the year and the proportion to the answers they have received from the iAMA host.
+Arguments:
+	
+			{year} 		= 	the year which is to be used for the calculation
+					=	2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{top / worst)	= 	top [top 100] || worst [worst 100]
+
+Usage example: 		python analyze_top100_pieChart.py 2009 false
 ------------------
 ------------------
+------------------
+------------------
+
+
+Filename:		crawl_differences.py {year_begin} {year_end} {direction}
+
+Description: 		This script crawls missing threads / collections from the reddit servers. Because by regular crawling some threads will be missed due to some limitions of the amazon cloudsearch (which will be used for crawling that data) the [iAMA_Reddit_Threads_{year}] and [iAMA_Reddit_Comments_{year}] do not contain the same amount of collections. To "fix" this issue this script compares the collections of both databases [according to the given year] and crawls the missing data.
+
+
+Arguments:
+
+			{year_begin}	= 		The year you want the start the crawling process on
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
+
+			{direction}	=		Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
+
+					=		forward || backward
+
+
+Usage example: 		python crawl_differences.py 2009 2010 backward
+------------------
+------------------
+
+
 Filename:		crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
 
 Description: 		This script crawls threads / comments from the reddit API and writes them into the mongoDB.
@@ -166,29 +200,5 @@ Arguments:
 
 
 Usage example: 		python crawl_threads_n_comments.py threads 2009 2014 96
-------------------
-------------------
-
-------------------
-------------------
-Filename:		crawl_differences.py {year_begin} {year_end} {direction}
-
-Description: 		This script crawls missing threads / collections from the reddit servers. Because by regular crawling some threads will be missed due to some limitions of the amazon cloudsearch (which will be used for crawling that data) the [iAMA_Reddit_Threads_{year}] and [iAMA_Reddit_Comments_{year}] do not contain the same amount of collections. To "fix" this issue this script compares the collections of both databases [according to the given year] and crawls the missing data.
-
-
-Arguments:
-
-			{year_begin}	= 		The year you want the start the crawling process on
-					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
-			{year_end}	= 		The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
-					=		2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016
-
-			{direction}	=		Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
-
-					=		forward || backward
-
-
-Usage example: 		python crawl_differences.py 2009 2010 backward
 ------------------
 ------------------

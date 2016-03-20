@@ -248,7 +248,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     return dict_to_be_returned
 
 
-def generate_data_to_be_plotted():
+def generate_data_to_be_analyzed():
     """Generates the data which will be analyzed
 
     1. This method iterates over every thread
@@ -701,7 +701,7 @@ check_script_arguments()
 initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
-generate_data_to_be_plotted()
+generate_data_to_be_analyzed()
 
 # Plots the data wich has been calculated before
 plot_the_generated_data()

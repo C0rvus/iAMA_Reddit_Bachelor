@@ -63,6 +63,25 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
 >	"ups"		=		The amount of upvotes
 
 
+#### crawl\_differences.py
+Compares regarding threads and comments databases and crawls missing collections
+
+    python crawl_differences.py {year_begin} {year_end} {direction}
+    
+    
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start the crawling process on 
+
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+
+* **direction**	= **[forward || backward]** Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
+
+*Usage examples shown down below*
+
+    python crawl_differences.py 2009 2010 backward
+    python crawl_differences.py 2009 2016 forward
+    python crawl_differences.py 2009 2009 forward
+
+
 #### crawl\_threads\_n\_comments.py
 Crawls threads and comments into the regarding databases
 
@@ -82,25 +101,6 @@ Crawls threads and comments into the regarding databases
     python crawl_threads_n_comments.py threads 2009 2014 96
     python crawl_threads_n_comments.py threads 2009 2014 96
     python crawl_threads_n_comments.py threads 2009 today 128
-
-    
-#### crawl\_differences.py
-Compares regarding threads and comments databases and crawls missing collections
-
-    python crawl_differences.py {year_begin} {year_end} {direction}
-    
-    
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start the crawling process on 
-
-* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
-
-* **direction**	= **[forward || backward]** Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
-
-*Usage examples shown down below*
-
-    python crawl_differences.py 2009 2010 backward
-    python crawl_differences.py 2009 2016 forward
-    python crawl_differences.py 2009 2009 forward
 
 
 ### Analyzing data:
