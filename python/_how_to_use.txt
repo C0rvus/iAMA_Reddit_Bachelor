@@ -53,15 +53,15 @@ Arguments:
 
 			{time}		=		the time units in which the calculated values will be seperated into.. (necessary for graph plotting)
 					=		
-					=		min is for minutes, hours is for separation into hours
+					=		minutes is for minutes, hours is for separation into hours
 
 Usage example: 		python analyze_tier_answered_time_pieChart.py 2009 x min
 ------------------
 ------------------
-Filename:		analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {tier} {time} {plot_x_limit}
+Filename:		analyze_correlation_upvote_reaction_time_pieChart.py {year} {tier} {time} {plot_x_limit}
 
 Description:		Plots a scatter chart which contains values of the upvotes of answered questions (by the iAMA host) and the repsonse time of the iAma host to those questions
-			Additionally Pearsons Ro will be calculated and printed into the plots title bar.
+			Additionally Pearsons Ro und the regarding p-value will be calculated and printed into the plots title bar.
 Arguments:
 
 			{year}		=		the year which is to be used for the calculation
@@ -79,7 +79,7 @@ Arguments:
 					=		0 || (int)
 					=		0 means no limit; Any other integer limits the plot to the given number on x scale
 
-Usage example: 		python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py.py 2009 any min 300
+Usage example: 		python analyze_correlation_upvote_reaction_time_pieChart.py 2009 any min 300
 ------------------
 ------------------
 Filename:		analyze_tier_answered_percentage_pieChart.py {year} {tier}

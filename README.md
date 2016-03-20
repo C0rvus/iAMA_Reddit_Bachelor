@@ -19,7 +19,6 @@ Python, HTML5, CoffeeScript, LESS, MongoDB
 3. Make sure having needed python modules (praw, numpy, pymongo) installed on your client
 
 ### Crawling data:
-
 1. Run the scripts with the prefix "***crawl***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
@@ -63,8 +62,8 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
 
 >	"ups"		=		The amount of upvotes
 
-#### crawl\_threads\_n\_comments.py
 
+#### crawl\_threads\_n\_comments.py
 Crawls threads and comments into the regarding databases
 
     python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
@@ -86,7 +85,6 @@ Crawls threads and comments into the regarding databases
 
     
 #### crawl\_differences.py
-
 Compares regarding threads and comments databases and crawls missing collections
 
     python crawl_differences.py {year_begin} {year_end} {direction}
@@ -106,15 +104,36 @@ Compares regarding threads and comments databases and crawls missing collections
 
 
 ### Analyzing data:
-
 1. Run the scripts with the prefix ***"analyze"*** within **./python/** - folder.
 
 The analyzing scripts iterates over the documents / collections within the databases and calculate various things which will be explained down below:
 
 
-#### analyze\_thread\_lifeSpan\_n\_average\_commentTime_pieChart.py 
+#### analyze\_correlation\_upvote\_reaction\_time\_pieChart.py
 
-Calculates how long a thread lives and the average comment time - for the given year
+Plots a scatter chart which contains values of the upvotes of answered questions (by the iAMA host) and the repsonse time of the iAma host to those questions. Additionally Pearsons Ro und the regarding p-value will be calculated and printed into the plots title bar.
+
+    python analyze_correlation_upvote_reaction_time_pieChart.py {year} {tier} {time} {plot_x_limit}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation
+
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+
+* **time** = **[minutes || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+
+* **plot_x_limit**	=	**[int]**	Limits the plot on the x scale.. Useful if you only want to look at given response times.. 0 means no limit
+
+
+*Usage examples shown down below*
+
+    python analyze_correlation_upvote_reaction_time_pieChart.py 2009 any hours 0
+    python analyze_correlation_upvote_reaction_time_pieChart.py 2010 1 minutes 500
+    python analyze_correlation_upvote_reaction_time_pieChart.py 2009 x hours 200
+
+
+#### analyze\_thread\_lifeSpan\_n\_average\_commentTime_pieChart.py 
+Calculates how long a thread lives and the average comment time - for the given year and additionally plots a pie chart with that information.
 
     python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
 
@@ -125,6 +144,8 @@ Calculates how long a thread lives and the average comment time - for the given 
 
 * **time** = **[min || hours || days]** The time units in which the calculated values will be seperated into for plotting.. 
 
+
+
 *Usage examples shown down below*
 
     python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
@@ -132,46 +153,7 @@ Calculates how long a thread lives and the average comment time - for the given 
     python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2012 lifespan minutes
 
 
-#### analyze\_top100\_pieChart.py 
-
-Calculates how many of the top / worst 100 questions have been answered. A top / worst question is a question with the highest / lowest amount of votes.
-
-    python analyze_top100_pieChart.py {year} {rate}
-
-    
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
-
-* **rate** = **[top || worst]** The best or worst voted questions you want to have a look at 
-
-*Usage examples shown down below*
-
-    python analyze_top100_pieChart.py 2009 top
-    python analyze_top100_pieChart.py 2011 worst
-    python analyze_top100_pieChart.py 2010 worst
-
-    
-#### analyze\_tier\_answered\_time\_pieChart.py 
-
-Calculates the arithmetic mean of the iAMA hosts response time to questions depending on the tier and the time_value given
-
-    python analyze_tier_answered_time_pieChart.py {year} {tier} {time}
-
-    
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
-
-* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
-
-* **time** = **[min || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting) 
-
-*Usage examples shown down below*
-
-    python analyze_tier_answered_time_pieChart.py 2011 1 minutes
-    python analyze_tier_answered_time_pieChart.py 2012 x hours
-    python analyze_tier_answered_time_pieChart.py 2009 any hours    
-    
-    
 #### analyze\_tier\_answered\_percentage\_pieChart.py
-
 Plots a pieChart which contains the distribution of questions answered per tier for the given year.
 
     python analyze_tier_answered_percentage_pieChart.py {year} {tier}
@@ -188,8 +170,26 @@ Plots a pieChart which contains the distribution of questions answered per tier 
     python analyze_tier_answered_percentage_pieChart.py 2015 any    
 
 
-#### analyze\_tier\_question\_distribution\_pieChart
+#### analyze\_tier\_answered\_time\_pieChart.py 
+Calculates the arithmetic mean of the iAMA hosts response time to questions depending on the tier and the time_value given and plots a pie chart with those information.
 
+    python analyze_tier_answered_time_pieChart.py {year} {tier} {time}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+
+* **time** = **[minutes || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting) 
+
+*Usage examples shown down below*
+
+    python analyze_tier_answered_time_pieChart.py 2011 1 minutes
+    python analyze_tier_answered_time_pieChart.py 2012 x hours
+    python analyze_tier_answered_time_pieChart.py 2009 any hours    
+
+
+#### analyze\_tier\_question\_distribution\_pieChart.py
 Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest - how many questions rely on the first tier and how mana rely on the remaining tiers.
 
     python analyze_tier_question_distribution_pieChart.py {year}
@@ -204,6 +204,22 @@ Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest
     python analyze_tier_question_distribution_pieChart.py 2011
     python analyze_tier_question_distribution_pieChart.py 2014
 
+
+#### analyze\_top100\_pieChart.py 
+Calculates how many of the top / worst 100 questions have been answered. A top / worst question is a question with the highest / lowest amount of votes. A pie chart will be plotted for visualisation.
+
+    python analyze_top100_pieChart.py {year} {rate}
+
+    
+* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+
+* **rate** = **[top || worst]** The best or worst voted questions you want to have a look at 
+
+*Usage examples shown down below*
+
+    python analyze_top100_pieChart.py 2009 top
+    python analyze_top100_pieChart.py 2011 worst
+    python analyze_top100_pieChart.py 2010 worst
 
 ### Usage of overhaul:
 
