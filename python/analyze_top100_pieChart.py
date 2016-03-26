@@ -1,11 +1,18 @@
 # Tutorials used within this class:
 # 1. (12.03.2016 @ 16:53) -
 # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
+# 2. (26.03.2016 @ 15:40) -
+# https://stackoverflow.com/questions/14693646/writing-to-csv-file-python
+# 3. (26.03.2016 @ 18:03) -
+# https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
 
 import collections                  # Necessary to sort collections alphabetically
+import datetime                     # Necessary to create the year out of the thread utc
 import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
-import datetime                     # Necessary to do time calculation
 import sys                          # Necessary to use script arguments
+import csv                          # Necessary to write data to csv files
+import os                           # Necessary to get the name of currently processed file
+import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient     # Necessary to make use of MongoDB
 
 
@@ -24,17 +31,17 @@ def initialize_mongo_db_parameters():
     global mongo_DB_Comments_Instance
 
     mongo_DB_Client_Instance = MongoClient('localhost', 27017)
-    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + argument_year]
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(argument_year_beginning)]
     mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
-    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + argument_year]
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(argument_year_beginning)]
 
 
 def check_script_arguments():
     """Checks if enough and correct arguments have been given to run this script adequate
 
     1. It checks in the first instance if enough arguments have been given
-    2. Afterwards it fills 'argument_year' with the first argument (str) and 'argument_sorting' with a boolean value,
-        by previously parsing and checking that value.
+    2. Afterwards it fills 'argument_year_beginning' with the first argument (str) and 'argument_sorting' with
+        a boolean value, by previously parsing and checking that value.
 
     Args:
         -
@@ -42,10 +49,10 @@ def check_script_arguments():
         -
     """
 
-    global argument_year, argument_sorting
+    global argument_year_beginning, argument_year_ending, argument_sorting, argument_amount_of_top_quotes
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 2:
+    if len(sys.argv) <= 4:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
@@ -56,13 +63,16 @@ def check_script_arguments():
         bool_checker = ['top', 'best']
 
         # Parses the first argument to the variable
-        argument_year = str(sys.argv[1])
+        argument_year_beginning = int(sys.argv[1])
+        argument_year_ending = int(sys.argv[2])
 
         # Whenever the second argument is in the bool_checker list
-        if sys.argv[2] in bool_checker:
+        if sys.argv[3] in bool_checker:
             argument_sorting = True
         else:
             argument_sorting = False
+
+        argument_amount_of_top_quotes = int(sys.argv[4])
 
 
 def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
@@ -96,10 +106,10 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
         answer_time_iama_host_converted, '%d-%m-%Y %H:%M:%S')
 
     # Calculates the time difference between the comment and the iAMA hosts answer
-    time_difference_in_seconds = (
+    time_difference_in_seconds = int((
         answer_time_iama_host_converted_for_subtraction -
         comment_time_converted_for_subtraction
-    ).total_seconds()
+    ).total_seconds())
 
     return time_difference_in_seconds
 
@@ -140,8 +150,8 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
             # Whenever the iterated comment is from the iAMA-Host and that
             # comment has the question as parent_id
             if (check_if_comment_is_not_from_thread_author(
-                        author_of_thread,
-                        actual_comment_author) == False) and (
+                    author_of_thread,
+                    actual_comment_author) == False) and (
                     check_comment_parent_id == comment_acutal_id):
 
                 dict_to_be_returned["question_Answered_From_Host"] = True
@@ -250,6 +260,7 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
 
             # A dictionary containing the results necessary for the calculation here
             dict_result = {
+                "year": 0,
                 "id_thread": str(id_of_thread),
                 "id_question": comment_acutal_id,
                 "question_ups": comment_upvotes,
@@ -262,9 +273,17 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
                     and comment_author is not None \
                     and comment_parent_id is not None:
 
+                # Converts the timestamp to float, parses it to strings and cut anything away except the last 4 chars
+                floated_time = float(comment_time_stamp)
+                converted_time = datetime.datetime.fromtimestamp(floated_time).strftime('%c')
+                converted_time_length = len(converted_time)
+                converted_time_length -= 4
+
+                dict_result["year"] = converted_time[converted_time_length:]
+
                 # Calculation of time since thread has been started can only happen here, because of previous checks
                 dict_result["time_since_thread_started"] = \
-                    calculate_time_difference(thread_creation_date, comment_time_stamp),
+                    calculate_time_difference(thread_creation_date, comment_time_stamp)
 
                 bool_comment_is_question = check_if_comment_is_a_question(comment_text)
 
@@ -315,25 +334,8 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
         return None
 
 
-def generate_data_to_be_analyzed():
-    """Generates the data which will be analyzed
-
-    1. This method iterates over every thread
-        1.1. It filters if that iterated thread is an iAMA-request or not
-            1.1.1. If yes: this thread gets skipped and the next one will be processed
-            1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive an ordered dictionary containing information about every question
-        whether it has been answered or not
-    3. This ordered dictionary will be applied to a global list, which will be processed after wards for the generation
-        of plots
-
-    Args:
-        -
-    Returns:
-        -
-    """
-
-    print("Generating data now...")
+def generate_data_now():
+    print("Generating data now for year " + str(argument_year_beginning) + " ...")
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
         # Skips the system.indexes-table which is automatically created by mongodb itself
@@ -367,24 +369,59 @@ def generate_data_to_be_analyzed():
                 list_To_Be_Plotted.append(returned_value)
 
 
-def prepare_and_print_data_to_be_plotted():
-    """Prepares data and prints data into the command line
+def start_data_generation_for_analysis():
+    """Generates the data which will be analyzed
 
-    1. This method prepares the data, in kind of sorting and counting amount of questions not being answered
-    2. Afterwards it prints, in dependency of the second argument given of this script, whether the
-        TOP or WORST 100 questions have been answered or not
+    1. This method iterates over every thread
+        1.1. It filters if that iterated thread is an iAMA-request or not
+            1.1.1. If yes: this thread gets skipped and the next one will be processed
+            1.1.2. If no: this thread will be processed
+    2. If the thread gets processed it will receive an ordered dictionary containing information about every question
+        whether it has been answered or not
+    3. This ordered dictionary will be applied to a global list, which will be processed after wards for the generation
+        of plots
 
     Args:
         -
     Returns:
-        amount_of_questions_not_answered (int) : The amount of questions which have not been answered
+        -
+    """
+
+    global argument_year_beginning
+
+    temp_starting_year = copy.copy(argument_year_beginning)
+
+    while argument_year_beginning != argument_year_ending:
+        generate_data_now()
+        argument_year_beginning += 1
+        initialize_mongo_db_parameters()
+
+    if argument_year_beginning == argument_year_ending:
+        generate_data_now()
+        argument_year_beginning += 1
+        initialize_mongo_db_parameters()
+
+    # After all operations have finished reset the starting year - this is necessary to have a correct and
+    # not progressional file name
+    argument_year_beginning = temp_starting_year
+
+
+def prepare_and_print_data_to_be_plotted():
+    """Prepares data and prints data into the command line
+
+    1. This method prepares the data, in kind of sorting and counting amount of questions not being answered
+    2. Afterwards it executes the write_csv_and_count_unanswered - method to write an csv file containing the top /
+        worst amount of questions (parsed as arguments)
+    3. Then it returns the number of unanswered questions, necessary for graph plotting
+
+    Args:
+        -
+    Returns:
+        write_csv_and_count_unanswered (int) : The amount of questions which have not been answered
     """
 
     # Will contain all comments later on
     all_comments = []
-
-    # Defines the amount of the top 100 questions (by upvotes) which have not been answered
-    amount_of_questions_not_answered = 0
 
     # Iterates over every ordered list
     for i, val in enumerate(list_To_Be_Plotted):
@@ -399,34 +436,69 @@ def prepare_and_print_data_to_be_plotted():
     # In dependence of given sort parameter..
     new_list = sorted(all_comments, key=lambda k: k['question_ups'], reverse=argument_sorting)
 
-    print("---- Printing top 100 comments now")
+    # Defines the amount of the top X questions (by upvotes) which have not been answered
+    return write_csv_and_count_unanswered(new_list)
 
-    # Iterates over that generated sorted and counts the amount of questions which have not been answered
-    for item in new_list[0:100]:
-        print(
-            "Has Question been answered ?: " +
-            str(item.get("question_answered")) +
 
-            "| ID-Thread: " +
-            str(item.get("id_thread")) +
+def write_csv_and_count_unanswered(list_with_comments):
+    """Creates a csv file containing all necessary information and calculates the amount of unanswered questions
 
-            "| ID-Question: " +
-            str(item.get("id_question")) +
+    1. This method iterates over the top / worst X comments
+        1.1. By iterating: all necessary information will be written into the csv file
+        1.2. By iterating: the amount of unanswered questions will be counted
+    2. After iterating the amount of unanswered questions will be returned, which is necessary for graph plotting
 
-            "| Amount of question upvotes: " +
-            str(item.get("question_ups")) +
+    Args:
+        list_with_comments (list): Contains all comments from the year
+    Returns:
+        write_csv_and_count_unanswered (int) : The amount of questions which have not been answered
+    """
 
-            "| Time (sec) since thread has started: " +
-            str(item.get("time_since_thread_started")) +
+    print("---- Writing top / worst " + str(argument_amount_of_top_quotes) + " comments now")
 
-            "| Link to thread: https://www.reddit.com/r/IAma/" +
-            str(item.get("id_thread"))
-            )
+    amount_of_questions_not_answered = 0
 
-        if item.get("question_answered") is False:
-            amount_of_questions_not_answered += 1
+    file_name_csv = str(os.path.basename(__file__))[0:len(os.path.basename(__file__)) - 3] + \
+                    '_' + \
+                    str(argument_year_beginning) + \
+                    '_until_' + \
+                    str(argument_year_ending) + \
+                    '_' + \
+                    str(sys.argv[3]) + \
+                    '.csv'
 
-    print("------------------------------")
+    with open(file_name_csv, 'w', newline='') as fp:
+        csv_writer = csv.writer(fp, delimiter=',')
+
+        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
+        data = [['sep=,'],
+                ['Year',
+                 'Has question been answered?',
+                 'Thread-ID',
+                 'Question-ID',
+                 'Question-Upvotes',
+                 'Thread lifespan (seconds)',
+                 'Link to Thread']]
+
+        # Iterates over that generated sorted and counts the amount of questions which have not been answered
+        for item in list_with_comments[0:argument_amount_of_top_quotes]:
+            temp_list = [str(item.get("year")),
+                         str(item.get("question_answered")),
+                         str(item.get("id_thread")),
+                         str(item.get("id_question")),
+                         str(item.get("question_ups")),
+                         str(item.get("time_since_thread_started")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("id_thread"))
+                         ]
+            data.append(temp_list)
+
+            # Additionally checks whether a question has been answered or not
+            if item.get("question_answered") is False:
+                amount_of_questions_not_answered += 1
+
+        # Writes data into the csv file
+        csv_writer.writerows(data)
+
     return amount_of_questions_not_answered
 
 
@@ -444,7 +516,7 @@ def plot_generated_data(amount_of_questions_not_answered):
     plt.figure()
     labels = ['Nicht beantwortet', 'Beantwortet']
     colors = ['yellowgreen', 'gold']
-    values = [amount_of_questions_not_answered, 100 - amount_of_questions_not_answered]
+    values = [amount_of_questions_not_answered, argument_amount_of_top_quotes - amount_of_questions_not_answered]
 
     patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
     plt.pie(values, colors=colors, autopct='%.2f%%')
@@ -452,9 +524,11 @@ def plot_generated_data(amount_of_questions_not_answered):
     plt.legend(patches, labels, loc="upper right")
 
     if argument_sorting is True:
-        plt.title('iAMA ' + argument_year + ' - Beantwortung der TOP 100 Fragen')
+        plt.title('iAMA ' + str(argument_year_beginning) + ' - Beantwortung der TOP ' +
+                  str(argument_amount_of_top_quotes) + ' Fragen')
     else:
-        plt.title('iAMA ' + argument_year + ' - Beantwortung der WORST 100 Fragen')
+        plt.title('iAMA ' + str(argument_year_beginning) + ' - Beantwortung der WORST ' +
+                  str(argument_amount_of_top_quotes) + ' Fragen')
 
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
@@ -465,11 +539,17 @@ def plot_generated_data(amount_of_questions_not_answered):
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
-argument_year = ""
+argument_year_beginning = 0
 
-# Contains the information wether the first top 100 (highest upvotes) or the last 100 (lowest upvotes [negative]
+# Contains the year which is given as argument
+argument_year_ending = 0
+
+# Contains the information wether the first top X (highest upvotes) or the last X (lowest upvotes [negative]
 # should be calculated
 argument_sorting = bool
+
+# Contains the amount of questions you will be having respected in plotting your graph and writing the csv data
+argument_amount_of_top_quotes = 0
 
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = None
@@ -496,7 +576,7 @@ check_script_arguments()
 initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
-generate_data_to_be_analyzed()
+start_data_generation_for_analysis()
 
 # Sorts, prepares the data and finally plots it
 plot_generated_data(prepare_and_print_data_to_be_plotted())

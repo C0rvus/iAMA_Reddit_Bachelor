@@ -18,7 +18,7 @@ def check_script_arguments():
         -
     """
 
-    global argument_year_beginning, argument_year_end, argument_inverse_crawling
+    global argument_year_beginning, argument_year_ending, argument_inverse_crawling
 
     # Whenever not enough arguments were given
     if len(sys.argv) <= 2:
@@ -34,7 +34,7 @@ def check_script_arguments():
 
         # It is necessary to add + 1 here, otherwise it would only crawl the amount "argument_hours_to_shift" for the
         # given year and it would end after one crawl attempt..
-        argument_year_end = str(sys.argv[2])
+        argument_year_ending = str(sys.argv[2])
 
         # Contains information about the direction of diff - crawling (forwards / backwards)
         # This is necessary if you want to fill the database much faster and want to avoid double entries by crawling.
@@ -410,7 +410,7 @@ def start_crawling_for_diffs():
     global argument_year_beginning
 
     # Whenever the user wants to crawl many years at all
-    while argument_year_beginning != argument_year_end:
+    while argument_year_beginning != argument_year_ending:
 
         # Creates missing collections within the comments database
         check_if_collection_is_missing_in_comments_database()
@@ -425,7 +425,7 @@ def start_crawling_for_diffs():
         initialize_mongo_db_parameters()
 
     # Whenever the user only wants to crawl one year
-    if argument_year_beginning == argument_year_end:
+    if argument_year_beginning == argument_year_ending:
 
         # Database variables need to be refreshed because the year has changed
         initialize_mongo_db_parameters()
@@ -470,7 +470,7 @@ mongo_DB_Comments_Collection = None
 argument_year_beginning = ""
 
 # Will contain the ending year to crawl data for in epoch time
-argument_year_end = ""
+argument_year_ending = ""
 
 # Will contain the information in which direction the crawler should start its work
 argument_inverse_crawling = ""
