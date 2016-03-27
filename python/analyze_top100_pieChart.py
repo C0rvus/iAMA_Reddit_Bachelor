@@ -7,6 +7,16 @@
 # https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
 # 4. (26.03.2016 @ 18:43) -
 # http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
+# 5. (27.03.2016 @ 15:28) -
+# http://matplotlib.org/examples/pylab_examples/alignment_test.html
+# 6. (27.03.2016 @ 16:54) -
+# https://stackoverflow.com/questions/12750355/python-matplotlib-figure-title-overlaps-axes-label-when-using-twiny
+# 7. (27.03.2016 @ 17:51) -
+# https://stackoverflow.com/questions/14737599/mongoengine-serverstatus
+# 8. (27.03.2016 @ 19:13) -
+# https://stackoverflow.com/questions/33661080/python-matplotlib-plot-text-will-not-align-left
+# 9. (27.03.2016 @ 19:50) -
+# https://stackoverflow.com/questions/1093322/how-do-i-check-what-version-of-python-is-running-my-script
 
 import collections                  # Necessary to sort collections alphabetically
 import datetime                     # Necessary to create the year out of the thread utc
@@ -15,7 +25,9 @@ import sys                          # Necessary to use script arguments
 import csv                          # Necessary to write data to csv files
 import os                           # Necessary to get the name of currently processed file
 import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
+import time                         # Necessary to calculate the current time
 from pymongo import MongoClient     # Necessary to make use of MongoDB
+import pymongo                      # Necessary to get information about the database
 
 
 def initialize_mongo_db_parameters():
@@ -354,7 +366,7 @@ def generate_data_now():
         -
     """
 
-    print("Generating data now for year " + str(argument_year_beginning) + " ...")
+    print("Generating data for year " + str(argument_year_beginning) + " now...")
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
         # Skips the system.indexes-table which is automatically created by mongodb itself
@@ -528,15 +540,21 @@ def plot_generated_data(amount_of_questions_not_answered):
         -
     """
 
-    plt.figure()
+    # Connect to admin (internal) mongoDB for mongoDB-Server information
+    mongo_db_admin_database = mongo_DB_Client_Instance.admin
+
+    mono = {'family' : 'monospace'}
+
+    plt.figure(figsize=(10, 6))
     labels = ['Nicht beantwortet', 'Beantwortet']
     colors = ['indianred', 'yellowgreen']
     values = [amount_of_questions_not_answered, argument_amount_of_top_quotes - amount_of_questions_not_answered]
 
-    print(str(amount_of_questions_not_answered))
+    # The absolute amount of numbers
+    absolute_amount = [values[0], values[1]]
 
     patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
-    plt.pie(values, colors=colors, autopct='%.2f%%')
+    plt.pie(values, labels=absolute_amount, colors=colors, autopct='%.2f%%')
 
     plt.legend(patches, labels, loc="upper right")
 
@@ -547,15 +565,58 @@ def plot_generated_data(amount_of_questions_not_answered):
                   '\n ' +
                   str(argument_year_beginning) +
                   ' bis ' +
-                  str(argument_year_ending)
+                  str(argument_year_ending),
+                  bbox={'facecolor': '0.8', 'pad': 5},
+                  y=1.08
                   )
     else:
-        plt.title('iAMA ' + str(argument_year_beginning) + ' - Beantwortung der WORST ' +
-                  str(argument_amount_of_top_quotes) + ' Fragen')
+        plt.title('Beantwortung der WORST ' +
+                  str(argument_amount_of_top_quotes) +
+                  ' iAMA Fragen von' +
+                  '\n ' +
+                  str(argument_year_beginning) +
+                  ' bis ' +
+                  str(argument_year_ending),
+                  bbox={'facecolor': '0.8', 'pad': 5},
+                  y=1.08
+                  )
 
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
     plt.tight_layout()
+
+    time_now_date = time.strftime("%d.%m.%Y")
+    time_now_time = time.strftime("%H:%M:%S")
+
+    text_to_print_box_1 = "MongoDB connection:" + "\n" + \
+                "MongoDB version:" + "\n" + \
+                "MongoDB storage engine:" + "\n" + \
+                "\n" + \
+                "IAMA-db creation date:" + "\n" + \
+                "\n" + \
+                "Python version:" + "\n" + \
+                "Pymongo version:" + "\n" + \
+                "\n" + \
+                "Plot creation date:" + "\n" + \
+                "Plot creation time:"
+
+    text_to_print_box_2 = str(MongoClient.HOST) + ":" + str(MongoClient.PORT) + "\n" + \
+                str(mongo_db_admin_database.command("serverStatus")["version"]) + "\n" + \
+                str(mongo_db_admin_database.command("serverStatus")["storageEngine"]['name']) + "\n" + \
+                "\n" + \
+                "17.02.2016" + "\n" + \
+                "\n" + \
+                str(sys.version[:5]) + "\n" + \
+                str(pymongo.version) + "\n" + \
+                "\n" + \
+                time_now_date + "\n" + \
+                time_now_time
+
+    ax = plt.gca()
+
+    plt.text(0.0, 0.0, text_to_print_box_1, transform=ax.transAxes, fontsize=8, fontdict=mono, ha='left', va='bottom')
+    plt.text(0.25, 0.0, text_to_print_box_2, transform=ax.transAxes, fontsize=8, fontdict=mono, ha='right', va='bottom')
+
     plt.show()
 
 
