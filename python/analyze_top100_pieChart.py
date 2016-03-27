@@ -5,6 +5,8 @@
 # https://stackoverflow.com/questions/14693646/writing-to-csv-file-python
 # 3. (26.03.2016 @ 18:03) -
 # https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
+# 4. (26.03.2016 @ 18:43) -
+# http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
 
 import collections                  # Necessary to sort collections alphabetically
 import datetime                     # Necessary to create the year out of the thread utc
@@ -209,7 +211,7 @@ def check_if_comment_is_a_question(given_string):
         return False
 
 
-def calculate_answered_question_upvote_correlation(id_of_thread, author_of_thread, thread_creation_date):
+def process_answered_questions_within_thread(id_of_thread, author_of_thread, thread_creation_date):
     """ Checks whether an iterated question has been answered by the iama host or not
 
     1. This method checks at first whether an iterated comment contains values (e.g. is not none)
@@ -335,6 +337,23 @@ def calculate_answered_question_upvote_correlation(id_of_thread, author_of_threa
 
 
 def generate_data_now():
+    """Generates the data which will be analyzed later on
+
+    1. This method iterates over every thread
+        1.1. It filters if that iterated thread is an iAMA-request or not
+            1.1.1. If yes: this thread gets skipped and the next one will be processed
+            1.1.2. If no: this thread will be processed
+    2. If the thread gets processed it will receive an ordered dictionary containing information about every question
+        whether it has been answered or not
+    3. This ordered dictionary will be appended to a global list, which will be processed afterwards for the generation
+        of plots
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
     print("Generating data now for year " + str(argument_year_beginning) + " ...")
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
@@ -360,7 +379,7 @@ def generate_data_now():
                     and "request response" not in temp_thread_title.lower():
                 continue
 
-            returned_value = calculate_answered_question_upvote_correlation(
+            returned_value = process_answered_questions_within_thread(
                 val, temp_thread_author, temp_thread_creation_date
             )
 
@@ -370,16 +389,9 @@ def generate_data_now():
 
 
 def start_data_generation_for_analysis():
-    """Generates the data which will be analyzed
+    """Starts the data processing by swichting through the years
 
-    1. This method iterates over every thread
-        1.1. It filters if that iterated thread is an iAMA-request or not
-            1.1.1. If yes: this thread gets skipped and the next one will be processed
-            1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive an ordered dictionary containing information about every question
-        whether it has been answered or not
-    3. This ordered dictionary will be applied to a global list, which will be processed after wards for the generation
-        of plots
+    1. Triggers the data generation process and moves forward within the years
 
     Args:
         -
@@ -389,6 +401,7 @@ def start_data_generation_for_analysis():
 
     global argument_year_beginning
 
+    # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     temp_starting_year = copy.copy(argument_year_beginning)
 
     while argument_year_beginning != argument_year_ending:
@@ -465,6 +478,8 @@ def write_csv_and_count_unanswered(list_with_comments):
                     str(argument_year_ending) + \
                     '_' + \
                     str(sys.argv[3]) + \
+                    '_' + \
+                    str(argument_amount_of_top_quotes) + \
                     '.csv'
 
     with open(file_name_csv, 'w', newline='') as fp:
@@ -515,8 +530,10 @@ def plot_generated_data(amount_of_questions_not_answered):
 
     plt.figure()
     labels = ['Nicht beantwortet', 'Beantwortet']
-    colors = ['yellowgreen', 'gold']
+    colors = ['indianred', 'yellowgreen']
     values = [amount_of_questions_not_answered, argument_amount_of_top_quotes - amount_of_questions_not_answered]
+
+    print(str(amount_of_questions_not_answered))
 
     patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
     plt.pie(values, colors=colors, autopct='%.2f%%')
@@ -524,8 +541,14 @@ def plot_generated_data(amount_of_questions_not_answered):
     plt.legend(patches, labels, loc="upper right")
 
     if argument_sorting is True:
-        plt.title('iAMA ' + str(argument_year_beginning) + ' - Beantwortung der TOP ' +
-                  str(argument_amount_of_top_quotes) + ' Fragen')
+        plt.title('Beantwortung der TOP ' +
+                  str(argument_amount_of_top_quotes) +
+                  ' iAMA Fragen von' +
+                  '\n ' +
+                  str(argument_year_beginning) +
+                  ' bis ' +
+                  str(argument_year_ending)
+                  )
     else:
         plt.title('iAMA ' + str(argument_year_beginning) + ' - Beantwortung der WORST ' +
                   str(argument_amount_of_top_quotes) + ' Fragen')
