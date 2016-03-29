@@ -1,5 +1,8 @@
-# Source: https://plot.ly/python/bar-charts/
-# Source: https://plot.ly/javascript/hover-text-and-formatting/
+# Tutorials used within this class:
+# 1. (29.03.2016 @ 04:45) -
+# https://plot.ly/python/bar-charts/
+# 1. (29.03.2016 @ 06:18) -
+# https://plot.ly/javascript/hover-text-and-formatting/
 
 import time                         # Necessary to calculate the current time
 import plotly
@@ -8,6 +11,15 @@ from plotly.graph_objs import *
 
 
 class PlotlyBarChart:
+    """The class to create a stacked bar chart.
+        This class is heavily modified because it pyplot normally is not designed to run offline this way..
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
     time_now_date = time.strftime("%d.%m.%Y")
     time_now_time = time.strftime("%H:%M:%S")
 
@@ -22,10 +34,31 @@ class PlotlyBarChart:
     bar_answered_percentage_values = []
 
     def __init__(self):
+        """Instanciates the class
+
+        Args:
+            -
+        Returns:
+            -
+        """
         print('... Initializing plotly bar chart ...')
 
     def main_method(self, list_of_calculated_data):
+        """Sequential fills the necessary varibales for the graph
+        Structure of list_of_calculated_data:
 
+        [ "sorting", [year, answered, unanswered], [year, answered, unanswered], ... ]
+        i.e. ["top",
+              [2009, 900, 1536],
+              [2010, 500, 500],
+              [2011, 300, 700]
+              ]
+
+        Args:
+            list_of_calculated_data (list): Contains sorting method, and the years data
+        Returns:
+            -
+        """
         self.fill_x_axis_list(list_of_calculated_data)
         self.fill_y_axis_answered_list(list_of_calculated_data)
         self.fill_y_axis_unanswered_list(list_of_calculated_data)
@@ -35,6 +68,13 @@ class PlotlyBarChart:
 
     @staticmethod
     def fill_x_axis_list(list_of_calculated_data):
+        """Fills the "x axis" with the values of the years
+
+        Args:
+            list_of_calculated_data (list) : Will be iterated to gain necessary values
+        Returns:
+            -
+        """
         print(".. filling x_axis with year data now")
 
         # Adds the years to the x-axis list
@@ -43,15 +83,28 @@ class PlotlyBarChart:
 
     @staticmethod
     def fill_y_axis_answered_list(list_of_calculated_data):
+        """Fills an bar within the chart with values of the amount of unanswered questions
+
+        Args:
+            list_of_calculated_data (list) : Will be iterated to gain necessary values
+        Returns:
+            -
+        """
         print(".. filling y_axis_answered list now")
 
         # Adds the amount of answered questions to the graph
         for i in range(1, len(list_of_calculated_data)):
             PlotlyBarChart.bar_y_axis_answered_values.append(list_of_calculated_data[i][1])
 
-
     @staticmethod
     def fill_y_axis_unanswered_list(list_of_calculated_data):
+        """Fills an bar within the chart with values of the amount of unanswered questions
+
+        Args:
+            list_of_calculated_data (list) : Will be iterated to gain necessary values
+        Returns:
+            -
+        """
         print(".. filling y_axis_unanswered list now")
 
         # Adds the amount of unanswered questions to the graph
@@ -60,6 +113,14 @@ class PlotlyBarChart:
 
     @staticmethod
     def fill_bar_percentages_values(list_of_calculated_data):
+        """Calculates percentages to be shown within the graph..
+            This is not supported within pyplot under normal circumstances.. so we're tricking the HTML settings
+
+        Args:
+            list_of_calculated_data (list) : Will be iterated to gain necessary values
+        Returns:
+            -
+        """
         print(".. filling bar_percentages_values now")
 
         # Calculates the percentage amount of questions answered / not answered
@@ -74,14 +135,21 @@ class PlotlyBarChart:
             amount_of_percentage_unanswered = float('%.2f' % amount_of_percentage_unanswered)
             amount_of_percentage_answered = float('%.2f' % (100 - amount_of_percentage_unanswered))
 
-            text_to_be_appended = '' + str(amount_of_percentage_answered) + \
-                                  '<br><br>' + str(amount_of_percentage_unanswered)
+            text_to_be_appended = '' + str(amount_of_percentage_answered) + "%" \
+                                  '<br><br>' + str(amount_of_percentage_unanswered) + "%"
 
             # The amount of answered questions in percentage will be calculated here
             PlotlyBarChart.bar_answered_percentage_values.append(text_to_be_appended)
 
     @staticmethod
     def fill_chart_title(list_of_calculated_data):
+        """Defines the chart title in dependence to sorting method and processed years
+
+        Args:
+            list_of_calculated_data (list) : Will be iterated to gain necessary values
+        Returns:
+            -
+        """
         print(".. defining plot title now")
 
         top_worst_string = list_of_calculated_data[0]
@@ -90,12 +158,19 @@ class PlotlyBarChart:
         last_year = list_of_calculated_data[len(list_of_calculated_data) - 1][0]
         amount_of_questions = list_of_calculated_data[1][1] + list_of_calculated_data[1][2]
 
-        PlotlyBarChart.chart_title = "Question answering status in % <br>" + \
+        PlotlyBarChart.chart_title = "Question answering status <br>" + \
                                      top_worst_string.upper() + " " + str(amount_of_questions) + " <br>" + \
                                      "[" + str(first_year) + " - " + str(last_year) + "]"
 
     @staticmethod
     def generate_chart():
+        """Generates the chart "temp-plot.html" which will be automatically opened within the browser
+
+        Args:
+            -
+        Returns:
+            -
+        """
         print(".. generating chart now!")
 
         # noinspection PyUnresolvedReferences
