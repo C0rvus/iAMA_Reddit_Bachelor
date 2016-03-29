@@ -25,6 +25,7 @@ class PlotlyBarChart:
         print('... Initializing plotly bar chart ...')
 
     def main_method(self, list_of_calculated_data):
+
         self.fill_x_axis_list(list_of_calculated_data)
         self.fill_y_axis_answered_list(list_of_calculated_data)
         self.fill_y_axis_unanswered_list(list_of_calculated_data)
@@ -37,34 +38,35 @@ class PlotlyBarChart:
         print(".. filling x_axis with year data now")
 
         # Adds the years to the x-axis list
-        for i in list_of_calculated_data:
-            PlotlyBarChart.bar_x_axis_values.append(i[0])
+        for i in range(1, len(list_of_calculated_data)):
+            PlotlyBarChart.bar_x_axis_values.append(list_of_calculated_data[i][0])
 
     @staticmethod
     def fill_y_axis_answered_list(list_of_calculated_data):
         print(".. filling y_axis_answered list now")
 
         # Adds the amount of answered questions to the graph
-        for i in list_of_calculated_data:
-            PlotlyBarChart.bar_y_axis_answered_values.append(i[1])
+        for i in range(1, len(list_of_calculated_data)):
+            PlotlyBarChart.bar_y_axis_answered_values.append(list_of_calculated_data[i][1])
+
 
     @staticmethod
     def fill_y_axis_unanswered_list(list_of_calculated_data):
         print(".. filling y_axis_unanswered list now")
 
         # Adds the amount of unanswered questions to the graph
-        for i in list_of_calculated_data:
-            PlotlyBarChart.bar_y_axis_unanswered_values.append(i[2])
+        for i in range(1, len(list_of_calculated_data)):
+            PlotlyBarChart.bar_y_axis_unanswered_values.append(list_of_calculated_data[i][2])
 
     @staticmethod
     def fill_bar_percentages_values(list_of_calculated_data):
         print(".. filling bar_percentages_values now")
 
         # Calculates the percentage amount of questions answered / not answered
-        for i in list_of_calculated_data:
+        for i in range(1, len(list_of_calculated_data)):
 
-            answered_per_iteration = i[1]
-            unanswered_per_iteration = i[2]
+            answered_per_iteration = list_of_calculated_data[i][1]
+            unanswered_per_iteration = list_of_calculated_data[i][2]
             amount_of_questions = answered_per_iteration + unanswered_per_iteration
             amount_of_percentage_unanswered = (unanswered_per_iteration / amount_of_questions) * 100
 
@@ -82,16 +84,19 @@ class PlotlyBarChart:
     def fill_chart_title(list_of_calculated_data):
         print(".. defining plot title now")
 
-        first_year = list_of_calculated_data[0][0]
+        top_worst_string = list_of_calculated_data[0]
+
+        first_year = list_of_calculated_data[1][0]
         last_year = list_of_calculated_data[len(list_of_calculated_data) - 1][0]
+        amount_of_questions = list_of_calculated_data[1][1] + list_of_calculated_data[1][2]
 
-        PlotlyBarChart.chart_title = "Question answering status in % <br> [" + str(first_year) + " - " + str(last_year) + "]"
-
-
+        PlotlyBarChart.chart_title = "Question answering status in % <br>" + \
+                                     top_worst_string.upper() + " " + str(amount_of_questions) + " <br>" + \
+                                     "[" + str(first_year) + " - " + str(last_year) + "]"
 
     @staticmethod
     def generate_chart():
-        print("generating chart now!")
+        print(".. generating chart now!")
 
         # noinspection PyUnresolvedReferences
         plotly.offline.plot({
@@ -137,14 +142,3 @@ class PlotlyBarChart:
                                             PlotlyBarChart.bar_answered_percentage_values)]
             )
         })
-
-
-
-
-
-
-
-
-
-
-

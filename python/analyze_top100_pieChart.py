@@ -20,14 +20,11 @@
 
 import collections                  # Necessary to sort collections alphabetically
 import datetime                     # Necessary to create the year out of the thread utc
-import matplotlib.pyplot as plt     # Necessary to plot graphs with the data calculated
 import sys                          # Necessary to use script arguments
 import csv                          # Necessary to write data to csv files
 import os                           # Necessary to get the name of currently processed file
 import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
-import time                         # Necessary to calculate the current time
 from pymongo import MongoClient     # Necessary to make use of MongoDB
-import pymongo                      # Necessary to get information about the database
 
 
 def initialize_mongo_db_parameters():
@@ -366,7 +363,7 @@ def generate_data_now():
         -
     """
 
-    print("Generating data for year " + str(argument_year_beginning) + " now...")
+    print("Generating data for year " + str(year_actually_in_progress) + " now...")
     # noinspection PyTypeChecker
     for j, val in enumerate(mongo_DB_Thread_Collection):
         # Skips the system.indexes-table which is automatically created by mongodb itself
@@ -411,27 +408,62 @@ def start_data_generation_for_analysis():
         -
     """
 
-    global argument_year_beginning
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, list_To_Be_Plotted
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
-    temp_starting_year = copy.copy(argument_year_beginning)
+    year_actually_in_progress = copy.copy(argument_year_beginning)
 
-    while argument_year_beginning != argument_year_ending:
+    # Defines the first entry of the list which is to be plotted
+    data_to_give_plotly.append(str(argument_sorting))
+
+    temp_list = []
+
+    while year_actually_in_progress != argument_year_ending:
+
+        # Starts retrieving and checking that data
         generate_data_now()
-        argument_year_beginning += 1
+
+        # Sorts the questions corresponding to the sorting parameters given
+        list_of_sorted_questions = sort_questions()
+
+        # Due writing a csv file for that actually processed year the amount of not answered questions will be answered
+        amount_of_unanswered_questions = write_csv_and_count_unanswered(list_of_sorted_questions)
+
+        temp_list.append([argument_year_beginning,
+                         argument_amount_of_top_quotes - amount_of_unanswered_questions,
+                         amount_of_unanswered_questions])
+
+        # Removes the values to be able to generate the csv file for every year
+        list_To_Be_Plotted = []
+
+        year_actually_in_progress += 1
+
         initialize_mongo_db_parameters()
 
-    if argument_year_beginning == argument_year_ending:
+    if year_actually_in_progress == argument_year_ending:
+
+        # Starts retrieving and checking that data
         generate_data_now()
-        argument_year_beginning += 1
-        initialize_mongo_db_parameters()
 
-    # After all operations have finished reset the starting year - this is necessary to have a correct and
-    # not progressional file name
-    argument_year_beginning = temp_starting_year
+        # Sorts the questions corresponding to the sorting parameters given
+        list_of_sorted_questions = sort_questions()
+
+        # Due writing a csv file for that actually processed year the amount of not answered questions will be answered
+        amount_of_unanswered_questions = write_csv_and_count_unanswered(list_of_sorted_questions)
+
+        temp_list.append([argument_year_beginning,
+                         argument_amount_of_top_quotes - amount_of_unanswered_questions,
+                         amount_of_unanswered_questions])
+
+        # Removes the values to be able to generate the csv file for every year
+        list_To_Be_Plotted = []
+
+    # Hier für alle Jahre gesamt, die csv file ausgeben
+    data_to_give_plotly.append(temp_list)
+    plot_generated_data()
 
 
-def prepare_and_print_data_to_be_plotted():
+def sort_questions():
     """Prepares data and prints data into the command line
 
     1. This method prepares the data, in kind of sorting and counting amount of questions not being answered
@@ -459,10 +491,10 @@ def prepare_and_print_data_to_be_plotted():
 
     # Creates a "sorted" which contains all comments of that year, sorted by upvotes in descending order
     # In dependence of given sort parameter..
-    new_list = sorted(all_comments, key=lambda k: k['question_ups'], reverse=argument_sorting)
+    questions_sorted = sorted(all_comments, key=lambda k: k['question_ups'], reverse=argument_sorting)
 
     # Defines the amount of the top X questions (by upvotes) which have not been answered
-    return write_csv_and_count_unanswered(new_list)
+    return questions_sorted
 
 
 def write_csv_and_count_unanswered(list_with_comments):
@@ -492,6 +524,8 @@ def write_csv_and_count_unanswered(list_with_comments):
                     str(sys.argv[3]) + \
                     '_' + \
                     str(argument_amount_of_top_quotes) + \
+                    '_' + \
+                    str(year_actually_in_progress) + \
                     '.csv'
 
     with open(file_name_csv, 'w', newline='') as fp:
@@ -529,101 +563,27 @@ def write_csv_and_count_unanswered(list_with_comments):
     return amount_of_questions_not_answered
 
 
-def plot_generated_data(amount_of_questions_not_answered):
+def plot_generated_data():
     """Plots the data which is to be generated
 
     1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
 
     Args:
-        amount_of_questions_not_answered (int): The amount of questions which have not been answered.
+        -
     Returns:
         -
+        data_to_be_plotted_with_plotly (list) : Contains the data which will be plotted with Plotly later on
     """
 
-    # Connect to admin (internal) mongoDB for mongoDB-Server information
-    mongo_db_admin_database = mongo_DB_Client_Instance.admin
-
-    mono = {'family' : 'monospace'}
-
-    plt.figure(figsize=(10, 6))
-    labels = ['Nicht beantwortet', 'Beantwortet']
-    colors = ['indianred', 'yellowgreen']
-    values = [amount_of_questions_not_answered, argument_amount_of_top_quotes - amount_of_questions_not_answered]
-
-    # The absolute amount of numbers
-    absolute_amount = [values[0], values[1]]
-
-    patches, texts = plt.pie(values, colors=colors, startangle=90, shadow=True)
-    plt.pie(values, labels=absolute_amount, colors=colors, autopct='%.2f%%')
-
-    plt.legend(patches, labels, loc="upper right")
-
-    if argument_sorting is True:
-        plt.title('Beantwortung der TOP ' +
-                  str(argument_amount_of_top_quotes) +
-                  ' iAMA Fragen von' +
-                  '\n ' +
-                  str(argument_year_beginning) +
-                  ' bis ' +
-                  str(argument_year_ending),
-                  bbox={'facecolor': '0.8', 'pad': 5},
-                  y=1.08
-                  )
-    else:
-        plt.title('Beantwortung der WORST ' +
-                  str(argument_amount_of_top_quotes) +
-                  ' iAMA Fragen von' +
-                  '\n ' +
-                  str(argument_year_beginning) +
-                  ' bis ' +
-                  str(argument_year_ending),
-                  bbox={'facecolor': '0.8', 'pad': 5},
-                  y=1.08
-                  )
-
-    # Set aspect ratio to be equal so that pie is drawn as a circle.
-    plt.axis('equal')
-    plt.tight_layout()
-
-    time_now_date = time.strftime("%d.%m.%Y")
-    time_now_time = time.strftime("%H:%M:%S")
-
-    text_to_print_box_1 = "MongoDB connection:" + "\n" + \
-                "MongoDB version:" + "\n" + \
-                "MongoDB storage engine:" + "\n" + \
-                "\n" + \
-                "IAMA-db creation date:" + "\n" + \
-                "\n" + \
-                "Python version:" + "\n" + \
-                "Pymongo version:" + "\n" + \
-                "\n" + \
-                "Plot creation date:" + "\n" + \
-                "Plot creation time:"
-
-    text_to_print_box_2 = str(MongoClient.HOST) + ":" + str(MongoClient.PORT) + "\n" + \
-                str(mongo_db_admin_database.command("serverStatus")["version"]) + "\n" + \
-                str(mongo_db_admin_database.command("serverStatus")["storageEngine"]['name']) + "\n" + \
-                "\n" + \
-                "17.02.2016" + "\n" + \
-                "\n" + \
-                str(sys.version[:5]) + "\n" + \
-                str(pymongo.version) + "\n" + \
-                "\n" + \
-                time_now_date + "\n" + \
-                time_now_time
-
-    ax = plt.gca()
-
-    plt.text(0.0, 0.0, text_to_print_box_1, transform=ax.transAxes, fontsize=8, fontdict=mono, ha='left', va='bottom')
-    plt.text(0.25, 0.0, text_to_print_box_2, transform=ax.transAxes, fontsize=8, fontdict=mono, ha='right', va='bottom')
-
-    plt.show()
-
+    print(data_to_give_plotly)
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
 argument_year_beginning = 0
+
+# Contains the year which will be processed at the moment
+year_actually_in_progress = 0
 
 # Contains the year which is given as argument
 argument_year_ending = 0
@@ -647,8 +607,20 @@ mongo_DB_Thread_Collection = None
 # The data base instance for the comments
 mongo_DB_Comments_Instance = None
 
-# Will contain all analyzed time information for threads & comments
+# Will contain temporarily contain all analyzed question information
 list_To_Be_Plotted = []
+
+# Contains the data which are necessary for plotly
+# <editor-fold desc="Description of data object plotly needs">
+# Structure as follows:
+# [ "sorting", [year, answered, unanswered], [year, answered, unanswered], ... ]
+# i.e. ["top",
+#       [2009, 900, 1536],
+#       [2010, 500, 500],
+#       [2011, 300, 700]
+#       ]
+# </editor-fold>
+data_to_give_plotly = []
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Methods which are to be called are here
@@ -661,6 +633,3 @@ initialize_mongo_db_parameters()
 
 # Generates the data which will be plotted later on
 start_data_generation_for_analysis()
-
-# Sorts, prepares the data and finally plots it
-plot_generated_data(prepare_and_print_data_to_be_plotted())
