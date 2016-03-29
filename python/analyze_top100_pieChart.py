@@ -25,13 +25,15 @@ import csv                          # Necessary to write data to csv files
 import os                           # Necessary to get the name of currently processed file
 import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient     # Necessary to make use of MongoDB
+# noinspection PyUnresolvedReferences
+from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
 
 
-def initialize_mongo_db_parameters():
+def initialize_mongo_db_parameters(actually_processed_year):
     """Instantiates all necessary variables for the correct usage of the mongoDB-Client
 
     Args:
-        -
+        actually_processed_year (int) : The year with which parameters the database should be accessed
     Returns:
         -
     """
@@ -42,9 +44,9 @@ def initialize_mongo_db_parameters():
     global mongo_DB_Comments_Instance
 
     mongo_DB_Client_Instance = MongoClient('localhost', 27017)
-    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(argument_year_beginning)]
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(actually_processed_year)]
     mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
-    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(argument_year_beginning)]
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
 
 
 def check_script_arguments():
@@ -118,9 +120,9 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
 
     # Calculates the time difference between the comment and the iAMA hosts answer
     time_difference_in_seconds = int((
-        answer_time_iama_host_converted_for_subtraction -
-        comment_time_converted_for_subtraction
-    ).total_seconds())
+                                         answer_time_iama_host_converted_for_subtraction -
+                                         comment_time_converted_for_subtraction
+                                     ).total_seconds())
 
     return time_difference_in_seconds
 
@@ -163,7 +165,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
             if (check_if_comment_is_not_from_thread_author(
                     author_of_thread,
                     actual_comment_author) == False) and (
-                    check_comment_parent_id == comment_acutal_id):
+                        check_comment_parent_id == comment_acutal_id):
 
                 dict_to_be_returned["question_Answered_From_Host"] = True
                 dict_to_be_returned[
@@ -413,10 +415,16 @@ def start_data_generation_for_analysis():
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     year_actually_in_progress = copy.copy(argument_year_beginning)
 
-    # Defines the first entry of the list which is to be plotted
-    data_to_give_plotly.append(str(argument_sorting))
+    # Contains the summary / total amount of all questions for all years..
+    # This is necessary to print out a csv file containing all (!) questions within
+    all_years_whole_list = []
 
-    temp_list = []
+    # Defines the first entry of the list which is to be plotted
+
+    if argument_sorting is True:
+        data_to_give_plotly.append("top")
+    else:
+        data_to_give_plotly.append("worst")
 
     while year_actually_in_progress != argument_year_ending:
 
@@ -424,21 +432,26 @@ def start_data_generation_for_analysis():
         generate_data_now()
 
         # Sorts the questions corresponding to the sorting parameters given
-        list_of_sorted_questions = sort_questions()
+        list_of_sorted_questions = sort_questions(list_To_Be_Plotted)
+
+        # Contains the contains for every year
+        all_years_whole_list.append(list_of_sorted_questions)
 
         # Due writing a csv file for that actually processed year the amount of not answered questions will be answered
         amount_of_unanswered_questions = write_csv_and_count_unanswered(list_of_sorted_questions)
 
-        temp_list.append([argument_year_beginning,
-                         argument_amount_of_top_quotes - amount_of_unanswered_questions,
-                         amount_of_unanswered_questions])
+        data_to_give_plotly.append([year_actually_in_progress,
+                                    argument_amount_of_top_quotes - amount_of_unanswered_questions,
+                                    amount_of_unanswered_questions])
 
         # Removes the values to be able to generate the csv file for every year
         list_To_Be_Plotted = []
 
+        # Progresses in the year, necessary for onward year calculation
         year_actually_in_progress += 1
 
-        initialize_mongo_db_parameters()
+        # Reinitializes the mongodb with new year parameter here
+        initialize_mongo_db_parameters(year_actually_in_progress)
 
     if year_actually_in_progress == argument_year_ending:
 
@@ -446,24 +459,29 @@ def start_data_generation_for_analysis():
         generate_data_now()
 
         # Sorts the questions corresponding to the sorting parameters given
-        list_of_sorted_questions = sort_questions()
+        list_of_sorted_questions = sort_questions(list_To_Be_Plotted)
+
+        # Contains the contains for every year
+        all_years_whole_list.append(list_of_sorted_questions)
 
         # Due writing a csv file for that actually processed year the amount of not answered questions will be answered
         amount_of_unanswered_questions = write_csv_and_count_unanswered(list_of_sorted_questions)
 
-        temp_list.append([argument_year_beginning,
-                         argument_amount_of_top_quotes - amount_of_unanswered_questions,
-                         amount_of_unanswered_questions])
+        data_to_give_plotly.append([year_actually_in_progress,
+                                    argument_amount_of_top_quotes - amount_of_unanswered_questions,
+                                    amount_of_unanswered_questions])
 
         # Removes the values to be able to generate the csv file for every year
         list_To_Be_Plotted = []
 
+    # Creates an csv file with questions for all years.. so all years are compacted into a single file!
+    create_question_list_containing_all_years(all_years_whole_list)
+
     # Hier für alle Jahre gesamt, die csv file ausgeben
-    data_to_give_plotly.append(temp_list)
     plot_generated_data()
 
 
-def sort_questions():
+def sort_questions(list_which_is_to_be_sorted):
     """Prepares data and prints data into the command line
 
     1. This method prepares the data, in kind of sorting and counting amount of questions not being answered
@@ -472,7 +490,7 @@ def sort_questions():
     3. Then it returns the number of unanswered questions, necessary for graph plotting
 
     Args:
-        -
+        list_which_is_to_be_sorted (list) : The list you want to sort regarding the sorting arguments give on execution
     Returns:
         write_csv_and_count_unanswered (int) : The amount of questions which have not been answered
     """
@@ -481,7 +499,7 @@ def sort_questions():
     all_comments = []
 
     # Iterates over every ordered list
-    for i, val in enumerate(list_To_Be_Plotted):
+    for i, val in enumerate(list_which_is_to_be_sorted):
 
         # Iterates over the sub elements within that iterated object
         for j, val_2 in enumerate(val):
@@ -495,6 +513,27 @@ def sort_questions():
 
     # Defines the amount of the top X questions (by upvotes) which have not been answered
     return questions_sorted
+
+
+def create_question_list_containing_all_years(list_with_comments_per_years):
+    global year_actually_in_progress
+    # Contains all comments for every year, within a flat hierarchy
+    temp_flat_hierarchy_all_years = []
+
+    # iterates over every question
+#     for i in list_with_comments_per_years:
+#         print(i)
+#         for j in list_with_comments_per_years[i]:
+#             temp_flat_hierarchy_all_years.append(j)
+
+    year_actually_in_progress = "ALL"
+
+    # List will be sorted here, so we do not have to sort it within excel or some other software
+    whole_list_of_years_sorted = sort_questions(list_with_comments_per_years)
+
+    # This variable is senseless, because we won't use it, but the execution of the method creates the csv we want!
+    # noinspection PyUnusedLocal
+    senseless_number = write_csv_and_count_unanswered(whole_list_of_years_sorted)
 
 
 def write_csv_and_count_unanswered(list_with_comments):
@@ -512,6 +551,8 @@ def write_csv_and_count_unanswered(list_with_comments):
     """
 
     print("---- Writing top / worst " + str(argument_amount_of_top_quotes) + " comments now")
+    # Empty print line here for a more beautiful console output
+    print("")
 
     amount_of_questions_not_answered = 0
 
@@ -574,6 +615,7 @@ def plot_generated_data():
         -
         data_to_be_plotted_with_plotly (list) : Contains the data which will be plotted with Plotly later on
     """
+    PlotlyBarChart().main_method(data_to_give_plotly)
 
     print(data_to_give_plotly)
 
@@ -629,7 +671,7 @@ data_to_give_plotly = []
 check_script_arguments()
 
 # Initializes the mongoDB with the arguments given via command line
-initialize_mongo_db_parameters()
+initialize_mongo_db_parameters(argument_year_beginning)
 
 # Generates the data which will be plotted later on
 start_data_generation_for_analysis()

@@ -72,7 +72,7 @@ class PlotlyBarChart:
 
             # Shortens huge percentage numbers by rounding them..
             amount_of_percentage_unanswered = float('%.2f' % amount_of_percentage_unanswered)
-            amount_of_percentage_answered = 100 - amount_of_percentage_unanswered
+            amount_of_percentage_answered = float('%.2f' % (100 - amount_of_percentage_unanswered))
 
             text_to_be_appended = '' + str(amount_of_percentage_answered) + \
                                   '<br><br>' + str(amount_of_percentage_unanswered)
