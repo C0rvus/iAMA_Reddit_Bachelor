@@ -425,7 +425,7 @@ def start_data_generation_for_analysis():
     # Creates an csv file with questions for all years.. so all years are compacted into a single file!
     create_question_list_containing_all_years(all_years_whole_list)
 
-    # Hier für alle Jahre gesamt, die csv file ausgeben
+    # Plots the graph
     plot_generated_data()
 
 
@@ -643,8 +643,8 @@ list_To_Be_Plotted = []
 # Contains the data which are necessary for plotly
 # <editor-fold desc="Description of data object plotly needs">
 # Structure as follows:
-# [ "sorting", [year, answered, unanswered], [year, answered, unanswered], ... ]
-# i.e. ["top",
+# [ "analyze_type", "analyze_setting"}, [year, answered, unanswered], [year, answered, unanswered], ... ]
+# i.e. [["q_answered_y_n", "top"],
 #       [2009, 900, 1536],
 #       [2010, 500, 500],
 #       [2011, 300, 700]
