@@ -28,10 +28,18 @@ class PlotlyBarChart:
                       'IAMA db MD5 hash: 7C3058809C20C087C97F9DECF6244620'
     chart_title = ""
 
+    # Contains values what the chart is about..
+    bar_value_description = []
     bar_x_axis_values = []
-    bar_y_axis_answered_values = []
-    bar_y_axis_unanswered_values = []
-    bar_answered_percentage_values = []
+
+    # i.e. (amount answered questions || amount of tier 1 questions)
+    bar_y_axis_first_values = []
+
+    # i.e. (amount unanswered questions || amount of questions on any tier)
+    bar_y_axis_second_values = []
+
+    # i.e. (answered / unanswered questions || amount of questions on tier 1 / any)
+    bar_first_n_second_values_percentage = []
 
     def __init__(self):
         """Instanciates the class
@@ -63,7 +71,7 @@ class PlotlyBarChart:
         self.fill_y_axis_answered_list(list_of_calculated_data)
         self.fill_y_axis_unanswered_list(list_of_calculated_data)
         self.fill_bar_percentages_values(list_of_calculated_data)
-        self.fill_chart_title(list_of_calculated_data)
+        self.fill_chart_title_n_bar_description(list_of_calculated_data)
         self.generate_chart()
 
     @staticmethod
@@ -94,7 +102,7 @@ class PlotlyBarChart:
 
         # Adds the amount of answered questions to the graph
         for i in range(1, len(list_of_calculated_data)):
-            PlotlyBarChart.bar_y_axis_answered_values.append(list_of_calculated_data[i][1])
+            PlotlyBarChart.bar_y_axis_first_values.append(list_of_calculated_data[i][1])
 
     @staticmethod
     def fill_y_axis_unanswered_list(list_of_calculated_data):
@@ -109,7 +117,7 @@ class PlotlyBarChart:
 
         # Adds the amount of unanswered questions to the graph
         for i in range(1, len(list_of_calculated_data)):
-            PlotlyBarChart.bar_y_axis_unanswered_values.append(list_of_calculated_data[i][2])
+            PlotlyBarChart.bar_y_axis_second_values.append(list_of_calculated_data[i][2])
 
     @staticmethod
     def fill_bar_percentages_values(list_of_calculated_data):
@@ -135,14 +143,14 @@ class PlotlyBarChart:
             amount_of_percentage_unanswered = float('%.2f' % amount_of_percentage_unanswered)
             amount_of_percentage_answered = float('%.2f' % (100 - amount_of_percentage_unanswered))
 
-            text_to_be_appended = '' + str(amount_of_percentage_answered) + "%" \
+            text_to_be_appended = '' + str(amount_of_percentage_answered) + "%" + \
                                   '<br><br>' + str(amount_of_percentage_unanswered) + "%"
 
             # The amount of answered questions in percentage will be calculated here
-            PlotlyBarChart.bar_answered_percentage_values.append(text_to_be_appended)
+            PlotlyBarChart.bar_first_n_second_values_percentage.append(text_to_be_appended)
 
     @staticmethod
-    def fill_chart_title(list_of_calculated_data):
+    def fill_chart_title_n_bar_description(list_of_calculated_data):
         """Defines the chart title in dependence to sorting method and processed years
 
         Args:
@@ -152,15 +160,33 @@ class PlotlyBarChart:
         """
         print(".. defining plot title now")
 
-        top_worst_string = list_of_calculated_data[0]
+        top_worst_string = list_of_calculated_data[0][1]
 
         first_year = list_of_calculated_data[1][0]
         last_year = list_of_calculated_data[len(list_of_calculated_data) - 1][0]
-        amount_of_questions = list_of_calculated_data[1][1] + list_of_calculated_data[1][2]
 
-        PlotlyBarChart.chart_title = "Question answering status <br>" + \
-                                     top_worst_string.upper() + " " + str(amount_of_questions) + " <br>" + \
-                                     "[" + str(first_year) + " - " + str(last_year) + "]"
+        if list_of_calculated_data[0][0] == "q_answered_y_n":
+
+            amount_of_questions = list_of_calculated_data[1][1] + list_of_calculated_data[1][2]
+
+            PlotlyBarChart.chart_title += "Question answering status <br>" + top_worst_string.upper() + \
+                                          " " + str(amount_of_questions) + " <br>"
+
+            # Creation arrays here, because i do not trust list sorting
+            PlotlyBarChart.bar_value_description.append(['Not answered'])
+            PlotlyBarChart.bar_value_description.append(['Answered'])
+
+        elif list_of_calculated_data[0][0] == "q_tier_dist":
+
+            PlotlyBarChart.chart_title += "Question tier distribution <br>"
+
+            PlotlyBarChart.bar_value_description.append(['Tier 1'])
+            PlotlyBarChart.bar_value_description.append(['Other tiers'])
+
+        else:
+            print("could not find parameter")
+
+        PlotlyBarChart.chart_title += "[" + str(first_year) + " - " + str(last_year) + "]"
 
     @staticmethod
     def generate_chart():
@@ -178,8 +204,8 @@ class PlotlyBarChart:
 
             "data": [
                 Bar(x=PlotlyBarChart.bar_x_axis_values,
-                    y=PlotlyBarChart.bar_y_axis_unanswered_values,
-                    name='Not answered',
+                    y=PlotlyBarChart.bar_y_axis_second_values,
+                    name=PlotlyBarChart.bar_value_description[0],
                     marker=dict(
                         color='rgba(255, 0, 0, 0.7)',
                         line=dict(
@@ -189,8 +215,8 @@ class PlotlyBarChart:
                     )
                     ),
                 Bar(x=PlotlyBarChart.bar_x_axis_values,
-                    y=PlotlyBarChart.bar_y_axis_answered_values,
-                    name='Answered',
+                    y=PlotlyBarChart.bar_y_axis_first_values,
+                    name=PlotlyBarChart.bar_value_description[1],
                     marker=dict(
                         color='rgba(50, 171, 96, 0.7)',
                         line=dict(
@@ -213,7 +239,7 @@ class PlotlyBarChart:
                         showarrow=False,
                         font=dict(family='Arial', size=14, color='rgba(0, 0, 0, 1)')
                     ) for x, y, text in zip(PlotlyBarChart.bar_x_axis_values,
-                                            PlotlyBarChart.bar_y_axis_unanswered_values,
-                                            PlotlyBarChart.bar_answered_percentage_values)]
+                                            PlotlyBarChart.bar_y_axis_second_values,
+                                            PlotlyBarChart.bar_first_n_second_values_percentage)]
             )
         })
