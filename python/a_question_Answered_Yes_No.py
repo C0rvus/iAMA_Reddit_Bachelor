@@ -7,16 +7,7 @@
 # https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
 # 4. (26.03.2016 @ 18:43) -
 # http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
-# 5. (27.03.2016 @ 15:28) -
-# http://matplotlib.org/examples/pylab_examples/alignment_test.html
-# 6. (27.03.2016 @ 16:54) -
-# https://stackoverflow.com/questions/12750355/python-matplotlib-figure-title-overlaps-axes-label-when-using-twiny
-# 7. (27.03.2016 @ 17:51) -
-# https://stackoverflow.com/questions/14737599/mongoengine-serverstatus
-# 8. (27.03.2016 @ 19:13) -
-# https://stackoverflow.com/questions/33661080/python-matplotlib-plot-text-will-not-align-left
-# 9. (27.03.2016 @ 19:50) -
-# https://stackoverflow.com/questions/1093322/how-do-i-check-what-version-of-python-is-running-my-script
+
 
 import collections                  # Necessary to sort collections alphabetically
 import datetime                     # Necessary to create the year out of the thread utc
@@ -357,7 +348,7 @@ def start_data_generation_for_analysis():
         -
     """
 
-    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, list_To_Be_Plotted
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, question_information_list
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     year_actually_in_progress = copy.copy(argument_year_beginning)
@@ -379,7 +370,7 @@ def start_data_generation_for_analysis():
         generate_data_now()
 
         # Sorts the questions corresponding to the sorting parameters given
-        list_of_sorted_questions = sort_questions(list_To_Be_Plotted)
+        list_of_sorted_questions = sort_questions(question_information_list)
 
         # Contains the contains for every year
         all_years_whole_list.append(list_of_sorted_questions)
@@ -392,7 +383,7 @@ def start_data_generation_for_analysis():
                                     amount_of_unanswered_questions])
 
         # Removes the values to be able to generate the csv file for every year
-        list_To_Be_Plotted = []
+        question_information_list = []
 
         # Progresses in the year, necessary for onward year calculation
         year_actually_in_progress += 1
@@ -407,7 +398,7 @@ def start_data_generation_for_analysis():
         generate_data_now()
 
         # Sorts the questions corresponding to the sorting parameters given
-        list_of_sorted_questions = sort_questions(list_To_Be_Plotted)
+        list_of_sorted_questions = sort_questions(question_information_list)
 
         # Contains the contains for every year
         all_years_whole_list.append(list_of_sorted_questions)
@@ -420,7 +411,7 @@ def start_data_generation_for_analysis():
                                     amount_of_unanswered_questions])
 
         # Removes the values to be able to generate the csv file for every year
-        list_To_Be_Plotted = []
+        question_information_list = []
 
     # Creates an csv file with questions for all years.. so all years are compacted into a single file!
     create_question_list_containing_all_years(all_years_whole_list)
@@ -478,7 +469,7 @@ def generate_data_now():
 
             # Value could be none if it has i.E. no values
             if returned_value is not None:
-                list_To_Be_Plotted.append(returned_value)
+                question_information_list.append(returned_value)
 
 
 def sort_questions(list_which_is_to_be_sorted):
@@ -567,9 +558,9 @@ def write_csv_and_count_unanswered(list_with_comments):
         data = [['sep=,'],
                 ['Year',
                  'Has question been answered?',
-                 'Thread-ID',
-                 'Question-ID',
-                 'Question-Upvotes',
+                 'Thread id',
+                 'Question id',
+                 'Question ups',
                  'Question birth time since thread started (sec)',
                  'Link to Thread']]
 
@@ -605,6 +596,7 @@ def plot_generated_data():
     Returns:
         -
     """
+
     PlotlyBarChart().main_method(data_to_give_plotly)
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
@@ -625,6 +617,7 @@ argument_sorting = bool
 # Contains the amount of questions you will be having respected in plotting your graph and writing the csv data
 argument_amount_of_top_quotes = 0
 
+
 # The mongo client, necessary to connect to mongoDB
 mongo_DB_Client_Instance = None
 
@@ -637,8 +630,9 @@ mongo_DB_Thread_Collection = None
 # The data base instance for the comments
 mongo_DB_Comments_Instance = None
 
+
 # Will contain temporarily contain all analyzed question information
-list_To_Be_Plotted = []
+question_information_list = []
 
 # Contains the data which are necessary for plotly
 # <editor-fold desc="Description of data object plotly needs">

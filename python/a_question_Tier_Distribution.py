@@ -1,12 +1,20 @@
-# Source: http://stackoverflow.com/questions/33448233/python-write-to-text-file-skip-bad-lines
+# 1. (12.03.2016 @ 16:53) -
+# https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
+# 2. (26.03.2016 @ 18:03) -
+# https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
+# 3. (26.03.2016 @ 18:43) -
+# http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
+# 4. (31.03.2016 @ 12:13) -
+# http://stackoverflow.com/questions/33448233/python-write-to-text-file-skip-bad-lines
+# 5. (31.03.2016 @ 13:15) -
 # http://stackoverflow.com/questions/14630288/unicodeencodeerror-charmap-codec-cant-encode-character-maps-to-undefined
-
+# 6. (31.03.2016 @ 13:45) -
+# https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
 import collections               # Necessary to sort collections alphabetically
 import sys                       # Necessary to use script arguments
 import unicodecsv as csv         # Necessary to write data to csv files
 import os                        # Necessary to get the name of currently processed file
-import numpy as np               # Necessary for mean calculation
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
@@ -55,8 +63,8 @@ def check_script_arguments():
 
     else:
         # Parses the first argument to the variable
-        # Parses the first argument to the variable
         argument_year_beginning = int(sys.argv[1])
+        # Parses the second argument to the variable
         argument_year_ending = int(sys.argv[2])
 
 
@@ -81,41 +89,12 @@ def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author)
         return False
 
 
-def calculate_percentages_n_amount(amount_of_tier_1_questions, amount_of_tier_x_questions):
-    """Checks whether both strings are equal or not
-
-    1. This method simply checks wether both strings match each other or not.
-        I have built this extra method to have a better overview in the main code..
-
-    Args:
-        amount_of_tier_1_questions (int) : The amount of questions which have been asked at all
-        amount_of_tier_x_questions (int) : The amount of questions which have been answered
-    Returns:
-        dict_to_be_returned (dict): A dictionary containing
-            1. The amount of questions answered as int
-            2. The amount of questions which have not been answered
-         answered that given question)
-    """
-
-    full_percent = amount_of_tier_1_questions + amount_of_tier_x_questions
-    percentage_tier_1 = (amount_of_tier_1_questions / full_percent) * 100
-    percentage_tier_x = 100 - percentage_tier_1
-
-    dict_to_be_returned = {
-        "percentage_tier_1": percentage_tier_1,
-        "percentage_tier_x": percentage_tier_x,
-        "amount_tier_1_questions": amount_of_tier_1_questions,
-        "amount_tier_x_questions": amount_of_tier_x_questions,
-    }
-
-    return dict_to_be_returned
-
-
 def check_if_comment_is_on_tier_1(comment_parent_id):
     """Simply checks whether a given string is a question posted on tier 1 or not
 
     1. This method simply checks whether a question has been posted on tier 1 by looking whether the given
         string contains the substring "t3_" or not
+
     Args:
         comment_parent_id (str): The string which will be checked for "t3_" appearance in it
     Returns:
@@ -149,8 +128,7 @@ def check_if_comment_is_a_question(given_string):
         return False
 
 
-# noinspection PyIncorrectDocstring
-def amount_of_tier_1_questions_percentage(id_of_thread, author_of_thread):
+def question_distribution_tier1_tierx(id_of_thread, author_of_thread):
     """Generates the data which will be analyzed
 
     1. It iterates over every comment and
@@ -161,12 +139,12 @@ def amount_of_tier_1_questions_percentage(id_of_thread, author_of_thread):
     2. Now the distribution of on the tier levels will be calculated
     3. Then a dict will be returned containing the distribution amount of questions on the tier levels in percentage
 
-    id_of_thread (str) : Contains the id of the processed thread
-    author_of_thread (str) : Contains the iAMA-Hosts name
+    Args:
+        id_of_thread (str) : Contains the id of the processed thread
+        author_of_thread (str) : Contains the iAMA-Hosts name
 
     Returns:
-    dict_to_be_returned_percentage_answered_questions (dict) : Containing the percentage amount of questions
-    on tier 1 and the other tiers
+    dict_to_be_returned (dict) : Containing the amount of questions on tier 1 and any other tier
      """
 
     # Makes the global comments instance locally available here
@@ -249,13 +227,15 @@ def amount_of_tier_1_questions_percentage(id_of_thread, author_of_thread):
     if (amount_of_tier_x_questions != 0) \
             and (amount_of_tier_1_questions != 0):
 
-        dict_to_be_returned_percentage_time = calculate_percentages_n_amount(
-            amount_of_tier_1_questions, amount_of_tier_x_questions)
+        dict_to_be_returned = {
+            "amount_tier_1_questions": amount_of_tier_1_questions,
+            "amount_tier_x_questions": amount_of_tier_x_questions
+        }
 
-        dict_to_be_returned_percentage_time = collections.OrderedDict(
-            sorted(dict_to_be_returned_percentage_time.items()))
+        dict_to_be_returned = collections.OrderedDict(
+            sorted(dict_to_be_returned.items()))
 
-        return dict_to_be_returned_percentage_time
+        return dict_to_be_returned
 
     # Whenever there were no tier X questions asked.. so all questions remained on tier 1
     else:
@@ -263,7 +243,19 @@ def amount_of_tier_1_questions_percentage(id_of_thread, author_of_thread):
 
 
 def start_data_generation_for_analysis():
-    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, list_To_Be_Plotted, \
+    """Starts the data processing by swichting through the years
+
+    1. Triggers the data generation process and moves forward within the years
+        1.1. By moving through the years a csv file will be created for every year
+        1.3. Additionally an interactive chart will be plotted
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, questions_in_thread_list, \
         global_question_list
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
@@ -287,7 +279,7 @@ def start_data_generation_for_analysis():
         prepare_data_for_graph()
 
         # Empty both lists
-        list_To_Be_Plotted = []
+        questions_in_thread_list = []
         global_question_list = []
 
         # Progresses in the year, necessary for onward year calculation
@@ -309,7 +301,7 @@ def start_data_generation_for_analysis():
         prepare_data_for_graph()
 
         # Empty both lists
-        list_To_Be_Plotted = []
+        questions_in_thread_list = []
         global_question_list = []
 
     # Plots the graph
@@ -317,6 +309,21 @@ def start_data_generation_for_analysis():
 
 
 def write_csv():
+    """Creates a csv file containing all necessary information about the distribution of questions on the tiers
+
+    This method iterates over the "global_question_list", which contains every single questions of that year and writes
+    a csv file containing misc information about those questions.
+
+    One thing is to be said: The .csv file will be written in binary mode, therefore looking at them in a plain text
+    editor could be a problem - please use excel for that.
+    I had to use "binary" mode, otherwise the questions-text could not be written into the csv file, because windows
+    has some problem by converting some special chars to utf.
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     global global_question_list
 
@@ -336,6 +343,7 @@ def write_csv():
     # We write the file here in binary mode.. therefore only excel is able to correctly display the csv file
     # We must use binary mode, because some comments contain characters which python on windows is not able to process
     # Because I do not want to leave out the question text of this data, I left the comments in
+    # To use normal writing mode, simply use this:     with open(file_name_csv, 'w', newline='') as fp:
     with open(file_name_csv, 'wb') as fp:
         csv_writer = csv.writer(fp, delimiter=',', encoding='utf-8')
 
@@ -372,12 +380,19 @@ def write_csv():
 
 
 def prepare_data_for_graph():
+    """Sorts and prepares data for graph plotting
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     # Will contain the amount of questions which are not tier 1 questions
     amount_of_tier_1_questions = 0
     amount_of_tier_x_questions = 0
 
-    for i, val in enumerate(list_To_Be_Plotted):
+    for i, val in enumerate(questions_in_thread_list):
         amount_of_tier_1_questions += val.get("amount_tier_1_questions")
         amount_of_tier_x_questions += val.get("amount_tier_x_questions")
 
@@ -394,6 +409,7 @@ def generate_data_to_be_analyzed():
             1.1.2. If no: this thread will be processed
     2. If the thread gets processed it will receive the distribution of questions on the tiers
     3. This value will be added to a global list and will be plotted later on
+
     Args:
         -
     Returns:
@@ -424,17 +440,18 @@ def generate_data_to_be_analyzed():
                     and "request response" not in temp_thread_title.lower():
                 continue
 
-            returned_value = amount_of_tier_1_questions_percentage(
+            returned_value = question_distribution_tier1_tierx(
                 val, temp_thread_author)
 
             # Value could be none if it has i.E. no values
             if returned_value is not None:
-                list_To_Be_Plotted.append(returned_value)
+                questions_in_thread_list.append(returned_value)
 
 
 def plot_generated_data():
     """Plots the data which is to be generated
 
+    1. This method plots the data which has been calculated before by using Pltoly-Framework within a self written class
 
     Args:
         -
@@ -442,7 +459,6 @@ def plot_generated_data():
         -
     """
 
-    print(data_to_give_plotly)
     PlotlyBarChart().main_method(data_to_give_plotly)
 
 
@@ -470,8 +486,9 @@ mongo_DB_Thread_Collection = None
 # The data base instance for the comments
 mongo_DB_Comments_Instance = None
 
+
 # Will contain all analyzed time information for threads & comments
-list_To_Be_Plotted = []
+questions_in_thread_list = []
 
 # Contains all questions of the actually processed year
 global_question_list = []
@@ -497,12 +514,5 @@ check_script_arguments()
 # Initializes the mongoDB with the arguments given via command line
 initialize_mongo_db_parameters(argument_year_beginning)
 
-
 # Starts the data generation process, writes csv files and plots that processed data
 start_data_generation_for_analysis()
-
-# Generates the data which will be plotted later on
-# generate_data_to_be_analyzed()
-
-# Plots a pie chart containing the tier 1 question distribution
-# plot_the_generated_data()
