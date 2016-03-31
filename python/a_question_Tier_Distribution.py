@@ -11,7 +11,7 @@
 # 6. (31.03.2016 @ 13:45) -
 # https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
-import collections               # Necessary to sort collections alphabetically
+
 import sys                       # Necessary to use script arguments
 import unicodecsv as csv         # Necessary to write data to csv files
 import os                        # Necessary to get the name of currently processed file
