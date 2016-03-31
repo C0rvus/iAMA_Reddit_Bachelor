@@ -208,8 +208,8 @@ class PlotlyBarChart:
             PlotlyBarChart.bar_value_description.append(['Answered'])
 
         elif list_of_calculated_data[0][0] == "q_tier_dist":
-            PlotlyBarChart.bar_value_description.append(['Tier 1'])
             PlotlyBarChart.bar_value_description.append(['Other tiers'])
+            PlotlyBarChart.bar_value_description.append(['Tier 1'])
         else:
             print("could not find parameter")
 
