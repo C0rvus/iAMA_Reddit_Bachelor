@@ -49,6 +49,7 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         print('... Initializing plotly bar chart ...')
 
     def main_method(self, list_of_calculated_data):
@@ -67,11 +68,13 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         self.fill_x_axis_list(list_of_calculated_data)
         self.fill_y_axis_answered_list(list_of_calculated_data)
         self.fill_y_axis_unanswered_list(list_of_calculated_data)
         self.fill_bar_percentages_values(list_of_calculated_data)
         self.fill_chart_title_n_bar_description(list_of_calculated_data)
+        self.fill_bar_description(list_of_calculated_data)
         self.generate_chart()
 
     @staticmethod
@@ -83,6 +86,7 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         print(".. filling x_axis with year data now")
 
         # Adds the years to the x-axis list
@@ -98,6 +102,7 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         print(".. filling y_axis_answered list now")
 
         # Adds the amount of answered questions to the graph
@@ -113,6 +118,7 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         print(".. filling y_axis_unanswered list now")
 
         # Adds the amount of unanswered questions to the graph
@@ -129,6 +135,7 @@ class PlotlyBarChart:
         Returns:
             -
         """
+
         print(".. filling bar_percentages_values now")
 
         # Calculates the percentage amount of questions answered / not answered
@@ -154,10 +161,11 @@ class PlotlyBarChart:
         """Defines the chart title in dependence to sorting method and processed years
 
         Args:
-            list_of_calculated_data (list) : Will be iterated to gain necessary values
+            list_of_calculated_data (list) : Will be accessed to gain necessary values
         Returns:
             -
         """
+
         print(".. defining plot title now")
 
         top_worst_string = list_of_calculated_data[0][1]
@@ -165,6 +173,7 @@ class PlotlyBarChart:
         first_year = list_of_calculated_data[1][0]
         last_year = list_of_calculated_data[len(list_of_calculated_data) - 1][0]
 
+        # Whenever a_question_Answered_Yes_No.py has been executed
         if list_of_calculated_data[0][0] == "q_answered_y_n":
 
             amount_of_questions = list_of_calculated_data[1][1] + list_of_calculated_data[1][2]
@@ -172,21 +181,37 @@ class PlotlyBarChart:
             PlotlyBarChart.chart_title += "Question answering status <br>" + top_worst_string.upper() + \
                                           " " + str(amount_of_questions) + " <br>"
 
-            # Creation arrays here, because i do not trust list sorting
-            PlotlyBarChart.bar_value_description.append(['Not answered'])
-            PlotlyBarChart.bar_value_description.append(['Answered'])
-
+        # Whenever a_question_Tier_Distribution.py has been executed
         elif list_of_calculated_data[0][0] == "q_tier_dist":
 
             PlotlyBarChart.chart_title += "Question tier distribution <br>"
-
-            PlotlyBarChart.bar_value_description.append(['Tier 1'])
-            PlotlyBarChart.bar_value_description.append(['Other tiers'])
 
         else:
             print("could not find parameter")
 
         PlotlyBarChart.chart_title += "[" + str(first_year) + " - " + str(last_year) + "]"
+
+    @staticmethod
+    def fill_bar_description(list_of_calculated_data):
+        """Defines the bar description in dependence to given parameters list_of_calculated_data[0][0]
+
+        Args:
+            list_of_calculated_data (list) : Will be accessed to gain necessary values
+        Returns:
+            -
+        """
+
+        print(".. defining bar description now")
+
+        if list_of_calculated_data[0][0] == "q_answered_y_n":
+            PlotlyBarChart.bar_value_description.append(['Not answered'])
+            PlotlyBarChart.bar_value_description.append(['Answered'])
+
+        elif list_of_calculated_data[0][0] == "q_tier_dist":
+            PlotlyBarChart.bar_value_description.append(['Tier 1'])
+            PlotlyBarChart.bar_value_description.append(['Other tiers'])
+        else:
+            print("could not find parameter")
 
     @staticmethod
     def generate_chart():
