@@ -24,7 +24,7 @@ def check_script_arguments():
     """Checks if enough and correct arguments have been given to run this script adequate
 
     1. It checks in the first instance if enough arguments have been given
-    2. Afterwards it will fill the instance variables ap
+    2. Then necessary variables will be filled with appropriate values
 
     Args:
         -
