@@ -130,7 +130,7 @@ class PlotlyBarChart5Bars:
             -
         """
 
-        print(".. filling 'bar_y_axis_first_values' now")
+        print(".. filling values for the y-axis now now")
 
         # Adds the amount of answered questions to the graph
         for i in range(1, len(list_of_calculated_data)):

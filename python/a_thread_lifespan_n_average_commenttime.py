@@ -108,7 +108,7 @@ def start_data_generation_for_analysis():
             dict_thread_life_span = prepare_data_for_graph_life_span()
 
             data_to_give_plotly.append([
-                year_actually_in_progress,
+                int(year_actually_in_progress),
                 dict_thread_life_span["first"],
                 dict_thread_life_span["second"],
                 dict_thread_life_span["third"],
@@ -118,6 +118,10 @@ def start_data_generation_for_analysis():
 
         # Whenever the average comment reaction time will be calculated
         else:
+
+            # Iterates over every item within the list and adds them to a gobal list..
+            # This is necessary for printing out a global list containing appropriate information about threads, etc.
+            add_thread_list_to_global_list(list_with_currents_year_infos)
 
             # Calculates the average mean comment reaction time of users within that actually processed year
             dict_mean_comment_time = prepare_data_for_comment_time()
@@ -142,6 +146,7 @@ def start_data_generation_for_analysis():
         year_actually_in_progress += 1
 
         # Reinitializes the mongodb with new year parameter here
+        # noinspection PyTypeChecker
         initialize_mongo_db_parameters(year_actually_in_progress)
 
     # Will be entered whenever the last year is beeing processed
@@ -174,6 +179,10 @@ def start_data_generation_for_analysis():
 
         else:
 
+            # Iterates over every item within the list and adds them to a gobal list..
+            # This is necessary for printing out a global list containing appropriate information about threads, etc.
+            add_thread_list_to_global_list(list_with_currents_year_infos)
+
             # Calculates the average mean comment reaction time of users within that actually processed year
             dict_mean_comment_time = prepare_data_for_comment_time()
 
@@ -195,8 +204,6 @@ def start_data_generation_for_analysis():
 
         # Value setting is necessary for correct file writing
         year_actually_in_progress = "ALL"
-
-    print(data_to_give_plotly)
 
     # Writes a global csv file containing information about all threads
     write_csv(global_thread_list)
@@ -309,6 +316,13 @@ def prepare_data_for_graph_life_span():
 
 
 def prepare_data_for_comment_time():
+    """Prepares the average mean comment time per thread
+
+    Args:
+        -
+    Returns:
+        -
+    """
     global temp_time_difference_list, data_to_give_plotly
 
     temp_amount_counter = 0
@@ -533,7 +547,10 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         "id": str(id_of_thread),
 
         # The amount of comments for the iterated thread
-        "thread_num_comments": 0
+        "thread_num_comments": 0,
+
+        # Appends the year, actually in progress
+        "year": year_actually_in_progress
     }
 
     # Iterates over every time stamp and writes it into time_list
@@ -642,6 +659,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
                 # Write the time difference (seconds) between the time the thread has been created and the
                 # time the last comment was created
+                # The substraction method only returns ints and no floats
                 dict_to_be_returned["thread_life_span"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
@@ -656,7 +674,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         # and graph plotting
         temp_time_difference_list.append(time_difference)
 
-        dict_to_be_returned["arithmetic_Mean_Response_Time"] = float(np.mean(time_difference))
+        dict_to_be_returned["arithmetic_Mean_Response_Time"] = int(np.mean(time_difference))
         dict_to_be_returned["median_Response_Time"] = float(np.median(time_difference))
         dict_to_be_returned["thread_num_comments"] = len(time_list)
 
@@ -688,7 +706,7 @@ def write_csv(list_with_information):
                     '_until_' + \
                     str(argument_year_ending) + \
                     '_' + \
-                    str(argument_calculation) + \
+                    "thread_n_comment" + \
                     '_' + \
                     str(year_actually_in_progress) + \
                     '.csv'
@@ -709,7 +727,7 @@ def write_csv(list_with_information):
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_information:
-            temp_list = [str(year_actually_in_progress),
+            temp_list = [str(item.get("year")),
                          str(item.get("id")),
                          str(item.get("thread_ups")),
                          str(item.get("thread_downs")),
