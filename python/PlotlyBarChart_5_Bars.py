@@ -201,12 +201,18 @@ class PlotlyBarChart5Bars:
         last_year = list_of_calculated_data[len(list_of_calculated_data) - 1][0]
 
         # Whenever XXXXXXXXXXXXXXXXXX has been executed
-        if list_of_calculated_data[0][0] == "t_life_span":
+        if list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][1] == "minutes":
+            PlotlyBarChart5Bars.chart_title += "Thread life span in minutes <br>"
 
+        elif list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][2] == "hours":
+            PlotlyBarChart5Bars.chart_title += "Thread life span in hours <br>"
+
+        elif list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][3] == "days":
             PlotlyBarChart5Bars.chart_title += "Thread life span in days <br>"
 
         else:
             print("could not find parameter")
+            PlotlyBarChart5Bars.chart_title += "Error in parsing arguments ... please check again ! <br>"
 
         PlotlyBarChart5Bars.chart_title += "[" + str(first_year) + " - " + str(last_year) + "]"
 
@@ -222,7 +228,21 @@ class PlotlyBarChart5Bars:
 
         print(".. defining bar description now")
 
-        if list_of_calculated_data[0][0] == "t_life_span":
+        if list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][1] == "minutes":
+            PlotlyBarChart5Bars.bar_value_description.append(['0 - 14 minutes'])
+            PlotlyBarChart5Bars.bar_value_description.append(['15 - 29 minutes'])
+            PlotlyBarChart5Bars.bar_value_description.append(['30 - 59 minutes'])
+            PlotlyBarChart5Bars.bar_value_description.append(['60 - 119 minutes'])
+            PlotlyBarChart5Bars.bar_value_description.append(['>= 120 minutes'])
+
+        elif list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][1] == "hours":
+            PlotlyBarChart5Bars.bar_value_description.append(['0 - 1 hours'])
+            PlotlyBarChart5Bars.bar_value_description.append(['2 - 5 hours'])
+            PlotlyBarChart5Bars.bar_value_description.append(['6 - 10 hours'])
+            PlotlyBarChart5Bars.bar_value_description.append(['11 - 23 hours'])
+            PlotlyBarChart5Bars.bar_value_description.append(['>= 24 hours'])
+
+        elif list_of_calculated_data[0][0] == "t_life_span" and list_of_calculated_data[0][1] == "days":
             PlotlyBarChart5Bars.bar_value_description.append(['0 - 1 days'])
             PlotlyBarChart5Bars.bar_value_description.append(['2 - 4 days'])
             PlotlyBarChart5Bars.bar_value_description.append(['5 - 8 days'])

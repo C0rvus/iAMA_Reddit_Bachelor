@@ -9,16 +9,21 @@
 import collections               # Necessary to sort collections alphabetically
 import matplotlib.pyplot as plt  # Necessary to plot graphs with the data calculated
 import sys                       # Necessary to use script arguments
+import os                        # Necessary to get the name of currently processed file
+import csv                       # Necessary to write data to csv files
 import numpy as np               # Necessary for mean calculation
 import datetime                  # Necessary for calculating time differences
+import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient  # Necessary to make use of MongoDB
+# noinspection PyUnresolvedReferences
+from PlotlyBarChart_5_Bars import PlotlyBarChart5Bars
 
 
-def initialize_mongo_db_parameters():
+def initialize_mongo_db_parameters(actually_processed_year):
     """Instantiates all necessary variables for the correct usage of the mongoDB-Client
 
     Args:
-        -
+        actually_processed_year (int) : The year with which parameters the database should be accessed
     Returns:
         -
     """
@@ -29,9 +34,9 @@ def initialize_mongo_db_parameters():
     global mongo_DB_Comments_Instance
 
     mongo_DB_Client_Instance = MongoClient('localhost', 27017)
-    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + argument_year]
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(actually_processed_year)]
     mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
-    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + argument_year]
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
 
 
 def check_script_arguments():
@@ -46,18 +51,258 @@ def check_script_arguments():
         -
     """
 
-    global argument_year, argument_calculation, argument_plot_time_unit
+    global argument_year_beginning, argument_year_ending, argument_calculation, argument_plot_time_unit
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 2:
+    if len(sys.argv) <= 3:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
     else:
         # Writes necessary values into the variables
-        argument_year = str(sys.argv[1])
-        argument_calculation = str(sys.argv[2])
-        argument_plot_time_unit = str(sys.argv[3]).lower()
+        argument_year_beginning = str(sys.argv[1])
+        argument_year_ending = str(sys.argv[2])
+        argument_calculation = str(sys.argv[3])
+        argument_plot_time_unit = str(sys.argv[4]).lower()
+
+
+def start_data_generation_for_analysis():
+    """Starts the data processing by swichting through the years
+
+    1. Triggers the data generation process and moves forward within the years
+        1.1. By moving through the years a csv file will be created for every year
+        1.2. Additionally an interactive chart will be plotted
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, global_thread_list, \
+        list_to_be_plotted
+
+    # Copies the value of the beginning year, because it will be changed due to moving forward within the years
+    year_actually_in_progress = copy.copy(argument_year_beginning)
+
+    # Contains the summary / total amount of all questions for all years..
+    # This is necessary to print out a csv file containing all (!) questions within
+
+    if argument_calculation == "lifespan":
+        data_to_give_plotly.append(["t_life_span", str(argument_plot_time_unit)])
+    else:
+        data_to_give_plotly.append(["ffffuuuu", str(argument_plot_time_unit)])
+
+    # As long as the ending year has not been reached
+    while year_actually_in_progress != argument_year_ending:
+
+        # Starts retrieving and checking that data
+        generate_data_to_be_analyzed()
+
+        # Writes a csv file for the actually processed year
+        # write_csv()
+
+        # Prepares data for graph / chart plotting later on
+        # prepare_data_for_graph()
+
+        # Empty both lists
+        global_thread_list = []
+
+        # Progresses in the year, necessary for onward year calculation
+        year_actually_in_progress += 1
+
+        # Reinitializes the mongodb with new year parameter here
+        initialize_mongo_db_parameters(int(year_actually_in_progress))
+
+    # Will be entered whenever the last year is beeing processed
+    if year_actually_in_progress == argument_year_ending:
+
+        # Starts retrieving and checking that data
+        generate_data_to_be_analyzed()
+
+        # Writes a csv file for the actually processed year
+        write_csv(list_to_be_plotted)
+
+        add_thread_list_to_global_list(list_to_be_plotted)
+
+        # Prepares data for graph / chart plotting later on
+        dict_thread_life_span = prepare_data_for_graph_life_span()
+
+        data_to_give_plotly.append([
+            int(year_actually_in_progress),
+            dict_thread_life_span["first"],
+            dict_thread_life_span["second"],
+            dict_thread_life_span["third"],
+            dict_thread_life_span["fourth"],
+            dict_thread_life_span["fifth"],
+        ])
+
+        list_to_be_plotted = []
+
+        # Value setting is necessary for correct file writing
+        year_actually_in_progress = "ALL"
+
+    print(data_to_give_plotly)
+
+    # Writes a global csv file containing information about all threads
+    write_csv(global_thread_list)
+
+    # Plots the graph
+    plot_generated_data()
+
+
+def prepare_data_for_graph_life_span():
+    global data_to_give_plotly
+
+    dict_time_amount_counter = {
+        "first": 0,
+        "second": 0,
+        "third": 0,
+        "fourth": 0,
+        "fifth": 0
+    }
+
+    # minutes
+    if argument_plot_time_unit == "minutes":
+        divider = 60
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_to_be_plotted):
+
+            value = val.get("thread_life_span")
+
+            if (value / divider) <= 14:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 14) \
+                    and ((value / 60) <= 29):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 29) \
+                    and ((value / 60) <= 59):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 59) \
+                    and ((value / 60) <= 119):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 120:
+                dict_time_amount_counter["fifth"] += 1
+
+    # hours
+    elif argument_plot_time_unit == "hours":
+        divider = 3600
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_to_be_plotted):
+
+            value = val.get("thread_life_span")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) \
+                    and ((value / divider) <= 5):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 5) \
+                    and ((value / divider) <= 10):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 10) \
+                    and ((value / divider) <= 23):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 24:
+                dict_time_amount_counter["fifth"] += 1
+
+    # days
+    else:
+        divider = 86400
+
+        # Iterates over every element and checks if that value is between some given values
+        for i, val in enumerate(list_to_be_plotted):
+
+            value = val.get("thread_life_span")
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) and \
+                    ((value / divider) <= 4):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 4) and \
+                    ((value / divider) <= 8):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 8) and \
+                    ((value / divider) <= 13):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 14:
+                dict_time_amount_counter["fifth"] += 1
+
+    print(dict_time_amount_counter)
+    return dict_time_amount_counter
+
+
+def generate_data_to_be_analyzed():
+    """Generates the data which will be analyzed
+
+    1. This method iterates over every thread
+        1.1. It filters if that iterated thread is an iAMA-request or not
+            1.1.1. If yes: this thread gets skipped and the next one will be processed
+            1.1.2. If no: this thread will be processed
+    2. If the thread gets processed it will receive the life span and other information about the thread as dictionary
+    3. This dictionary will be added to a global list and will be plotted later on
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    print("Generating data for year " + str(year_actually_in_progress) + " now...")
+
+    # noinspection PyTypeChecker
+    for j, val in enumerate(mongo_DB_Thread_Collection):
+
+        # Skips the system.indexes-table which is automatically created by  mongodb itself
+        if not val == "system.indexes":
+            # References the actual iterated thread
+            temp_thread = mongo_DB_Threads_Instance[val]
+
+            # Gets the creation date of that iterated thread
+            temp_thread_creation_time = temp_thread.find()[0].get("created_utc")
+
+            # Gets the title of that iterated thread
+            temp_thread_title = temp_thread.find()[0].get("title")
+
+            # Removes iAMA-Requests out of our selection
+            if "request" in temp_thread_title.lower() \
+                    and "as requested" not in temp_thread_title.lower() \
+                    and "by request" not in temp_thread_title.lower() \
+                    and "per request" not in temp_thread_title.lower() \
+                    and "request response" not in temp_thread_title.lower():
+                # Continue skips processing of those elements which are requests here
+                continue
+
+            # Will contain information about time calculation methods
+            returned_dict = calculate_time_difference(val, temp_thread_creation_time)
+
+            # Whenever the thread has only one comment, or null comments, or is somehow faulty it won't be added
+            # to the global list which is to be plotted later on
+            if returned_dict.get("median_Response_Time") == 0 \
+                    or returned_dict.get("first_Comment_After_Thread_Started") == 0 \
+                    or returned_dict.get("thread_life_span") == 0 \
+                    or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
+
+                continue
+
+            else:
+                # Add that analyzed data dictionary to the global list which will be plotted later on
+                list_to_be_plotted.append(returned_dict)
 
 
 def calculate_time_difference(id_of_thread, creation_date_of_thread):
@@ -67,7 +312,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     2. Then the comments will be iterated over, creating a dictionary which is structured as follows:
       {
           ('first_Comment_After_Thread_Started', int),
-          ('thread_Lifespan', int),
+          ('thread_life_span', int),
           ('arithmetic_Mean_Response_Time', int),
           ('median_Response_Time', int),
           ('id')
@@ -89,6 +334,10 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
     comments_cursor = comments_collection.find()
 
+    temp_thread = mongo_DB_Threads_Instance[id_of_thread]
+    temp_thread_ups = temp_thread.find()[0].get("ups")
+    temp_thread_downs = temp_thread.find()[0].get("downs")
+
     # Contains the creation date of every comment in epoch time format
     time_list = []
 
@@ -105,7 +354,13 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         "first_Comment_After_Thread_Started": 0,
 
         # The difference between thread creation date and the timestamp of the last comment -> live span
-        "thread_Lifespan": 0,
+        "thread_life_span": 0,
+
+        # The amount of upvotes a thread received
+        "thread_ups": temp_thread_ups,
+
+        # The amount of downvotes a thread received
+        "thread_downs": temp_thread_downs,
 
         # The arithmetic mean response time between the comments
         "arithmetic_Mean_Response_Time": 0,
@@ -118,7 +373,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         "id": str(id_of_thread),
 
         # The amount of comments for the iterated thread
-        "thread_Num_Comments": 0
+        "thread_num_comments": 0
     }
 
     # Iterates over every time stamp and writes it into time_list
@@ -176,7 +431,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 time_difference.append(
                     (current_time_converted_for_subtraction - temp_thread_time).total_seconds())
 
-                dict_to_be_returned["thread_Lifespan"] = int(
+                dict_to_be_returned["thread_life_span"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
             # Whenever the last list object is iterated over skip anything because there will be no future object
@@ -227,7 +482,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
                 # Write the time difference (seconds) between the time the thread has been created and the
                 # time the last comment was created
-                dict_to_be_returned["thread_Lifespan"] = int(
+                dict_to_be_returned["thread_life_span"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
     # Whenever not a single comment was null.. concrete: Whenever everything is normal and the thread contains answers
@@ -239,7 +494,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
         dict_to_be_returned["arithmetic_Mean_Response_Time"] = float(np.mean(time_difference))
         dict_to_be_returned["median_Response_Time"] = float(np.median(time_difference))
-        dict_to_be_returned["thread_Num_Comments"] = len(time_list)
+        dict_to_be_returned["thread_num_comments"] = len(time_list)
 
         # Sorts that dictionary so the dictionary structure is standardized
         dict_to_be_returned = collections.OrderedDict(sorted(dict_to_be_returned.items()))
@@ -248,181 +503,75 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     return dict_to_be_returned
 
 
-def generate_data_to_be_analyzed():
-    """Generates the data which will be analyzed
+def write_csv(list_with_information):
+    """Creates a csv file containing all necessary information and calculates the amount of unanswered questions
 
-    1. This method iterates over every thread
-        1.1. It filters if that iterated thread is an iAMA-request or not
-            1.1.1. If yes: this thread gets skipped and the next one will be processed
-            1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive the life span and other information about the thread as dictionary
-    3. This dictionary will be added to a global list and will be plotted later on
+    1. This method iterates over the top / worst X comments
+        1.1. By iterating: all necessary information will be written into the csv file
+        1.2. By iterating: the amount of unanswered questions will be counted
+    2. After iterating the amount of unanswered questions will be returned, which is necessary for graph plotting
 
     Args:
-        -
+        list_with_information (list) : Contains various information about thread and comment time
     Returns:
         -
     """
+    global global_thread_list
 
-    print("Generating data now...")
+    print("---- Writing csv containing all thread life spans for year " + str(year_actually_in_progress) + " now")
+    # Empty print line here for a more beautiful console output
+    print("")
 
-    # noinspection PyTypeChecker
-    for j, val in enumerate(mongo_DB_Thread_Collection):
+    file_name_csv = str(os.path.basename(__file__))[0:len(os.path.basename(__file__)) - 3] + \
+                    '_' + \
+                    str(argument_year_beginning) + \
+                    '_until_' + \
+                    str(argument_year_ending) + \
+                    '_' + \
+                    str(argument_calculation) + \
+                    '_' + \
+                    str(year_actually_in_progress) + \
+                    '.csv'
 
-        # Skips the system.indexes-table which is automatically created by  mongodb itself
-        if not val == "system.indexes":
-            # References the actual iterated thread
-            temp_thread = mongo_DB_Threads_Instance[val]
+    with open(file_name_csv, 'w', newline='') as fp:
+        csv_writer = csv.writer(fp, delimiter=',')
 
-            # Gets the creation date of that iterated thread
-            temp_thread_creation_time = temp_thread.find()[0].get("created_utc")
+        if argument_calculation == "lifespan":
 
-            # Gets the title of that iterated thread
-            temp_thread_title = temp_thread.find()[0].get("title")
+            # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
+            data = [['sep=,'],
+                    ['Year',
+                     'Thread id',
+                     'Thread ups',
+                     'Thread downs',
+                     'Thread comments',
+                     'Thread life span (sec)',
+                     'Link to Thread']]
 
-            # Removes iAMA-Requests out of our selection
-            if "request" in temp_thread_title.lower() \
-                    and "as requested" not in temp_thread_title.lower() \
-                    and "by request" not in temp_thread_title.lower() \
-                    and "per request" not in temp_thread_title.lower() \
-                    and "request response" not in temp_thread_title.lower():
-                # Continue skips processing of those elements which are requests here
-                continue
+            # Iterates over that generated sorted and counts the amount of questions which have not been answered
+            for item in list_with_information:
+                temp_list = [str(year_actually_in_progress),
+                             str(item.get("id")),
+                             str(item.get("thread_ups")),
+                             str(item.get("thread_downs")),
+                             str(item.get("thread_num_comments")),
+                             str(item.get("thread_life_span")),
+                             'https://www.reddit.com/r/IAma/' + str(item.get("id"))
+                             ]
+                data.append(temp_list)
 
-            # Will contain information about time calculation methods
-            returned_dict = calculate_time_difference(val, temp_thread_creation_time)
+        else:
+            print("nothing defined here yet")
 
-            # Whenever the thread has only one comment, or null comments, or is somehow faulty it won't be added
-            # to the global list which is to be plotted later on
-            if returned_dict.get("median_Response_Time") == 0 \
-                    or returned_dict.get("first_Comment_After_Thread_Started") == 0 \
-                    or returned_dict.get("thread_Lifespan") == 0 \
-                    or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
-
-                continue
-
-            else:
-                # Add that analyzed data dictionary to the global list which will be plotted later on
-                list_To_Be_Plotted.append(returned_dict)
+        # Writes data into the csv file
+        csv_writer.writerows(data)
 
 
-def prepare_dict_by_time_separation_for_life_span():
-    """Restructures the dictionary which is to be plotted for the display of the life span
+def add_thread_list_to_global_list(list_to_append):
+    global global_thread_list
 
-    1. This method processes the data in dependence of the commited time
-
-    Args:
-        -
-    Returns:
-        -
-    """
-
-    # noinspection PyUnusedLocal
-    divider = 0
-
-    dict_time_amount_counter = {
-        "first": 0,
-        "second": 0,
-        "third": 0,
-        "fourth": 0,
-        "fifth": 0,
-        "sixth": 0
-    }
-
-    # minutes
-    if argument_plot_time_unit == "minutes":
-        divider = 60
-
-        # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
-
-            value = val.get("thread_Lifespan")
-
-            if (value / divider) <= 1:
-                dict_time_amount_counter["first"] += 1
-
-            elif ((value / divider) > 1)\
-                    and ((value / 60) <= 5):
-                dict_time_amount_counter["second"] += 1
-
-            elif ((value / divider) > 5)\
-                    and ((value / 60) <= 10):
-                dict_time_amount_counter["third"] += 1
-
-            elif ((value / divider) > 10)\
-                    and ((value / 60) <= 15):
-                dict_time_amount_counter["fourth"] += 1
-
-            elif ((value / divider) > 15)\
-                    and ((value / 60) <= 30):
-                dict_time_amount_counter["fifth"] += 1
-
-            elif (value / divider) > 30:
-                dict_time_amount_counter["sixth"] += 1
-
-    # hours
-    elif argument_plot_time_unit == "hours":
-        divider = 3600
-
-        # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
-
-            value = val.get("thread_Lifespan")
-
-            if (value / divider) <= 1:
-                dict_time_amount_counter["first"] += 1
-
-            elif ((value / divider) > 1)\
-                    and ((val.get("thread_Lifespan") / divider) <= 6):
-                dict_time_amount_counter["second"] += 1
-
-            elif ((value / divider) > 6)\
-                    and ((value / divider) <= 12):
-                dict_time_amount_counter["third"] += 1
-
-            elif ((value / divider) > 12)\
-                    and ((value / divider) <= 24):
-                dict_time_amount_counter["fourth"] += 1
-
-            elif ((value / divider) > 24)\
-                    and ((value / divider) <= 48):
-                dict_time_amount_counter["fifth"] += 1
-
-            elif (value / divider) > 48:
-                dict_time_amount_counter["sixth"] += 1
-
-    # days
-    else:
-        divider = 86400
-
-        # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
-
-            value = val.get("thread_Lifespan")
-
-            if (value / divider) <= 1:
-                dict_time_amount_counter["first"] += 1
-
-            elif ((value / divider) > 1) and \
-                    ((value / divider) <= 3):
-                dict_time_amount_counter["second"] += 1
-
-            elif ((value / divider) > 3) and \
-                    ((value / divider) <= 7):
-                dict_time_amount_counter["third"] += 1
-
-            elif ((value / divider) > 7) and \
-                    ((value / divider) <= 14):
-                dict_time_amount_counter["fourth"] += 1
-
-            elif (value / divider) > 14 and \
-                    ((value / divider) <= 28):
-                dict_time_amount_counter["fifth"] += 1
-
-            elif (value / divider) > 28:
-                dict_time_amount_counter["sixth"] += 1
-
-    return dict_time_amount_counter
+    for item in list_to_append:
+        global_thread_list.append(item)
 
 
 def prepare_dict_by_time_separation_for_comment_time():
@@ -454,26 +603,26 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 60
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
+        for i, val in enumerate(list_to_be_plotted):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
 
-            elif ((value / divider) > 1)\
+            elif ((value / divider) > 1) \
                     and ((value / 60) <= 5):
                 dict_time_amount_counter["second"] += 1
 
-            elif ((value / divider) > 5)\
+            elif ((value / divider) > 5) \
                     and ((value / 60) <= 10):
                 dict_time_amount_counter["third"] += 1
 
-            elif ((value / divider) > 10)\
+            elif ((value / divider) > 10) \
                     and ((value / 60) <= 15):
                 dict_time_amount_counter["fourth"] += 1
 
-            elif ((value / divider) > 15)\
+            elif ((value / divider) > 15) \
                     and ((value / 60) <= 30):
                 dict_time_amount_counter["fifth"] += 1
 
@@ -485,26 +634,26 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 3600
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
+        for i, val in enumerate(list_to_be_plotted):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
 
-            elif ((value / divider) > 1)\
+            elif ((value / divider) > 1) \
                     and ((value / divider) <= 6):
                 dict_time_amount_counter["second"] += 1
 
-            elif ((value / divider) > 6)\
+            elif ((value / divider) > 6) \
                     and ((value / divider) <= 12):
                 dict_time_amount_counter["third"] += 1
 
-            elif ((value / divider) > 12)\
+            elif ((value / divider) > 12) \
                     and ((value / divider) <= 24):
                 dict_time_amount_counter["fourth"] += 1
 
-            elif ((value / divider) > 24)\
+            elif ((value / divider) > 24) \
                     and ((value / divider) <= 48):
                 dict_time_amount_counter["fifth"] += 1
 
@@ -516,7 +665,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 86400
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_To_Be_Plotted):
+        for i, val in enumerate(list_to_be_plotted):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
@@ -545,12 +694,10 @@ def prepare_dict_by_time_separation_for_comment_time():
     return dict_time_amount_counter
 
 
-def plot_the_generated_data():
+def plot_generated_data():
     """Plots the data which is to be generated
 
-    1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
-    2. Depending on the committed year the title will be adapted appropriate
-    3. Time units will be separated into days, because this gives us the best overview
+    1. This method plots the data which has been calculated before by using Pltoly-Framework within a self written class
 
     Args:
         -
@@ -558,120 +705,23 @@ def plot_the_generated_data():
         -
     """
 
-    # noinspection PyUnusedLocal
-    labels = []
-    plot_title = ""
+    PlotlyBarChart5Bars().main_method(data_to_give_plotly)
 
-    # noinspection PyUnusedLocal
-    dict_to_be_used = {}
-
-    if argument_calculation == "lifespan":
-        # The dictionary which is necessary to count the amount of response times
-        dict_to_be_used = prepare_dict_by_time_separation_for_life_span()
-
-        plot_title += 'iAMA ' +\
-                      argument_year +\
-                      '- Ø Lebensspanne eines Threads in '
-    else:
-        dict_to_be_used = prepare_dict_by_time_separation_for_comment_time()
-
-        plot_title += 'iAMA ' + \
-                      argument_year + \
-                      '- Verteilung Ø Antwortzeit per Thread in '
-
-    if argument_plot_time_unit == "minutes":
-        plot_title += "Minuten"
-        labels = [
-            '0 bis 1 min',
-            '1 bis 5 min',
-            '5 bis 10 min',
-            '10 bis 15 min',
-            '15 bis 30 min',
-            '> 30 min'
-        ]
-
-    elif argument_plot_time_unit == "hours":
-        plot_title += "Stunden"
-        labels = [
-            '0 bis 1 h',
-            '1 bis 6 h',
-            '6 bis 12 h',
-            '12 bis 24 h',
-            '24 bis 48 h',
-            '> 48 h'
-        ]
-
-    else:
-        plot_title += "Tagen"
-        labels = [
-            '0 bis 1 d',
-            '1 bis 3 d',
-            '3 bis 7 d',
-            '7 bis 14 d',
-            '14 bis 28 d',
-            '> 28 d'
-        ]
-
-    plt.figure()
-
-    # Contains the colors, used for the plot
-    colors = [
-        'yellowgreen',
-        'gold',
-        'lightskyblue',
-        'lightcoral',
-        'mediumpurple',
-        'orange',
-    ]
-
-    # Contains the values, used for the plot
-    values = [
-        dict_to_be_used['first'],
-        dict_to_be_used['second'],
-        dict_to_be_used['third'],
-        dict_to_be_used['fourth'],
-        dict_to_be_used['fifth'],
-        dict_to_be_used['sixth']
-    ]
-
-    # Defines the way the patches and texts will be printed
-    patches, texts = plt.pie(
-        values,
-        colors=colors,
-        startangle=90,
-        shadow=True
-    )
-
-    # Defines the design of the plots legend
-    plt.pie(
-        values,
-        colors=colors,
-        autopct='%.2f%%'
-    )
-
-    # Defines the design of the plots legend
-    plt.legend(
-        patches,
-        labels,
-        loc="upper right"
-    )
-
-    plt.title(plot_title)
-
-    # Set aspect ratio to be equal so that pie is drawn as a circle.
-    plt.axis('equal')
-    plt.tight_layout()
-
-    plt.show()
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
-argument_year = ""
+argument_year_beginning = 0
 
 # Contains information what data you want to be calculated
 argument_calculation = ""
+
+# Contains the year which is given as an argument
+argument_year_ending = 0
+
+# Contains the year which will be processed at the moment
+year_actually_in_progress = 0
 
 # Contains the time unit in which the graphs will be plotted later on
 argument_plot_time_unit = ""
@@ -688,8 +738,24 @@ mongo_DB_Thread_Collection = None
 # The data base instance for the comments
 mongo_DB_Comments_Instance = None
 
+# Contains all questions of the actually processed year
+global_thread_list = []
+
 # Will contain all analyzed time information for threads & comments
-list_To_Be_Plotted = []
+list_to_be_plotted = []
+
+
+# Contains the data which are necessary for plotly
+# <editor-fold desc="Description of data object plotly needs">
+# Structure as follows:
+# [ "analyze_type", "analyze_setting"}, [year, tier 1, other tier], [year, tier 1, other tier], ... ]
+# i.e. [["q_tier_dist", None],
+#       [2009, 900, 1536],
+#       [2010, 500, 500],
+#       [2011, 300, 700]
+#       ]
+# </editor-fold>
+data_to_give_plotly = []
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Methods which are to be called are here
 
@@ -698,10 +764,7 @@ list_To_Be_Plotted = []
 check_script_arguments()
 
 # Initializes the mongoDB with the arguments given via command line
-initialize_mongo_db_parameters()
+initialize_mongo_db_parameters(argument_year_beginning)
 
-# Generates the data which will be plotted later on
-generate_data_to_be_analyzed()
-
-# Plots the data wich has been calculated before
-plot_the_generated_data()
+# Starts the data generation process, writes csv files and plots that processed data
+start_data_generation_for_analysis()
