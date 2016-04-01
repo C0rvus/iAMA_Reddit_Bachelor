@@ -218,10 +218,27 @@ class PlotlyBarChart5Bars:
         elif list_of_calculated_data[0][0] == "t_comment_time" and list_of_calculated_data[0][1] == "days":
             PlotlyBarChart5Bars.chart_title += "Average comment reaction time in days <br>"
 
+        elif list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][1] == "minutes":
+            PlotlyBarChart5Bars.chart_title += "Average comment reaction time of iAMA host in minutes <br>"
+
+        elif list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][1] == "hours":
+            PlotlyBarChart5Bars.chart_title += "Average comment reaction time of iAMA host in hours <br>"
+
+        elif list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][1] == "days":
+            PlotlyBarChart5Bars.chart_title += "Average comment reaction time of iAMA host in days <br>"
 
         else:
             print("could not find parameter")
             PlotlyBarChart5Bars.chart_title += "Error in parsing arguments ... please check again ! <br>"
+
+        if list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][2] == "1":
+            PlotlyBarChart5Bars.chart_title += "on tier 1 <br>"
+
+        elif list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][2] == "x":
+            PlotlyBarChart5Bars.chart_title += "on any tier except tier 1 <br>"
+
+        elif list_of_calculated_data[0][0] == "t_iama_comment_time" and list_of_calculated_data[0][2] == "any":
+            PlotlyBarChart5Bars.chart_title += "on all tiers <br>"
 
         PlotlyBarChart5Bars.chart_title += "[" + str(first_year) + " - " + str(last_year) + "]"
 
@@ -237,7 +254,9 @@ class PlotlyBarChart5Bars:
 
         print(".. defining bar description now")
 
-        if (list_of_calculated_data[0][0] == "t_life_span" or list_of_calculated_data[0][0] == "t_comment_time") and \
+        if (list_of_calculated_data[0][0] == "t_life_span" or
+                    list_of_calculated_data[0][0] == "t_comment_time" or
+                    list_of_calculated_data[0][0] == "t_iama_comment_time") and \
                         list_of_calculated_data[0][1] == "minutes":
             PlotlyBarChart5Bars.bar_value_description.append(['0 - 14 minutes'])
             PlotlyBarChart5Bars.bar_value_description.append(['15 - 29 minutes'])
@@ -245,7 +264,9 @@ class PlotlyBarChart5Bars:
             PlotlyBarChart5Bars.bar_value_description.append(['60 - 119 minutes'])
             PlotlyBarChart5Bars.bar_value_description.append(['>= 120 minutes'])
 
-        elif (list_of_calculated_data[0][0] == "t_life_span" or list_of_calculated_data[0][0] == "t_comment_time") and \
+        elif (list_of_calculated_data[0][0] == "t_life_span" or
+                      list_of_calculated_data[0][0] == "t_comment_time" or
+                      list_of_calculated_data[0][0] == "t_iama_comment_time") and \
                         list_of_calculated_data[0][1] == "hours":
             PlotlyBarChart5Bars.bar_value_description.append(['0 - 1 hours'])
             PlotlyBarChart5Bars.bar_value_description.append(['2 - 5 hours'])
@@ -253,7 +274,9 @@ class PlotlyBarChart5Bars:
             PlotlyBarChart5Bars.bar_value_description.append(['11 - 23 hours'])
             PlotlyBarChart5Bars.bar_value_description.append(['>= 24 hours'])
 
-        elif (list_of_calculated_data[0][0] == "t_life_span" or list_of_calculated_data[0][0] == "t_comment_time") and \
+        elif (list_of_calculated_data[0][0] == "t_life_span" or
+                      list_of_calculated_data[0][0] == "t_comment_time" or
+                      list_of_calculated_data[0][0] == "t_iama_comment_time") and \
                         list_of_calculated_data[0][1] == "days":
             PlotlyBarChart5Bars.bar_value_description.append(['0 - 1 days'])
             PlotlyBarChart5Bars.bar_value_description.append(['2 - 4 days'])
