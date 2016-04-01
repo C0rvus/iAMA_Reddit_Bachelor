@@ -89,6 +89,10 @@ def start_data_generation_for_analysis():
 
         year_actually_in_progress += 1
 
+        # Reinitializes the mongodb with new year parameter here
+        # noinspection PyTypeChecker
+        initialize_mongo_db_parameters(year_actually_in_progress)
+
     # Will be entered whenever the last year is beeing processed
     if year_actually_in_progress == argument_year_ending:
 
@@ -116,6 +120,8 @@ def start_data_generation_for_analysis():
 
     # Writes a global csv file containing information about all threads
     write_csv_data(global_thread_list)
+
+    print(data_to_give_plotly)
 
     # Plots the graph
     plot_generated_data()
