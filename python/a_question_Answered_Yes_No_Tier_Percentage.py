@@ -507,7 +507,8 @@ def prepare_data_for_graph():
                 amount_of_unanswered_questions += 1
 
     # Appends the information for the year to the global list
-    data_to_give_plotly.append([year_actually_in_progress, amount_of_answered_questions, amount_of_unanswered_questions])
+    data_to_give_plotly.append(
+        [year_actually_in_progress, amount_of_answered_questions, amount_of_unanswered_questions])
 
 
 def plot_generated_data():
