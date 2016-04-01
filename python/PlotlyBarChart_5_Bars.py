@@ -20,18 +20,23 @@ class PlotlyBarChart5Bars:
         -
     """
 
+    # Color for the 1st bar
     color_1 = 'rgba(255, 114, 86, 1.0)'
     color_1_border = 'rgba(238, 106, 80, 1.0)'
 
+    # Color for the 2nd bar
     color_2 = 'rgba(238, 118, 0, 1.0)'
     color_2_border = 'rgba(205, 102, 0, 1.0)'
 
+    # Color for the 3rd bar
     color_3 = 'rgba(0, 201, 87, 1.0)'
     color_3_border = 'rgba(0, 139, 0, 1.0)'
 
+    # Color for the 4th bar
     color_4 = 'rgba(0, 205, 205, 1.0)'
     color_4_border = 'rgba(0, 139, 139, 1.0)'
 
+    # Color for the 5th bar
     color_5 = 'rgba(137, 104, 205, 1.0)'
     color_5_border = 'rgba(39, 71, 139, 1.0)'
 
@@ -54,13 +59,14 @@ class PlotlyBarChart5Bars:
     bar_y_axis_fourth_values = []
     bar_y_axis_fifth_values = []
 
-    # i.e. (answered / unanswered questions || amount of questions on tier 1 / any)
+    # Contains percentages distribution information for every bar chart
     bar_percentages_values_1 = []
     bar_percentages_values_2 = []
     bar_percentages_values_3 = []
     bar_percentages_values_4 = []
     bar_percentages_values_5 = []
 
+    # Annotations to be hard printed into the layout (contain the previously defined bar_percentage_information)
     annotations_1 = []
     annotations_2 = []
     annotations_3 = []
@@ -83,12 +89,15 @@ class PlotlyBarChart5Bars:
         """Sequential fills the necessary varibales for the graph
         Structure of list_of_calculated_data:
 
-        [ "sorting", [year, answered, unanswered], [year, answered, unanswered], ... ]
-        i.e. ["top",
-              [2009, 900, 1536],
-              [2010, 500, 500],
-              [2011, 300, 700]
-              ]
+        [ ["data_type", "data_minute_separation"],
+            [year, values 1st time separation, values 2nd time separation,
+             values 3rd time separation, values 4th time separation, values 5th time separation]]
+
+        i.e. [["t_life_span", "minutes"],
+                    [2009, 1, 2, 3, 4, 5],
+                    [2010, 6, 7, 2, 3, 4],
+                    [2011, 16, 3, 9, 0, 1]
+                    ]
 
         Args:
             list_of_calculated_data (list): Contains sorting method, and the years data
@@ -254,6 +263,14 @@ class PlotlyBarChart5Bars:
 
     @staticmethod
     def fill_bar_annotations():
+        """Defines annotations (percentage values) which will be hardcoded into the layout, to show percentage
+         distribution of the values
+
+         Args:
+             -
+         Returns:
+             -
+         """
 
         PlotlyBarChart5Bars.annotations_1 = [dict(
             x=x - 0.325,

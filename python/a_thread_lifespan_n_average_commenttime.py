@@ -7,7 +7,6 @@
 #       http://www.programiz.com/python-programming/break-continue
 
 import collections               # Necessary to sort collections alphabetically
-import matplotlib.pyplot as plt  # Necessary to plot graphs with the data calculated
 import sys                       # Necessary to use script arguments
 import os                        # Necessary to get the name of currently processed file
 import csv                       # Necessary to write data to csv files
@@ -60,8 +59,8 @@ def check_script_arguments():
         sys.exit()
     else:
         # Writes necessary values into the variables
-        argument_year_beginning = str(sys.argv[1])
-        argument_year_ending = str(sys.argv[2])
+        argument_year_beginning = int(sys.argv[1])
+        argument_year_ending = int(sys.argv[2])
         argument_calculation = str(sys.argv[3])
         argument_plot_time_unit = str(sys.argv[4]).lower()
 
@@ -80,13 +79,10 @@ def start_data_generation_for_analysis():
     """
 
     global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, global_thread_list, \
-        list_to_be_plotted
+        list_with_currents_year_infos
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     year_actually_in_progress = copy.copy(argument_year_beginning)
-
-    # Contains the summary / total amount of all questions for all years..
-    # This is necessary to print out a csv file containing all (!) questions within
 
     if argument_calculation == "lifespan":
         data_to_give_plotly.append(["t_life_span", str(argument_plot_time_unit)])
@@ -100,19 +96,32 @@ def start_data_generation_for_analysis():
         generate_data_to_be_analyzed()
 
         # Writes a csv file for the actually processed year
-        # write_csv()
+        write_csv(list_with_currents_year_infos)
+
+        # Iterates over every item within the list and adds them to a gobal list..
+        # This is necessary for printing out a global list containing appropriate information about threads, etc.
+        add_thread_list_to_global_list(list_with_currents_year_infos)
 
         # Prepares data for graph / chart plotting later on
-        # prepare_data_for_graph()
+        dict_thread_life_span = prepare_data_for_graph_life_span()
 
-        # Empty both lists
-        global_thread_list = []
+        data_to_give_plotly.append([
+            year_actually_in_progress,
+            dict_thread_life_span["first"],
+            dict_thread_life_span["second"],
+            dict_thread_life_span["third"],
+            dict_thread_life_span["fourth"],
+            dict_thread_life_span["fifth"],
+        ])
+
+        # Empty that list, so new values have room
+        list_with_currents_year_infos = []
 
         # Progresses in the year, necessary for onward year calculation
         year_actually_in_progress += 1
 
         # Reinitializes the mongodb with new year parameter here
-        initialize_mongo_db_parameters(int(year_actually_in_progress))
+        initialize_mongo_db_parameters(year_actually_in_progress)
 
     # Will be entered whenever the last year is beeing processed
     if year_actually_in_progress == argument_year_ending:
@@ -121,9 +130,11 @@ def start_data_generation_for_analysis():
         generate_data_to_be_analyzed()
 
         # Writes a csv file for the actually processed year
-        write_csv(list_to_be_plotted)
+        write_csv(list_with_currents_year_infos)
 
-        add_thread_list_to_global_list(list_to_be_plotted)
+        # Iterates over every item within the list and adds them to a gobal list..
+        # This is necessary for printing out a global list containing appropriate information about threads, etc.
+        add_thread_list_to_global_list(list_with_currents_year_infos)
 
         # Prepares data for graph / chart plotting later on
         dict_thread_life_span = prepare_data_for_graph_life_span()
@@ -137,7 +148,8 @@ def start_data_generation_for_analysis():
             dict_thread_life_span["fifth"],
         ])
 
-        list_to_be_plotted = []
+        # Empty that list, so new values have room
+        list_with_currents_year_infos = []
 
         # Value setting is necessary for correct file writing
         year_actually_in_progress = "ALL"
@@ -152,6 +164,14 @@ def start_data_generation_for_analysis():
 
 
 def prepare_data_for_graph_life_span():
+    """Calculates the distribution of single values regarding the chosen time argument
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
     global data_to_give_plotly
 
     dict_time_amount_counter = {
@@ -162,12 +182,12 @@ def prepare_data_for_graph_life_span():
         "fifth": 0
     }
 
-    # minutes
+    # Minutes
     if argument_plot_time_unit == "minutes":
         divider = 60
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("thread_life_span")
 
@@ -189,12 +209,12 @@ def prepare_data_for_graph_life_span():
             elif (value / divider) >= 120:
                 dict_time_amount_counter["fifth"] += 1
 
-    # hours
+    # Hours
     elif argument_plot_time_unit == "hours":
         divider = 3600
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("thread_life_span")
 
@@ -216,12 +236,12 @@ def prepare_data_for_graph_life_span():
             elif (value / divider) >= 24:
                 dict_time_amount_counter["fifth"] += 1
 
-    # days
+    # Days
     else:
         divider = 86400
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("thread_life_span")
 
@@ -243,7 +263,6 @@ def prepare_data_for_graph_life_span():
             elif (value / divider) >= 14:
                 dict_time_amount_counter["fifth"] += 1
 
-    print(dict_time_amount_counter)
     return dict_time_amount_counter
 
 
@@ -302,7 +321,7 @@ def generate_data_to_be_analyzed():
 
             else:
                 # Add that analyzed data dictionary to the global list which will be plotted later on
-                list_to_be_plotted.append(returned_dict)
+                list_with_currents_year_infos.append(returned_dict)
 
 
 def calculate_time_difference(id_of_thread, creation_date_of_thread):
@@ -504,12 +523,8 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
 
 
 def write_csv(list_with_information):
-    """Creates a csv file containing all necessary information and calculates the amount of unanswered questions
-
-    1. This method iterates over the top / worst X comments
-        1.1. By iterating: all necessary information will be written into the csv file
-        1.2. By iterating: the amount of unanswered questions will be counted
-    2. After iterating the amount of unanswered questions will be returned, which is necessary for graph plotting
+    """Creates a csv file containing all necessary information about the life span of a thread and various information
+        about comments
 
     Args:
         list_with_information (list) : Contains various information about thread and comment time
@@ -535,6 +550,8 @@ def write_csv(list_with_information):
 
     with open(file_name_csv, 'w', newline='') as fp:
         csv_writer = csv.writer(fp, delimiter=',')
+
+        data = []
 
         if argument_calculation == "lifespan":
 
@@ -603,7 +620,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 60
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
@@ -634,7 +651,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 3600
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
@@ -665,7 +682,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         divider = 86400
 
         # Iterates over every element and checks if that value is between some given values
-        for i, val in enumerate(list_to_be_plotted):
+        for i, val in enumerate(list_with_currents_year_infos):
 
             value = val.get("arithmetic_Mean_Response_Time")
 
@@ -707,8 +724,6 @@ def plot_generated_data():
 
     PlotlyBarChart5Bars().main_method(data_to_give_plotly)
 
-
-
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
@@ -742,17 +757,19 @@ mongo_DB_Comments_Instance = None
 global_thread_list = []
 
 # Will contain all analyzed time information for threads & comments
-list_to_be_plotted = []
+list_with_currents_year_infos = []
 
 
 # Contains the data which are necessary for plotly
 # <editor-fold desc="Description of data object plotly needs">
 # Structure as follows:
-# [ "analyze_type", "analyze_setting"}, [year, tier 1, other tier], [year, tier 1, other tier], ... ]
-# i.e. [["q_tier_dist", None],
-#       [2009, 900, 1536],
-#       [2010, 500, 500],
-#       [2011, 300, 700]
+# [ "analyze_type", "analyze_time_setting"},
+#  [year, first values, second values, third values, fourth values, fifth values],
+#  ... ]
+# Values can be the amount of minutes between a defined interval..
+# i.e. [["t_life_span", "minutes"],
+#       [2009, 32, 21, 48, 102, 4787],
+#       [...],
 #       ]
 # </editor-fold>
 data_to_give_plotly = []
