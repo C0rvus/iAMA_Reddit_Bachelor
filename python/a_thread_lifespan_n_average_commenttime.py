@@ -79,7 +79,7 @@ def start_data_generation_for_analysis():
     """
 
     global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, global_thread_list, \
-        list_with_currents_year_infos
+        list_with_currents_year_infos, temp_time_difference_list
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     year_actually_in_progress = copy.copy(argument_year_beginning)
@@ -87,7 +87,7 @@ def start_data_generation_for_analysis():
     if argument_calculation == "lifespan":
         data_to_give_plotly.append(["t_life_span", str(argument_plot_time_unit)])
     else:
-        data_to_give_plotly.append(["ffffuuuu", str(argument_plot_time_unit)])
+        data_to_give_plotly.append(["t_comment_time", str(argument_plot_time_unit)])
 
     # As long as the ending year has not been reached
     while year_actually_in_progress != argument_year_ending:
@@ -98,21 +98,42 @@ def start_data_generation_for_analysis():
         # Writes a csv file for the actually processed year
         write_csv(list_with_currents_year_infos)
 
-        # Iterates over every item within the list and adds them to a gobal list..
-        # This is necessary for printing out a global list containing appropriate information about threads, etc.
-        add_thread_list_to_global_list(list_with_currents_year_infos)
+        if argument_calculation == "lifespan":
 
-        # Prepares data for graph / chart plotting later on
-        dict_thread_life_span = prepare_data_for_graph_life_span()
+            # Iterates over every item within the list and adds them to a gobal list..
+            # This is necessary for printing out a global list containing appropriate information about threads, etc.
+            add_thread_list_to_global_list(list_with_currents_year_infos)
 
-        data_to_give_plotly.append([
-            year_actually_in_progress,
-            dict_thread_life_span["first"],
-            dict_thread_life_span["second"],
-            dict_thread_life_span["third"],
-            dict_thread_life_span["fourth"],
-            dict_thread_life_span["fifth"],
-        ])
+            # Prepares data for graph / chart plotting later on
+            dict_thread_life_span = prepare_data_for_graph_life_span()
+
+            data_to_give_plotly.append([
+                year_actually_in_progress,
+                dict_thread_life_span["first"],
+                dict_thread_life_span["second"],
+                dict_thread_life_span["third"],
+                dict_thread_life_span["fourth"],
+                dict_thread_life_span["fifth"],
+            ])
+
+        # Whenever the average comment reaction time will be calculated
+        else:
+
+            # Calculates the average mean comment reaction time of users within that actually processed year
+            dict_mean_comment_time = prepare_data_for_comment_time()
+
+            # Append data to plotly object
+            data_to_give_plotly.append([
+                int(year_actually_in_progress),
+                dict_mean_comment_time["first"],
+                dict_mean_comment_time["second"],
+                dict_mean_comment_time["third"],
+                dict_mean_comment_time["fourth"],
+                dict_mean_comment_time["fifth"],
+            ])
+
+            # Empty that time list so there is space for new values
+            temp_time_difference_list = []
 
         # Empty that list, so new values have room
         list_with_currents_year_infos = []
@@ -132,21 +153,42 @@ def start_data_generation_for_analysis():
         # Writes a csv file for the actually processed year
         write_csv(list_with_currents_year_infos)
 
-        # Iterates over every item within the list and adds them to a gobal list..
-        # This is necessary for printing out a global list containing appropriate information about threads, etc.
-        add_thread_list_to_global_list(list_with_currents_year_infos)
+        if argument_calculation == "lifespan":
 
-        # Prepares data for graph / chart plotting later on
-        dict_thread_life_span = prepare_data_for_graph_life_span()
+            # Iterates over every item within the list and adds them to a gobal list..
+            # This is necessary for printing out a global list containing appropriate information about threads, etc.
+            add_thread_list_to_global_list(list_with_currents_year_infos)
 
-        data_to_give_plotly.append([
-            int(year_actually_in_progress),
-            dict_thread_life_span["first"],
-            dict_thread_life_span["second"],
-            dict_thread_life_span["third"],
-            dict_thread_life_span["fourth"],
-            dict_thread_life_span["fifth"],
-        ])
+            # Prepares data for graph / chart plotting later on
+            dict_thread_life_span = prepare_data_for_graph_life_span()
+
+            # Append data to plotly object
+            data_to_give_plotly.append([
+                int(year_actually_in_progress),
+                dict_thread_life_span["first"],
+                dict_thread_life_span["second"],
+                dict_thread_life_span["third"],
+                dict_thread_life_span["fourth"],
+                dict_thread_life_span["fifth"],
+            ])
+
+        else:
+
+            # Calculates the average mean comment reaction time of users within that actually processed year
+            dict_mean_comment_time = prepare_data_for_comment_time()
+
+            # Append data to plotly object
+            data_to_give_plotly.append([
+                int(year_actually_in_progress),
+                dict_mean_comment_time["first"],
+                dict_mean_comment_time["second"],
+                dict_mean_comment_time["third"],
+                dict_mean_comment_time["fourth"],
+                dict_mean_comment_time["fifth"],
+            ])
+
+            # Empty that time list so there is space for new values
+            temp_time_difference_list = []
 
         # Empty that list, so new values have room
         list_with_currents_year_infos = []
@@ -266,6 +308,105 @@ def prepare_data_for_graph_life_span():
     return dict_time_amount_counter
 
 
+def prepare_data_for_comment_time():
+    global temp_time_difference_list, data_to_give_plotly
+
+    temp_amount_counter = 0
+
+    dict_time_amount_counter = {
+        "first": 0,
+        "second": 0,
+        "third": 0,
+        "fourth": 0,
+        "fifth": 0
+    }
+
+    for item in temp_time_difference_list:
+        for i in item:
+            temp_amount_counter += i
+
+        temp_amount_counter /= len(item)
+
+        # Minutes
+        if argument_plot_time_unit == "minutes":
+            divider = 60
+
+            value = temp_amount_counter
+
+            if (value / divider) <= 14:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 14) \
+                    and ((value / 60) <= 29):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 29) \
+                    and ((value / 60) <= 59):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 59) \
+                    and ((value / 60) <= 119):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 120:
+                dict_time_amount_counter["fifth"] += 1
+
+        # Hours
+        elif argument_plot_time_unit == "hours":
+            divider = 3600
+
+            # Iterates over every element and checks if that value is between some given values
+
+            value = temp_amount_counter
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) \
+                    and ((value / divider) <= 5):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 5) \
+                    and ((value / divider) <= 10):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 10) \
+                    and ((value / divider) <= 23):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 24:
+                dict_time_amount_counter["fifth"] += 1
+
+        # Days
+        else:
+            divider = 86400
+
+            value = temp_amount_counter
+
+            if (value / divider) <= 1:
+                dict_time_amount_counter["first"] += 1
+
+            elif ((value / divider) > 1) and \
+                    ((value / divider) <= 4):
+                dict_time_amount_counter["second"] += 1
+
+            elif ((value / divider) > 4) and \
+                    ((value / divider) <= 8):
+                dict_time_amount_counter["third"] += 1
+
+            elif ((value / divider) > 8) and \
+                    ((value / divider) <= 13):
+                dict_time_amount_counter["fourth"] += 1
+
+            elif (value / divider) >= 14:
+                dict_time_amount_counter["fifth"] += 1
+
+        # Resets the value
+        temp_amount_counter = 0
+
+    return dict_time_amount_counter
+
+
 def generate_data_to_be_analyzed():
     """Generates the data which will be analyzed
 
@@ -348,7 +489,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     """
 
     # Makes the global comments instance locally available here
-    global mongo_DB_Comments_Instance
+    global mongo_DB_Comments_Instance, temp_time_difference_list
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
     comments_cursor = comments_collection.find()
@@ -511,6 +652,10 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         # Resorts the time_difference - List , which is necessary to correctly calculate the median of it
         time_difference.sort()
 
+        # Adds the list containing all response time information to a global list.. necessary for correct csv writing
+        # and graph plotting
+        temp_time_difference_list.append(time_difference)
+
         dict_to_be_returned["arithmetic_Mean_Response_Time"] = float(np.mean(time_difference))
         dict_to_be_returned["median_Response_Time"] = float(np.median(time_difference))
         dict_to_be_returned["thread_num_comments"] = len(time_list)
@@ -551,34 +696,29 @@ def write_csv(list_with_information):
     with open(file_name_csv, 'w', newline='') as fp:
         csv_writer = csv.writer(fp, delimiter=',')
 
-        data = []
+        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
+        data = [['sep=,'],
+                ['Year',
+                 'Thread id',
+                 'Thread ups',
+                 'Thread downs',
+                 'Thread comments',
+                 'Thread life span (sec)',
+                 'Thread average comment reaction time (sec)',
+                 'Link to Thread']]
 
-        if argument_calculation == "lifespan":
-
-            # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
-            data = [['sep=,'],
-                    ['Year',
-                     'Thread id',
-                     'Thread ups',
-                     'Thread downs',
-                     'Thread comments',
-                     'Thread life span (sec)',
-                     'Link to Thread']]
-
-            # Iterates over that generated sorted and counts the amount of questions which have not been answered
-            for item in list_with_information:
-                temp_list = [str(year_actually_in_progress),
-                             str(item.get("id")),
-                             str(item.get("thread_ups")),
-                             str(item.get("thread_downs")),
-                             str(item.get("thread_num_comments")),
-                             str(item.get("thread_life_span")),
-                             'https://www.reddit.com/r/IAma/' + str(item.get("id"))
-                             ]
-                data.append(temp_list)
-
-        else:
-            print("nothing defined here yet")
+        # Iterates over that generated sorted and counts the amount of questions which have not been answered
+        for item in list_with_information:
+            temp_list = [str(year_actually_in_progress),
+                         str(item.get("id")),
+                         str(item.get("thread_ups")),
+                         str(item.get("thread_downs")),
+                         str(item.get("thread_num_comments")),
+                         str(item.get("thread_life_span")),
+                         str(item.get("arithmetic_Mean_Response_Time")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("id"))
+                         ]
+            data.append(temp_list)
 
         # Writes data into the csv file
         csv_writer.writerows(data)
@@ -755,6 +895,9 @@ mongo_DB_Comments_Instance = None
 
 # Contains all questions of the actually processed year
 global_thread_list = []
+
+# Contains every single time difference_value for the currently processed year
+temp_time_difference_list = []
 
 # Will contain all analyzed time information for threads & comments
 list_with_currents_year_infos = []
