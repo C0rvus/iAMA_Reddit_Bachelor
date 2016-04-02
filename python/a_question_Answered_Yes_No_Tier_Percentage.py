@@ -21,26 +21,6 @@ from pymongo import MongoClient  # Necessary to make use of MongoDB
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
 
 
-def initialize_mongo_db_parameters(actually_processed_year):
-    """Instantiates all necessary variables for the correct usage of the mongoDB-Client
-
-    Args:
-        actually_processed_year (int) : The year with which parameters the database should be accessed
-    Returns:
-        -
-    """
-
-    global mongo_DB_Client_Instance
-    global mongo_DB_Threads_Instance
-    global mongo_DB_Thread_Collection
-    global mongo_DB_Comments_Instance
-
-    mongo_DB_Client_Instance = MongoClient('localhost', 27017)
-    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(actually_processed_year)]
-    mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
-    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
-
-
 def check_script_arguments():
     """Checks if enough and correct arguments have been given to run this script adequate
 
@@ -66,6 +46,26 @@ def check_script_arguments():
         # Parses the second argument to the variable
         argument_year_ending = int(sys.argv[2])
         argument_tier_in_scope = str(sys.argv[3]).lower()
+
+
+def initialize_mongo_db_parameters(actually_processed_year):
+    """Instantiates all necessary variables for the correct usage of the mongoDB-Client
+
+    Args:
+        actually_processed_year (int) : The year with which parameters the database should be accessed
+    Returns:
+        -
+    """
+
+    global mongo_DB_Client_Instance
+    global mongo_DB_Threads_Instance
+    global mongo_DB_Thread_Collection
+    global mongo_DB_Comments_Instance
+
+    mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(actually_processed_year)]
+    mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
 
 
 def start_data_generation_for_analysis():

@@ -4,32 +4,14 @@
 # 2. (13.03.2016 @ 16.11) -
 # https://stackoverflow.com/questions/13964872/pyplot-tab-character
 
-
+import copy                             # Necessary to copy value of the starting year
 import matplotlib.pyplot as plt         # Necessary to plot graphs with the data calculated
 import datetime                         # Necessary to do time calculation
 import sys                              # Necessary to use script arguments
+
+import numpy as np
 from pymongo import MongoClient         # Necessary to make use of MongoDB
 from scipy.stats.stats import pearsonr  # Necessary for correlation calculation
-
-
-def initialize_mongo_db_parameters():
-    """Instantiates all necessary variables for the correct usage of the mongoDB-Client
-
-    Args:
-        -
-    Returns:
-        -
-    """
-
-    global mongo_DB_Client_Instance
-    global mongo_DB_Threads_Instance
-    global mongo_DB_Thread_Collection
-    global mongo_DB_Comments_Instance
-
-    mongo_DB_Client_Instance = MongoClient('localhost', 27017)
-    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + argument_year]
-    mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
-    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + argument_year]
 
 
 def check_script_arguments():
@@ -44,19 +26,145 @@ def check_script_arguments():
         -
     """
 
-    global argument_year, argument_tier_in_scope, argument_plot_time_unit, argument_plot_x_limiter
+    global argument_year_beginning, argument_year_ending, argument_tier_in_scope, argument_plot_time_unit, \
+        argument_plot_x_limiter
 
     # Whenever not enough arguments were given
-    if len(sys.argv) <= 3:
+    if len(sys.argv) <= 4:
         print("Not enough arguments were given...")
         print("Terminating script now!")
         sys.exit()
     else:
         # Parses the first argument to the variable
-        argument_year = str(sys.argv[1])
-        argument_tier_in_scope = str(sys.argv[2]).lower()
-        argument_plot_time_unit = str(sys.argv[3]).lower()
-        argument_plot_x_limiter = int(sys.argv[4])
+        argument_year_beginning = int(sys.argv[1])
+        argument_year_ending = int(sys.argv[2])
+        argument_tier_in_scope = str(sys.argv[3]).lower()
+        argument_plot_time_unit = str(sys.argv[4]).lower()
+        argument_plot_x_limiter = int(sys.argv[5])
+
+
+def initialize_mongo_db_parameters(actually_processed_year):
+    """Instantiates all necessary variables for the correct usage of the mongoDB-Client
+
+    Args:
+        actually_processed_year (int) : The year with which parameters the database should be accessed
+    Returns:
+        -
+    """
+
+    global mongo_DB_Client_Instance
+    global mongo_DB_Threads_Instance
+    global mongo_DB_Thread_Collection
+    global mongo_DB_Comments_Instance
+
+    mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+    mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(actually_processed_year)]
+    mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
+    mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
+
+
+def start_data_generation_for_analysis():
+    """Starts the data processing by swichting through the years
+
+    1. Triggers the data generation process and moves forward within the years
+        1.1. By moving through the years a csv file will be created for every year
+        1.2. Additionally an interactive chart will be plotted
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, global_thread_list, \
+        list_To_Be_Plotted
+
+    # Copies the value of the beginning year, because it will be changed due to moving forward within the years
+    year_actually_in_progress = int(copy.copy(argument_year_beginning))
+
+    data_to_give_plotly.append(["SHITSHITFUCKFUCK", str(argument_tier_in_scope)])
+
+    # As long as the ending year has not been reached
+    while year_actually_in_progress != argument_year_ending:
+
+        # Starts retrieving and checking that data
+        generate_data_to_be_analyzed()
+        print_data_to_commandline(list_To_Be_Plotted)
+        add_list_to_global_list(list_To_Be_Plotted)
+        list_To_Be_Plotted = []
+
+        # Progresses in the year, necessary for onward year calculation
+        year_actually_in_progress += 1
+
+        # Reinitializes the mongodb with new year parameter here
+        initialize_mongo_db_parameters(year_actually_in_progress)
+
+    # Will be entered whenever the last year is beeing processed
+    if year_actually_in_progress == argument_year_ending:
+
+        # Starts retrieving and checking that data
+        generate_data_to_be_analyzed()
+        print_data_to_commandline(list_To_Be_Plotted)
+        add_list_to_global_list(list_To_Be_Plotted)
+        list_To_Be_Plotted = []
+
+    year_actually_in_progress = "ALL"
+    print_data_to_commandline(global_thread_list)
+
+
+def generate_data_to_be_analyzed():
+    """Generates the data which will be analyzed
+
+    1. This method iterates over every thread
+        1.1. It filters if that iterated thread is an iAMA-request or not
+            1.1.1. If yes: this thread gets skipped and the next one will be processed
+            1.1.2. If no: this thread will be processed
+    2. If the thread gets processed it will receive the arithmetic mean of answer time
+    3. This value will be added to a global list and will be plotted later on
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    print("Generating data for year " + str(year_actually_in_progress) + " now...")
+
+    # noinspection PyTypeChecker
+    for j, val in enumerate(mongo_DB_Thread_Collection):
+
+        # Skips the system.indexes-table which is automatically created by
+        # mongodb itself
+        if not val == "system.indexes":
+            # References the actual iterated thread
+            temp_thread = mongo_DB_Threads_Instance[val]
+
+            # Gets the creation date of that iterated thread
+            temp_thread_author = temp_thread.find()[0].get("author")
+
+            # Gets the title of that iterated thread
+            temp_thread_title = temp_thread.find()[0].get("title")
+
+            # removes iAMA-Requests out of our selection
+            if "request" in temp_thread_title.lower() \
+                    and "as requested" not in temp_thread_title.lower() \
+                    and "by request" not in temp_thread_title.lower() \
+                    and "per request" not in temp_thread_title.lower() \
+                    and "request response" not in temp_thread_title.lower():
+                continue
+
+            returned_value = calculate_comment_upvotes_and_response_time_by_host(val, temp_thread_author)
+
+            # Value could be none if it has i.E. no values
+            if returned_value is not None:
+                list_To_Be_Plotted.append(returned_value)
+
+
+def add_list_to_global_list(list_to_append):
+
+    global global_thread_list
+
+    for item in list_to_append:
+        global_thread_list.append(item)
 
 
 def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
@@ -98,6 +206,63 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
     return time_difference_in_seconds
 
 
+def check_if_comment_is_a_question(given_string):
+    """Simply checks whether a given string is a question or not
+
+    1. This method simply checks wether a question mark exists within that string or not..
+        This is just that simple because messing around with natural processing kits to determine the semantic sense
+        would blow up my bachelor work...
+
+    Args:
+        given_string (int) : The string which will be checked for a question mark
+    Returns:
+        True (bool): Whenever the given string is a question
+        False (bool): Whenever the given string is not a question
+
+    """
+
+    if "?" in given_string:
+        return True
+    else:
+        return False
+
+
+def check_if_comment_is_on_tier_1(comment_parent_id):
+    """Checks whether a comment relies on the first tier or any other tier
+
+    Args:
+        comment_parent_id (str) : The name id of the comments parent
+    Returns:
+        True (bool): Whenever the comment lies on tier 1
+        False (bool): Whenever the comment lies on any other tier
+    """
+
+    if "t3_" in comment_parent_id:
+        return True
+    else:
+        return False
+
+
+def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author):
+    """Checks whether both strings are equal or not
+
+    1. This method simply checks wether both strings match each other or not.
+        I have built this extra method to have a better overview in the main code..
+
+    Args:
+        author_of_thread (str) : The name of the thread author (iAMA-Host)
+        comment_author (str) : The name of the comments author
+    Returns:
+        True (bool): Whenever the strings do not match
+        False (bool): Whenever the strings do match
+         answered that given question)
+    """
+    if author_of_thread != comment_author:
+        return True
+    else:
+        return False
+
+
 def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acutal_id, comments_cursor):
     """Checks whether both strings are equal or not
 
@@ -134,9 +299,9 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
             # Whenever the iterated comment is from the iAMA-Host and that
             # comment has the question as parent_id
             if (check_if_comment_is_not_from_thread_author(
-                        author_of_thread,
-                        actual_comment_author) == False) and (
-                    check_comment_parent_id == comment_acutal_id):
+                    author_of_thread,
+                    actual_comment_author) == False) and (
+                        check_comment_parent_id == comment_acutal_id):
 
                 dict_to_be_returned["question_Answered_From_Host"] = True
                 dict_to_be_returned[
@@ -150,63 +315,6 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
 
     # This is the case whenever a comment has not a single thread
     return dict_to_be_returned
-
-
-def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author):
-    """Checks whether both strings are equal or not
-
-    1. This method simply checks wether both strings match each other or not.
-        I have built this extra method to have a better overview in the main code..
-
-    Args:
-        author_of_thread (str) : The name of the thread author (iAMA-Host)
-        comment_author (str) : The name of the comments author
-    Returns:
-        True (bool): Whenever the strings do not match
-        False (bool): Whenever the strings do match
-         answered that given question)
-    """
-    if author_of_thread != comment_author:
-        return True
-    else:
-        return False
-
-
-def check_if_comment_is_on_tier_1(comment_parent_id):
-    """Checks whether a comment relies on the first tier or any other tier
-
-    Args:
-        comment_parent_id (str) : The name id of the comments parent
-    Returns:
-        True (bool): Whenever the comment lies on tier 1
-        False (bool): Whenever the comment lies on any other tier
-    """
-
-    if "t3_" in comment_parent_id:
-        return True
-    else:
-        return False
-
-
-def check_if_comment_is_a_question(given_string):
-    """Simply checks whether a given string is a question or not
-
-    1. This method simply checks wether a question mark exists within that string or not..
-        This is just that simple because messing around with natural processing kits to determine the semantic sense
-        would blow up my bachelor work...
-
-    Args:
-        given_string (int) : The string which will be checked for a question mark
-    Returns:
-        True (bool): Whenever the given string is a question
-        False (bool): Whenever the given string is not a question
-
-    """
-
-    if "?" in given_string:
-        return True
-    else:
-        return False
 
 
 def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_thread):
@@ -283,8 +391,8 @@ def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_
 
                             # Adds the calculated answer time to a local list
                             answer_time_iama_host_in_seconds = calculate_time_difference(
-                                    comment_time_stamp,
-                                    answer_time_stamp_iama_host
+                                comment_time_stamp,
+                                answer_time_stamp_iama_host
                             )
 
                             # Contains the amount of upvotes of a question which has been answered by the iama host
@@ -323,8 +431,8 @@ def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_
 
                             # Adds the calculated answer time to a local list
                             answer_time_iama_host_in_seconds = calculate_time_difference(
-                                    comment_time_stamp,
-                                    answer_time_stamp_iama_host
+                                comment_time_stamp,
+                                answer_time_stamp_iama_host
                             )
 
                             # Contains the amount of upvotes of a question which has been answered by the iama host
@@ -359,8 +467,8 @@ def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_
 
                             # Adds the calculated answer time to a local list
                             answer_time_iama_host_in_seconds = calculate_time_difference(
-                                    comment_time_stamp,
-                                    answer_time_stamp_iama_host
+                                comment_time_stamp,
+                                answer_time_stamp_iama_host
                             )
 
                             # Contains the amount of upvotes of a question which has been answered by the iama host
@@ -393,54 +501,79 @@ def calculate_comment_upvotes_and_response_time_by_host(id_of_thread, author_of_
         return None
 
 
-def generate_data_to_be_analyzed():
-    """Generates the data which will be analyzed
+def print_data_to_commandline(list_to_be_processed):
+    answer_time_host_all_questions = []
+    answer_time_host_only_positive_questions_with_0 = []
+    answer_time_host_only_negative_questions = []
 
-    1. This method iterates over every thread
-        1.1. It filters if that iterated thread is an iAMA-request or not
-            1.1.1. If yes: this thread gets skipped and the next one will be processed
-            1.1.2. If no: this thread will be processed
-    2. If the thread gets processed it will receive the arithmetic mean of answer time
-    3. This value will be added to a global list and will be plotted later on
-    Args:
-        -
-    Returns:
-        -
-    """
+    comments_votes_score_all_questions = []
+    comments_votes_score_only_positive_questions_with_0 = []
+    comments_votes_score_only_negative_questions = []
 
-    print("Generating data now...")
+    amount_all_questions = 0
+    amount_only_positive_questions_with_0 = 0
+    amount_only_negative_questions = 0
 
-    # noinspection PyTypeChecker
-    for j, val in enumerate(mongo_DB_Thread_Collection):
+    for i, val in enumerate(list_to_be_processed):
+        for j, val_2 in enumerate(val):
 
-        # Skips the system.indexes-table which is automatically created by
-        # mongodb itself
-        if not val == "system.indexes":
-            # References the actual iterated thread
-            temp_thread = mongo_DB_Threads_Instance[val]
+            answer_time_host_all_questions.append(float((val_2.get("answer_time_host"))))
+            comments_votes_score_all_questions.append(float((val_2.get("comment_upvotes"))))
+            amount_all_questions += 1
 
-            # Gets the creation date of that iterated thread
-            temp_thread_author = temp_thread.find()[0].get("author")
+            if (int(val_2.get("comment_upvotes"))) >= 0:
+                answer_time_host_only_positive_questions_with_0.append(float((val_2.get("answer_time_host"))))
+                comments_votes_score_only_positive_questions_with_0.append(float((val_2.get("comment_upvotes"))))
+                amount_only_positive_questions_with_0 += 1
 
-            # Gets the title of that iterated thread
-            temp_thread_title = temp_thread.find()[0].get("title")
+            if (int(val_2.get("comment_upvotes"))) < 0:
+                answer_time_host_only_negative_questions.append(float((val_2.get("answer_time_host"))))
+                comments_votes_score_only_negative_questions.append(float((val_2.get("comment_upvotes"))))
+                amount_only_negative_questions += 1
 
-            # removes iAMA-Requests out of our selection
-            if "request" in temp_thread_title.lower() \
-                    and "as requested" not in temp_thread_title.lower() \
-                    and "by request" not in temp_thread_title.lower() \
-                    and "per request" not in temp_thread_title.lower() \
-                    and "request response" not in temp_thread_title.lower():
-                continue
+    print("-- >>> " + str(year_actually_in_progress) + " on tier" + str(argument_tier_in_scope))
+    print("-- ALL QUESTIONS --")
+    print("Amount of answered questions, by iama host, in total: " + str(amount_all_questions))
+    print("Average response time iAMA host in seconds: " + str(np.mean(answer_time_host_all_questions)))
+    print("Average answered question vote score: " + str(np.mean(comments_votes_score_all_questions)))
+    print("Pearson Ro correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(
+                                        answer_time_host_all_questions, comments_votes_score_all_questions)[0]))
+    print("P-value correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(
+                                        answer_time_host_all_questions, comments_votes_score_all_questions)[1]))
+    print("-----------")
 
-            returned_value = calculate_comment_upvotes_and_response_time_by_host(val, temp_thread_author)
+    print("-- ONLY POSITIVE QUESTIONS with 0 --")
+    print("Amount of answered questions, by iama host, in total: " + str(amount_only_positive_questions_with_0))
+    print("Average response time iAMA host in seconds: " +
+                                    str(np.mean(answer_time_host_only_positive_questions_with_0)))
+    print("Average answered question vote score: " + str(np.mean(comments_votes_score_only_positive_questions_with_0)))
+    print("Pearson Ro correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(answer_time_host_only_positive_questions_with_0,
+                                                 comments_votes_score_only_positive_questions_with_0)[0]))
+    print("P-value correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(answer_time_host_only_positive_questions_with_0,
+                                                 comments_votes_score_only_positive_questions_with_0)[1]))
+    print("-----------")
 
-            # Value could be none if it has i.E. no values
-            if returned_value is not None:
-                list_To_Be_Plotted.append(returned_value)
+    print("-- ONLY NEGATIVE QUESTIONS --")
+    print("Amount of answered questions, by iama host, in total: " + str(amount_only_negative_questions))
+    print("Average response time iAMA host in seconds: " +
+                                    str(np.mean(answer_time_host_only_negative_questions)))
+    print("Average answered question vote score: " + str(np.mean(comments_votes_score_only_negative_questions)))
+    print("Pearson Ro correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(answer_time_host_only_negative_questions,
+                                                 comments_votes_score_only_negative_questions)[0]))
+    print("P-value correlation upvotes <-> response time iAMA host: " +
+                                    str(pearsonr(answer_time_host_only_negative_questions,
+                                                 comments_votes_score_only_negative_questions)[1]))
+    print("-----------")
+    print("-----------")
+    print("")
 
 
-def plot_the_generated_data():
+def plot_generated_data():
     """Plots the data which is to be generated
 
     1. This method plots the data which has been calculated before by using 'matplotlib.pyplot-library'
@@ -537,7 +670,13 @@ def plot_the_generated_data():
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Necessary variables and scripts are here
 
 # Contains the year which is given as an argument
-argument_year = ""
+argument_year_beginning = 0
+
+# Contains the year which will be processed at the moment
+year_actually_in_progress = 0
+
+# Contains the year which is given as argument
+argument_year_ending = 0
 
 # Contains the tiers which will be in scope for the calculation
 argument_tier_in_scope = ""
@@ -562,7 +701,11 @@ mongo_DB_Comments_Instance = None
 
 # Will contain all analyzed time information for threads & comments
 list_To_Be_Plotted = []
+# SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSHIT
+global_thread_list = []
 
+# Data which will be given to plotly bar chart library
+data_to_give_plotly = []
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Methods which are to be called are here
 
@@ -570,10 +713,10 @@ list_To_Be_Plotted = []
 check_script_arguments()
 
 # Initializes the mongoDB with the arguments given via command line
-initialize_mongo_db_parameters()
+initialize_mongo_db_parameters(argument_year_beginning)
 
-# Generates the data which will be plotted later on
-generate_data_to_be_analyzed()
+# Starts the data generation process, writes csv files and plots that processed data
+start_data_generation_for_analysis()
 
 # Plots a pie chart containing the tier question distribution
-plot_the_generated_data()
+# plot_generated_data()
