@@ -1,4 +1,4 @@
-# Tutorials used within this class:
+# Sources used within this class:
 # 1. (12.03.2016 @ 16:53) -
 # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
 # 2. (26.03.2016 @ 15:40) -
@@ -8,13 +8,12 @@
 # 4. (26.03.2016 @ 18:43) -
 # http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
 
-
 import collections                  # Necessary to sort collections alphabetically
-import datetime                     # Necessary to create the year out of the thread utc
-import sys                          # Necessary to use script arguments
-import csv                          # Necessary to write data to csv files
-import os                           # Necessary to get the name of currently processed file
 import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
+import csv                          # Necessary to write data to csv files
+import datetime                     # Necessary to create the year out of the thread utc
+import os                           # Necessary to get the name of currently processed file
+import sys                          # Necessary to use script arguments
 from pymongo import MongoClient     # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
@@ -266,12 +265,12 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
 
             # A dictionary containing the results necessary for the calculation here
             dict_result = {
-                "year": 0,
-                "id_thread": str(id_of_thread),
-                "id_question": comment_acutal_id,
-                "question_ups": comment_upvotes,
-                "time_since_thread_started": 0,
-                "question_answered": bool
+                "Year": 0,
+                "Thread_id": str(id_of_thread),
+                "Question_id": comment_acutal_id,
+                "Question_ups": comment_upvotes,
+                "Thread_time_since_start": 0,
+                "Question_answered": bool
             }
 
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
@@ -285,10 +284,10 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
                 converted_time_length = len(converted_time)
                 converted_time_length -= 4
 
-                dict_result["year"] = converted_time[converted_time_length:]
+                dict_result["Year"] = converted_time[converted_time_length:]
 
                 # Calculation of time since thread has been started can only happen here, because of previous checks
-                dict_result["time_since_thread_started"] = \
+                dict_result["Thread_time_since_start"] = \
                     calculate_time_difference(thread_creation_date, comment_time_stamp)
 
                 bool_comment_is_question = check_if_comment_is_a_question(comment_text)
@@ -311,13 +310,13 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
                         amount_of_tier_any_questions_answered += 1
 
                         # Whenever the question has been answered by the iAMA-Host
-                        dict_result["question_answered"] = True
+                        dict_result["Question_answered"] = True
                         dict_result = collections.OrderedDict(sorted(dict_result.items()))
                         amount_of_results.append(dict_result)
 
                     # Whenever the question has not been answered by the iAMA-Host
                     else:
-                        dict_result["question_answered"] = False
+                        dict_result["Question_answered"] = False
                         dict_result = collections.OrderedDict(sorted(dict_result.items()))
                         amount_of_results.append(dict_result)
 
@@ -505,6 +504,14 @@ def sort_questions(list_which_is_to_be_sorted):
 
 
 def create_question_list_containing_all_years(list_with_comments_per_years):
+    """Creates a list, containing all questions from all years
+
+    Args:
+        list_with_comments_per_years (list) : The list containing the current years questions
+    Returns:
+        -
+    """
+
     global year_actually_in_progress
 
     # Overwrites the variable, because the final csv file gets written
@@ -566,18 +573,18 @@ def write_csv_and_count_unanswered(list_with_comments):
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_comments[0:argument_amount_of_top_quotes]:
-            temp_list = [str(item.get("year")),
-                         str(item.get("question_answered")),
-                         str(item.get("id_thread")),
-                         str(item.get("id_question")),
-                         str(item.get("question_ups")),
-                         str(item.get("time_since_thread_started")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("id_thread"))
+            temp_list = [str(item.get("Year")),
+                         str(item.get("Question_answered")),
+                         str(item.get("Thread_id")),
+                         str(item.get("Question_id")),
+                         str(item.get("Question_ups")),
+                         str(item.get("Thread_time_since_start")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)
 
             # Additionally checks whether a question has been answered or not
-            if item.get("question_answered") is False:
+            if item.get("Question_answered") is False:
                 amount_of_questions_not_answered += 1
 
         # Writes data into the csv file

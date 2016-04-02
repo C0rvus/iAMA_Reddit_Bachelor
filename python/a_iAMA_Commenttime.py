@@ -1,3 +1,10 @@
+# Sources used within this class:
+# 1. (26.03.2016 @ 18:03) -
+# https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
+# 2. (26.03.2016 @ 18:43) -
+# http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
+# 3. (26.03.2016 @ 15:40) -
+# https://stackoverflow.com/questions/14693646/writing-to-csv-file-python
 
 import datetime                     # Necessary to do time calculation
 import sys                          # Necessary to use script arguments
@@ -58,6 +65,18 @@ def initialize_mongo_db_parameters(actually_processed_year):
 
 
 def start_data_generation_for_analysis():
+    """Starts the data processing by swichting through the years
+
+    1. Triggers the data generation process and moves forward within the years
+        1.1. By moving through the years a csv file will be created for every year
+        1.2. Additionally an interactive chart will be plotted
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
     global year_actually_in_progress, data_to_give_plotly, global_thread_list, list_To_Be_Plotted
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
@@ -128,6 +147,13 @@ def start_data_generation_for_analysis():
 
 
 def prepare_data_for_graph():
+    """Sorts and prepares data for graph plotting
+
+    Args:
+        -
+    Returns:
+        -
+    """
 
     dict_time_amount_counter = {
         "first": 0,
@@ -221,22 +247,23 @@ def prepare_data_for_graph():
     return dict_time_amount_counter
 
 
-
-
 def add_thread_list_to_global_list(list_to_append):
+    """Adds all elements of for the current year into a global list. This global list will be written into a csv file
+    later on
+
+    1. This method simply checks wether both strings match each other or not.
+        I have built this extra method to have a better overview in the main code..
+
+    Args:
+        list_to_append (list) : The list which will be iterated over and which elements will be added to the global list
+    Returns:
+        -
+    """
+
     global global_thread_list
 
     for item in list_to_append:
         global_thread_list.append(item)
-
-
-
-
-
-
-
-
-
 
 
 def generate_data_to_be_analyzed():
@@ -248,6 +275,7 @@ def generate_data_to_be_analyzed():
             1.1.2. If no: this thread will be processed
     2. If the thread gets processed it will receive the arithmetic mean of answer time
     3. This value will be added to a global list and will be plotted later on
+
     Args:
         -
     Returns:
@@ -613,8 +641,7 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
 
 
 def write_csv_data(list_with_information):
-    """Creates a csv file containing all necessary information about the life span of a thread and various information
-        about comments
+    """Creates a csv file containing all necessary information about the average comment time of the iama host
 
     Args:
         list_with_information (list) : Contains various information about thread and comment time
@@ -634,7 +661,7 @@ def write_csv_data(list_with_information):
                     '_' + \
                     "thread_n_comment" + \
                     '_' + \
-                    str(argument_tier_in_scope)+ \
+                    str(argument_tier_in_scope) + \
                     '_' + \
                     str(year_actually_in_progress) + \
                     '.csv'
@@ -748,6 +775,4 @@ check_script_arguments()
 initialize_mongo_db_parameters(argument_year_beginning)
 
 # Starts the data generation process, writes csv files and plots that processed data
-
-
 start_data_generation_for_analysis()

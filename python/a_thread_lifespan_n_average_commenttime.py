@@ -1,18 +1,18 @@
-#   Tutorials used within this class:
-#   1. (27.02.2016 @ 14:10) -
-#       http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
-#   2. (27.02.2016 @ 14:22) -
-#       https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
-#   3. (27.02.2016 @ 16:30) -
-#       http://www.programiz.com/python-programming/break-continue
+# Sources used within this class:
+# 1. (27.02.2016 @ 14:10) -
+# http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
+# 2. (27.02.2016 @ 14:22) -
+# https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
+# 3. (27.02.2016 @ 16:30) -
+# http://www.programiz.com/python-programming/break-continue
 
 import collections               # Necessary to sort collections alphabetically
-import sys                       # Necessary to use script arguments
-import os                        # Necessary to get the name of currently processed file
-import csv                       # Necessary to write data to csv files
-import numpy as np               # Necessary for mean calculation
-import datetime                  # Necessary for calculating time differences
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
+import csv                       # Necessary to write data to csv files
+import datetime                  # Necessary for calculating time differences
+import numpy as np               # Necessary for mean calculation
+import os                        # Necessary to get the name of currently processed file
+import sys                       # Necessary to use script arguments
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart_5_Bars import PlotlyBarChart5Bars
@@ -236,7 +236,7 @@ def prepare_data_for_graph_life_span():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("thread_life_span")
+            value = val.get("Thread_life_span")
 
             if (value / divider) <= 14:
                 dict_time_amount_counter["first"] += 1
@@ -263,7 +263,7 @@ def prepare_data_for_graph_life_span():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("thread_life_span")
+            value = val.get("Thread_life_span")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
@@ -290,7 +290,7 @@ def prepare_data_for_graph_life_span():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("thread_life_span")
+            value = val.get("Thread_life_span")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
@@ -465,10 +465,10 @@ def generate_data_to_be_analyzed():
 
             # Whenever the thread has only one comment, or null comments, or is somehow faulty it won't be added
             # to the global list which is to be plotted later on
-            if returned_dict.get("median_Response_Time") == 0 \
-                    or returned_dict.get("first_Comment_After_Thread_Started") == 0 \
-                    or returned_dict.get("thread_life_span") == 0 \
-                    or returned_dict.get("arithmetic_Mean_Response_Time") == 0:
+            if returned_dict.get("Median_Response_Time") == 0 \
+                    or returned_dict.get("First_comment_after_thread_started") == 0 \
+                    or returned_dict.get("Thread_life_span") == 0 \
+                    or returned_dict.get("Arithmetic_mean_response_time") == 0:
 
                 continue
 
@@ -523,32 +523,32 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     dict_to_be_returned = {
 
         # The time between thread creation date and the first comment submitted to it
-        "first_Comment_After_Thread_Started": 0,
+        "First_comment_after_thread_started": 0,
 
         # The difference between thread creation date and the timestamp of the last comment -> live span
-        "thread_life_span": 0,
+        "Thread_life_span": 0,
 
         # The amount of upvotes a thread received
-        "thread_ups": temp_thread_ups,
+        "Thread_ups": temp_thread_ups,
 
         # The amount of downvotes a thread received
-        "thread_downs": temp_thread_downs,
+        "Thread_downs": temp_thread_downs,
 
         # The arithmetic mean response time between the comments
-        "arithmetic_Mean_Response_Time": 0,
+        "Arithmetic_mean_response_time": 0,
 
         # The median response time between the comments
-        "median_Response_Time": 0,
+        "Median_Response_Time": 0,
 
         # The thread id. Not really necessary but perhaps interesting for postprocessing threads
         # (i.E. looking up, which threads have most comments)
-        "id": str(id_of_thread),
+        "Thread_id": str(id_of_thread),
 
         # The amount of comments for the iterated thread
-        "thread_num_comments": 0,
+        "Thread_num_comments": 0,
 
         # Appends the year, actually in progress
-        "year": year_actually_in_progress
+        "Year": year_actually_in_progress
     }
 
     # Iterates over every time stamp and writes it into time_list
@@ -606,7 +606,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 time_difference.append(
                     (current_time_converted_for_subtraction - temp_thread_time).total_seconds())
 
-                dict_to_be_returned["thread_life_span"] = int(
+                dict_to_be_returned["Thread_life_span"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
             # Whenever the last list object is iterated over skip anything because there will be no future object
@@ -658,12 +658,12 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 # Write the time difference (seconds) between the time the thread has been created and the
                 # time the last comment was created
                 # The substraction method only returns ints and no floats
-                dict_to_be_returned["thread_life_span"] = int(
+                dict_to_be_returned["Thread_life_span"] = int(
                     ((current_time_converted_for_subtraction - temp_thread_time).total_seconds()))
 
     # Whenever not a single comment was null.. concrete: Whenever everything is normal and the thread contains answers
     if are_comments_null is not True:
-        dict_to_be_returned["first_Comment_After_Thread_Started"] = int(time_difference[0])
+        dict_to_be_returned["First_comment_after_thread_started"] = int(time_difference[0])
 
         # Resorts the time_difference - List , which is necessary to correctly calculate the median of it
         time_difference.sort()
@@ -672,9 +672,9 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
         # and graph plotting
         temp_time_difference_list.append(time_difference)
 
-        dict_to_be_returned["arithmetic_Mean_Response_Time"] = int(np.mean(time_difference))
-        dict_to_be_returned["median_Response_Time"] = float(np.median(time_difference))
-        dict_to_be_returned["thread_num_comments"] = len(time_list)
+        dict_to_be_returned["Arithmetic_mean_response_time"] = int(np.mean(time_difference))
+        dict_to_be_returned["Median_Response_Time"] = float(np.median(time_difference))
+        dict_to_be_returned["Thread_num_comments"] = len(time_list)
 
         # Sorts that dictionary so the dictionary structure is standardized
         dict_to_be_returned = collections.OrderedDict(sorted(dict_to_be_returned.items()))
@@ -725,14 +725,14 @@ def write_csv(list_with_information):
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_information:
-            temp_list = [str(item.get("year")),
-                         str(item.get("id")),
-                         str(item.get("thread_ups")),
-                         str(item.get("thread_downs")),
-                         str(item.get("thread_num_comments")),
-                         str(item.get("thread_life_span")),
-                         str(item.get("arithmetic_Mean_Response_Time")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("id"))
+            temp_list = [str(item.get("Year")),
+                         str(item.get("Thread_id")),
+                         str(item.get("Thread_ups")),
+                         str(item.get("Thread_downs")),
+                         str(item.get("Thread_num_comments")),
+                         str(item.get("Thread_life_span")),
+                         str(item.get("Arithmetic_mean_response_time")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)
 
@@ -741,6 +741,18 @@ def write_csv(list_with_information):
 
 
 def add_thread_list_to_global_list(list_to_append):
+    """Adds all elements of for the current year into a global list. This global list will be written into a csv file
+    later on
+
+    1. This method simply checks wether both strings match each other or not.
+        I have built this extra method to have a better overview in the main code..
+
+    Args:
+        list_to_append (list) : The list which will be iterated over and which elements will be added to the global list
+    Returns:
+        -
+    """
+
     global global_thread_list
 
     for item in list_to_append:
@@ -778,7 +790,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("arithmetic_Mean_Response_Time")
+            value = val.get("Arithmetic_mean_response_time")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
@@ -809,7 +821,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("arithmetic_Mean_Response_Time")
+            value = val.get("Arithmetic_mean_response_time")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1
@@ -840,7 +852,7 @@ def prepare_dict_by_time_separation_for_comment_time():
         # Iterates over every element and checks if that value is between some given values
         for i, val in enumerate(list_with_currents_year_infos):
 
-            value = val.get("arithmetic_Mean_Response_Time")
+            value = val.get("Arithmetic_mean_response_time")
 
             if (value / divider) <= 1:
                 dict_time_amount_counter["first"] += 1

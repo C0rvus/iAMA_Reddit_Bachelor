@@ -1,3 +1,4 @@
+# Sources used within this class:
 # 1. (12.03.2016 @ 16:53) -
 # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
 # 2. (26.03.2016 @ 18:03) -
@@ -11,11 +12,10 @@
 # 6. (31.03.2016 @ 13:45) -
 # https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
-
+import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
+import os                        # Necessary to get the name of currently processed file
 import sys                       # Necessary to use script arguments
 import unicodecsv as csv         # Necessary to write data to csv files
-import os                        # Necessary to get the name of currently processed file
-import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
@@ -207,7 +207,7 @@ def question_distribution_tier1_tierx(id_of_thread, author_of_thread):
             # References the text of the comment
             comment_text = collection.get("body")
             comment_author = collection.get("author")
-            comment_parent_id = collection.get("parent_id")
+            comment_parent_id = collection.get("Parent_id")
             comment_time_stamp = collection.get("created_utc")
             comment_id = collection.get("name")
             comment_ups = collection.get("ups")
@@ -229,12 +229,12 @@ def question_distribution_tier1_tierx(id_of_thread, author_of_thread):
                         and bool_comment_is_question_on_tier_1 \
                         and bool_comment_is_not_from_thread_author:
 
-                    temp_dict = {"year": year_actually_in_progress,
-                                 "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                 "question_id": comment_id, "question_ups": comment_ups,
-                                 "parent_id": comment_parent_id, "thread_id": str(id_of_thread),
-                                 "thread_author": str(author_of_thread), "tier": "1",
-                                 "comment_text": comment_text}
+                    temp_dict = {"Year": year_actually_in_progress,
+                                 "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                 "Question_id": comment_id, "Question_ups": comment_ups,
+                                 "Parent_id": comment_parent_id, "Thread_id": str(id_of_thread),
+                                 "Thread_author": str(author_of_thread), "Tier": "1",
+                                 "Comment_text": comment_text}
 
                     # Apply that temp_dict to the global list, so we have all questions of that year within that list
                     global_question_list.append(temp_dict)
@@ -244,12 +244,12 @@ def question_distribution_tier1_tierx(id_of_thread, author_of_thread):
                 elif bool_comment_is_question \
                         and bool_comment_is_not_from_thread_author:
 
-                    temp_dict = {"year": year_actually_in_progress,
-                                 "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                 "question_id": comment_id, "question_ups": comment_ups,
-                                 "parent_id": comment_parent_id, "thread_id": str(id_of_thread),
-                                 "thread_author": str(author_of_thread), "tier": "other",
-                                 "comment_text": comment_text}
+                    temp_dict = {"Year": year_actually_in_progress,
+                                 "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                 "Question_id": comment_id, "Question_ups": comment_ups,
+                                 "Parent_id": comment_parent_id, "Thread_id": str(id_of_thread),
+                                 "Thread_author": str(author_of_thread), "Tier": "other",
+                                 "Comment_text": comment_text}
 
                     # Apply that temp_dict to the global list, so we have all questions of that year within that list
                     global_question_list.append(temp_dict)
@@ -373,17 +373,17 @@ def write_csv():
                  'Link to Thread']]
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in global_question_list:
-            temp_list = [str(item.get("year")),
-                         str(item.get("thread_id")),
-                         str(item.get("thread_author")),
-                         str(item.get("question_time_stamp")),
-                         str(item.get("question_author")),
-                         str(item.get("question_id")),
-                         str(item.get("tier")),
-                         str(item.get("question_ups")),
-                         str(item.get("comment_text")),
-                         str(item.get("parent_id")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("thread_id"))
+            temp_list = [str(item.get("Year")),
+                         str(item.get("Thread_id")),
+                         str(item.get("Thread_author")),
+                         str(item.get("Question_time_stamp")),
+                         str(item.get("Question_author")),
+                         str(item.get("Question_id")),
+                         str(item.get("Tier")),
+                         str(item.get("Question_ups")),
+                         str(item.get("Comment_text")),
+                         str(item.get("Parent_id")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)
         # Writes data into the csv file
@@ -405,8 +405,8 @@ def prepare_data_for_graph():
 
     # Iterates over every item in the global list and counts the amount of questions on tier 1 / other tier
     for item in global_question_list:
-        if str(item.get("year")) == str(year_actually_in_progress):
-            if str(item.get("tier")) == "1":
+        if str(item.get("Year")) == str(year_actually_in_progress):
+            if str(item.get("Tier")) == "1":
                 amount_of_tier_1_questions += 1
             else:
                 amount_of_tier_x_questions += 1

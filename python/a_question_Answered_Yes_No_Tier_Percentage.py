@@ -1,3 +1,4 @@
+# Sources used within this class:
 # 1. (12.03.2016 @ 16:53) -
 # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-values-of-the-dictionary-in-python
 # 2. (26.03.2016 @ 18:03) -
@@ -11,11 +12,10 @@
 # 6. (31.03.2016 @ 13:45) -
 # https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
-
+import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
+import os                        # Necessary to get the name of currently processed file
 import sys                       # Necessary to use script arguments
 import unicodecsv as csv         # Necessary to write data to csv files
-import os                        # Necessary to get the name of currently processed file
-import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
@@ -207,7 +207,7 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
             # References the text of the comment
             comment_text = collection.get("body")
             comment_author = collection.get("author")
-            comment_parent_id = collection.get("parent_id")
+            comment_parent_id = collection.get("Parent_id")
             comment_time_stamp = collection.get("created_utc")
             comment_id = collection.get("name")
             comment_ups = collection.get("ups")
@@ -233,19 +233,19 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             author_of_thread, comment_id, comments_cursor)
 
                         if answer_is_from_thread_author is True:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "yes", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
                         else:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "no", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
@@ -262,19 +262,19 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             author_of_thread, comment_id, comments_cursor)
 
                         if answer_is_from_thread_author is True:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "yes", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
                         else:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "no", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
@@ -290,19 +290,19 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             author_of_thread, comment_id, comments_cursor)
 
                         if answer_is_from_thread_author is True:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "yes", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
                         else:
-                            temp_dict = {"year": year_actually_in_progress,
-                                         "question_time_stamp": comment_time_stamp, "question_author": comment_author,
-                                         "question_id": comment_id, "question_ups": comment_ups,
-                                         "question_answered": "no", "parent_id": comment_parent_id,
-                                         "thread_id": str(id_of_thread), "thread_author": str(author_of_thread),
-                                         "comment_text": comment_text}
+                            temp_dict = {"Year": year_actually_in_progress,
+                                         "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
+                                         "Question_id": comment_id, "Question_ups": comment_ups,
+                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
+                                         "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
@@ -398,7 +398,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
         # Whenever the iterated comment was created by user "AutoModerator"
         # skip it
         if (collection.get("author")) != "AutoModerator":
-            check_comment_parent_id = collection.get("parent_id")
+            check_comment_parent_id = collection.get("Parent_id")
             actual_comment_author = collection.get("author")
 
             # Whenever the iterated comment is from the iAMA-Host and that
@@ -468,17 +468,17 @@ def write_csv():
                  'Link to Thread']]
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in global_question_list:
-            temp_list = [str(item.get("year")),
-                         str(item.get("thread_id")),
-                         str(item.get("thread_author")),
-                         str(item.get("question_time_stamp")),
-                         str(item.get("question_author")),
-                         str(item.get("question_id")),
-                         str(item.get("question_answered")),
-                         str(item.get("question_ups")),
-                         str(item.get("comment_text")),
-                         str(item.get("parent_id")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("thread_id"))
+            temp_list = [str(item.get("Year")),
+                         str(item.get("Thread_id")),
+                         str(item.get("Thread_author")),
+                         str(item.get("Question_time_stamp")),
+                         str(item.get("Question_author")),
+                         str(item.get("Question_id")),
+                         str(item.get("Question_answered")),
+                         str(item.get("Question_ups")),
+                         str(item.get("Comment_text")),
+                         str(item.get("Parent_id")),
+                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)
         # Writes data into the csv file
@@ -500,8 +500,8 @@ def prepare_data_for_graph():
 
     # Iterates over every item in the global list and counts the amount of questions on tier 1 / other tier
     for item in global_question_list:
-        if str(item.get("year")) == str(year_actually_in_progress):
-            if str(item.get("question_answered")) == "yes":
+        if str(item.get("Year")) == str(year_actually_in_progress):
+            if str(item.get("Question_answered")) == "yes":
                 amount_of_answered_questions += 1
             else:
                 amount_of_unanswered_questions += 1
