@@ -375,9 +375,9 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
                 # Whenever the scope lies on the first tier
                 if argument_tier_in_scope == "1":
 
-                    if bool_comment_is_question \
-                            and bool_comment_is_question_on_tier_1 \
-                            and bool_comment_is_not_from_thread_author:
+                    if bool_comment_is_question is True \
+                            and bool_comment_is_question_on_tier_1 is True\
+                            and bool_comment_is_not_from_thread_author is True:
 
                         amount_of_questions += 1
 
@@ -408,7 +408,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
                 elif argument_tier_in_scope == "x":
 
                     # If the posted comment is a question and is not from the thread author and is not on Tier 1
-                    if bool_comment_is_question \
+                    if bool_comment_is_question is True \
                             and bool_comment_is_question_on_tier_1 is False \
                             and bool_comment_is_not_from_thread_author is True:
 
@@ -437,8 +437,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
 
                 # Whenever the scope lies on all tiers
                 else:
-
-                    if bool_comment_is_question and bool_comment_is_not_from_thread_author is True:
+                    if bool_comment_is_question is True and bool_comment_is_not_from_thread_author is True:
 
                         amount_of_questions += 1
 
