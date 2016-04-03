@@ -597,8 +597,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
                 temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
                     temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
 
-                # Subtracts the comment creation time from the thread creation
-                # time
+                # Subtracts the comment creation time from the thread creation time
                 temp_thread_time = datetime.datetime.strptime(
                     temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
 
