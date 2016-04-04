@@ -658,8 +658,6 @@ def write_csv_data(list_with_information):
                     '_until_' + \
                     str(argument_year_ending) + \
                     '_' + \
-                    "thread_n_comment" + \
-                    '_' + \
                     str(argument_tier_in_scope) + \
                     '_' + \
                     str(year_actually_in_progress) + \

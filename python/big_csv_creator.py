@@ -1,6 +1,8 @@
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import datetime                  # Necessary for calculating time differences
 import sys                       # Necessary to use script arguments
+import os                        # Necessary to get the name of currently processed file
+import csv                       # Necessary to write data to csv files
 import collections               # Necessary to sort collections alphabetically
 import numpy as np
 
@@ -55,6 +57,154 @@ def initialize_mongo_db_parameters(actually_processed_year):
     mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(actually_processed_year)]
 
 
+def add_actual_year_list_to_global_list(list_to_append):
+    global list_global_year
+
+    for item in list_to_append:
+        list_global_year.append(item)
+
+
+def write_csv_data(list_with_information):
+    """Creates a csv file containing all necessary information about the average comment time of the iama host
+
+    Args:
+        list_with_information (list) : Contains various information about thread and comment time
+    Returns:
+        -
+    """
+
+    print("---- Writing csv containing all thread information for year " + str(year_actually_in_progress) + " now")
+    # Empty print line here for a more beautiful console output
+    print("")
+
+    file_name_csv = str(os.path.basename(__file__))[0:len(os.path.basename(__file__)) - 3] + \
+                    '_' + \
+                    str(argument_year_beginning) + \
+                    '_until_' + \
+                    str(argument_year_ending) + \
+                    '_' + \
+                    "BIGDATA" + \
+                    '_' + \
+                    str(year_actually_in_progress) + \
+                    '.csv'
+
+    with open(file_name_csv, 'w', newline='') as fp:
+        csv_writer = csv.writer(fp, delimiter=',')
+
+        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
+        data = [['sep=,'],
+                ['Year',
+                 'Thread id',
+                 'Thread author',
+                 'Thread ups',
+                 'Thread downs',
+                 'Thread creation time stamp',
+
+                 'Thread average comment vote score total',
+                 'Thread average comment vote score tier 1',
+                 'Thread average comment vote score tier x',
+
+                 'Thread average question vote score total',
+                 'Thread average question vote score tier 1',
+                 'Thread average question vote score tier x',
+
+                 'Thread num comments total skewed',
+                 'Thread num comments total',
+                 'Thread num comments tier 1',
+                 'Thread num comments tier x',
+
+                 'Thread num questions total',
+                 'Thread num questions tier 1',
+                 'Thread num questions tier x',
+
+                 'Thread num questions answered by iama host total',
+                 'Thread num questions answered by iama host tier 1',
+                 'Thread num questions answered by iama host tier x',
+
+                 'Thread num comments answered by iama host total',
+                 'Thread num comments answered by iama host tier 1',
+                 'Thread num comments answered by iama host tier x',
+
+                 'Thread average reaction time between comments total',
+                 'Thread average reaction time between comments tier 1',
+                 'Thread average reaction time between comments tier x',
+
+                 'Thread average reaction time between questions total',
+                 'Thread average reaction time between questions tier 1',
+                 'Thread average reaction time between questions tier x',
+
+                 'Thread average response to question time iama host total',
+                 'Thread average response to question time iama host tier 1',
+                 'Thread average response to question time iama host tier x',
+
+                 'Thread average response to comment time iama host total',
+                 'Thread average response to comment time iama host total',
+                 'Thread average response to comment time iama host total',
+
+                 'Thread life span until last comment',
+                 'Thread life span until last question']]
+
+        # Iterates over that generated sorted and counts the amount of questions which have not been answered
+        for item in list_with_information:
+
+            temp_list = [str(item.get("Year")),
+                         str(item.get("Thread_id")),
+                         str(item.get("Thread_author")),
+                         str(item.get("Thread_ups")),
+                         str(item.get("Thread_downs")),
+                         str(item.get("Thread_creation_time_stamp")),
+
+                         str(item.get("Thread_average_comment_vote_score_total")),
+                         str(item.get("Thread_average_comment_vote_score_tier_1")),
+                         str(item.get("Thread_average_comment_vote_score_tier_x")),
+
+                         str(item.get("Thread_average_question_vote_score_total")),
+                         str(item.get("Thread_average_question_vote_score_tier_1")),
+                         str(item.get("Thread_average_question_vote_score_tier_x")),
+
+                         str(item.get("Thread_num_comments_total_skewed")),
+                         str(item.get("Thread_num_comments_total")),
+                         str(item.get("Thread_num_comments_tier_1")),
+                         str(item.get("Thread_num_comments_tier_x")),
+
+                         str(item.get("Thread_num_questions_total")),
+                         str(item.get("Thread_num_questions_tier_1")),
+                         str(item.get("Thread_num_questions_tier_x")),
+
+                         str(item.get("Thread_num_questions_answered_by_iama_host_total")),
+                         str(item.get("Thread_num_questions_answered_by_iama_host_tier_1")),
+                         str(item.get("Thread_num_questions_answered_by_iama_host_tier_x")),
+
+                         str(item.get("Thread_num_comments_answered_by_iama_host_total")),
+                         str(item.get("Thread_num_comments_answered_by_iama_host_tier_1")),
+                         str(item.get("Thread_num_comments_answered_by_iama_host_tier_x")),
+
+
+                         str(item.get("Thread_average_reaction_time_between_comments_total")),
+                         str(item.get("Thread_average_reaction_time_between_comments_tier_1")),
+                         str(item.get("Thread_average_reaction_time_between_comments_tier_x")),
+
+                         str(item.get("Thread_average_reaction_time_between_questions_total")),
+                         str(item.get("Thread_average_reaction_time_between_questions_tier_1")),
+                         str(item.get("Thread_average_reaction_time_between_questions_tier_x")),
+
+                         str(item.get("Thread_average_iama_host_response_to_question_time_total")),
+                         str(item.get("Thread_average_iama_host_response_to_question_time_tier_1")),
+                         str(item.get("Thread_average_iama_host_response_to_question_time_tier_x")),
+
+                         str(item.get("Thread_average_iama_host_response_to_comment_time_total")),
+                         str(item.get("Thread_average_iama_host_response_to_comment_time_tier_1")),
+                         str(item.get("Thread_average_iama_host_response_to_comment_time_tier_x")),
+
+                         str(item.get("Thread_life_span_question")),
+                         str(item.get("Thread_life_span_comment"))]
+
+            data.append(temp_list)
+
+        # Writes data into the csv file
+        csv_writer.writerows(data)
+
+
 def start_data_generation_for_analysis():
 
     global year_actually_in_progress
@@ -64,12 +214,35 @@ def start_data_generation_for_analysis():
 
     while year_actually_in_progress != argument_year_ending:
         print("IM WHILE")
+        start_data_generation()
+        add_actual_year_list_to_global_list(list_current_year)
+
+        write_csv_data(list_current_year)
+
+        year_actually_in_progress += 1
+
+        # Reinitializes the mongodb with new year parameter here
+        # noinspection PyTypeChecker
+        initialize_mongo_db_parameters(year_actually_in_progress)
+
     if year_actually_in_progress == argument_year_ending:
         print("EQUAL")
         start_data_generation()
+        add_actual_year_list_to_global_list(list_current_year)
+
+        write_csv_data(list_current_year)
+
+        # Value setting is necessary for correct file writing
+        year_actually_in_progress = "ALL"
+
+    write_csv_data(list_global_year)
 
 
 def start_data_generation():
+    global list_current_year
+
+    # Empty that list for correct processing
+    list_current_year = []
 
     print("Generating data for year " + str(year_actually_in_progress) + " now...")
 
@@ -104,63 +277,106 @@ def start_data_generation():
             # Will contain information about time calculation methods
             # returned_dict = process_specific_thread(val, temp_thread_creation_time, temp_thread_author)
 
-            process_specific_thread(val, temp_thread_creation_time, temp_thread_author)
+            values_for_analysis = process_specific_thread(val, temp_thread_creation_time, temp_thread_author)
 
-            dict_to_append_to_global_list = {
-                'Year': year_actually_in_progress,
+            #print(values_for_analysis)
 
-                'Thread_id': str(val),
-                'Thread_author': temp_thread_author,
-                'Thread_ups': temp_thread_ups,
-                'Thread_downs': temp_thread_downs,
-                'Thread_creation_time_stamp': temp_thread_creation_time,
+            if values_for_analysis is not None:
 
-                'Thread_num_comments_total_skewed': temp_thread_num_comments_skewed,
-                'Thread_num_comments_total': 0,
-                'Thread_num_comments_total_tier_1': 0,
-                'Thread_num_comments_total_tier_x': 0,
+                dict_to_append = {
+                    'Year': year_actually_in_progress,
+                    'Thread_id': str(val),
+                    'Thread_author': temp_thread_author,
+                    'Thread_ups': temp_thread_ups,
+                    'Thread_downs': temp_thread_downs,
+                    'Thread_creation_time_stamp': temp_thread_creation_time,
 
-                'Thread_num_questions_total_total': 0,
-                'Thread_num_questions_total_tier_1': 0,
-                'Thread_num_questions_total_tier_x': 0,
+                    'Thread_average_comment_vote_score_total': values_for_analysis["comment_total_vote_average"],
+                    'Thread_average_comment_vote_score_tier_1': values_for_analysis["comment_tier_1_vote_average"],
+                    'Thread_average_comment_vote_score_tier_x': values_for_analysis["comment_tier_x_vote_average"],
 
-                'Thread_num_questions_answered_by_iama_host_total': 0,
-                'Thread_num_questions_answered_by_iama_host_tier_1': 0,
-                'Thread_num_questions_answered_by_iama_host_tier_x': 0,
-
-                'Thread_num_comments_answered_by_iama_host_total': 0,
-                'Thread_num_comments_answered_by_iama_host_tier_1': 0,
-                'Thread_num_comments_answered_by_iama_host_tier_x': 0,
-
-                'Thread_average_reaction_time_between_comments_total': 0,
-                'Thread_average_reaction_time_between_comments_tier_1': 0,
-                'Thread_average_reaction_time_between_comments_tier_x': 0,
-
-                'Thread_average_reaction_time_between_questions_total': 0,
-                'Thread_average_reaction_time_between_questions_tier_1': 0,
-                'Thread_average_reaction_time_between_questions_tier_x': 0,
-
-                'Thread_average_iama_host_response_to_question_time_total': 0,
-                'Thread_average_iama_host_response_to_question_time_tier_1': 0,
-                'Thread_average_iama_host_response_to_question_time_tier_x': 0,
-
-                'Thread_average_iama_host_response_to_comment_time_total': 0,
-                'Thread_average_iama_host_response_to_comment_time_tier_1': 0,
-                'Thread_average_iama_host_response_to_comment_time_tier_x': 0,
+                    'Thread_average_question_vote_score_total': values_for_analysis["question_total_vote_average"],
+                    'Thread_average_question_vote_score_tier_1': values_for_analysis["question_tier_1_vote_average"],
+                    'Thread_average_question_vote_score_tier_x': values_for_analysis["question_tier_x_vote_average"],
 
 
-                'Thread_life_span_question': 0,
-                'Thread_life_span_comment': 0,
+                    'Thread_num_comments_total_skewed': temp_thread_num_comments_skewed,
+                    'Thread_num_comments_total': values_for_analysis["comments_total"],
+                    'Thread_num_comments_tier_1': values_for_analysis["comments_tier_1"],
+                    'Thread_num_comments_tier_x': values_for_analysis["comments_tier_x"],
 
-                'Thread_average_comment_vote_score_total': 0,
-                'Thread_average_comment_vote_score_tier_1': 0,
-                'Thread_average_comment_vote_score_tier_x': 0,
+                    'Thread_num_questions_total': values_for_analysis["questions_total"],
+                    'Thread_num_questions_tier_1': values_for_analysis["questions_tier_1"],
+                    'Thread_num_questions_tier_x': values_for_analysis["questions_tier_x"],
 
-                'Thread_average_question_vote_score_total': 0,
-                'Thread_average_question_vote_score_tier_1': 0,
-                'Thread_average_question_vote_score_tier_x': 0,
-            }
 
+                    'Thread_num_questions_answered_by_iama_host_total':
+                        values_for_analysis["questions_answered_by_iama_host_total"],
+
+                    'Thread_num_questions_answered_by_iama_host_tier_1':
+                        values_for_analysis["questions_answered_by_iama_host_tier_1"],
+
+                    'Thread_num_questions_answered_by_iama_host_tier_x':
+                        values_for_analysis["questions_answered_by_iama_host_tier_x"],
+
+
+                    'Thread_num_comments_answered_by_iama_host_total':
+                        values_for_analysis["comments_answered_by_iama_host_total"],
+
+                    'Thread_num_comments_answered_by_iama_host_tier_1':
+                        values_for_analysis["comments_answered_by_iama_host_tier_1"],
+
+                    'Thread_num_comments_answered_by_iama_host_tier_x':
+                        values_for_analysis["comments_answered_by_iama_host_tier_x"],
+
+
+                    'Thread_average_reaction_time_between_comments_total':
+                        values_for_analysis["reaction_time_between_comments_total_average"],
+
+                    'Thread_average_reaction_time_between_comments_tier_1':
+                        values_for_analysis["reaction_time_between_comments_tier_1_average"],
+
+                    'Thread_average_reaction_time_between_comments_tier_x':
+                        values_for_analysis["reaction_time_between_comments_tier_x_average"],
+
+
+                    'Thread_average_reaction_time_between_questions_total':
+                        values_for_analysis["reaction_time_between_questions_total_average"],
+
+                    'Thread_average_reaction_time_between_questions_tier_1':
+                        values_for_analysis["reaction_time_between_questions_tier_1_average"],
+
+                    'Thread_average_reaction_time_between_questions_tier_x':
+                        values_for_analysis["reaction_time_between_questions_tier_x_average"],
+
+
+                    'Thread_average_iama_host_response_to_question_time_total':
+                        values_for_analysis["iama_host_response_to_question_time_total_average"],
+
+                    'Thread_average_iama_host_response_to_question_time_tier_1':
+                        values_for_analysis["iama_host_response_to_question_time_tier_1_average"],
+
+                    'Thread_average_iama_host_response_to_question_time_tier_x':
+                        values_for_analysis["iama_host_response_to_question_time_tier_x_average"],
+
+
+                    'Thread_average_iama_host_response_to_comment_time_total':
+                        values_for_analysis["iama_host_response_to_comment_time_total_average"],
+
+                    'Thread_average_iama_host_response_to_comment_time_tier_1':
+                        values_for_analysis["iama_host_response_to_comment_time_tier_1_average"],
+
+                    'Thread_average_iama_host_response_to_comment_time_tier_x':
+                        values_for_analysis["iama_host_response_to_comment_time_tier_x_average"],
+
+
+                    'Thread_life_span_question': values_for_analysis["time_value_of_last_question"],
+                    'Thread_life_span_comment': values_for_analysis["time_value_of_last_comment"]
+
+
+                }
+
+                list_current_year.append(dict_to_append)
 
 
 def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author):
@@ -171,7 +387,6 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
     comments_cursor = list(comments_collection.find())
 
     # Comments and questions are seperated from another !!
-
 
     dict_with_value_to_be_returned = {
         "comment_total_vote_average": [],
@@ -252,7 +467,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                 if bool_comment_is_question and bool_comment_is_not_from_thread_author is True:
                     dict_with_value_to_be_returned["questions_total"] += 1
                     dict_with_value_to_be_returned["question_total_vote_average"].append(val.get("ups"))
-                    dict_with_value_to_be_returned["reaction_time_between_questions_total_average"].\
+                    dict_with_value_to_be_returned["reaction_time_between_questions_total_average"]. \
                         append(comment_creation_time)
 
                     if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_question"]:
@@ -278,7 +493,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     if bool_comment_is_question_on_tier_1 is True:
                         dict_with_value_to_be_returned["questions_tier_1"] += 1
                         dict_with_value_to_be_returned["question_tier_1_vote_average"].append(val.get("ups"))
-                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_1_average"].\
+                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_1_average"]. \
                             append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
@@ -299,7 +514,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     else:
                         dict_with_value_to_be_returned["questions_tier_x"] += 1
                         dict_with_value_to_be_returned["question_tier_x_vote_average"].append(val.get("ups"))
-                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_x_average"].\
+                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_x_average"]. \
                             append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
@@ -320,8 +535,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                 else:
                     dict_with_value_to_be_returned["comments_total"] += 1
                     dict_with_value_to_be_returned["comment_total_vote_average"].append(val.get("ups"))
-                    dict_with_value_to_be_returned["reaction_time_between_comments_total_average"].\
-                            append(comment_creation_time)
+                    dict_with_value_to_be_returned["reaction_time_between_comments_total_average"]. \
+                        append(comment_creation_time)
 
                     if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_comment"]:
                         dict_with_value_to_be_returned["time_value_of_last_comment"] = comment_creation_time
@@ -344,7 +559,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     if bool_comment_is_question_on_tier_1 is True:
                         dict_with_value_to_be_returned["comments_tier_1"] += 1
                         dict_with_value_to_be_returned["comment_tier_1_vote_average"].append(val.get("ups"))
-                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_1_average"].\
+                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_1_average"]. \
                             append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
@@ -366,7 +581,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     else:
                         dict_with_value_to_be_returned["comments_tier_x"] += 1
                         dict_with_value_to_be_returned["comment_tier_x_vote_average"].append(val.get("ups"))
-                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_x_average"].\
+                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_x_average"]. \
                             append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
@@ -408,8 +623,6 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
     dict_life_span_values = calculate_life_span(thread_creation_time_stamp,
                                                 dict_with_value_to_be_returned["time_value_of_last_comment"],
                                                 dict_with_value_to_be_returned["time_value_of_last_question"])
-    #    print(thread_id, dict_life_span_valuees)
-    #    print(str(iama_host_response_to_question_time_total_average))
 
     if str(thread_id) == "45fiy6":
         dict_with_value_to_be_returned = collections.OrderedDict(sorted(dict_with_value_to_be_returned.items()))
@@ -420,16 +633,87 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
     else:
         pass
 
+    # Filling the dict, which we want to return, with values here
 
+    if dict_with_value_to_be_returned ["comment_total_vote_average"]:
+        dict_with_value_to_be_returned["comment_total_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["comment_total_vote_average"])
 
+    if dict_with_value_to_be_returned["comment_tier_1_vote_average"]:
+        dict_with_value_to_be_returned["comment_tier_1_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["comment_tier_1_vote_average"])
 
-        # Am Ende über das Dict gehen und sagen, wenn 0 dann mache ein None draus.. (Pandas kann das handeln 1!)
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+    if dict_with_value_to_be_returned["comment_tier_x_vote_average"]:
+        dict_with_value_to_be_returned["comment_tier_x_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["comment_tier_x_vote_average"])
+
+    if dict_with_value_to_be_returned["question_total_vote_average"]:
+        dict_with_value_to_be_returned["question_total_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["question_total_vote_average"])
+
+    if dict_with_value_to_be_returned["question_tier_1_vote_average"]:
+        dict_with_value_to_be_returned["question_tier_1_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["question_tier_1_vote_average"])
+
+    if dict_with_value_to_be_returned["question_tier_x_vote_average"]:
+        dict_with_value_to_be_returned["question_tier_x_vote_average"] = \
+            np.mean(dict_with_value_to_be_returned["question_tier_x_vote_average"])
+
+    dict_with_value_to_be_returned["reaction_time_between_comments_total_average"] = \
+        average_reaction_time_comments_total
+    dict_with_value_to_be_returned["reaction_time_between_comments_tier_1_average"] = \
+        average_reaction_time_comments_tier_1
+    dict_with_value_to_be_returned["reaction_time_between_comments_tier_x_average"] = \
+        average_reaction_time_comments_tier_x
+
+    dict_with_value_to_be_returned["reaction_time_between_questions_total_average"] = \
+        average_reaction_time_questions_total
+    dict_with_value_to_be_returned["reaction_time_between_questions_tier_1_average"] = \
+        average_reaction_time_questions_tier_1
+    dict_with_value_to_be_returned["reaction_time_between_questions_tier_x_average"] = \
+        average_reaction_time_questions_tier_x
+
+    dict_with_value_to_be_returned["time_value_of_last_question"] = \
+        dict_life_span_values["lifespan_thread_last_question"]
+
+    dict_with_value_to_be_returned["time_value_of_last_comment"] = \
+        dict_life_span_values["lifespan_thread_last_comment"]
+
+    # Whenever that list ist not empty
+    if dict_with_value_to_be_returned["iama_host_response_to_comment_time_total_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_comment_time_total_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_comment_time_total_average"])
+
+    if dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_1_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_1_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_1_average"])
+
+    if dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_x_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_x_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_x_average"])
+
+    if dict_with_value_to_be_returned["iama_host_response_to_question_time_total_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_question_time_total_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_question_time_total_average"])
+
+    if dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_1_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_1_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_1_average"])
+
+    if dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_x_average"]:
+        dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_x_average"] = \
+            np.mean(dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_x_average"])
+
+    # Final checking for return !
+    # Whenever one of the two time values is negative (which means nobody or only "AutoModerator" have responded
+    # Return nothing, otherwise return the dict
+    if dict_with_value_to_be_returned["time_value_of_last_comment"] > 0 or \
+                    dict_with_value_to_be_returned["time_value_of_last_question"] > 0:
+        return dict_with_value_to_be_returned
+    else:
+        # Return None, to make clear to not process that thread which has 0 comments or 0 questions, or a single
+        # recation from the AutoModerator-Bot
+        return None
 
 
 def calculate_reaction_time_average(list_to_be_processed, thread_creation_time_stamp):
@@ -517,8 +801,6 @@ def calculate_reaction_time_average(list_to_be_processed, thread_creation_time_s
         return None
     else:
         return np.mean(time_difference)
-
-
 
 
 def check_if_comment_is_a_question(given_string):
@@ -700,6 +982,11 @@ argument_year_ending = 0
 # Contains the year which will be processed at the moment
 year_actually_in_progress = 0
 
+# Contains information for the current year
+list_current_year = []
+
+# Contains information for all years about all threads within reddit
+list_global_year = []
 
 # Executes necessary checks
 check_script_arguments()
