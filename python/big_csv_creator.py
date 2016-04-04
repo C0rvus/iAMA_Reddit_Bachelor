@@ -4,6 +4,9 @@ import sys                       # Necessary to use script arguments
 import collections               # Necessary to sort collections alphabetically
 import numpy as np
 
+# Quelle:
+# http://stackoverflow.com/questions/7301110/why-does-return-list-sort-return-none-not-the-list
+
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
@@ -159,6 +162,7 @@ def start_data_generation():
             }
 
 
+
 def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author):
     # Makes the global comments instance locally available here
     global mongo_DB_Comments_Instance
@@ -248,6 +252,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                 if bool_comment_is_question and bool_comment_is_not_from_thread_author is True:
                     dict_with_value_to_be_returned["questions_total"] += 1
                     dict_with_value_to_be_returned["question_total_vote_average"].append(val.get("ups"))
+                    dict_with_value_to_be_returned["reaction_time_between_questions_total_average"].\
+                        append(comment_creation_time)
 
                     if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_question"]:
                         dict_with_value_to_be_returned["time_value_of_last_question"] = comment_creation_time
@@ -272,6 +278,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     if bool_comment_is_question_on_tier_1 is True:
                         dict_with_value_to_be_returned["questions_tier_1"] += 1
                         dict_with_value_to_be_returned["question_tier_1_vote_average"].append(val.get("ups"))
+                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_1_average"].\
+                            append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
                             dict_with_value_to_be_returned["questions_answered_by_iama_host_tier_1"] += 1
@@ -291,6 +299,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     else:
                         dict_with_value_to_be_returned["questions_tier_x"] += 1
                         dict_with_value_to_be_returned["question_tier_x_vote_average"].append(val.get("ups"))
+                        dict_with_value_to_be_returned["reaction_time_between_questions_tier_x_average"].\
+                            append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
                             dict_with_value_to_be_returned["questions_answered_by_iama_host_tier_x"] += 1
@@ -310,6 +320,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                 else:
                     dict_with_value_to_be_returned["comments_total"] += 1
                     dict_with_value_to_be_returned["comment_total_vote_average"].append(val.get("ups"))
+                    dict_with_value_to_be_returned["reaction_time_between_comments_total_average"].\
+                            append(comment_creation_time)
 
                     if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_comment"]:
                         dict_with_value_to_be_returned["time_value_of_last_comment"] = comment_creation_time
@@ -332,6 +344,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     if bool_comment_is_question_on_tier_1 is True:
                         dict_with_value_to_be_returned["comments_tier_1"] += 1
                         dict_with_value_to_be_returned["comment_tier_1_vote_average"].append(val.get("ups"))
+                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_1_average"].\
+                            append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
                             dict_with_value_to_be_returned["comments_answered_by_iama_host_tier_1"] += 1
@@ -352,6 +366,8 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                     else:
                         dict_with_value_to_be_returned["comments_tier_x"] += 1
                         dict_with_value_to_be_returned["comment_tier_x_vote_average"].append(val.get("ups"))
+                        dict_with_value_to_be_returned["reaction_time_between_comments_tier_x_average"].\
+                            append(comment_creation_time)
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
                             dict_with_value_to_be_returned["comments_answered_by_iama_host_tier_x"] += 1
@@ -367,6 +383,27 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                             pass
             else:
                 pass
+
+    # Whenever no entries could be found within that list "None" will be returned
+    average_reaction_time_comments_total = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_comments_total_average"]), thread_creation_time_stamp)
+
+    average_reaction_time_comments_tier_1 = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_comments_tier_1_average"]), thread_creation_time_stamp)
+
+    average_reaction_time_comments_tier_x = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_comments_tier_x_average"]), thread_creation_time_stamp)
+
+    #
+
+    average_reaction_time_questions_total = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_questions_total_average"]), thread_creation_time_stamp)
+
+    average_reaction_time_questions_tier_1 = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_questions_tier_1_average"]), thread_creation_time_stamp)
+
+    average_reaction_time_questions_tier_x = calculate_reaction_time_average(sorted(
+        dict_with_value_to_be_returned["reaction_time_between_questions_tier_x_average"]), thread_creation_time_stamp)
 
     dict_life_span_values = calculate_life_span(thread_creation_time_stamp,
                                                 dict_with_value_to_be_returned["time_value_of_last_comment"],
@@ -386,18 +423,6 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         # Am Ende über das Dict gehen und sagen, wenn 0 dann mache ein None draus.. (Pandas kann das handeln 1!)
         # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
         # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
@@ -405,6 +430,95 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
         # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
         # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
         # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+
+
+def calculate_reaction_time_average(list_to_be_processed, thread_creation_time_stamp):
+
+    # Will contain the time difference between each "reactions" in seconds
+    time_difference = []
+
+    for i, val in enumerate(list_to_be_processed):
+        # Convert the time_Value into float, otherwise it could not be converted...
+        time_value_current = float(val)
+
+        current_time_converted = datetime.datetime.fromtimestamp(
+            time_value_current).strftime('%d-%m-%Y %H:%M:%S')
+
+        current_time_converted_for_subtraction = datetime.datetime.strptime(
+            current_time_converted, '%d-%m-%Y %H:%M:%S')
+
+        # Whenever a thread only has one single comment which is not null
+        if len(list_to_be_processed) == 1:
+            # Converts the thread creation date into a comparable time format
+            temp_creation_date_of_thread = float(thread_creation_time_stamp)
+
+            temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
+                temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
+
+            # Subtracts the comment creation time from the thread creation time
+            temp_thread_time = datetime.datetime.strptime(
+                temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
+
+            # Add the difference between those two times, in seconds, to that list
+            time_difference.append(
+                (current_time_converted_for_subtraction - temp_thread_time).total_seconds())
+
+        # Whenever the last list object is iterated over skip anything because there will be no future object
+        elif i != len(list_to_be_processed) - 1:
+            # Convers the next time_Value into float
+            time_value_next = float(list_to_be_processed[i + 1])
+            next_time_converted = datetime.datetime.fromtimestamp(
+                time_value_next).strftime('%d-%m-%Y %H:%M:%S')
+
+            next_time_converted_for_subtraction = datetime.datetime.strptime(
+                next_time_converted, '%d-%m-%Y %H:%M:%S')
+
+            # Whenever the first commented gets iterated over, build the
+            # difference between thread and 1st comment creation date
+            if i == 0:
+                # Converts the thread creation date into a comparable time format
+                temp_creation_date_of_thread = float(thread_creation_time_stamp)
+
+                temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
+                    temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
+
+                # Subtracts the comment creation time from the thread creation time
+                temp_thread_time = datetime.datetime.strptime(
+                    temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
+
+                # Add the difference between those two times, in seconds, to that list
+                time_difference.append(
+                    (current_time_converted_for_subtraction -
+                     temp_thread_time).total_seconds())
+
+            else:
+                # Appends the difference between the time of the current and next comment into the time_difference
+                # variable
+                time_difference.append(
+                    (next_time_converted_for_subtraction - current_time_converted_for_subtraction).total_seconds())
+
+        # Whenever the last comment time stamp gets iterated over ->
+        # calculate the time difference between thread creation date and that last comment (seconds)
+        else:
+            # Converts the thread creation date into a comparable time format
+            temp_creation_date_of_thread = float(thread_creation_time_stamp)
+            temp_creation_date_of_thread_converted = datetime.datetime.fromtimestamp(
+                temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
+
+            # Subtracts the comment creation time from the thread creation time
+            temp_thread_time = datetime.datetime.strptime(
+                temp_creation_date_of_thread_converted, '%d-%m-%Y %H:%M:%S')
+
+            # Write the time difference (seconds) between the time the thread has been created and the
+            # time the last comment was created
+            # The substraction method only returns ints and no floats
+
+    if len(time_difference) is 0:
+        return None
+    else:
+        return np.mean(time_difference)
+
+
 
 
 def check_if_comment_is_a_question(given_string):
@@ -572,9 +686,6 @@ def calculate_time_difference(comment_time_stamp, answer_time_stamp_iama_host):
     ).total_seconds()
 
     return time_difference_in_seconds
-
-
-
 
 
 # Contains the year which is given as an argument
