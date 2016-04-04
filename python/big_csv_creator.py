@@ -1,8 +1,9 @@
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import datetime                  # Necessary for calculating time differences
 import sys                       # Necessary to use script arguments
-
+import collections               # Necessary to sort collections alphabetically
 import numpy as np
+
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
@@ -163,66 +164,70 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
     global mongo_DB_Comments_Instance
 
     comments_collection = mongo_DB_Comments_Instance[thread_id]
-    comments_cursor = comments_collection.find()
+    comments_cursor = list(comments_collection.find())
 
     # Comments and questions are seperated from another !!
 
-    comment_total_vote_average = []
-    comment_tier_1_vote_average = []
-    comment_tier_x_vote_average = []
 
-    question_total_vote_average = []
-    question_tier_1_vote_average = []
-    question_tier_x_vote_average = []
+    dict_with_value_to_be_returned = {
+        "comment_total_vote_average": [],
+        "comment_tier_1_vote_average": [],
+        "comment_tier_x_vote_average": [],
 
-    reaction_time_between_comments_total_average = []
-    reaction_time_between_comments_tier_1_average = []
-    reaction_time_between_comments_tier_x_average = []
+        "question_total_vote_average": [],
+        "question_tier_1_vote_average": [],
+        "question_tier_x_vote_average": [],
 
-    reaction_time_between_questions_total_average = []
-    reaction_time_between_questions_tier_1_average = []
-    reaction_time_between_questions_tier_x_average = []
+        "reaction_time_between_comments_total_average": [],
+        "reaction_time_between_comments_tier_1_average": [],
+        "reaction_time_between_comments_tier_x_average": [],
 
-    iama_host_response_to_comment_time_total_average = []
-    iama_host_response_to_comment_time_tier_1_average = []
-    iama_host_response_to_comment_time_tier_x_average = []
+        "reaction_time_between_questions_total_average": [],
+        "reaction_time_between_questions_tier_1_average": [],
+        "reaction_time_between_questions_tier_x_average": [],
 
-    iama_host_response_to_question_time_total_average = []
-    iama_host_response_to_question_time_tier_1_average = []
-    iama_host_response_to_question_time_tier_x_average = []
+        "iama_host_response_to_comment_time_total_average": [],
+        "iama_host_response_to_comment_time_tier_1_average": [],
+        "iama_host_response_to_comment_time_tier_x_average": [],
 
-    comments_total = 0
-    comments_tier_1 = 0
-    comments_tier_x = 0
+        "iama_host_response_to_question_time_total_average": [],
+        "iama_host_response_to_question_time_tier_1_average": [],
+        "iama_host_response_to_question_time_tier_x_average": [],
 
-    questions_total = 0
-    questions_tier_1 = 0
-    questions_tier_x = 0
+        "comments_total": 0,
+        "comments_tier_1": 0,
+        "comments_tier_x": 0,
 
-    questions_answered_by_iama_host_total = 0
-    questions_answered_by_iama_host_tier_1 = 0
-    questions_answered_by_iama_host_tier_x = 0
+        "questions_total": 0,
+        "questions_tier_1": 0,
+        "questions_tier_x": 0,
 
-    comments_answered_by_iama_host_total = 0
-    comments_answered_by_iama_host_tier_1 = 0
-    comments_answered_by_iama_host_tier_x = 0
+        "questions_answered_by_iama_host_total": 0,
+        "questions_answered_by_iama_host_tier_1": 0,
+        "questions_answered_by_iama_host_tier_x": 0,
 
-    time_value_of_last_comment = 0
-    time_value_of_last_question = 0
+        "comments_answered_by_iama_host_total": 0,
+        "comments_answered_by_iama_host_tier_1": 0,
+        "comments_answered_by_iama_host_tier_x": 0,
+
+        "time_value_of_last_comment": 0,
+        "time_value_of_last_question": 0
+    }
+
 
     # iterates over every comment
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
         if str(thread_id) == "45fiy6":
-            print(collection)
+            print(i, val)
 
         # Whenever the iterated comment was created by user "AutoModerator" skip it
-        if collection.get("author") != "AutoModerator":
+        if val.get("author") != "AutoModerator":
 
-            comment_text = collection.get("body")
-            comment_author = collection.get("author")
-            comment_parent_id = collection.get("parent_id")
-            comment_actual_id = collection.get("name")
+            comment_text = val.get("body")
+            comment_author = val.get("author")
+            comment_parent_id = val.get("parent_id")
+            comment_actual_id = val.get("name")
 
             # Check whether that iterated comment is answered by the host
             answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
@@ -230,7 +235,7 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
 
             if comment_text is not None and comment_author is not None and comment_parent_id is not None:
 
-                comment_creation_time = float(collection.get("created_utc"))
+                comment_creation_time = float(val.get("created_utc"))
 
                 bool_comment_is_question = check_if_comment_is_a_question(comment_text)
 
@@ -241,76 +246,78 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
 
                 # Whenever the iterated "reaction" is a question
                 if bool_comment_is_question and bool_comment_is_not_from_thread_author is True:
-                    questions_total += 1
-                    question_total_vote_average.append(collection.get("ups"))
+                    dict_with_value_to_be_returned["questions_total"] += 1
+                    dict_with_value_to_be_returned["question_total_vote_average"].append(val.get("ups"))
 
-                    if comment_creation_time > time_value_of_last_question:
-                        time_value_of_last_question = comment_creation_time
+                    if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_question"]:
+                        dict_with_value_to_be_returned["time_value_of_last_question"] = comment_creation_time
                     else:
                         pass
 
                     if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                        questions_answered_by_iama_host_total += 1
+                        dict_with_value_to_be_returned["questions_answered_by_iama_host_total"] += 1
 
                         answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
 
                         # Adds the calculated answer time to a local list for TOTAL
                         answer_time_iama_host_in_seconds = calculate_time_difference(
                             comment_creation_time, answer_time_stamp_iama_host)
-                        iama_host_response_to_question_time_total_average.append(answer_time_iama_host_in_seconds)
+
+                        dict_with_value_to_be_returned["iama_host_response_to_question_time_total_average"] \
+                            .append(answer_time_iama_host_in_seconds)
                     else:
                         pass
 
                     # Whenever we are on tier 1
                     if bool_comment_is_question_on_tier_1 is True:
-                        questions_tier_1 += 1
-                        question_tier_1_vote_average.append(collection.get("ups"))
+                        dict_with_value_to_be_returned["questions_tier_1"] += 1
+                        dict_with_value_to_be_returned["question_tier_1_vote_average"].append(val.get("ups"))
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                            questions_answered_by_iama_host_tier_1 += 1
+                            dict_with_value_to_be_returned["questions_answered_by_iama_host_tier_1"] += 1
 
                             answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
 
                             # Adds the calculated answer time to a local list for TIER 1
                             answer_time_iama_host_in_seconds = calculate_time_difference(
                                 comment_creation_time, answer_time_stamp_iama_host)
-                            iama_host_response_to_question_time_tier_1_average.append(answer_time_iama_host_in_seconds)
 
-                            if str(thread_id) == "45fiy6":
-                                print("II BIN DASSDds")
-                                print(iama_host_response_to_question_time_tier_1_average)
-
+                            dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_1_average"] \
+                                .append(answer_time_iama_host_in_seconds)
 
                         else:
                             pass
                     # Whenever we are NOT on tier 1 but on any other tier
                     else:
-                        questions_tier_x += 1
-                        question_tier_x_vote_average.append(collection.get("ups"))
+                        dict_with_value_to_be_returned["questions_tier_x"] += 1
+                        dict_with_value_to_be_returned["question_tier_x_vote_average"].append(val.get("ups"))
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                            questions_answered_by_iama_host_tier_x += 1
+                            dict_with_value_to_be_returned["questions_answered_by_iama_host_tier_x"] += 1
 
                             answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
 
                             # Adds the calculated answer time to a local list for TIER X
+                            # noinspection PyTypeChecker
                             answer_time_iama_host_in_seconds = calculate_time_difference(
                                 comment_creation_time, answer_time_stamp_iama_host)
-                            iama_host_response_to_question_time_tier_x_average.append(answer_time_iama_host_in_seconds)
+
+                            dict_with_value_to_be_returned["iama_host_response_to_question_time_tier_x_average"] \
+                                .append(answer_time_iama_host_in_seconds)
                         else:
                             pass
                 # Whenever the iterated "reaction" is just a comment and no question
                 else:
-                    comments_total += 1
-                    comment_total_vote_average.append(collection.get("ups"))
+                    dict_with_value_to_be_returned["comments_total"] += 1
+                    dict_with_value_to_be_returned["comment_total_vote_average"].append(val.get("ups"))
 
-                    if comment_creation_time > time_value_of_last_comment:
-                        time_value_of_last_comment = comment_creation_time
+                    if comment_creation_time > dict_with_value_to_be_returned["time_value_of_last_comment"]:
+                        dict_with_value_to_be_returned["time_value_of_last_comment"] = comment_creation_time
                     else:
                         pass
 
                     if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                        comments_answered_by_iama_host_total += 1
+                        dict_with_value_to_be_returned["comments_answered_by_iama_host_total"] += 1
 
                         answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
 
@@ -319,55 +326,60 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
                         answer_time_iama_host_in_seconds = calculate_time_difference(
                             comment_creation_time, answer_time_stamp_iama_host)
 
-                        iama_host_response_to_comment_time_total_average.append(answer_time_iama_host_in_seconds)
+                        dict_with_value_to_be_returned["iama_host_response_to_comment_time_total_average"] \
+                            .append(answer_time_iama_host_in_seconds)
 
                     if bool_comment_is_question_on_tier_1 is True:
-                        comments_tier_1 += 1
-                        comment_tier_1_vote_average.append(collection.get("ups"))
+                        dict_with_value_to_be_returned["comments_tier_1"] += 1
+                        dict_with_value_to_be_returned["comment_tier_1_vote_average"].append(val.get("ups"))
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                            comments_answered_by_iama_host_tier_1 += 1
+                            dict_with_value_to_be_returned["comments_answered_by_iama_host_tier_1"] += 1
+
+                            answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
+
+                            # Adds the calculated answer time to a local list for TIER 1
+                            # noinspection PyTypeChecker
+                            answer_time_iama_host_in_seconds = calculate_time_difference(
+                                comment_creation_time, answer_time_stamp_iama_host)
+
+                            dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_1_average"] \
+                                .append(answer_time_iama_host_in_seconds)
+
                         else:
                             pass
-
-                        answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
-
-                        # Adds the calculated answer time to a local list for TIER 1
-                        # noinspection PyTypeChecker
-                        answer_time_iama_host_in_seconds = calculate_time_difference(
-                            comment_creation_time, answer_time_stamp_iama_host)
-
-                        iama_host_response_to_comment_time_tier_1_average.append(answer_time_iama_host_in_seconds)
 
                     else:
-                        comments_tier_x += 1
-                        comment_tier_x_vote_average.append(collection.get("ups"))
+                        dict_with_value_to_be_returned["comments_tier_x"] += 1
+                        dict_with_value_to_be_returned["comment_tier_x_vote_average"].append(val.get("ups"))
 
                         if answer_is_from_thread_author["question_Answered_From_Host"] is True:
-                            comments_answered_by_iama_host_tier_x += 1
+                            dict_with_value_to_be_returned["comments_answered_by_iama_host_tier_x"] += 1
+                            answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
+
+                            # Adds the calculated answer time to a local list for TIER 1
+                            answer_time_iama_host_in_seconds = calculate_time_difference(
+                                comment_creation_time, answer_time_stamp_iama_host)
+
+                            dict_with_value_to_be_returned["iama_host_response_to_comment_time_tier_x_average"] \
+                                .append(answer_time_iama_host_in_seconds)
                         else:
                             pass
-
-                        answer_time_stamp_iama_host = answer_is_from_thread_author["time_Stamp_Answer"]
-
-                        # Adds the calculated answer time to a local list for TIER 1
-                        # noinspection PyTypeChecker
-                        answer_time_iama_host_in_seconds = calculate_time_difference(
-                            comment_creation_time, answer_time_stamp_iama_host)
-
-                        iama_host_response_to_comment_time_tier_x_average.append(answer_time_iama_host_in_seconds)
             else:
                 pass
 
     dict_life_span_values = calculate_life_span(thread_creation_time_stamp,
-                                                 time_value_of_last_comment,
-                                                 time_value_of_last_question)
-#    print(thread_id, dict_life_span_valuees)
-#    print(str(iama_host_response_to_question_time_total_average))
+                                                dict_with_value_to_be_returned["time_value_of_last_comment"],
+                                                dict_with_value_to_be_returned["time_value_of_last_question"])
+    #    print(thread_id, dict_life_span_valuees)
+    #    print(str(iama_host_response_to_question_time_total_average))
 
     if str(thread_id) == "45fiy6":
-        print(thread_id, "  Comments n questions total: " + str(comments_total + questions_total) + " || " +
-          " Amount within cursor: " + str(comments_cursor.count()))
+        dict_with_value_to_be_returned = collections.OrderedDict(sorted(dict_with_value_to_be_returned.items()))
+        print(thread_id, "  Comments n questions total: " + str(dict_with_value_to_be_returned["comments_total"]+
+                                                                dict_with_value_to_be_returned["questions_total"]) +
+              " || " + " Amount within cursor: " + str(len(comments_cursor)))
+        print(dict_with_value_to_be_returned)
     else:
         pass
 
@@ -386,13 +398,13 @@ def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author
 
 
 
-
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
-    # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # Am Ende über das Dict gehen und sagen, wenn 0 dann mache ein None draus.. (Pandas kann das handeln 1!)
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
+        # if lifespan kleiner 0, dann nix returnen, das so einbauen !!
 
 
 def check_if_comment_is_a_question(given_string):
@@ -477,10 +489,10 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
     }
 
     # Iterates over every comment
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
-        check_comment_parent_id = collection.get("parent_id")
-        actual_comment_author = collection.get("author")
+        check_comment_parent_id = val.get("parent_id")
+        actual_comment_author = val.get("author")
 
         # Whenever the iterated comment is from the iAMA-Host and that
         # comment has the question as parent_id
@@ -488,7 +500,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
                 (check_comment_parent_id == comment_actual_id):
 
             dict_to_be_returned["question_Answered_From_Host"] = True
-            dict_to_be_returned["time_Stamp_Answer"] = collection.get("created_utc")
+            dict_to_be_returned["time_Stamp_Answer"] = val.get("created_utc")
 
             return dict_to_be_returned
 
@@ -513,12 +525,11 @@ def calculate_life_span(thread_creation_time_stamp, time_value_of_last_comment, 
     temp_time_stamp_last_question_converted = datetime.datetime.strptime(
         temp_time_stamp_last_question, '%d-%m-%Y %H:%M:%S')
 
-
     dict_to_be_returned = {
         "lifespan_thread_last_comment": (temp_time_stamp_last_comment_converted -
                                          temp_creation_date_of_thread_converted).total_seconds(),
         "lifespan_thread_last_question": (temp_time_stamp_last_question_converted -
-                                           temp_creation_date_of_thread_converted).total_seconds()
+                                          temp_creation_date_of_thread_converted).total_seconds()
     }
 
     return dict_to_be_returned
