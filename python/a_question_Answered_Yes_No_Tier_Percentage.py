@@ -15,7 +15,7 @@
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import os                        # Necessary to get the name of currently processed file
 import sys                       # Necessary to use script arguments
-import unicodecsv as csv         # Necessary to write data to csv files
+import csv                          # Necessary to write data to csv files
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
@@ -41,9 +41,7 @@ def check_script_arguments():
         print("Terminating script now!")
         sys.exit()
     else:
-        # Parses the first argument to the variable
         argument_year_beginning = int(sys.argv[1])
-        # Parses the second argument to the variable
         argument_year_ending = int(sys.argv[2])
         argument_tier_in_scope = str(sys.argv[3]).lower()
 
@@ -81,7 +79,7 @@ def start_data_generation_for_analysis():
         -
     """
 
-    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, global_question_list
+    global argument_year_beginning, data_to_give_plotly, year_actually_in_progress, year_question_list
 
     # Copies the value of the beginning year, because it will be changed due to moving forward within the years
     year_actually_in_progress = copy.copy(argument_year_beginning)
@@ -98,18 +96,22 @@ def start_data_generation_for_analysis():
         generate_data_to_be_analyzed()
 
         # Writes a csv file for the actually processed year
-        write_csv()
+        write_csv(year_question_list)
+
+        # Adds the currents years items to a global list
+        add_local_list_to_global_list(year_question_list)
 
         # Prepares data for graph / chart plotting later on
         prepare_data_for_graph()
 
         # Empty both lists
-        global_question_list = []
+        year_question_list = []
 
         # Progresses in the year, necessary for onward year calculation
         year_actually_in_progress += 1
 
         # Reinitializes the mongodb with new year parameter here
+        # noinspection PyTypeChecker
         initialize_mongo_db_parameters(year_actually_in_progress)
 
     # Will be entered whenever the last year is beeing processed
@@ -119,13 +121,22 @@ def start_data_generation_for_analysis():
         generate_data_to_be_analyzed()
 
         # Writes a csv file for the actually processed year
-        write_csv()
+        write_csv(year_question_list)
+
+        # Adds the currents years items to a global list
+        add_local_list_to_global_list(year_question_list)
 
         # Prepares data for graph / chart plotting later on
         prepare_data_for_graph()
 
         # Empty both lists
-        global_question_list = []
+        year_question_list = []
+
+        # Value setting is necessary for correct file writing
+        year_actually_in_progress = "ALL"
+
+        # Writes a csv file for the all years
+    write_csv(global_question_list)
 
     # Plots the graph
     plot_generated_data()
@@ -193,35 +204,38 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
      """
 
     # Makes the global comments instance locally available here
-    global mongo_DB_Comments_Instance, global_question_list
+    global mongo_DB_Comments_Instance, year_question_list
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
-    comments_cursor = comments_collection.find()
+
+    # Generating a list out of the cursor is absolutely necessary, because the cursor can be exhausted..
+    # During the calculations we have to do many iterations on a thread, but by using only one cursor for many
+    # iterations I will be depleted very fast...
+    # To not always generate a new cursor for each iteration this is a way more performant way to do the stuff
+
+    comments_cursor = list(comments_collection.find())
 
     # Iterates over every comment within that thread
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
         # Whenever the iterated comment was created by user "AutoModerator"
         # skip it
-        if (collection.get("author")) != "AutoModerator":
-
+        if (val.get("author")) != "AutoModerator":
             # References the text of the comment
-            comment_text = collection.get("body")
-            comment_author = collection.get("author")
-            comment_parent_id = collection.get("Parent_id")
-            comment_time_stamp = collection.get("created_utc")
-            comment_id = collection.get("name")
-            comment_ups = collection.get("ups")
+            comment_text = val.get("body")
+            comment_author = val.get("author")
+            comment_parent_id = val.get("parent_id")
+            comment_time_stamp = val.get("created_utc")
+            comment_id = val.get("name")
+            comment_ups = val.get("ups")
 
             # Whenever some values are not None.. (Values can be null / None whenever they have been deleted)
             if comment_text is not None \
                     and comment_author is not None \
                     and comment_parent_id is not None:
-
                 bool_comment_is_question = check_if_comment_is_a_question(comment_text)
                 bool_comment_is_question_on_tier_1 = check_if_comment_is_on_tier_1(comment_parent_id)
                 bool_comment_is_not_from_thread_author = \
                     check_if_comment_is_not_from_thread_author(author_of_thread, comment_author)
-
                 if argument_tier_in_scope == "1":
 
                     # If the posted comment is a question and is not from the thread author and is on Tier 1
@@ -236,20 +250,20 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Question_answered": 1, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
                         else:
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Question_answered": 0, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
-                        global_question_list.append(temp_dict)
+                        year_question_list.append(temp_dict)
 
                 elif argument_tier_in_scope == "x":
 
@@ -265,23 +279,22 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Question_answered": 1, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
                         else:
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Question_answered": 0, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
-                        global_question_list.append(temp_dict)
+                        year_question_list.append(temp_dict)
 
                 elif argument_tier_in_scope == "any":
-
                     # If the posted comment is a question and is not from the thread author and is on Tier 1
                     if bool_comment_is_question is True \
                             and bool_comment_is_not_from_thread_author is True:
@@ -293,21 +306,22 @@ def question_answering_distribution_tier1_tierx_tierany(id_of_thread, author_of_
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "yes", "Parent_id": comment_parent_id,
+                                         "Question_answered": 1, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
                         else:
                             temp_dict = {"Year": year_actually_in_progress,
                                          "Question_time_stamp": comment_time_stamp, "Question_author": comment_author,
                                          "Question_id": comment_id, "Question_ups": comment_ups,
-                                         "Question_answered": "no", "Parent_id": comment_parent_id,
+                                         "Question_answered": 0, "Parent_id": comment_parent_id,
                                          "Thread_id": str(id_of_thread), "Thread_author": str(author_of_thread),
                                          "Comment_text": comment_text}
 
                         # Apply that temp_dict to the global list, so we have all questions of that year
                         # within that list
-                        global_question_list.append(temp_dict)
-
+                        year_question_list.append(temp_dict)
+                else:
+                    pass
             # Whenever a comment has been deleted or has, somehow, null values in it.. do not process it
             else:
                 continue
@@ -393,43 +407,32 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
     """
 
     # Iterates over every comment
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
+        comment_parent_id = val.get("parent_id")
+        actual_comment_author = val.get("author")
 
-        # Whenever the iterated comment was created by user "AutoModerator"
-        # skip it
-        if (collection.get("author")) != "AutoModerator":
-            check_comment_parent_id = collection.get("Parent_id")
-            actual_comment_author = collection.get("author")
+        # Whenever the iterated comment is from the iAMA-Host and that
+        # comment has the question as parent_id
+        if (check_if_comment_is_not_from_thread_author(author_of_thread, actual_comment_author) is False) \
+                and (comment_parent_id == comment_actual_id):
+            return True
 
-            # Whenever the iterated comment is from the iAMA-Host and that
-            # comment has the question as parent_id
-            if (check_if_comment_is_not_from_thread_author(author_of_thread, actual_comment_author) == False) \
-                    and (check_comment_parent_id == comment_actual_id):
-                return True
-            else:
-                return False
-        else:
-            return False
+    return False
 
 
-def write_csv():
+def write_csv(list_with_information):
     """Creates a csv file containing all necessary information about the distribution of questions on the tiers
 
-    This method iterates over the "global_question_list", which contains every single questions of that year and writes
-    a csv file containing misc information about those questions.
-
-    One thing is to be said: The .csv file will be written in binary mode, therefore looking at them in a plain text
-    editor could be a problem - please use excel for that.
-    I had to use "binary" mode, otherwise the questions-text could not be written into the csv file, because windows
-    has some problem by converting some special chars to utf.
+    This method iterates over the the given list, which contains every single questions of that year (or all years)
+    and writes a csv file containing misc information about those questions.
 
     Args:
-        -
+        list_with_information (list) : Contains various information about thread and comment time
     Returns:
         -
     """
 
-    global global_question_list
+    global year_question_list
 
     print("---- Writing csv containing all questions for year " + str(year_actually_in_progress) + " now")
     # Empty print line here for a more beautiful console output
@@ -450,12 +453,11 @@ def write_csv():
     # We must use binary mode, because some comments contain characters which python on windows is not able to process
     # Because I do not want to leave out the question text of this data, I left the comments in
     # To use normal writing mode, simply use this:     with open(file_name_csv, 'w', newline='') as fp:
-    with open(file_name_csv, 'wb') as fp:
-        csv_writer = csv.writer(fp, delimiter=',', encoding='utf-8')
+    with open(file_name_csv, 'w', newline='') as fp:
+        csv_writer = csv.writer(fp, delimiter=',')
 
         # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
-        data = [['sep=,'],
-                ['Year',
+        data = [['Year',
                  'Thread id',
                  'Thread author',
                  'Question time stamp utc (epoch)',
@@ -463,11 +465,10 @@ def write_csv():
                  'Question id',
                  'Question answered by iAMA host',
                  'Question ups',
-                 'Question text',
-                 'Parent id',
-                 'Link to Thread']]
+                 'Parent id'
+                 ]]
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
-        for item in global_question_list:
+        for item in list_with_information:
             temp_list = [str(item.get("Year")),
                          str(item.get("Thread_id")),
                          str(item.get("Thread_author")),
@@ -476,13 +477,30 @@ def write_csv():
                          str(item.get("Question_id")),
                          str(item.get("Question_answered")),
                          str(item.get("Question_ups")),
-                         str(item.get("Comment_text")),
-                         str(item.get("Parent_id")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
+                         str(item.get("Parent_id"))
                          ]
             data.append(temp_list)
         # Writes data into the csv file
         csv_writer.writerows(data)
+
+
+def add_local_list_to_global_list(list_to_append):
+    """Adds all elements of for the current year into a global list. This global list will be written into a csv file
+    later on
+
+    1. This method simply checks wether both strings match each other or not.
+        I have built this extra method to have a better overview in the main code..
+
+    Args:
+        list_to_append (list) : The list which will be iterated over and which elements will be added to the global list
+    Returns:
+        -
+    """
+
+    global global_question_list
+
+    for item in list_to_append:
+        global_question_list.append(item)
 
 
 def prepare_data_for_graph():
@@ -499,9 +517,10 @@ def prepare_data_for_graph():
     amount_of_unanswered_questions = 0
 
     # Iterates over every item in the global list and counts the amount of questions on tier 1 / other tier
-    for item in global_question_list:
+    for item in year_question_list:
         if str(item.get("Year")) == str(year_actually_in_progress):
-            if str(item.get("Question_answered")) == "yes":
+            print(item.get("Question_answered"))
+            if int(item.get("Question_answered")) is 1:
                 amount_of_answered_questions += 1
             else:
                 amount_of_unanswered_questions += 1
@@ -554,8 +573,11 @@ mongo_DB_Thread_Collection = None
 # The data base instance for the comments
 mongo_DB_Comments_Instance = None
 
-# Contains all questions of the actually processed year
+# Contains all questions for all years...
 global_question_list = []
+
+# Contains all questions of the actually processed year
+year_question_list = []
 
 # Contains the data which are necessary for plotly
 # <editor-fold desc="Description of data object plotly needs">

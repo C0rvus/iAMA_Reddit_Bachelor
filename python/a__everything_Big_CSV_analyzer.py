@@ -60,10 +60,11 @@
 # ----
 import pandas
 
-thread_information = pandas.read_csv('sepp.csv', sep=',', na_values="None")
+thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
+question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_tier_any_no_text_n_link.csv', sep=',', na_values="None", low_memory=False)
 # Would replace NaN with zeroes: thread_information.fillna(0, inplace=True)
 
-year = thread_information['Year']
+thread_year = thread_information['Year']
 thread_id = thread_information['Thread id']
 thread_author = thread_information['Thread author']
 thread_ups = thread_information['Thread ups']
@@ -132,6 +133,20 @@ thread_average_response_to_question_time_iama_host_tier_x = thread_information[
 
 thread_life_span_until_last_comment = thread_information['Thread life span until last comment']
 thread_life_span_until_last_question = thread_information['Thread life span until last question']
+
+question_ups = question_information['Question ups']
+question_answered_by_iAMA_host = question_information['Question answered by iAMA host']
+
+
+print("Pearson correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host)))
+print("Kendall correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="kendall")))
+print("Spearman correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="spearman")))
+
+
+
+
+
+
 
 
 # Average means
@@ -826,41 +841,41 @@ def relation_thread_average_reaction_time_with_thread_life_span():
 
 
 # Start that calculation
-average_means_of_values()
-
-relation_thread_upvotes_with_amount_of_comments()
-relation_thread_upvotes_with_amount_of_questions()
-
-relation_thread_downvotes_with_amount_of_comments()
-relation_thread_downvotes_with_amount_of_questions()
-
-relation_thread_upvotes_and_iama_host_response_time_comments()
-relation_thread_upvotes_and_iama_host_response_time_questions()
-
-relation_thread_downvotes_and_iama_host_response_time_comments()
-relation_thread_downvotes_and_iama_host_response_time_questions()
-
-relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-relation_thread_lifespan_to_last_comment_and_amount_of_questions()
-
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
-
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-
-relation_thread_lifespan_to_last_question_and_amount_of_comments()
-relation_thread_lifespan_to_last_question_and_amount_of_question()
-
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-
-relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+# average_means_of_values()
+#
+# relation_thread_upvotes_with_amount_of_comments()
+# relation_thread_upvotes_with_amount_of_questions()
+#
+# relation_thread_downvotes_with_amount_of_comments()
+# relation_thread_downvotes_with_amount_of_questions()
+#
+# relation_thread_upvotes_and_iama_host_response_time_comments()
+# relation_thread_upvotes_and_iama_host_response_time_questions()
+#
+# relation_thread_downvotes_and_iama_host_response_time_comments()
+# relation_thread_downvotes_and_iama_host_response_time_questions()
+#
+# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+#
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+#
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+#
+# relation_thread_lifespan_to_last_question_and_amount_of_comments()
+# relation_thread_lifespan_to_last_question_and_amount_of_question()
+#
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
+#
+# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
 
