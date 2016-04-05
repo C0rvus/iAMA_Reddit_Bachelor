@@ -1014,8 +1014,8 @@ def write_csv_data(list_with_information):
                  'Thread average response to question time iama host tier x',
 
                  'Thread average response to comment time iama host total',
-                 'Thread average response to comment time iama host total',
-                 'Thread average response to comment time iama host total',
+                 'Thread average response to comment time iama host tier 1',
+                 'Thread average response to comment time iama host tier x',
 
                  'Thread life span until last comment',
                  'Thread life span until last question']]
