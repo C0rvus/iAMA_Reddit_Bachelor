@@ -62,8 +62,8 @@ import pandas                   # Necessary to do statistical calculation
 # ----
 
 
-thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
-question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
+thread_information = pandas.read_csv('thread_all_any.csv', sep=',', na_values="None")
+question_information = pandas.read_csv('questions_all_any.csv',
                                        sep=',', na_values="None", low_memory=False)
 # Would replace NaN with zeroes: thread_information.fillna(0, inplace=True)
 
@@ -509,7 +509,7 @@ def relation_thread_downvotes_and_iama_host_response_time_comments():
     print("Spearman correlation coefficient: " + str(thread_downs.corr(
         thread_average_response_to_comment_time_iama_host_total, method="spearman")))
     print("")
-    print("Calculating correlation between 'thread_ups' and"
+    print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_downs.corr(
@@ -520,7 +520,7 @@ def relation_thread_downvotes_and_iama_host_response_time_comments():
         thread_average_response_to_comment_time_iama_host_tier_1, method="spearman")))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_ups' and"
+    print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_downs.corr(
@@ -555,7 +555,7 @@ def relation_thread_downvotes_and_iama_host_response_time_questions():
     print("Spearman correlation coefficient: " + str(thread_downs.corr(
         thread_average_response_to_question_time_iama_host_total, method="spearman")))
     print("")
-    print("Calculating correlation between 'thread_ups' and"
+    print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_downs.corr(
@@ -566,7 +566,7 @@ def relation_thread_downvotes_and_iama_host_response_time_questions():
         thread_average_response_to_question_time_iama_host_tier_1, method="spearman")))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_ups' and"
+    print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_downs.corr(
@@ -634,7 +634,7 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_total':")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_total':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(
         thread_num_questions_total)))
@@ -643,7 +643,7 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
     print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(
         thread_num_questions_total, method="spearman")))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_tier_1':")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_tier_1':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(
         thread_num_questions_tier_1)))
@@ -653,7 +653,7 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
         thread_num_questions_tier_1, method="spearman")))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_tier_x':")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_tier_x':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(
         thread_num_questions_tier_x)))
@@ -720,7 +720,7 @@ def relation_thread_lifespan_to_last_question_and_amount_of_question():
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_total':")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_total':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(
         thread_num_questions_total)))
@@ -729,7 +729,7 @@ def relation_thread_lifespan_to_last_question_and_amount_of_question():
     print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(
         thread_num_questions_total, method="spearman")))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_tier_1':")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_tier_1':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(
         thread_num_questions_tier_1)))
@@ -739,7 +739,7 @@ def relation_thread_lifespan_to_last_question_and_amount_of_question():
         thread_num_questions_tier_1, method="spearman")))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_tier_x':")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_tier_x':")
     print("")
     print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(
         thread_num_questions_tier_x)))
@@ -1308,42 +1308,51 @@ def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_hos
 
 # Start that calculation
 
-relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
-
+# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+#
 average_means_of_values()
+#
+# relation_thread_upvotes_with_amount_of_comments()
+# relation_thread_upvotes_with_amount_of_questions()
+#
+# relation_thread_downvotes_with_amount_of_comments()
+# relation_thread_downvotes_with_amount_of_questions()
+#
+# relation_thread_upvotes_and_iama_host_response_time_comments()
+# relation_thread_upvotes_and_iama_host_response_time_questions()
+#
+# relation_thread_downvotes_and_iama_host_response_time_comments()
+# relation_thread_downvotes_and_iama_host_response_time_questions()
+#
+#
 
-relation_thread_upvotes_with_amount_of_comments()
-relation_thread_upvotes_with_amount_of_questions()
+# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
 
-relation_thread_downvotes_with_amount_of_comments()
-relation_thread_downvotes_with_amount_of_questions()
+# relation_thread_lifespan_to_last_question_and_amount_of_comments()
+# relation_thread_lifespan_to_last_question_and_amount_of_question()
 
-relation_thread_upvotes_and_iama_host_response_time_comments()
-relation_thread_upvotes_and_iama_host_response_time_questions()
 
-relation_thread_downvotes_and_iama_host_response_time_comments()
-relation_thread_downvotes_and_iama_host_response_time_questions()
 
-relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+#
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+#
 
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+#
 
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+#
 
-relation_thread_lifespan_to_last_question_and_amount_of_comments()
-relation_thread_lifespan_to_last_question_and_amount_of_question()
+# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
 
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
 
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-
-relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()

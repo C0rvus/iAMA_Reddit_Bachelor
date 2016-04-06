@@ -444,8 +444,6 @@ def plot_generated_data():
         -
     """
 
-    print(data_to_give_plotly)
-
     PlotlyBarChart().main_method(data_to_give_plotly)
 
 
