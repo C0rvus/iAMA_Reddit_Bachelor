@@ -519,7 +519,6 @@ def prepare_data_for_graph():
     # Iterates over every item in the global list and counts the amount of questions on tier 1 / other tier
     for item in year_question_list:
         if str(item.get("Year")) == str(year_actually_in_progress):
-            print(item.get("Question_answered"))
             if int(item.get("Question_answered")) is 1:
                 amount_of_answered_questions += 1
             else:

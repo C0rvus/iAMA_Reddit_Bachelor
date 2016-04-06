@@ -730,7 +730,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
 
             return dict_to_be_returned
 
-    # This is the case whenever a comment has not a single thread
+    # This is the case whenever a comment has not a single thread or the comment / question has not been answered
     return dict_to_be_returned
 
 

@@ -242,7 +242,7 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
     global mongo_DB_Comments_Instance
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
-    comments_cursor = comments_collection.find()
+    comments_cursor = list(comments_collection.find())
 
     amount_of_results = []
 
@@ -250,18 +250,18 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
     amount_of_tier_any_questions_answered = 0
 
     # Iterates over every comment within that thread
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
         # Whenever the iterated comment was created by user "AutoModerator" skip it
-        if (collection.get("author")) != "AutoModerator":
+        if (val.get("author")) != "AutoModerator":
 
             # References the text of the comment
-            comment_text = collection.get("body")
-            comment_author = collection.get("author")
-            comment_parent_id = collection.get("parent_id")
-            comment_acutal_id = collection.get("name")
-            comment_time_stamp = collection.get("created_utc")
-            comment_upvotes = collection.get("ups")
+            comment_text = val.get("body")
+            comment_author = val.get("author")
+            comment_parent_id = val.get("parent_id")
+            comment_acutal_id = val.get("name")
+            comment_time_stamp = val.get("created_utc")
+            comment_upvotes = val.get("ups")
 
             # A dictionary containing the results necessary for the calculation here
             dict_result = {
@@ -270,7 +270,7 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
                 "Question_id": comment_acutal_id,
                 "Question_ups": comment_upvotes,
                 "Thread_time_since_start": 0,
-                "Question_answered": bool
+                "Question_answered": 0
             }
 
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
@@ -310,13 +310,13 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
                         amount_of_tier_any_questions_answered += 1
 
                         # Whenever the question has been answered by the iAMA-Host
-                        dict_result["Question_answered"] = True
+                        dict_result["Question_answered"] = 1
                         dict_result = collections.OrderedDict(sorted(dict_result.items()))
                         amount_of_results.append(dict_result)
 
                     # Whenever the question has not been answered by the iAMA-Host
                     else:
-                        dict_result["Question_answered"] = False
+                        dict_result["Question_answered"] = 0
                         dict_result = collections.OrderedDict(sorted(dict_result.items()))
                         amount_of_results.append(dict_result)
 
@@ -393,7 +393,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
     Args:
         author_of_thread (str) : The name of the thread author (iAMA-Host)
         comment_acutal_id (str) : The id of the actually processed comment
-        comments_cursor (Cursor) : The cursor which shows to the amount of comments which can be iterated
+        comments_cursor (list) : The cursor which shows to the amount of comments which can be iterated
     Returns:
         True (bool): Whenever the strings do not match
         False (bool): Whenever the strings do match
@@ -405,32 +405,22 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
     }
 
     # Iterates over every comment
-    for collection in comments_cursor:
+    for i, val in comments_cursor:
 
-        # Whenever the iterated comment was created by user "AutoModerator"
-        # skip it
-        if (collection.get("author")) != "AutoModerator":
-            check_comment_parent_id = collection.get("parent_id")
-            actual_comment_author = collection.get("author")
+        check_comment_parent_id = val.get("parent_id")
+        actual_comment_author = val.get("author")
 
-            # Whenever the iterated comment is from the iAMA-Host and that
-            # comment has the question as parent_id
-            if (check_if_comment_is_not_from_thread_author(
-                    author_of_thread,
-                    actual_comment_author) == False) and (
-                        check_comment_parent_id == comment_acutal_id):
+        # Whenever the iterated comment is from the iAMA-Host and that
+        # comment has the question as parent_id
+        if (check_if_comment_is_not_from_thread_author(author_of_thread, actual_comment_author) == False) \
+                and (check_comment_parent_id == comment_acutal_id):
 
-                dict_to_be_returned["question_Answered_From_Host"] = True
-                dict_to_be_returned[
-                    "time_Stamp_Answer"] = collection.get("created_utc")
+            dict_to_be_returned["question_Answered_From_Host"] = True
+            dict_to_be_returned["time_Stamp_Answer"] = val.get("created_utc")
 
-                return dict_to_be_returned
-            else:
-                return dict_to_be_returned
-        else:
             return dict_to_be_returned
 
-    # This is the case whenever a comment has not a single thread
+    # This is the case whenever a comment has not a single thread or the comment / question has not been answered
     return dict_to_be_returned
 
 
@@ -561,9 +551,7 @@ def write_csv_and_count_unanswered(list_with_comments):
     with open(file_name_csv, 'w', newline='') as fp:
         csv_writer = csv.writer(fp, delimiter=',')
 
-        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
-        data = [['sep=,'],
-                ['Year',
+        data = [['Year',
                  'Has question been answered?',
                  'Thread id',
                  'Question id',
@@ -584,7 +572,7 @@ def write_csv_and_count_unanswered(list_with_comments):
             data.append(temp_list)
 
             # Additionally checks whether a question has been answered or not
-            if item.get("Question_answered") is False:
+            if item.get("Question_answered") == 0:
                 amount_of_questions_not_answered += 1
 
         # Writes data into the csv file

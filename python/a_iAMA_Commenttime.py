@@ -140,8 +140,6 @@ def start_data_generation_for_analysis():
     # Writes a global csv file containing information about all threads
     write_csv_data(global_thread_list)
 
-    print(data_to_give_plotly)
-
     # Plots the graph
     plot_generated_data()
 
@@ -335,7 +333,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
     global mongo_DB_Comments_Instance
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
-    comments_cursor = comments_collection.find()
+    comments_cursor = list(comments_collection.find())
 
     temp_thread = mongo_DB_Threads_Instance[id_of_thread]
     temp_thread_ups = temp_thread.find()[0].get("ups")
@@ -348,16 +346,16 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
     amount_of_questions_answered_by_iama_host = 0
 
     # Iterates over every comment within that thread
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
         # Whenever the iterated comment was created by user "AutoModerator" skip it
-        if (collection.get("author")) != "AutoModerator":
+        if (val.get("author")) != "AutoModerator":
 
             # References the text of the comment
-            comment_text = collection.get("body")
-            comment_author = collection.get("author")
-            comment_parent_id = collection.get("parent_id")
-            comment_actual_id = collection.get("name")
-            comment_time_stamp = collection.get("created_utc")
+            comment_text = val.get("body")
+            comment_author = val.get("author")
+            comment_parent_id = val.get("parent_id")
+            comment_actual_id = val.get("name")
+            comment_time_stamp = val.get("created_utc")
 
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
             if comment_text is not None \
@@ -376,7 +374,7 @@ def calculate_ar_mean_answer_time_for_questions(id_of_thread, author_of_thread):
                 if argument_tier_in_scope == "1":
 
                     if bool_comment_is_question is True \
-                            and bool_comment_is_question_on_tier_1 is True\
+                            and bool_comment_is_question_on_tier_1 is True \
                             and bool_comment_is_not_from_thread_author is True:
 
                         amount_of_questions += 1
@@ -559,7 +557,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
     Args:
         author_of_thread (str) : The name of the thread author (iAMA-Host)
         comment_actual_id (str) : The id of the actually processed comment
-        comments_cursor (Cursor) : The cursor which shows to the amount of comments which can be iterated
+        comments_cursor (list) : The cursor which shows to the amount of comments which can be iterated
     Returns:
         True (bool): Whenever the strings do not match
         False (bool): Whenever the strings do match
@@ -571,30 +569,21 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actu
     }
 
     # Iterates over every comment
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
-        # Whenever the iterated comment was created by user "AutoModerator"
-        # skip it
-        if (collection.get("author")) != "AutoModerator":
-            check_comment_parent_id = collection.get("parent_id")
-            actual_comment_author = collection.get("author")
+        check_comment_parent_id = val.get("parent_id")
+        actual_comment_author = val.get("author")
 
-            # Whenever the iterated comment is from the iAMA-Host and that
-            # comment has the question as parent_id
-            if (check_if_comment_is_not_from_thread_author(
-                    author_of_thread,
-                    actual_comment_author) == False) and (
-                        check_comment_parent_id == comment_actual_id):
+        # Whenever the iterated comment is from the iAMA-Host and that
+        # comment has the question as parent_id
+        if (check_if_comment_is_not_from_thread_author(author_of_thread, actual_comment_author) is False) and (
+                    check_comment_parent_id == comment_actual_id):
 
-                dict_to_be_returned["question_Answered_From_Host"] = True
-                dict_to_be_returned[
-                    "time_Stamp_Answer"] = collection.get("created_utc")
+            dict_to_be_returned["question_Answered_From_Host"] = True
+            dict_to_be_returned["time_Stamp_Answer"] = val.get("created_utc")
 
-                return dict_to_be_returned
-            else:
-                return dict_to_be_returned
-        else:
             return dict_to_be_returned
+
 
     # This is the case whenever a comment has not a single thread
     return dict_to_be_returned
@@ -666,9 +655,7 @@ def write_csv_data(list_with_information):
     with open(file_name_csv, 'w', newline='') as fp:
         csv_writer = csv.writer(fp, delimiter=',')
 
-        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
-        data = [['sep=,'],
-                ['Year',
+        data = [['Year',
                  'Thread id',
                  'Thread author',
                  'Thread ups',
@@ -681,7 +668,6 @@ def write_csv_data(list_with_information):
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_information:
-
             temp_list = [str(item.get("Year")),
                          str(item.get("Thread_id")),
                          str(item.get("Thread_author")),

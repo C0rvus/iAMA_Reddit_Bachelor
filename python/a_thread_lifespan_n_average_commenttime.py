@@ -504,7 +504,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     global mongo_DB_Comments_Instance, temp_time_difference_list
 
     comments_collection = mongo_DB_Comments_Instance[id_of_thread]
-    comments_cursor = comments_collection.find()
+    comments_cursor = list(comments_collection.find())
 
     temp_thread = mongo_DB_Threads_Instance[id_of_thread]
     temp_thread_ups = temp_thread.find()[0].get("ups")
@@ -555,11 +555,11 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     # Additionally comments from AutoModerator-Bot are beeing ingored because
     # they skew our statistics and would be created with the same timestamp
     # like the thread itself
-    for collection in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
         # Whenever the iterated comment was created by user "AutoModerator" skip it
-        if (collection.get("author")) != "AutoModerator":
-            time_list.append(collection.get("created_utc"))
+        if (val.get("author")) != "AutoModerator":
+            time_list.append(val.get("created_utc"))
 
     # Whenever only "Automoderator" responded and no real comments were given, return an empty dictionary,
     # which will be discarded later on
@@ -711,9 +711,7 @@ def write_csv(list_with_information):
     with open(file_name_csv, 'w', newline='') as fp:
         csv_writer = csv.writer(fp, delimiter=',')
 
-        # The heading of the csv file.. sep= is needed, otherwise Microsoft Excel would not recognize seperators..
-        data = [['sep=,'],
-                ['Year',
+        data = [['Year',
                  'Thread id',
                  'Thread ups',
                  'Thread downs',

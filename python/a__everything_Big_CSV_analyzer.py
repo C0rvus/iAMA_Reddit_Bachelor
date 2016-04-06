@@ -8,6 +8,8 @@
 # [some depend on the tier they have been calculated from]
 # ----
 # Year
+# Question ups
+# Question answered by iAMA host
 # Thread id
 # Thread author
 # Thread ups
@@ -61,7 +63,7 @@
 import pandas
 
 thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
-question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_tier_any_no_text_n_link.csv', sep=',', na_values="None", low_memory=False)
+question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv', sep=',', na_values="None", low_memory=False)
 # Would replace NaN with zeroes: thread_information.fillna(0, inplace=True)
 
 thread_year = thread_information['Year']
@@ -138,18 +140,20 @@ question_ups = question_information['Question ups']
 question_answered_by_iAMA_host = question_information['Question answered by iAMA host']
 
 
-print("Pearson correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host)))
-print("Kendall correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="kendall")))
-print("Spearman correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="spearman")))
+# Correlation question upvotes <-> amount of questions answered by the iama host
+def relation_question_upvotes_with_amount_of_questions_answered_by_iama_host():
+    print("")
+    print("----")
+    print("Calculating correlation between 'question_ups' and 'question_answered_by_iAMA_host':")
+    print("")
+    print("Pearson correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host)))
+    print("Kendall correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="kendall")))
+    print("Spearman correlation coefficient: " + str(question_ups.corr(question_answered_by_iAMA_host, method="spearman")))
+    print("")
+    print("----")
 
 
-
-
-
-
-
-
-# Average means
+# Average means of different values
 def average_means_of_values():
     print("----")
     print("Calculating arithmetic average means here")
@@ -203,7 +207,7 @@ def average_means_of_values():
     print("----")
 
 
-# Upvotes and comments / questions
+# Correlation thread upvotes <-> amount of comments
 def relation_thread_upvotes_with_amount_of_comments():
     print("")
     print("----")
@@ -229,6 +233,7 @@ def relation_thread_upvotes_with_amount_of_comments():
     print("----")
 
 
+# Correlation thread upvotes <-> amount of questions
 def relation_thread_upvotes_with_amount_of_questions():
     print("")
     print("----")
@@ -254,7 +259,7 @@ def relation_thread_upvotes_with_amount_of_questions():
     print("----")
 
 
-# Downvotes and comments / questions
+# Correlation thread downvotes <-> amount of comments
 def relation_thread_downvotes_with_amount_of_comments():
     print("")
     print("----")
@@ -280,6 +285,7 @@ def relation_thread_downvotes_with_amount_of_comments():
     print("----")
 
 
+# Correlation thread downvotes <-> amount of questions
 def relation_thread_downvotes_with_amount_of_questions():
     print("")
     print("----")
@@ -305,7 +311,7 @@ def relation_thread_downvotes_with_amount_of_questions():
     print("----")
 
 
-# Upvotes and iama host response time to comments / questions
+# Correlation thread upvotes <-> iama host repsonse time to comments
 def relation_thread_upvotes_and_iama_host_response_time_comments():
     print("")
     print("----")
@@ -331,6 +337,7 @@ def relation_thread_upvotes_and_iama_host_response_time_comments():
     print("----")
 
 
+# Correlation thread upvotes <-> iama host repsonse time to questions
 def relation_thread_upvotes_and_iama_host_response_time_questions():
     print("")
     print("----")
@@ -356,7 +363,7 @@ def relation_thread_upvotes_and_iama_host_response_time_questions():
     print("----")
 
 
-# Downvotes and iama host response time to comments / questions
+# Correlation thread downvotes <-> iama host repsonse time to comments
 def relation_thread_downvotes_and_iama_host_response_time_comments():
     print("")
     print("----")
@@ -382,6 +389,7 @@ def relation_thread_downvotes_and_iama_host_response_time_comments():
     print("----")
 
 
+# Correlation thread downvotes <-> iama host repsonse time to questions
 def relation_thread_downvotes_and_iama_host_response_time_questions():
     print("")
     print("----")
@@ -407,7 +415,7 @@ def relation_thread_downvotes_and_iama_host_response_time_questions():
     print("----")
 
 
-# Thread lifespan of comments to amount of comments / questions
+# Correlation thread life span (until last comment) <-> amount of comments
 def relation_thread_lifespan_to_last_comment_and_amount_of_comments():
     print("")
     print("----")
@@ -433,6 +441,7 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_comments():
     print("----")
 
 
+# Correlation thread life span (until last comment) <-> amount of questions
 def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
     print("")
     print("----")
@@ -458,116 +467,7 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
     print("----")
 
 
-# Thread life span last comment <-> response time iAMA host to comments / questions
-def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments():
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_total':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total, method="spearman")))
-    print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_tier_1':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="spearman")))
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_tier_x':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="spearman")))
-    print("")
-    print("----")
-
-
-def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions():
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_total':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total, method="spearman")))
-    print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_1':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1, method="spearman")))
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_x':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x, method="spearman")))
-    print("")
-    print("----")
-
-
-# Thread life span last question <-> response time iAMA host to comments / questions
-def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments():
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_total':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total, method="spearman")))
-    print("")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_tier_1':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="spearman")))
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_tier_x':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="spearman")))
-    print("")
-    print("----")
-
-
-def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions():
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_total':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total, method="spearman")))
-    print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_1':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1, method="spearman")))
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_x':")
-    print("")
-    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x)))
-    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x, method="kendall")))
-    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x, method="spearman")))
-    print("")
-    print("----")
-
-
-
-
-
-
-
-
-
-# Thread lifespan of questions to amount of comments / questions
+# Correlation thread life span (until last question) <-> amount of comments
 def relation_thread_lifespan_to_last_question_and_amount_of_comments():
     print("")
     print("----")
@@ -593,6 +493,7 @@ def relation_thread_lifespan_to_last_question_and_amount_of_comments():
     print("----")
 
 
+# Correlation thread life span (until last question) <-> amount of question
 def relation_thread_lifespan_to_last_question_and_amount_of_question():
     print("")
     print("----")
@@ -618,7 +519,111 @@ def relation_thread_lifespan_to_last_question_and_amount_of_question():
     print("----")
 
 
-# Thread reaction time comments to response time of iama host to comments / questions
+# Correlation thread life span (until last comment) <-> iama host repsonse time to comments
+def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments():
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_total':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_total, method="spearman")))
+    print("")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="spearman")))
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="spearman")))
+    print("")
+    print("----")
+
+
+# Correlation thread life span (until last comment) <-> iama host repsonse time to questions
+def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions():
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_total':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_total, method="spearman")))
+    print("")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_1, method="spearman")))
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_comment.corr(thread_average_response_to_question_time_iama_host_tier_x, method="spearman")))
+    print("")
+    print("----")
+
+
+# Correlation thread life span (until last question) <-> and iama host repsonse time to comments
+def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments():
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_total':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_total, method="spearman")))
+    print("")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_1, method="spearman")))
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_comment_time_iama_host_tier_x, method="spearman")))
+    print("")
+    print("----")
+
+
+# Correlation thread life span (until last question) <-> iama host repsonse time to questions
+def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions():
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_total':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_total, method="spearman")))
+    print("")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_1, method="spearman")))
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print("")
+    print("Pearson correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x)))
+    print("Kendall correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x, method="kendall")))
+    print("Spearman correlation coefficient: " + str(thread_life_span_until_last_question.corr(thread_average_response_to_question_time_iama_host_tier_x, method="spearman")))
+    print("")
+    print("----")
+
+
+# Correlation thread reaction time between comments <-> iama host repsonse time to comments
 def relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments():
     print("")
     print("----")
@@ -644,6 +649,7 @@ def relation_thread_reaction_time_comments_and_iama_host_response_time_to_commen
     print("----")
 
 
+# Correlation thread reaction time between comments <-> iama host repsonse time to questions
 def relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions():
     print("")
     print("----")
@@ -669,7 +675,7 @@ def relation_thread_reaction_time_comments_and_iama_host_response_time_to_questi
     print("----")
 
 
-# Thread reaction time questions to response time of iama host to comments / questions
+# Correlation thread reaction time between questions <-> iama host repsonse time to comments
 def relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments():
     print("")
     print("----")
@@ -695,6 +701,7 @@ def relation_thread_reaction_time_questions_and_iama_host_response_time_to_comme
     print("----")
 
 
+# Correlation thread reaction time between questions <-> iama host repsonse time to questions
 def relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions():
     print("")
     print("----")
@@ -720,7 +727,7 @@ def relation_thread_reaction_time_questions_and_iama_host_response_time_to_quest
     print("----")
 
 
-# Thread reaction time comments to amount of comments / questions the iama host reacted to
+# Correlation thread reaction time between comments <-> amount of comments the iama host reacted to
 def relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to():
     print("")
     print("----")
@@ -746,6 +753,7 @@ def relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_
     print("----")
 
 
+# Correlation thread reaction time between comments <-> amount of questions the iama host reacted to
 def relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to():
     print("")
     print("----")
@@ -771,7 +779,7 @@ def relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host
     print("----")
 
 
-# Thread reaction time questions to amount of comments / questions the iama host reacted to
+# Correlation thread reaction time between questions <-> amount of comments the iama host reacted to
 def relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to():
     print("")
     print("----")
@@ -797,6 +805,7 @@ def relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host
     print("----")
 
 
+# Correlation thread reaction time between questions <-> amount of questions the iama host reacted to
 def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to():
     print("")
     print("----")
@@ -820,25 +829,6 @@ def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_hos
     print("Spearman correlation coefficient: " + str(thread_average_reaction_time_between_questions_tier_x.corr(thread_num_questions_answered_by_iama_host_tier_x, method="spearman")))
     print("")
     print("----")
-
-
-
-
-
-
-def relation_thread_average_reaction_time_with_thread_life_span():
-    print("")
-    print("----")
-    print("Calculating correlation between 'thread_average_mean_comment_reaction_time' and 'thread_average_lifespan':")
-    print("")
-#    print("Pearson correlation coefficient: " + str(thread_average_mean_comment_reaction_time.corr
-#                                                    (thread_average_lifespan)))
-#    print("Kendall correlation coefficient: " + str(thread_average_mean_comment_reaction_time.corr
-#                                                    (thread_average_lifespan, method="kendall")))
-#    print("Spearman correlation coefficient: " + str(thread_average_mean_comment_reaction_time.corr
-#                                                     (thread_average_lifespan, method="spearman")))
-    print("----")
-
 
 # Start that calculation
 # average_means_of_values()
@@ -878,4 +868,3 @@ def relation_thread_average_reaction_time_with_thread_life_span():
 #
 # relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
 # relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-
