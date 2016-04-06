@@ -1,13 +1,14 @@
-#   Tutorials used within this class:
-#   1. (06.02.2016 @ 15:23) -
-#           http://www.esqsoft.com/javascript_examples/date-to-epoch.htm
-#   2. (06.02.2016 @ 15:48) -
-#           https://www.reddit.com/r/redditdev/comments/2zdyy2/praw_continue_getting_posts_after_given_post_id/
-#   3. (06.02.2016 @ 16:20) -
-#           https://www.linuxquestions.org/questions/programming-9/python-datetime-to-epoch-4175520007/
-#   4. (06.02.2016 @ 16:30) -#
-#           https://stackoverflow.com/questions/11743019/convert-python-datetime-to-epoch-with-strftime
-#   This script has been developed by using PRAW 3.3.0
+# Sources used within this class:
+# 1. (06.02.2016 @ 15:23) -
+# http://www.esqsoft.com/javascript_examples/date-to-epoch.htm
+# 2. (06.02.2016 @ 15:48) -
+# https://www.reddit.com/r/redditdev/comments/2zdyy2/praw_continue_getting_posts_after_given_post_id/
+# 3. (06.02.2016 @ 16:20) -
+# https://www.linuxquestions.org/questions/programming-9/python-datetime-to-epoch-4175520007/
+# 4. (06.02.2016 @ 16:30) -
+# https://stackoverflow.com/questions/11743019/convert-python-datetime-to-epoch-with-strftime
+#
+# This script has been developed by using PRAW 3.3.0
 
 import praw                                 # Necessary for crawling data from reddit
 import time                                 # Necessary to do some time calculations

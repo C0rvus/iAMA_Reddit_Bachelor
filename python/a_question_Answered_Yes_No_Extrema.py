@@ -405,7 +405,7 @@ def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acut
     }
 
     # Iterates over every comment
-    for i, val in comments_cursor:
+    for i, val in enumerate(comments_cursor):
 
         check_comment_parent_id = val.get("parent_id")
         actual_comment_author = val.get("author")
@@ -487,7 +487,7 @@ def sort_questions(list_which_is_to_be_sorted):
 
     # Creates a "sorted" which contains all comments of that year, sorted by upvotes in descending order
     # In dependence of given sort parameter..
-    questions_sorted = sorted(all_comments, key=lambda k: k['question_ups'], reverse=argument_sorting)
+    questions_sorted = sorted(all_comments, key=lambda k: k['Question_ups'], reverse=argument_sorting)
 
     # Defines the amount of the top X questions (by upvotes) which have not been answered
     return questions_sorted

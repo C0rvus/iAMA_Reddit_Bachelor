@@ -7,10 +7,6 @@
 # http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
 # 4. (31.03.2016 @ 12:13) -
 # http://stackoverflow.com/questions/33448233/python-write-to-text-file-skip-bad-lines
-# 5. (31.03.2016 @ 13:15) -
-# http://stackoverflow.com/questions/14630288/unicodeencodeerror-charmap-codec-cant-encode-character-maps-to-undefined
-# 6. (31.03.2016 @ 13:45) -
-# https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import csv                       # Necessary to write data to csv files
@@ -220,7 +216,7 @@ def question_distribution_tier1_tierx(id_of_thread, author_of_thread):
             # References the text of the comment
             comment_text = val.get("body")
             comment_author = val.get("author")
-            comment_parent_id = val.get("Parent_id")
+            comment_parent_id = val.get("parent_id")
             comment_time_stamp = val.get("created_utc")
             comment_id = val.get("name")
             comment_ups = val.get("ups")

@@ -1,10 +1,10 @@
 # Sources used within this class:
-# 1. (27.02.2016 @ 14:10) -
-# http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
-# 2. (27.02.2016 @ 14:22) -
+# 1. (27.02.2016 @ 14:22) -
 # https://stackoverflow.com/questions/20214497/annoying-white-space-in-bar-chart-matplotlib-python
-# 3. (27.02.2016 @ 16:30) -
+# 2. (27.02.2016 @ 16:30) -
 # http://www.programiz.com/python-programming/break-continue
+# 3. (26.03.2016 @ 18:03) -
+# https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
 
 import collections               # Necessary to sort collections alphabetically
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name

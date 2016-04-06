@@ -1,9 +1,14 @@
+# Sources used within this class:
+# 1. (08.02.2016 @ 15:43) -
+# https://api.mongodb.org/python/current/tutorial.html
+#
+# This script has been developed by using PRAW 3.3.0
+
 from pymongo import MongoClient     # Necessary to interact with MongoDB
 from datetime import datetime       # Necessary to create the year out of the thread utc
 import praw                         # Necessary for praw usage
 import sys                          # Necessary to use script arguments
 import collections                  # Necessary to sort the dictionary before it will be written into the database
-#   This script has been developed by using PRAW 3.3.0
 
 
 def check_script_arguments():

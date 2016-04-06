@@ -1,14 +1,19 @@
-import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
-import datetime                  # Necessary for calculating time differences
-import sys                       # Necessary to use script arguments
-import os                        # Necessary to get the name of currently processed file
-import csv                       # Necessary to write data to csv files
-
-import numpy as np
-
-# Quelle:
+# Sources used within this class:
+# 1. (26.03.2016 @ 15:40) -
+# https://stackoverflow.com/questions/14693646/writing-to-csv-file-python
+# 2. (26.03.2016 @ 18:03) -
+# https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
+# 3. (26.03.2016 @ 18:43) -
+# http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
+# 4. (01.04.2016 @ 15:45) -
 # http://stackoverflow.com/questions/7301110/why-does-return-list-sort-return-none-not-the-list
 
+import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
+import csv                       # Necessary to write data to csv files
+import datetime                  # Necessary for calculating time differences
+import numpy as np               # Necessary for calculating the arithmetic mean of values
+import os                        # Necessary to get the name of currently processed file
+import sys                       # Necessary to use script arguments
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
@@ -246,6 +251,20 @@ def generate_data():
 
 
 def process_specific_thread(thread_id, thread_creation_time_stamp, thread_author):
+    """Does the needed operations, for gaining information / knowledge about threads on the given thread id
+
+    After the caluclations have every iteration the results will ber appended to a list, which will contain all that
+        information for the current year... That list will be writtend to csv and appended to a global list in other
+        methods
+
+    Args:
+        thread_id (str) : The id, needed for operating (i.E. comparison of parent - child relation)
+        thread_creation_time_stamp (int) : Creation time stamp of thread, needed for time difference calculation
+        thread_author (str): The name of the threads author, needed for answer checking of a post
+    Returns:
+        -
+    """
+
     # Makes the global comments instance locally available here
     global mongo_DB_Comments_Instance
 

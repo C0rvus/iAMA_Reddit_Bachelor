@@ -5,17 +5,13 @@
 # https://stackoverflow.com/questions/12400256/python-converting-epoch-time-into-the-datetime
 # 3. (26.03.2016 @ 18:43) -
 # http://effbot.org/pyfaq/how-do-i-copy-an-object-in-python.htm
-# 4. (31.03.2016 @ 12:13) -
-# http://stackoverflow.com/questions/33448233/python-write-to-text-file-skip-bad-lines
-# 5. (31.03.2016 @ 13:15) -
-# http://stackoverflow.com/questions/14630288/unicodeencodeerror-charmap-codec-cant-encode-character-maps-to-undefined
-# 6. (31.03.2016 @ 13:45) -
+# 5. (31.03.2016 @ 13:45) -
 # https://www.reddit.com/r/learnpython/comments/3i0uxt/unicodeencodeerror_charmap_codec_cant_encode/
 
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import os                        # Necessary to get the name of currently processed file
 import sys                       # Necessary to use script arguments
-import csv                          # Necessary to write data to csv files
+import csv                       # Necessary to write data to csv files
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 # noinspection PyUnresolvedReferences
 from PlotlyBarChart import PlotlyBarChart   # Necessary to plot the data into a stacked bar chart
