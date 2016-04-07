@@ -14,7 +14,7 @@ Third depending on the analyzation results the new webpage will have to be built
 ## What languages / setup do you want use to acheive your goals?
 Python, HTML5, CoffeeScript, LESS, MongoDB
 
-# How can I use it?
+## How can I use it?
 To make use of this repository please follow the instructions below.
 
 ### Prerequisites
@@ -25,7 +25,7 @@ To make use of this repository please follow the instructions below.
 4. Make sure you have the necessary python modules (praw, numpy, pandas, pymongo) installed on your client.
 5. Make sure to have your mongoDB up, running and accessible (you can check that i.E. by connecting via **Robomongo**)
 
-### Crawling data:
+# Crawl data:
 1. Run the scripts with the prefix "***c_***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
@@ -73,7 +73,7 @@ containing the following information:
 
 For a better understanding simply look at the picture in **.\_picutres\db_hierarchy.jpg** within this repository.
 
-#### c\_crawl\_Differences.py
+## c\_crawl\_Differences.py
 Compares threads and comments databases and crawls missing collections.
 By initially crawling information about threads and database you can sometimes have an unequal amount of documents
 between the databases. This is because crawling uses some sort of amazon cloud search which is not always working 
@@ -82,13 +82,17 @@ reliable.
     python crawl_differences.py {year_beginning} {year_ending} {direction}
     
     
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
-..* The year you want the start the crawling process on 
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start
+ the crawling process on 
 
-* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
-..* The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling
+ process to stop. The year defined here is included (!!) within the crawling process..
 
-* **direction**	= **[forward || backward]** Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
+* **direction** = **[forward || backward]** Defines the direction in which the comparison and crawling process 
+ should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up 
+ the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback 
+ mechanism which enables them to not write information twice into the database. So before every write process into the 
+ database it will be checked whether that actually processed collection already exists in the database or not.
 
 *Usage examples shown down below*
 
@@ -97,7 +101,7 @@ reliable.
     python crawl_differences.py 2009 2009 forward
 
 
-#### c\_crawl\_Threads\_N\_Comments.py
+## c\_crawl\_Threads\_N\_Comments.py
 Crawls threads and comments into the regarding databases
 
     python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
@@ -105,11 +109,15 @@ Crawls threads and comments into the regarding databases
     
 * **crawl_type** = **[threads || comments]** *The type of data you want to be crawled and written into the database*
  
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the start the crawling process on*
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the start
+ the crawling process on*
 
-* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..*
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** *The year you want the crawling
+ process to stop. The year defined here is included (!!) within the crawling process..*
 
-* **shift_hours**	= **[int]** *The time units (hours) the crawler will move forward in crawling.. Because crawling stepwise asks the reddit server for new data, it is necessary to do this is little intervals.. a value of 96 is good*
+* **shift_hours** = **[int]** *The time units (hours) the crawler will move forward in crawling.. 
+ Because crawling  asks the reddit server for new data stepwise - so it is necessary to do this is little intervals..
+  a value of 96 is good*
 
 *Usage examples shown down below*
 
@@ -118,124 +126,201 @@ Crawls threads and comments into the regarding databases
     python crawl_threads_n_comments.py threads 2009 today 128
 
 
-### Analyzing data:
-1. Run the scripts with the prefix ***"analyze"*** within **./python/** - folder.
+# Analyze data:
+1. Run the scripts with the prefix ***"a_"*** within **./python/** - folder.
 
-The analyzing scripts iterates over the documents / collections within the databases and calculate various things which will be explained down below:
+The analyzing scripts iterate over the documents / collections within the databases and calculate various things
+ which will be explained down below:
+
+## a\_everything\_Big\_CSV\_analyzer.py
+
+This script calculates all possible correlations / arithmetic means, etc.. with the data, stored in csv-files, which
+have been exported from the database. We use .csv-files for it because it allows use to user alternative
+analysis-frameworks like **WEKA**.
+
+To make use of it, you just need two .csv-files within the same folder the script is running in.
+
+* **d\_create\_Big\_CSV\_2009\_until\_2016\_BIGDATA\_ALL.csv**
+* **a\_question_Answered\_Yes\_No\_Tier\_Percentage\_2009\_until\_2016\_ALL\_tier\_any.csv**
+
+You get those two .csv files by running 
+
+    python d_create_Big_CSV.py 2009 2016
+    python a_question_Answered_Yes_No_Tier_Percentage.py 2009 2016 any
+    
+It printlines the various calculation results into the console output.
 
 
-#### analyze\_correlation\_upvote\_reaction\_time\_pieChart.py
+## a\_iAMA\_Commenttime.py
 
-Plots a scatter chart which contains values of the upvotes of answered questions (by the iAMA host) and the repsonse time of the iAma host to those questions. Additionally Pearsons Ro und the regarding p-value will be calculated and printed into the plots title bar.
+This script script calculates the time the iAma host needs to react / respond to a comment / question which has been
+posted in his thread.
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
 
-    python analyze_correlation_upvote_reaction_time_pieChart.py {year} {tier} {time} {plot_x_limit}
+    python a_iAMA_Commenttime.py {year_beginning} {year_ending} {tier} {time}
 
     
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
 
-* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop
 
-* **time** = **[minutes || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting)
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier,
+ x looks on any other tier except tier 1, any looks on all tiers
 
-* **plot_x_limit**	=	**[int]**	Limits the plot on the x scale.. Useful if you only want to look at given response times.. 0 means no limit
+* **time** = **[minutes || hours || days]** The time units in which the calculated values will be seperated into..
+ (necessary for graph plotting)
 
 
 *Usage examples shown down below*
 
-    python analyze_correlation_upvote_reaction_time_pieChart.py 2009 any hours 0
-    python analyze_correlation_upvote_reaction_time_pieChart.py 2010 1 minutes 500
-    python analyze_correlation_upvote_reaction_time_pieChart.py 2009 x hours 200
+    python a_iAMA_Commenttime.py 2009 2016 any days
+    python a_iAMA_Commenttime.py 2012 2016 1 minutes
+    python a_iAMA_Commenttime.py 2009 2010 x hours
 
 
-#### analyze\_thread\_lifeSpan\_n\_average\_commentTime_pieChart.py 
-Calculates how long a thread lives and the average comment time - for the given year and additionally plots a pie chart with that information.
+## a\_question_Answered\_Yes\_No\_Extrema 
+Calculates how many of the top / worst X questions have been answered.
+A top / worst question is a question with the highest / lowest amount of votes. X is the amount of questions you want
+the script to do calculations on.
 
-    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py {year} {calc} {time}
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
+ 
+
+    python a_question_Answered_Yes_No_Extrema.py {year_beginning} {year_ending} {rate}
 
     
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
 
-* **calc** = **[lifespan || comment]** The data you want to calculate 
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop  
 
-* **time** = **[min || hours || days]** The time units in which the calculated values will be seperated into for plotting.. 
+* **rate** = **[top || worst]** The best or worst voted questions you want to have a look at
 
+*Usage examples shown down below*
+
+    python a_question_Answered_Yes_No_Extrema 2009 2016 top
+    python a_question_Answered_Yes_No_Extrema 2009 2016 worst
+    python a_question_Answered_Yes_No_Extrema 2012 2014 top
+
+
+## a\_question\_Answered\_Yes\_No\_Tier\_Percentage.py
+Analyzes how many questions have been answered by the iAMA host on a given time span and year.
+
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
+
+    python a_question_Answered_Yes_No_Tier_Percentage.py {year_beginning} {year_ending} {tier}
+
+    
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
+
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop 
+
+* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier,
+ x looks on any other tier except tier 1, any looks on all tiers
 
 
 *Usage examples shown down below*
 
-    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2009 lifespan days
-    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2014 comment hours
-    python analyze_thread_lifeSpan_n_average_commentTime_pieChart.py 2012 lifespan minutes
+    python a_question_Answered_Yes_No_Tier_Percentage.py 2009 2016 any
+    python a_question_Answered_Yes_No_Tier_Percentage.py 2009 2013 1
+    python a_question_Answered_Yes_No_Tier_Percentage.py 2009 2011 x
+    
+    
+## a\_question\_Tier\_Distribution.py
+Calculates the distribution of questions for the given years. It only decides whether a question has been posted
+on tier 1 or on any other tier.
+
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
 
 
-#### analyze\_tier\_answered\_percentage\_pieChart.py
-Plots a pieChart which contains the distribution of questions answered per tier for the given year.
-
-    python analyze_tier_answered_percentage_pieChart.py {year} {tier}
+    python a_question_Tier_Distribution.py {year_beginning} {year_ending}
 
     
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
 
-* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
-
-*Usage examples shown down below*
-
-    python analyze_tier_answered_percentage_pieChart.py 2009 1
-    python analyze_tier_answered_percentage_pieChart.py 2011 x
-    python analyze_tier_answered_percentage_pieChart.py 2015 any    
-
-
-#### analyze\_tier\_answered\_time\_pieChart.py 
-Calculates the arithmetic mean of the iAMA hosts response time to questions depending on the tier and the time_value given and plots a pie chart with those information.
-
-    python analyze_tier_answered_time_pieChart.py {year} {tier} {time}
-
-    
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
-
-* **tier** = **[1 || x || any]** The tier which will be in scope. 1 only looks at the first tier, x looks on any other tier except tier 1, any looks on all tiers
-
-* **time** = **[minutes || hours]** The time units in which the calculated values will be seperated into.. (necessary for graph plotting) 
-
-*Usage examples shown down below*
-
-    python analyze_tier_answered_time_pieChart.py 2011 1 minutes
-    python analyze_tier_answered_time_pieChart.py 2012 x hours
-    python analyze_tier_answered_time_pieChart.py 2009 any hours    
-
-
-#### analyze\_tier\_question\_distribution\_pieChart.py
-Plots a pieChart which shows the distrubtion of questions on tier 1 and the rest - how many questions rely on the first tier and how mana rely on the remaining tiers.
-
-    python analyze_tier_question_distribution_pieChart.py {year}
-
-    
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop  
 
 
 *Usage examples shown down below*
 
-    python analyze_tier_question_distribution_pieChart.py 2009
-    python analyze_tier_question_distribution_pieChart.py 2011
-    python analyze_tier_question_distribution_pieChart.py 2014
+    python analyze_tier_question_distribution_pieChart.py 2009 2016
+    python analyze_tier_question_distribution_pieChart.py 2011 2012
+    python analyze_tier_question_distribution_pieChart.py 2010 2013
 
 
-#### analyze\_top100\_pieChart.py 
-Calculates how many of the top / worst 100 questions have been answered. A top / worst question is a question with the highest / lowest amount of votes. A pie chart will be plotted for visualisation.
+## a\_thread\_Lifespan\_N\_Average\_Commenttime.py
+This script calculates two things
 
-    python analyze_top100_pieChart.py {year} {rate}
+1. The average lifespan of a thread until the last reaction had been done (last question / comment posted)
+
+2. The average reaction time between posted comments 
+(so you can say.. in the year 2009 ever X seconds a new comment has been posted)
+
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
+
+    python a_thread_Lifespan_N_Average_Commenttime.py {year_beginning} {year_ending} {calc_type} {time}
 
     
-* **year** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year which is to be used for the calculation 
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
 
-* **rate** = **[top || worst]** The best or worst voted questions you want to have a look at 
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop
+
+* **calc** = **[lifespan || comment]** The type of data you want to calculate 
+
+* **time** = **[minutes || hours || days]** The time units in which the calculated values will be seperated into..
+ (necessary for graph plotting)
+
 
 *Usage examples shown down below*
 
-    python analyze_top100_pieChart.py 2009 top
-    python analyze_top100_pieChart.py 2011 worst
-    python analyze_top100_pieChart.py 2010 worst
+    python a_thread_Lifespan_N_Average_Commenttime 2009 2016 lifespan days
+    python a_thread_Lifespan_N_Average_Commenttime 2009 2012 comment hours
+    python a_thread_Lifespan_N_Average_Commenttime 2009 2010 lifespan minutes
 
-### Usage of overhaul:
+
+# Generate one big data file:
+
+## d\_create\_Big\_CSV.py
+
+Every analyze script creates its own inidivual .csv - files.. So it might be difficult to do calculations on the ***WHOLE***
+ reddit dataset by using those seperated files, because they contain slightly different information, depending on the 
+ script they were created from. (Some scripts need some special filtering [i.E. skipping thread with no questions in it, etc.].
+
+To not fiddle around with those seperated scripts and to have one conglomerat containing all information ever possible
+you can use this script here.
+ 
+I really recommend using ***this script*** if you want to do complete research on the ***WHOLE*** reddit
+dataset
+
+    python d_create_Big_CSV.py {year_beginning} {year_ending}
+    
+   
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
+
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop
+
+*Usage examples shown down below*
+
+    python d_create_Big_CSV.py 2009 2016
+    python d_create_Big_CSV.py 2009 2012
+    python d_create_Big_CSV.py 2012 2013
+
+## Usage of overhaul:
 
 This is actually not in development yet.
