@@ -1,25 +1,32 @@
 # What is this all about?
-This repository contains code for an iAMA overhaul I have to create because of my bachelor thesis, which is about the design and implementation of an overhaul for the iAMA subreddit to enhance the users reading experience.
-So this is a two step process. First some reddit data needs to be analyzed and afterwards upon the gained insights I will create and implement a better dashboard / layout.
-
+This repository contains code for an iAMA overhaul I have to create because of my bachelor thesis, which is about the
+design and implementation of an overhaul for the ***iAMA***-subreddit to enhance the users reading experience.
+So this is a three step process.
+First some reddit data needs to be crawled into a local database.
+Second that locally stored informatio needs to be analyzed.
+Third depending on the analyzation results the new webpage will have to be built equivalent. 
+ 
 ## What does this repository offer to me?
 1. Scripts to crawl data from reddit and write them into a database
 2. Scripts to analyze the crawled data
-2. The new iAMA - overhaul
+3. The new iAMA - overhaul
 
 ## What languages / setup do you want use to acheive your goals?
 Python, HTML5, CoffeeScript, LESS, MongoDB
 
-## How can I use it?
+# How can I use it?
+To make use of this repository please follow the instructions below.
 
 ### Prerequisites
 
-1. Install mongoDB on your client (localhost) and do not set up any special permissions (so everbody can access it). Also make sure you have enough disk space available (~50 GB)
-2. Install Python 3.5.1 on your client
-3. Make sure having needed python modules (praw, numpy, pymongo) installed on your client
+1. Make sure you have enough disk space available (~50 GB) (necessary because of data crawling).
+2. Install mongoDB on your client (localhost) and do not set up any special permissions (so everbody can access it). 
+3. Install Python 3.5.1 on your client (I recommend using the 64 bit version, because it uses up lots of RAM).
+4. Make sure you have the necessary python modules (praw, numpy, pandas, pymongo) installed on your client.
+5. Make sure to have your mongoDB up, running and accessible (you can check that i.E. by connecting via **Robomongo**)
 
 ### Crawling data:
-1. Run the scripts with the prefix "***crawl***" within **./python/** - folder.
+1. Run the scripts with the prefix "***c_***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
 You will be having database of two types:
@@ -30,25 +37,27 @@ You will be having database of two types:
 
 Each database contains a collection with the name of the appropriate crawled thread.
 
-In the "iAMA\_Reddit\_Threads_{year}" each document only holds one collection containing the following information about a thread:
+In the "iAMA\_Reddit\_Threads_{year}" database each document only holds one collection containing the 
+following thread information:
 
->	"_id"		=		The dynamically generated id from the mongo db
+>	"_id"	 =		The dynamically generated id from the mongo db
 
->	"author"	=		The author of the thread
+>	"author"	    =		The author of the thread
 
 >	"created_utc"	=		The timestamp when that thread has been created (timestamp is in unix epoch formatation)
 
 >	"downs"		=		The amount of downvotes that thread has received
 
->	"num_Comments"	=		The amount of comments that thread has received.. (This number differs from the actually parsed comments [this is because reddit does not allow you to crawl already deleted comments...]
+>	"num_Comments"	=		The amount of comments that thread has received.. (skewed by Reddit Anti-Bot system..)
 
->	"selftext"	=		The selftext of the thread. In the early years of reddit there were no selftext, therefore that value may be empty in some databases
+>	"selftext"	=		The selftext of the thread. Value can be empty on some years
 
->	"title"		=		The iAMAs title
+>	"title"		=		The iAMA threads title
 
 >	"ups"		=		The amount of upvotes
 
-In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for every comment within that thread, containing the following information:
+In the "iAMA\_Reddit\_Comments_{year}" database  each document holds one collection for every comment within that thread,
+containing the following information:
 
 >	"_id"		=		The dynamically generated id from the mongo db
 
@@ -62,16 +71,22 @@ In the "iAMA\_Reddit\_Comments_{year}" each document holds one collection for ev
 
 >	"ups"		=		The amount of upvotes
 
+For a better understanding simply look at the picture in **.\_picutres\db_hierarchy.jpg** within this repository.
 
-#### crawl\_differences.py
-Compares regarding threads and comments databases and crawls missing collections
+#### c\_crawl\_Differences.py
+Compares threads and comments databases and crawls missing collections.
+By initially crawling information about threads and database you can sometimes have an unequal amount of documents
+between the databases. This is because crawling uses some sort of amazon cloud search which is not always working 
+reliable.
 
-    python crawl_differences.py {year_begin} {year_end} {direction}
+    python crawl_differences.py {year_beginning} {year_ending} {direction}
     
     
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start the crawling process on 
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+..* The year you want the start the crawling process on 
 
-* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+..* The year you want the crawling process to stop. The year defined here is included (!!) within the crawling process..
 
 * **direction**	= **[forward || backward]** Defines the direction in which the comparison and crawling process should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback mechanism which enables them to not write information twice into the database. So before every write process into the database it will be checked whether that actually processed collection already exists in the database or not.
 
@@ -82,7 +97,7 @@ Compares regarding threads and comments databases and crawls missing collections
     python crawl_differences.py 2009 2009 forward
 
 
-#### crawl\_threads\_n\_comments.py
+#### c\_crawl\_Threads\_N\_Comments.py
 Crawls threads and comments into the regarding databases
 
     python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
