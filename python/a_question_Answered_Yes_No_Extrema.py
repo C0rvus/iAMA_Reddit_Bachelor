@@ -296,16 +296,16 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
                     author_of_thread, comment_author)
 
                 # If the posted comment is a question and is not from the thread author
-                if bool_comment_is_question and bool_comment_is_not_from_thread_author:
+                if bool_comment_is_question is True and bool_comment_is_not_from_thread_author is True:
 
                     amount_of_tier_any_questions += 1
 
                     # Check whether that iterated comment is answered by the host
-                    answer_is_from_thread_author = check_if_comment_is_answer_from_thread_author(
+                    comment_has_been_answered_by_thread_author = check_if_comment_has_been_answered_by_thread_author(
                         author_of_thread, comment_acutal_id, comments_cursor)
 
                     # Whenever the answer to that comment is from the author
-                    if answer_is_from_thread_author["question_Answered_From_Host"] is True:
+                    if comment_has_been_answered_by_thread_author["question_Answered_From_Host"] is True:
 
                         amount_of_tier_any_questions_answered += 1
 
@@ -380,7 +380,7 @@ def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author)
         return False
 
 
-def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_acutal_id, comments_cursor):
+def check_if_comment_has_been_answered_by_thread_author(author_of_thread, comment_acutal_id, comments_cursor):
     """Checks whether both strings are equal or not
 
     1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp will
