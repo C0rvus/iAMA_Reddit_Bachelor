@@ -557,7 +557,7 @@ def write_csv_and_count_unanswered(list_with_comments):
                  'Question id',
                  'Question ups',
                  'Question birth time since thread started (sec)',
-                 'Link to Thread']]
+                 'Link to Question']]
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_comments[0:argument_amount_of_top_quotes]:
@@ -567,7 +567,8 @@ def write_csv_and_count_unanswered(list_with_comments):
                          str(item.get("Question_id")),
                          str(item.get("Question_ups")),
                          str(item.get("Thread_time_since_start")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
+                         'https://www.reddit.com/r/iama/comments/' + str(item.get("Thread_id")) + "/-/" +
+                         str(item.get("Question_id"))[3:]
                          ]
             data.append(temp_list)
 

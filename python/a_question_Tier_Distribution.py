@@ -389,7 +389,7 @@ def write_csv(list_with_information):
                  'Question tier',
                  'Question ups',
                  'Parent id',
-                 'Link to Thread']]
+                 'Link to Question']]
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
         for item in list_with_information:
             temp_list = [str(item.get("Year")),
@@ -401,7 +401,8 @@ def write_csv(list_with_information):
                          str(item.get("Tier")),
                          str(item.get("Question_ups")),
                          str(item.get("Parent_id")),
-                         'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
+                         'https://www.reddit.com/r/iama/comments/' + str(item.get("Thread_id")) + "/-/" +
+                         str(item.get("Question_id"))[3:]
                          ]
             data.append(temp_list)
         # Writes data into the csv file
