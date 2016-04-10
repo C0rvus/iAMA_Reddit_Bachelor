@@ -39,7 +39,7 @@ class PlotlyBarChart5Bars:
     time_now_time = time.strftime("%H:%M:%S")
 
     bar_x_axis_text = 'Chart creation date: ' + str(time_now_date) + " @ " + str(time_now_time) + '<br>' + \
-                      'IAMA db creation date: ' + '17.02.2016' + '<br>' + \
+                      'IAMA db creation date: ' + '17.02.2016 @ 23:02:24' + '<br>' + \
                       'IAMA db MD5 hash: 7C3058809C20C087C97F9DECF6244620'
     chart_title = ""
 

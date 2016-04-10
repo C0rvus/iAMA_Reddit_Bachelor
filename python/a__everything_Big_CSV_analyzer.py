@@ -62,8 +62,8 @@ import pandas                   # Necessary to do statistical calculation
 # ----
 
 
-thread_information = pandas.read_csv('thread_all_any.csv', sep=',', na_values="None")
-question_information = pandas.read_csv('questions_all_any.csv',
+thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
+question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
                                        sep=',', na_values="None", low_memory=False)
 # Would replace NaN with zeroes: thread_information.fillna(0, inplace=True)
 
@@ -1308,7 +1308,7 @@ def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_hos
 
 # Start that calculation
 
-# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
 #
 average_means_of_values()
 #
