@@ -7,6 +7,8 @@
 # https://stackoverflow.com/questions/13413590/how-to-drop-rows-of-pandas-dataframe-whose-value-of-certain-column-is-nan
 # 4. (10.04.2016 @ 13:47) -
 # http://docs.scipy.org/doc/scipy/reference/stats.html
+# 5. (10.04.2016 @ 18:04) -
+# http://www.eecs.qmul.ac.uk/~norman/blog_articles/p_values.pdf
 
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 
@@ -70,9 +72,11 @@ from scipy.stats import kendalltau
 
 thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
 question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
-                                        sep=',', na_values="None", low_memory=False)
+                                         sep=',', na_values="None", low_memory=False)
 # Would replace NaN with zeroes:
 # thread_information.fillna(0, inplace=True)
+# thread_information.dropna(0, inplace=True)
+# question_information.fillna(0, inplace=True)
 
 # Skips NaN-Values here which is necessary for correct t-test (signifance) calculation
 for column in copy.copy(thread_information):
