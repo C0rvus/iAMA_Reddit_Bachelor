@@ -1,0 +1,5 @@
+Depending on the Storage Engine you want to use chose the appropriate config file...
+
+WiredTiger is the way to go, but takes up huge amounts of disk space and RAM (~32GB), because it loads all the data into the RAM, even if it is used at the moment or not.
+
+"mmapv1" is way more spare on resources and only loads elemnts into the RAM when necessary. (slower than WiredTiger but more resource friendly).

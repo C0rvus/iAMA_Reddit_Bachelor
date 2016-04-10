@@ -23,7 +23,8 @@ To make use of this repository please follow the instructions below.
 2. Install mongoDB on your client (localhost) and do not set up any special permissions (so everbody can access it). 
 3. Install Python 3.5.1 on your client (I recommend using the 64 bit version, because it uses up lots of RAM).
 4. Make sure you have the necessary python modules (praw, numpy, pandas, pymongo) installed on your client.
-5. Make sure to have your mongoDB up, running and accessible (you can check that i.E. by connecting via **Robomongo**)
+5. Modify your mongoDB config accordingly. (see config files in  **\_needed/config/** depending on the storage engine you choose)
+6. Make sure to have your mongoDB up, running and accessible (you can check that i.E. by connecting via **Robomongo**)
 
 # Crawl data:
 1. Run the scripts with the prefix "***c_***" within **./python/** - folder.
@@ -71,7 +72,7 @@ containing the following information:
 
 >	"ups"		=		The amount of upvotes
 
-For a better understanding simply look at the picture in **.\_picutres\db_hierarchy.jpg** within this repository.
+For a better understanding simply look at the picture in **.\_needed\db_hierarchy.jpg** within this repository.
 
 ## c\_crawl\_Differences.py
 Compares threads and comments databases and crawls missing collections.

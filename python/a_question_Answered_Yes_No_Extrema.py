@@ -274,9 +274,7 @@ def process_answered_questions_within_thread(id_of_thread, author_of_thread, thr
             }
 
             # Whenever some values are not None.. (Values can be null / None, whenever they have been deleted)
-            if comment_text is not None \
-                    and comment_author is not None \
-                    and comment_parent_id is not None:
+            if comment_text is not None and comment_author is not None and comment_parent_id is not None:
 
                 # Converts the timestamp to float, parses it to strings and cut anything away except the last 4 chars
                 floated_time = float(comment_time_stamp)

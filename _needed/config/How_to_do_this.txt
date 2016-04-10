@@ -1,0 +1,10 @@
+According to the mongoDB version you have installed do the following:
+
+1. Simply turn off the mongodb instance
+2. Replace the config file with the one regarding your mongodb version
+3. Change the database and systemlog - paths
+	3.1. (Create those folders if non existing)
+4. Start the mongoDB and be happy.
+
+
+The modification of namespaces is necessary, otherwise some databases could not be filled with data.
