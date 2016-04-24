@@ -12,7 +12,9 @@
 # 6. (23.04.2016 @ 18:19) -
 # https://stackoverflow.com/questions/12838993/scipy-normaltest-how-is-it-used
 
-import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
+# Necessary to copy value of the starting year - needed for correct csv
+# file name
+import copy
 import pandas                       # Necessary to do statistical calculation
 from scipy.stats import pearsonr
 from scipy.stats import spearmanr
@@ -70,20 +72,29 @@ from scipy.stats import kendalltau
 # ----
 
 
-thread_information = pandas.read_csv('d_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv', sep=',', na_values="None")
-question_information = pandas.read_csv('a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
-                                         sep=',', na_values="None", low_memory=False)
+thread_information = pandas.read_csv(
+    'd_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv',
+    sep=',',
+    na_values="None")
+question_information = pandas.read_csv(
+    'a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
+    sep=',',
+    na_values="None",
+    low_memory=False)
 # Would replace NaN with zeroes:
 # thread_information.fillna(0, inplace=True)
 # thread_information.dropna(0, inplace=True)
 # question_information.fillna(0, inplace=True)
 
-# Skips NaN-Values here which is necessary for correct t-test (signifance) calculation
+# Skips NaN-Values here which is necessary for correct t-test (signifance)
+# calculation
 for column in copy.copy(thread_information):
-    thread_information = thread_information[pandas.notnull(thread_information['' + str(column)])]
+    thread_information = thread_information[
+        pandas.notnull(thread_information['' + str(column)])]
 
 for column in copy.copy(question_information):
-    question_information = question_information[pandas.notnull(question_information['' + str(column)])]
+    question_information = question_information[
+        pandas.notnull(question_information['' + str(column)])]
 
 
 thread_year = thread_information['Year']
@@ -93,16 +104,23 @@ thread_ups = thread_information['Thread ups']
 thread_downs = thread_information['Thread downs']
 thread_creation_time_stamp = thread_information['Thread creation time stamp']
 
-thread_average_comment_vote_score_total = thread_information['Thread average comment vote score total']
+thread_average_comment_vote_score_total = thread_information[
+    'Thread average comment vote score total']
 
-thread_average_comment_vote_score_tier_1 = thread_information['Thread average comment vote score tier 1']
-thread_average_comment_vote_score_tier_x = thread_information['Thread average comment vote score tier x']
+thread_average_comment_vote_score_tier_1 = thread_information[
+    'Thread average comment vote score tier 1']
+thread_average_comment_vote_score_tier_x = thread_information[
+    'Thread average comment vote score tier x']
 
-thread_average_question_vote_score_total = thread_information['Thread average question vote score total']
-thread_average_question_vote_score_tier_1 = thread_information['Thread average question vote score tier 1']
-thread_average_question_vote_score_tier_x = thread_information['Thread average question vote score tier x']
+thread_average_question_vote_score_total = thread_information[
+    'Thread average question vote score total']
+thread_average_question_vote_score_tier_1 = thread_information[
+    'Thread average question vote score tier 1']
+thread_average_question_vote_score_tier_x = thread_information[
+    'Thread average question vote score tier x']
 
-thread_num_comments_total_skewed = thread_information['Thread num comments total skewed']
+thread_num_comments_total_skewed = thread_information[
+    'Thread num comments total skewed']
 thread_num_comments_total = thread_information['Thread num comments total']
 thread_num_comments_tier_1 = thread_information['Thread num comments tier 1']
 thread_num_comments_tier_x = thread_information['Thread num comments tier x']
@@ -153,23 +171,33 @@ thread_average_response_to_question_time_iama_host_tier_1 = thread_information[
 thread_average_response_to_question_time_iama_host_tier_x = thread_information[
     'Thread average response to question time iama host tier x']
 
-thread_amount_of_questioners_total = thread_information['Thread amount of questioners total']
-thread_amount_of_questioners_tier_1 = thread_information['Thread amount of questioners tier 1']
-thread_amount_of_questioners_tier_x = thread_information['Thread amount of questioners tier x']
+thread_amount_of_questioners_total = thread_information[
+    'Thread amount of questioners total']
+thread_amount_of_questioners_tier_1 = thread_information[
+    'Thread amount of questioners tier 1']
+thread_amount_of_questioners_tier_x = thread_information[
+    'Thread amount of questioners tier x']
 
-thread_amount_of_commentators_total = thread_information['Thread amount of commentators total']
-thread_amount_of_commentators_tier_1 = thread_information['Thread amount of commentators tier 1']
-thread_amount_of_commentators_tier_x = thread_information['Thread amount of commentators tier x']
+thread_amount_of_commentators_total = thread_information[
+    'Thread amount of commentators total']
+thread_amount_of_commentators_tier_1 = thread_information[
+    'Thread amount of commentators tier 1']
+thread_amount_of_commentators_tier_x = thread_information[
+    'Thread amount of commentators tier x']
 
 
-thread_life_span_until_last_comment = thread_information['Thread life span until last comment']
-thread_life_span_until_last_question = thread_information['Thread life span until last question']
+thread_life_span_until_last_comment = thread_information[
+    'Thread life span until last comment']
+thread_life_span_until_last_question = thread_information[
+    'Thread life span until last question']
 
 question_ups = question_information['Question ups']
-question_answered_by_iAMA_host = question_information['Question answered by iAMA host']
+question_answered_by_iAMA_host = question_information[
+    'Question answered by iAMA host']
 
 
-# Correlation question upvotes <-> amount of questions answered by the iama host
+# Correlation question upvotes <-> amount of questions answered by the
+# iama host
 def relation_question_upvotes_with_amount_of_questions_answered_by_iama_host():
     """Calculation of the correlation question upvotes <-> amount of questions answered by the iama host
 
@@ -184,14 +212,20 @@ def relation_question_upvotes_with_amount_of_questions_answered_by_iama_host():
     print("Calculating correlation between 'question_ups' and 'question_answered_by_iAMA_host':")
     print("")
 
-    print("Pearson correlation coefficient: " + str(pearsonr(question_ups, question_answered_by_iAMA_host)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(question_ups, question_answered_by_iAMA_host)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(question_ups, question_answered_by_iAMA_host)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(question_ups, question_answered_by_iAMA_host)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(question_ups, question_answered_by_iAMA_host)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(question_ups, question_answered_by_iAMA_host)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(question_ups, question_answered_by_iAMA_host)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(question_ups, question_answered_by_iAMA_host)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(question_ups, question_answered_by_iAMA_host)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(question_ups, question_answered_by_iAMA_host)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(question_ups, question_answered_by_iAMA_host)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(question_ups, question_answered_by_iAMA_host)[1]))
 
     print("")
     print("----")
@@ -307,37 +341,55 @@ def relation_thread_upvotes_with_amount_of_comments():
 
     print("Calculating correlation between 'thread_ups' and 'thread_num_comments_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_comments_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_comments_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_comments_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_comments_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_comments_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_comments_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_comments_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_comments_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_comments_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_comments_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_comments_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_comments_total)[1]))
     print("")
     print("Calculating correlation between 'thread_ups' and 'thread_num_comments_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_comments_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_comments_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_comments_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_comments_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_comments_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_comments_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_comments_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_comments_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_comments_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_comments_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_comments_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_comments_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_ups' and 'thread_num_comments_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_comments_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_comments_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_comments_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_comments_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_comments_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_comments_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_comments_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_comments_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_comments_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_comments_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_comments_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_comments_tier_x)[1]))
     print("")
     print("----")
 
@@ -356,37 +408,55 @@ def relation_thread_upvotes_with_amount_of_questions():
     print("----")
     print("Calculating correlation between 'thread_ups' and 'thread_num_questions_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_questions_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_questions_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_questions_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_questions_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_questions_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_questions_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_questions_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_questions_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_questions_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_questions_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_questions_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_questions_total)[1]))
     print("")
     print("Calculating correlation between 'thread_ups' and 'thread_num_questions_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_questions_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_questions_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_questions_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_questions_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_questions_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_questions_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_questions_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_questions_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_questions_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_questions_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_questions_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_questions_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_ups' and 'thread_num_questions_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_num_questions_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_num_questions_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_ups, thread_num_questions_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_ups, thread_num_questions_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_num_questions_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_num_questions_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_num_questions_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_num_questions_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_num_questions_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_num_questions_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_num_questions_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_num_questions_tier_x)[1]))
     print("")
     print("----")
 
@@ -405,37 +475,55 @@ def relation_thread_downvotes_with_amount_of_comments():
     print("----")
     print("Calculating correlation between 'thread_downs' and 'thread_num_comments_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_comments_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_comments_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_comments_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_comments_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_comments_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_comments_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_comments_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_comments_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_comments_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_comments_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_comments_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_comments_total)[1]))
     print("")
     print("Calculating correlation between 'thread_downs' and 'thread_num_comments_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_comments_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_comments_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_comments_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_comments_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_comments_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_comments_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_comments_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_comments_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_comments_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_comments_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_comments_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_comments_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_downs' and 'thread_num_comments_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_comments_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_comments_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_comments_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_comments_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_comments_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_comments_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_comments_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_comments_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_comments_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_comments_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_comments_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_comments_tier_x)[1]))
     print("")
     print("----")
 
@@ -454,37 +542,55 @@ def relation_thread_downvotes_with_amount_of_questions():
     print("----")
     print("Calculating correlation between 'thread_downs' and 'thread_num_questions_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_questions_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_questions_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_questions_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_questions_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_questions_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_questions_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_questions_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_questions_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_questions_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_questions_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_questions_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_questions_total)[1]))
     print("")
     print("Calculating correlation between 'thread_downs' and 'thread_num_questions_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_questions_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_questions_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_questions_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_questions_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_questions_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_questions_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_questions_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_questions_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_questions_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_questions_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_questions_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_questions_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_downs' and 'thread_num_questions_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_num_questions_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_num_questions_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_num_questions_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_num_questions_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_num_questions_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_num_questions_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_num_questions_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_num_questions_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_num_questions_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_num_questions_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_num_questions_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_num_questions_tier_x)[1]))
     print("")
     print("----")
 
@@ -504,39 +610,67 @@ def relation_thread_upvotes_and_iama_host_response_time_comments():
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_comment_time_iama_host_total)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups,
+                                                               thread_average_response_to_comment_time_iama_host_total)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_ups,
+                                                           thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups,
+                                                               thread_average_response_to_comment_time_iama_host_total)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_ups,
+                                                           thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_comment_time_iama_host_tier_1)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups,
+                                                               thread_average_response_to_comment_time_iama_host_tier_1)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_ups,
+                                                           thread_average_response_to_comment_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_ups,
+                                                           thread_average_response_to_comment_time_iama_host_tier_1)
+                                                 [1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_comment_time_iama_host_tier_x)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups,
+                                                               thread_average_response_to_comment_time_iama_host_tier_x)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_ups,
+                                                           thread_average_response_to_comment_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
@@ -556,39 +690,73 @@ def relation_thread_upvotes_and_iama_host_response_time_questions():
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_question_time_iama_host_total)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups,
+                                                               thread_average_response_to_question_time_iama_host_total)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_ups,
+                                                           thread_average_response_to_question_time_iama_host_total)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_total)
+                                                 [1]))
     print("")
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_question_time_iama_host_tier_1)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_question_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_ups,
+                                                           thread_average_response_to_question_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_1)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_ups,
+                                                           thread_average_response_to_question_time_iama_host_tier_1)
+                                                 [1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_ups' and"
           " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_ups,
+                                                             thread_average_response_to_question_time_iama_host_tier_x)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_ups,
+                                                         thread_average_response_to_question_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)
+                                                    [0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_ups, thread_average_response_to_question_time_iama_host_tier_x)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_ups,
+                                                           thread_average_response_to_question_time_iama_host_tier_x)
+                                                 [1]))
     print("")
     print("----")
 
@@ -608,39 +776,71 @@ def relation_thread_downvotes_and_iama_host_response_time_comments():
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs,
+                                                             thread_average_response_to_comment_time_iama_host_total)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_downs,
+                                                         thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_total)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_total)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs,
+                                                             thread_average_response_to_comment_time_iama_host_tier_1)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_downs,
+                                                         thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_tier_1)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_tier_1)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_tier_1)
+                                                 [1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs,
+                                                             thread_average_response_to_comment_time_iama_host_tier_x)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_downs,
+                                                         thread_average_response_to_comment_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_tier_x)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs,
+                                                               thread_average_response_to_comment_time_iama_host_tier_x)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_downs,
+                                                           thread_average_response_to_comment_time_iama_host_tier_x)
+                                                 [1]))
     print("")
     print("----")
 
@@ -660,39 +860,75 @@ def relation_thread_downvotes_and_iama_host_response_time_questions():
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs,
+                                                             thread_average_response_to_question_time_iama_host_total)
+                                                    [0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_downs,
+                                                         thread_average_response_to_question_time_iama_host_total)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs,
+                                                               thread_average_response_to_question_time_iama_host_total)
+                                                    [0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_downs,
+                                                           thread_average_response_to_question_time_iama_host_total)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_total)[1]))
+    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs,
+                                                               thread_average_response_to_question_time_iama_host_total)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_downs,
+                                                           thread_average_response_to_question_time_iama_host_total)
+                                                 [1]))
     print("")
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                    [0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                    [0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                     [0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_1)
+                                                 [1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_downs' and"
           " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Pearson correlation coefficient: " + str(pearsonr(thread_downs,
+                                                             thread_average_response_to_question_time_iama_host_tier_x)
+                                                    [0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)
+                                                    [0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)
+                                                [1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_downs, thread_average_response_to_question_time_iama_host_tier_x)
+                                                     [0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_downs,
+                                                           thread_average_response_to_question_time_iama_host_tier_x)
+                                                 [1]))
     print("")
     print("----")
 
@@ -711,37 +947,55 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_comments():
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_total)[1]))
     print("")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_comments_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_comments_tier_x)[1]))
     print("")
     print("----")
 
@@ -760,37 +1014,55 @@ def relation_thread_lifespan_to_last_comment_and_amount_of_questions():
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_total)[1]))
     print("")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_comment' and 'thread_num_questions_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_comment, thread_num_questions_tier_x)[1]))
     print("")
     print("----")
 
@@ -809,37 +1081,55 @@ def relation_thread_lifespan_to_last_question_and_amount_of_comments():
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_total)[1]))
     print("")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_comments_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_comments_tier_x)[1]))
     print("")
     print("----")
 
@@ -858,42 +1148,67 @@ def relation_thread_lifespan_to_last_question_and_amount_of_question():
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_total)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_total)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_total)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_questions_total)[0]))
+    print("Kendall correlation p-value: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_questions_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_total)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_total)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_total)[1]))
     print("")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_1)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_1)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_num_questions_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_1)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_1)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_life_span_until_last_question' and 'thread_num_questions_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_x)[1]))
+    print("Pearson correlation coefficient: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
+    print("Pearson correlation p-value: " +
+          str(pearsonr(thread_life_span_until_last_question, thread_num_questions_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_x)[1]))
+    print("Kendall correlation coefficient: " +
+          str(kendalltau(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_num_questions_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_x)[1]))
+    print("Spearman correlation coefficient: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_x)[0]))
+    print("Spearman correlation p-value: " +
+          str(spearmanr(thread_life_span_until_last_question, thread_num_questions_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread life span (until last comment) <-> iama host repsonse time to comments
+# Correlation thread life span (until last comment) <-> iama host repsonse
+# time to comments
 def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments():
     """Calculation of the correlation thread life span (until last comment) <-> iama host repsonse time to comments
 
@@ -905,47 +1220,123 @@ def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comm
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_comment_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread life span (until last comment) <-> iama host repsonse time to questions
+# Correlation thread life span (until last comment) <-> iama host repsonse
+# time to questions
 def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions():
     """Calculation of the correlation thread life span (until last comment) <-> iama host repsonse time to questions
 
@@ -957,47 +1348,123 @@ def relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_ques
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread life span (until last question) <-> and iama host repsonse time to comments
+# Correlation thread life span (until last question) <-> and iama host
+# repsonse time to comments
 def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments():
     """Calculation of the correlation thread life span (until last question) <-> and iama host repsonse time to comments
 
@@ -1009,47 +1476,123 @@ def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_com
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and"
-          " 'thread_average_response_to_comment_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_question' and"
+        " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_question' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_question' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_question' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_question, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_question,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread life span (until last question) <-> iama host repsonse time to questions
+# Correlation thread life span (until last question) <-> iama host
+# repsonse time to questions
 def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions():
     """Calculation of the correlation thread life span (until last question) <-> iama host repsonse time to questions
 
@@ -1061,47 +1604,123 @@ def relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_que
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_life_span_until_last_comment' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_life_span_until_last_comment' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_life_span_until_last_comment, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_life_span_until_last_comment,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between comments <-> iama host repsonse time to comments
+# Correlation thread reaction time between comments <-> iama host repsonse
+# time to comments
 def relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments():
     """Calculation of the correlation thread reaction time between comments <-> iama host repsonse time to comments
 
@@ -1113,47 +1732,123 @@ def relation_thread_reaction_time_comments_and_iama_host_response_time_to_commen
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
-          " 'thread_average_response_to_comment_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
+        " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between comments <-> iama host repsonse time to questions
+# Correlation thread reaction time between comments <-> iama host repsonse
+# time to questions
 def relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions():
     """Calculation of the correlation thread reaction time between comments <-> iama host repsonse time to questions
 
@@ -1165,47 +1860,123 @@ def relation_thread_reaction_time_comments_and_iama_host_response_time_to_questi
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
-          " 'thread_average_response_to_question_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
+        " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between questions <-> iama host repsonse time to comments
+# Correlation thread reaction time between questions <-> iama host
+# repsonse time to comments
 def relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments():
     """Calculation of the correlation thread reaction time between questions <-> iama host repsonse time to comments
 
@@ -1217,47 +1988,123 @@ def relation_thread_reaction_time_questions_and_iama_host_response_time_to_comme
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
-          " 'thread_average_response_to_comment_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
+        " 'thread_average_response_to_comment_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_average_response_to_comment_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_comment_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_comment_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_comment_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
-          " 'thread_average_response_to_comment_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
+        " 'thread_average_response_to_comment_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_comment_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_comment_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between questions <-> iama host repsonse time to questions
+# Correlation thread reaction time between questions <-> iama host
+# repsonse time to questions
 def relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions():
     """Calculation of the correlation thread reaction time between questions <-> iama host repsonse time to questions
 
@@ -1269,47 +2116,123 @@ def relation_thread_reaction_time_questions_and_iama_host_response_time_to_quest
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
-          " 'thread_average_response_to_question_time_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
+        " 'thread_average_response_to_question_time_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_average_response_to_question_time_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_average_response_to_question_time_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_average_response_to_question_time_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_average_response_to_question_time_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
-          " 'thread_average_response_to_question_time_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
+        " 'thread_average_response_to_question_time_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_average_response_to_question_time_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_average_response_to_question_time_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between comments <-> amount of comments the iama host reacted to
+# Correlation thread reaction time between comments <-> amount of comments
+# the iama host reacted to
 def relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to():
     """Calculation of the correlation thread reaction time between comments <-> amount of comments the iama host
         reacted to
@@ -1322,47 +2245,123 @@ def relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
-          " 'thread_num_comments_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
+        " 'thread_num_comments_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between comments <-> amount of questions the iama host reacted to
+# Correlation thread reaction time between comments <-> amount of
+# questions the iama host reacted to
 def relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to():
     """Calculation of the correlation thread reaction time between comments <-> amount of questions the
         iama host reacted to
@@ -1375,47 +2374,123 @@ def relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
-          " 'thread_num_questions_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_total' and"
+        " 'thread_num_questions_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_1' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_comments_tier_x' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_comments_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_comments_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between questions <-> amount of comments the iama host reacted to
+# Correlation thread reaction time between questions <-> amount of
+# comments the iama host reacted to
 def relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to():
     """Calculation of the correlation thread reaction time between questions <-> amount of comments the
         iama host reacted to
@@ -1428,47 +2503,123 @@ def relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
-          " 'thread_num_comments_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
+        " 'thread_num_comments_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation thread reaction time between questions <-> amount of questions the iama host reacted to
+# Correlation thread reaction time between questions <-> amount of
+# questions the iama host reacted to
 def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to():
     """Calculation of the correlation thread reaction time between questions <-> amount of questions the iama
         host reacted to
@@ -1481,47 +2632,123 @@ def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_hos
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
-          " 'thread_num_questions_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_total' and"
+        " 'thread_num_questions_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_1' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_average_reaction_time_between_questions_tier_x' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_average_reaction_time_between_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_average_reaction_time_between_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation amount of questioners per thread <-> amount of questions answered by iama host
+# Correlation amount of questioners per thread <-> amount of questions
+# answered by iama host
 def relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host():
     """Calculation of the correlation amount of questioners per thread <-> amount of questions answered by iama host
 
@@ -1533,47 +2760,123 @@ def relation_thread_amount_of_questioners_total_and_num_questions_answered_by_ia
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_amount_of_questioners_total' and"
-          " 'thread_num_questions_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_amount_of_questioners_total' and"
+        " 'thread_num_questions_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_questioners_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_questioners_total,
+                thread_num_questions_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_amount_of_questioners_tier_1' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_amount_of_questioners_tier_1' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_questioners_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_questioners_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_amount_of_questioners_tier_x' and"
-          " 'thread_num_questions_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_amount_of_questioners_tier_x' and"
+        " 'thread_num_questions_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_questioners_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_questioners_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
 
-# Correlation amount of commentators per thread <-> amount of questions answered by iama host
+# Correlation amount of commentators per thread <-> amount of questions
+# answered by iama host
 def realation_thread_amount_of_commentators_total_and_num_comments_answered_by_iama_host():
     """Calculation of the correlation amount of commentators per thread <-> amount of questions answered by iama host
 
@@ -1585,46 +2888,123 @@ def realation_thread_amount_of_commentators_total_and_num_comments_answered_by_i
 
     print("")
     print("----")
-    print("Calculating correlation between 'thread_amount_of_commentators_total' and"
-          " 'thread_num_comments_answered_by_iama_host_total':")
+    print(
+        "Calculating correlation between 'thread_amount_of_commentators_total' and"
+        " 'thread_num_comments_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_commentators_total, thread_num_comments_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_commentators_total,
+                thread_num_comments_answered_by_iama_host_total)[1]))
     print("")
-    print("Calculating correlation between 'thread_amount_of_commentators_tier_1' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_1':")
+    print(
+        "Calculating correlation between 'thread_amount_of_commentators_tier_1' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_commentators_tier_1, thread_num_comments_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_commentators_tier_1,
+                thread_num_comments_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
-    print("Calculating correlation between 'thread_amount_of_commentators_tier_x' and"
-          " 'thread_num_comments_answered_by_iama_host_tier_x':")
+    print(
+        "Calculating correlation between 'thread_amount_of_commentators_tier_x' and"
+        " 'thread_num_comments_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(pearsonr(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(pearsonr(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Pearson correlation p-value: " + str(
+            pearsonr(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(kendalltau(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(kendalltau(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Kendall correlation p-value: " + str(
+            kendalltau(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(spearmanr(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(spearmanr(thread_amount_of_commentators_tier_x, thread_num_comments_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[0]))
+    print(
+        "Spearman correlation p-value: " + str(
+            spearmanr(
+                thread_amount_of_commentators_tier_x,
+                thread_num_comments_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
 
-# Correlation amount of questions ansked <-> amount of questions answered by iama host
+
+# Correlation amount of questions ansked <-> amount of questions answered
+# by iama host
 def relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host():
     """Calculation of the amount of questions ansked <-> amount of questions answered by iama host
 
@@ -1639,98 +3019,124 @@ def relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_ho
     print("Calculating correlation between 'thread_num_questions_total' and"
           " 'thread_num_questions_answered_by_iama_host_total':")
     print("")
-    print("Pearson correlation coefficient: " + str(
-        pearsonr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Pearson correlation p-value: " + str(
-        pearsonr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_num_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_num_questions_total,
+                                                         thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Kendall correlation coefficient: " + str(
-        kendalltau(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Kendall correlation p-value: " + str(
-        kendalltau(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_num_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_num_questions_total,
+                                                           thread_num_questions_answered_by_iama_host_total)[1]))
 
-    print("Spearman correlation coefficient: " + str(
-        spearmanr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
-    print("Spearman correlation p-value: " + str(
-        spearmanr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_num_questions_total,
+                thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_num_questions_total,
+                                                           thread_num_questions_answered_by_iama_host_total)[1]))
     print("")
     print("Calculating correlation between 'thread_num_questions_tier_1' and"
           " 'thread_num_questions_answered_by_iama_host_tier_1':")
     print("")
-    print("Pearson correlation coefficient: " + str(
-        pearsonr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Pearson correlation p-value: " + str(
-        pearsonr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_num_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_num_questions_tier_1,
+                                                         thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Kendall correlation coefficient: " + str(
-        kendalltau(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Kendall correlation p-value: " + str(
-        kendalltau(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_num_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_num_questions_tier_1,
+                                                           thread_num_questions_answered_by_iama_host_tier_1)[1]))
 
-    print("Spearman correlation coefficient: " + str(
-        spearmanr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
-    print("Spearman correlation p-value: " + str(
-        spearmanr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_num_questions_tier_1,
+                thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_num_questions_tier_1,
+                                                           thread_num_questions_answered_by_iama_host_tier_1)[1]))
     print("")
     print("----")
     print("Calculating correlation between 'thread_num_questions_tier_x' and"
           " 'thread_num_questions_answered_by_iama_host_tier_x':")
     print("")
-    print("Pearson correlation coefficient: " + str(
-        pearsonr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Pearson correlation p-value: " + str(
-        pearsonr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Pearson correlation coefficient: " + str(
+            pearsonr(
+                thread_num_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Pearson correlation p-value: " + str(pearsonr(thread_num_questions_tier_x,
+                                                         thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Kendall correlation coefficient: " + str(
-        kendalltau(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Kendall correlation p-value: " + str(
-        kendalltau(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Kendall correlation coefficient: " + str(
+            kendalltau(
+                thread_num_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Kendall correlation p-value: " + str(kendalltau(thread_num_questions_tier_x,
+                                                           thread_num_questions_answered_by_iama_host_tier_x)[1]))
 
-    print("Spearman correlation coefficient: " + str(
-        spearmanr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
-    print("Spearman correlation p-value: " + str(
-        spearmanr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print(
+        "Spearman correlation coefficient: " + str(
+            spearmanr(
+                thread_num_questions_tier_x,
+                thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Spearman correlation p-value: " + str(spearmanr(thread_num_questions_tier_x,
+                                                           thread_num_questions_answered_by_iama_host_tier_x)[1]))
     print("")
     print("----")
-
 
 
 # Start that calculation
 
 # relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
-# 
+#
 # average_means_of_values()
-# 
+#
 # relation_thread_upvotes_with_amount_of_comments()
 # relation_thread_upvotes_with_amount_of_questions()
 # relation_thread_downvotes_with_amount_of_comments()
 # relation_thread_downvotes_with_amount_of_questions()
-# 
+#
 # relation_thread_upvotes_and_iama_host_response_time_comments()
 # relation_thread_upvotes_and_iama_host_response_time_questions()
 # relation_thread_downvotes_and_iama_host_response_time_comments()
 # relation_thread_downvotes_and_iama_host_response_time_questions()
-# 
+#
 # relation_thread_lifespan_to_last_comment_and_amount_of_comments()
 # relation_thread_lifespan_to_last_comment_and_amount_of_questions()
 # relation_thread_lifespan_to_last_question_and_amount_of_comments()
 # relation_thread_lifespan_to_last_question_and_amount_of_question()
-# 
+#
 # relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
 # relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
 # relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
 # relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-# 
+#
 # relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
 # relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
 # relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
 # relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-# 
+#
 # relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
 # relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
 # relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
 # relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-# 
+#
 # relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
 
 relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
