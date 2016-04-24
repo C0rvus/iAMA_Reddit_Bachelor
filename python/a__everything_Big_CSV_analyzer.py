@@ -9,15 +9,15 @@
 # http://docs.scipy.org/doc/scipy/reference/stats.html
 # 5. (10.04.2016 @ 18:04) -
 # http://www.eecs.qmul.ac.uk/~norman/blog_articles/p_values.pdf
+# 6. (23.04.2016 @ 18:19) -
+# https://stackoverflow.com/questions/12838993/scipy-normaltest-how-is-it-used
 
-import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
-
-import numpy
-import pandas                   # Necessary to do statistical calculation
-from scipy.stats import ttest_ind # Necessary to do some t-tests
+import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
+import pandas                       # Necessary to do statistical calculation
 from scipy.stats import pearsonr
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau
+
 
 # By looking at all generated csv files we can use the following parameters for calculating various things:
 # [some depend on the tier they have been calculated from]
@@ -1522,7 +1522,7 @@ def relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_hos
 
 
 # Correlation amount of questioners per thread <-> amount of questions answered by iama host
-def realation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host():
+def relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host():
     """Calculation of the correlation amount of questioners per thread <-> amount of questions answered by iama host
 
     Args:
@@ -1624,41 +1624,113 @@ def realation_thread_amount_of_commentators_total_and_num_comments_answered_by_i
     print("")
     print("----")
 
+# Correlation amount of questions ansked <-> amount of questions answered by iama host
+def relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host():
+    """Calculation of the amount of questions ansked <-> amount of questions answered by iama host
+
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_num_questions_total' and"
+          " 'thread_num_questions_answered_by_iama_host_total':")
+    print("")
+    print("Pearson correlation coefficient: " + str(
+        pearsonr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Pearson correlation p-value: " + str(
+        pearsonr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+
+    print("Kendall correlation coefficient: " + str(
+        kendalltau(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Kendall correlation p-value: " + str(
+        kendalltau(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+
+    print("Spearman correlation coefficient: " + str(
+        spearmanr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[0]))
+    print("Spearman correlation p-value: " + str(
+        spearmanr(thread_num_questions_total, thread_num_questions_answered_by_iama_host_total)[1]))
+    print("")
+    print("Calculating correlation between 'thread_num_questions_tier_1' and"
+          " 'thread_num_questions_answered_by_iama_host_tier_1':")
+    print("")
+    print("Pearson correlation coefficient: " + str(
+        pearsonr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Pearson correlation p-value: " + str(
+        pearsonr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+
+    print("Kendall correlation coefficient: " + str(
+        kendalltau(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Kendall correlation p-value: " + str(
+        kendalltau(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+
+    print("Spearman correlation coefficient: " + str(
+        spearmanr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[0]))
+    print("Spearman correlation p-value: " + str(
+        spearmanr(thread_num_questions_tier_1, thread_num_questions_answered_by_iama_host_tier_1)[1]))
+    print("")
+    print("----")
+    print("Calculating correlation between 'thread_num_questions_tier_x' and"
+          " 'thread_num_questions_answered_by_iama_host_tier_x':")
+    print("")
+    print("Pearson correlation coefficient: " + str(
+        pearsonr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Pearson correlation p-value: " + str(
+        pearsonr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+
+    print("Kendall correlation coefficient: " + str(
+        kendalltau(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Kendall correlation p-value: " + str(
+        kendalltau(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+
+    print("Spearman correlation coefficient: " + str(
+        spearmanr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[0]))
+    print("Spearman correlation p-value: " + str(
+        spearmanr(thread_num_questions_tier_x, thread_num_questions_answered_by_iama_host_tier_x)[1]))
+    print("")
+    print("----")
+
+
 
 # Start that calculation
 
-relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+# 
+# average_means_of_values()
+# 
+# relation_thread_upvotes_with_amount_of_comments()
+# relation_thread_upvotes_with_amount_of_questions()
+# relation_thread_downvotes_with_amount_of_comments()
+# relation_thread_downvotes_with_amount_of_questions()
+# 
+# relation_thread_upvotes_and_iama_host_response_time_comments()
+# relation_thread_upvotes_and_iama_host_response_time_questions()
+# relation_thread_downvotes_and_iama_host_response_time_comments()
+# relation_thread_downvotes_and_iama_host_response_time_questions()
+# 
+# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+# relation_thread_lifespan_to_last_question_and_amount_of_comments()
+# relation_thread_lifespan_to_last_question_and_amount_of_question()
+# 
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+# 
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+# 
+# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+# 
+# relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
 
-average_means_of_values()
-
-relation_thread_upvotes_with_amount_of_comments()
-relation_thread_upvotes_with_amount_of_questions()
-relation_thread_downvotes_with_amount_of_comments()
-relation_thread_downvotes_with_amount_of_questions()
-
-relation_thread_upvotes_and_iama_host_response_time_comments()
-relation_thread_upvotes_and_iama_host_response_time_questions()
-relation_thread_downvotes_and_iama_host_response_time_comments()
-relation_thread_downvotes_and_iama_host_response_time_questions()
-
-relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-relation_thread_lifespan_to_last_comment_and_amount_of_questions()
-relation_thread_lifespan_to_last_question_and_amount_of_comments()
-relation_thread_lifespan_to_last_question_and_amount_of_question()
-
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-
-realation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
+relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
