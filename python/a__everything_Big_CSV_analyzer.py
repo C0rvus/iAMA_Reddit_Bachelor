@@ -323,6 +323,21 @@ def average_means_of_values():
           str(thread_life_span_until_last_comment.mean()))
     print("Average arithmetic mean - Tier ALL: Thread life span until last comment: " +
           str(thread_life_span_until_last_question.mean()))
+
+    print("--")
+    print("Average arithmetic mean - Tier ALL: Thread amount of commentators: " +
+          str(thread_amount_of_commentators_total.mean()))
+    print("Average arithmetic mean - Tier 1: Thread amount of commentators: " +
+          str(thread_amount_of_commentators_tier_1.mean()))
+    print("Average arithmetic mean - Tier X: Thread amount of commentators: " +
+          str(thread_amount_of_commentators_tier_x.mean()))
+    print("--")
+    print("Average arithmetic mean - Tier ALL: Thread amount of questioners: " +
+          str(thread_amount_of_questioners_total.mean()))
+    print("Average arithmetic mean - Tier 1: Thread amount of questioners: " +
+          str(thread_amount_of_questioners_tier_1.mean()))
+    print("Average arithmetic mean - Tier X: Thread amount of questioners: " +
+          str(thread_amount_of_questioners_tier_x.mean()))
     print("----")
 
 
@@ -3101,42 +3116,69 @@ def relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_ho
     print("----")
 
 
+# Correlation of every column with every column
+def thread_overall_correlation():
+    """Calculation of the correlation of every column with every column for the threads
+
+    Args:
+        -
+    Returns:
+        -
+    """
+    print(str(thread_information.corr()))
+
+
+# Correlation of every column with every column
+def question_overall_correlation():
+    """Calculation of the correlation of every column with every column for the questions
+
+    Args:
+        -
+    Returns:
+        -
+    """
+    print(str(question_information.corr()))
+
+
 # Start that calculation
 
-# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
-#
-# average_means_of_values()
-#
-# relation_thread_upvotes_with_amount_of_comments()
-# relation_thread_upvotes_with_amount_of_questions()
-# relation_thread_downvotes_with_amount_of_comments()
-# relation_thread_downvotes_with_amount_of_questions()
-#
-# relation_thread_upvotes_and_iama_host_response_time_comments()
-# relation_thread_upvotes_and_iama_host_response_time_questions()
-# relation_thread_downvotes_and_iama_host_response_time_comments()
-# relation_thread_downvotes_and_iama_host_response_time_questions()
-#
-# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
-# relation_thread_lifespan_to_last_question_and_amount_of_comments()
-# relation_thread_lifespan_to_last_question_and_amount_of_question()
-#
-# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
-# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-#
-# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
-# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-#
-# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-#
-# relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
+relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+
+average_means_of_values()
+
+relation_thread_upvotes_with_amount_of_comments()
+relation_thread_upvotes_with_amount_of_questions()
+relation_thread_downvotes_with_amount_of_comments()
+relation_thread_downvotes_with_amount_of_questions()
+
+relation_thread_upvotes_and_iama_host_response_time_comments()
+relation_thread_upvotes_and_iama_host_response_time_questions()
+relation_thread_downvotes_and_iama_host_response_time_comments()
+relation_thread_downvotes_and_iama_host_response_time_questions()
+
+relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+relation_thread_lifespan_to_last_question_and_amount_of_comments()
+relation_thread_lifespan_to_last_question_and_amount_of_question()
+
+relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+
+relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+
+relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
+relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+
+relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
 
 relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
+
+thread_overall_correlation()
+question_overall_correlation()
