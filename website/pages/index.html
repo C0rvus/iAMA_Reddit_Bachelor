@@ -1,3 +1,16 @@
+<!--TODO:-->
+<!-- - Time line anpassen-->
+
+<!-- - Bei Click auf Filter / Sorting die entsprechenden Sachen anwählen-->
+
+<!-- - Die Stats im Notification Panel anpassen -->
+
+<!-- - Notification checken -->
+
+<!-- - Rest - Service ?-->
+<!-- - Login - Thematik-->
+<!-- - Fake iAMA erstellen-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -120,6 +133,7 @@
                             </div>
                         </a>
                     </li>
+
                     <li class="divider"></li>
                     <li>
                         <a href="#">
@@ -186,33 +200,76 @@
 
         </ul>
 
+        <!-- Left side bar -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+
+                <!-- Overview of all hosts threads -->
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="index.html">
+                            <i class="fa fa-th fa-fw"></i> thread_title_1
+                            <br />
+
+                            <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                            <br />
+
+                            <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                            <br />
+
+                            <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html">
+                            <i class="fa fa-th fa-fw"></i> thread_title_2
+                            <br />
+
+                            <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                            <br />
+
+                            <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                            <br />
+
+                            <i class="fa fa-tag  fa-fw"></i> id_thread_2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html">
+                            <i class="fa fa-th fa-fw"></i> thread_title_3
+                            <br />
+
+                            <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                            <br />
+
+                            <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                            <br />
+
+                            <i class="fa fa-tag  fa-fw"></i> id_thread_3
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
     <!-- The rest beside the navigation top bar -->
     <div id="page-wrapper">
 
-        <!-- 0st row containing the header of the page -->
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Dashboard</h1>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-
         <!-- 1st row containing signal symbols -->
         <div class="row">
 
             <!-- New questions symbol -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-5 col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-question-circle fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge">26</div>
-                                <div>Unanswered Questions!</div>
+                                <div>Unanswered Questions</div>
                             </div>
                         </div>
                     </div>
@@ -220,16 +277,33 @@
             </div>
 
             <!-- New tasks symbol -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-2 col-md-6">
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-5x"></i>
+                                <i class="fa fa-thumbs-o-up fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge">12</div>
-                                <div>New Tasks!</div>
+                                <div>Upvotes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New tickets symbol -->
+            <div class="col-lg-2 col-md-6">
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-thumbs-o-down  fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">13</div>
+                                <div>Downvotes</div>
                             </div>
                         </div>
                     </div>
@@ -242,44 +316,30 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                <i class="fa fa-clock-o fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">124</div>
-                                <div>New Orders!</div>
+                                <div class="huge">3</div>
+                                <div>Thread duration (days)</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- New tickets symbol -->
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-support fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">13</div>
-                                <div>Support Tickets!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <!-- 2nd row containing questions (left) / notify panel (right) -->
         <div class="row">
 
             <!-- Questions are here -->
-            <div class="col-lg-8">
+            <div class="col-lg-5">
 
                 <!-- Contains the whole question panel -->
                 <div class="chat-panel panel panel-default">
 
+                    <!-- Contains all buttons of that panel -->
                     <div class="panel-heading">
 
                         <!-- Question symbol -->
@@ -338,9 +398,46 @@
                     <!-- Contains the question and answer part -->
                     <div class="panel-body">
                         <ul class="chat">
+
                             <li class="left clearfix">
                                     <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <strong class="primary-font">User X</strong>
+
+                                        <!-- Posting time -->
+                                        <small class="pull-right text-muted">
+                                            <i class="fa fa-clock-o fa-fw"></i> 6 mins ago
+                                        </small>
+
+                                        <!-- Question ID -->
+                                        <small class="pull-right text-muted">
+                                            <i class="fa fa-bookmark fa-fw"></i>
+                                        </small>
+
+                                    </div>
+
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                                    </p>
+                                </div>
+
+                                <br />
+                                <div class="input-group">
+                                    <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat">
+                                        Send
+                                    </button>
+                                </span>
+                                </div>
+
+                            </li>
+                            <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
                                     </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
@@ -353,145 +450,42 @@
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
                                     </p>
                                 </div>
-                            </li>
-                            <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted">
-                                            <i class="fa fa-clock-o fa-fw"></i> 13 mins ago</small>
-                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong>
-                                        <small class="pull-right text-muted">
-                                            <i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted">
-                                            <i class="fa fa-clock-o fa-fw"></i> 15 mins ago</small>
-                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
 
-                    <!-- Contains the answer line here -->
-                    <div class="panel-footer">
-                        <div class="input-group">
-                            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                                <br />
+                                <div class="input-group">
+                                    <input id="btn-input_X" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat_Y">
                                         Send
                                     </button>
                                 </span>
-                        </div>
+                                </div>
+
+                            </li>
+
+                        </ul>
                     </div>
 
                 </div>
             </div>
-
-            <!-- Notification panel -->
-            <div class="col-lg-4">
-
-                <!-- Contains -->
-                <div class="panel panel-default">
-
-                    <!-- Contains the notification panel header -->
-                    <div class="panel-heading">
-                        <i class="fa fa-bell fa-fw"></i> Notifications Panel
-                    </div>
-
-                    <!-- Contains the notification panel content -->
-                    <div class="panel-body">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                            </a>
-
-
-                        </div>
-                        <!-- /.list-group -->
-                        <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- 3rd row containing responsive time line and charts -->
-        <div class="row">
 
             <!-- Contains the responsive time line -->
-            <div class="col-lg-8">
-                <div class="panel panel-default">
+            <div class="col-lg-4">
+                <div class="chat-panel panel panel-default">
                     <div class="panel-heading">
+
+                        <!-- Clock symbol -->
                         <i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
+
+                        <!-- Search box and button -->
+                        <div class="pull-right">
+                            <input type="text" placeholder="Search...">
+                            <button type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+
+                        </div>
+
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -602,9 +596,100 @@
                 </div>
             </div>
 
-            <!-- Contains some graphs and statistics -->
+            <!-- Notification panel -->
+            <div class="col-lg-3">
+
+                <!-- Contains -->
+                <div class="panel panel-default">
+
+                    <!-- Contains the notification panel header -->
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                    </div>
+
+                    <!-- Contains the notification panel content -->
+                    <div class="panel-body">
+
+                        <!-- New Questions -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-question-circle  fa-fw"></i> New Question
+                                    <span class="pull-right text-muted small"><em>2 minutes ago</em>
+                                    </span>
+                        </a>
+
+                        <!-- Amount answered questions -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-check  fa-fw"></i> Answered questions
+                                    <span class="pull-right text-muted small"><em> 13 / xx </em>
+                                    </span>
+                        </a>
+
+                        <!-- Average Question score -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-exchange  fa-fw"></i> Average question score
+                                    <span class="pull-right text-muted small"><em>2,04</em>
+                                    </span>
+                        </a>
+
+                        <!-- Reaction time -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-fire  fa-fw"></i> Reaction time
+
+                                    <span class="pull-right text-muted small"><em>12 sec</em>
+                                    </span>
+                        </a>
+
+                        <!-- New question every -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-repeat  fa-fw"></i> New question every
+                                    <span class="pull-right text-muted small"><em>16 sec</em>
+                                    </span>
+                        </a>
+
+                        <!-- Amount questions tier 1 -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-hand-o-up  fa-fw"></i> Amount Questions Tier 1
+                                    <span class="pull-right text-muted small"><em>123</em>
+                                    </span>
+                        </a>
+
+                        <!-- Amount questions tier X -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-hand-o-down   fa-fw"></i> Amount Questions Tier X
+                                    <span class="pull-right text-muted small"><em>145</em>
+                                    </span>
+                        </a>
+
+                        <!-- Score best question -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-star fa-fw"></i> Best question score
+                                    <span class="pull-right text-muted small"><em>4362</em>
+                                    </span>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 3rd row containing charts -->
+        <div class="row">
+
+            <!-- Example graph 1 -->
             <div class="col-lg-4">
-               Ich bin leer
+                <div id="container_example_1" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
+            </div>
+
+            <!-- Example graph 2 -->
+            <div class="col-lg-4">
+                <div id="container_example_2" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
+            </div>
+
+            <!-- Example graph 3 -->
+            <div class="col-lg-4">
+                <div id="container_example_3" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
             </div>
 
         </div>
@@ -613,7 +698,6 @@
 
 
 </div>
-<!-- /#wrapper -->
 
 <!-- jQuery -->
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -631,6 +715,15 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="../dist/js/sb-admin-2.js"></script>
+
+<!-- Highcharts necessary files -->
+<script src="../js/highcharts/highcharts_highcharts.js"></script>
+<script src="../js/highcharts/highcharts_exporting.js"></script>
+
+<!-- Highcharts example graphs -->
+<script src="../js/highcharts/highcharts_example_1.js"></script>
+<script src="../js/highcharts/highcharts_example_2.js"></script>
+<script src="../js/highcharts/highcharts_example_3.js"></script>
 
 </body>
 
