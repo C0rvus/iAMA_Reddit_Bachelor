@@ -23,8 +23,8 @@ thread_author = ""                          # Live receive (Reddit API)
 
 # Left side panel information will be stored here
 thread_title = ""                           # Live receive (Reddit API)
-thread_amount_questions = 0
-thread_amount_unanswered_questions = 0
+thread_amount_questions = 0                 # MongoDB
+thread_amount_unanswered_questions = 0      # MongoDB
 thread_duration = 0                         # Live receive (Reddit API)
 thread_id = ""                              # Live receive (Reddit API)
 
@@ -33,17 +33,20 @@ thread_ups = 0                              # Live receive (Reddit API)
 thread_downs = 0                            # Live receive (Reddit API)
 
 # Notification (Right) Panel
-thread_time_stamp_last_question = 0
+thread_time_stamp_last_question = 0         # MongoDB
+
 thread_average_question_Score = 0
 thread_average_reaction_time_host = 0
 thread_new_question_every_x_sec = 0
-thread_amount_questions_tier_1 = 0
-thread_amount_questions_tier_x = 0
-thread_question_top_score = 0
+
+thread_amount_questions_tier_1 = 0          # MongoDB
+thread_amount_questions_tier_x = 0          # MongoDB
+thread_question_top_score = 0               # MongoDB
 
 # Middle of screen
-thread_unanswered_questions = []
-thread_answered_questions = []
+thread_unanswered_questions = []            # MongoDB
+thread_answered_questions = []              # MongoDB
+
 
 # noinspection PyPep8Naming
 class r_rest_Notification_Panel:
@@ -161,24 +164,82 @@ class r_rest_Notification_Panel:
             comment_text = val.get("body")
             comment_author = val.get("author")
             comment_parent_id = val.get("parent_id")
-            comment_time_stamp = val.get("created_utc")
+            comment_timestamp = val.get("created_utc")
             comment_id = val.get("name")
             comment_ups = val.get("ups")
 
             if comment_text is not None and comment_author is not None and comment_parent_id is not None:
                 print("do something in here")
 
-            bool_comment_is_question = self.checker_comment_is_question(comment_text)
+                bool_comment_is_question = self.checker_comment_is_question(comment_text)
+                bool_comment_is_question_on_tier_1 = self.checker_comment_is_question_on_tier_1(comment_parent_id)
+                bool_comment_is_not_from_thread_author = self.checker_is_not_from_thread_author(
+                    thread_author, comment_author)
 
-            bool_comment_is_question_on_tier_1 = self.checker_comment_is_question_on_tier_1(comment_parent_id)
+                # Checks for question and tier behaviour
+                if bool_comment_is_question is True and bool_comment_is_not_from_thread_author is True:
 
-            bool_comment_is_not_from_thread_author = self.checker_is_not_from_thread_author(
-                thread_author, comment_author)
+                    thread_amount_questions += 1
 
+                    # Tier 1 checking
+                    if bool_comment_is_question_on_tier_1 is True:
+                        thread_amount_questions_tier_1 += 1
 
-            # print(i, val)
+                    # Tier X checking
+                    elif bool_comment_is_question_on_tier_1 is False:
+                        thread_amount_questions_tier_x += 1
 
+                    # Check whether that iterated comment is answered by the host
+                    comment_has_been_answered_by_thread_author = \
+                        self.check_if_comment_has_been_answered_by_thread_author(
+                            thread_author, comment_id, comments_cursor
+                        )
 
+                    # Fills necessary data of the question here
+                    dict_question = {
+                        "question_id": comment_id,
+                        "question_author": comment_author,
+                        "question_timestamp": comment_timestamp,
+                        "question_upvote_score": comment_ups,
+                        "question_on_tier_1": bool_comment_is_question_on_tier_1,
+                        "question_text": comment_text,
+                        "question_answered_by_host":
+                            comment_has_been_answered_by_thread_author["question_Answered_From_Host"]
+                    }
+
+                    # Whenever the answer to that comment is from the author
+                    if comment_has_been_answered_by_thread_author["question_Answered_From_Host"] is True:
+
+                        # Append it to the answered questions list
+                        thread_answered_questions.append(dict_question)
+
+                    elif comment_has_been_answered_by_thread_author["question_Answered_From_Host"] is False:
+
+                        # Append it to the unanswered questions list
+                        thread_unanswered_questions.append(dict_question)
+                        thread_amount_unanswered_questions += 1
+
+                    else:
+                        # Nothing to do here
+                        pass
+
+                        # reaction time host berechnen
+
+                # Skip that reaction (comment / question)
+                else:
+                    continue
+
+                # Reassigns the comment ups
+                if thread_question_top_score < comment_ups:
+                    thread_question_top_score = comment_ups
+
+                # Fills the value of the last question posted
+                if comment_timestamp > thread_time_stamp_last_question:
+                    thread_time_stamp_last_question = comment_timestamp
+
+            # Whenever a comment has been deleted or has, somehow, null values in it.. do not process it
+            else:
+                continue
 
     @staticmethod
     def calculate_down_votes():
@@ -227,7 +288,16 @@ class r_rest_Notification_Panel:
         thread_duration = time_diff_minutes
 
     @staticmethod
+    def calculate_question_stats():
+        print("<< in method calculate_question_stats() >>")
+
+        
+
+    # Checker methods below here for correct data calculation (notification panel [right])
+    @staticmethod
     def checker_comment_is_question(string_to_check):
+
+        print("<< in method checker_comment_is_question() >>")
 
         if "?" in string_to_check:
             return True
@@ -237,15 +307,47 @@ class r_rest_Notification_Panel:
     @staticmethod
     def checker_comment_is_question_on_tier_1(string_to_check):
 
+        print("<< in method checker_comment_is_question_on_tier_1() >>")
+
         if "t3_" in string_to_check:
             return True
         else:
             return False
 
     @staticmethod
-    def checker_is_not_from_thread_author(thread_author, comment_author):
+    def checker_is_not_from_thread_author(author_of_thread, comment_author):
 
-        if thread_author != comment_author:
+        print("<< in method checker_is_not_from_thread_author() >>")
+
+        if author_of_thread != comment_author:
             return True
         else:
             return False
+
+    @staticmethod
+    def check_if_comment_has_been_answered_by_thread_author(self, author_of_thread, comment_acutal_id, comments_cursor):
+
+        print("<< in method check_if_comment_has_been_answered_by_thread_author() >>")
+
+        dict_to_be_returned = {
+            "question_Answered_From_Host": False,
+            "time_Stamp_Answer": 0
+        }
+
+        # Iterates over every comment
+        for i, val in enumerate(comments_cursor):
+
+            check_comment_parent_id = val.get("parent_id")
+            actual_comment_author = val.get("author")
+
+            # Whenever the iterated comment is from the iAMA-Host and that comment has the question as parent_id
+            if (self.check_if_comment_is_not_from_thread_author(author_of_thread, actual_comment_author) == False) \
+                    and (check_comment_parent_id == comment_acutal_id):
+
+                dict_to_be_returned["question_Answered_From_Host"] = True
+                dict_to_be_returned["time_Stamp_Answer"] = val.get("created_utc")
+
+                return dict_to_be_returned
+
+        # This is the case whenever a comment has not a single thread or the comment / question has not been answered
+        return dict_to_be_returned
