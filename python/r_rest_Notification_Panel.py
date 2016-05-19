@@ -1,4 +1,6 @@
-# Source: https://stackoverflow.com/questions/17474211/how-to-sort-python-list-of-strings-of-numbers @ 15:43 Uhr
+# Sources used within this class:
+# (19.05.2016 @ 15:43) -
+# https://stackoverflow.com/questions/17474211/how-to-sort-python-list-of-strings-of-numbers
 
 import praw                      # Necessary to receive live data from reddit
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
@@ -22,50 +24,59 @@ reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.0
 reddit_submission = None
 
 # Refers to the thread creation date
-thread_created_utc = 0                      # Live receive (Reddit API)
-thread_author = ""                          # Live receive (Reddit API)
+thread_created_utc = 0                      # Value received by (Reddit API - live)
+thread_author = ""                          # Value received by (Reddit API - live)
 
 # Left side panel information will be stored here
-thread_title = ""                           # Live receive (Reddit API)
-thread_amount_questions = 0                 # MongoDB
-thread_amount_unanswered_questions = 0      # MongoDB
-thread_duration = 0                         # Live receive (Reddit API)
-thread_id = ""                              # Live receive (Reddit API)
+thread_title = ""                           # Value received by (Reddit API - live)
+thread_amount_questions = 0                 # Value received by (MongoDB - offline)
+thread_amount_unanswered_questions = 0      # Value received by (MongoDB - offline)
+thread_duration = 0                         # Value received by (Reddit API - live)
+thread_id = ""                              # Value received by (Reddit API - live)
 
 # Top panel
-thread_ups = 0                              # Live receive (Reddit API)
-thread_downs = 0                            # Live receive (Reddit API)
+thread_ups = 0                              # Value received by (Reddit API - live)
+thread_downs = 0                            # Value received by (Reddit API - live)
 
-# Notification (Right) Panel
-thread_time_stamp_last_question = 0         # MongoDB
+# Right (stats) panel
+thread_time_stamp_last_question = 0         # Value received by (MongoDB - offline)
 
-thread_average_question_score = 0           # MongoDB
-thread_average_reaction_time_host = 0       # MongoDB
-thread_new_question_every_x_sec = 0         # MongoDB
+thread_average_question_score = 0           # Value received by (MongoDB - offline)
+thread_average_reaction_time_host = 0       # Value received by (MongoDB - offline)
+thread_new_question_every_x_sec = 0         # Value received by (MongoDB - offline)
 
-thread_amount_questions_tier_1 = 0          # MongoDB
-thread_amount_questions_tier_x = 0          # MongoDB
-thread_question_top_score = 0               # MongoDB
+thread_amount_questions_tier_1 = 0          # Value received by (MongoDB - offline)
+thread_amount_questions_tier_x = 0          # Value received by (MongoDB - offline)
+thread_question_top_score = 0               # Value received by (MongoDB - offline)
 
 # Middle of screen
-thread_unanswered_questions = []            # MongoDB
-thread_answered_questions = []              # MongoDB
+thread_unanswered_questions = []            # Value received by (MongoDB - offline)
+thread_answered_questions = []              # Value received by (MongoDB - offline)
 
 
 # noinspection PyPep8Naming
 class r_rest_Notification_Panel:
 
     def main_method(self):
+        """Defines the main method which will be called by listening on a certain REST-Interface
 
-        # Assigns the submission to a submission object
+        Args:
+            self:   Self representation of the class [necessary to use methods within the class itself]
+        Returns:
+            -
+        """
+
+        # Assigns the reddit thread submission to an appropriate object
         self.get_thread_submission()
 
         # Assigns the thread created_utc data
         self.fill_misc_thread_data()
 
+        # <editor-fold desc="Initializes the database">
         # Initializes the database to get necessary information from
         # Necessary to first get the thread submission, otherwise we could not get the timestamp of the thread
         # That timestamp is necessary to look inside the correct database instance
+        # </editor-fold>
         self.init_DB()
 
         # Assigns data to left and top panel
@@ -77,11 +88,22 @@ class r_rest_Notification_Panel:
         # Calculates necessary question statistics
         self.calculate_question_stats(self)
 
-        # The value which is to be returned!
+        # Simple test method for checking the correct assignment of the variables / values
+        self.test_calculated_values()
+
+        # The value which is to be returned (JSON-Object)
         return "At the moment I have no data for you!"
 
     @staticmethod
     def init_DB():
+        """Initializes the database with all necessary instances
+
+        Args:
+            -
+        Returns:
+            -
+        """
+
         global mongo_DB_Client_Instance
 
         global mongo_DB_Threads_Instance
@@ -90,7 +112,7 @@ class r_rest_Notification_Panel:
         global mongo_DB_Comments_Instance
         global mongo_DB_Comments_Collection
 
-        print("<< in method init_DB() >>")
+        # print("<< in method init_DB() >>")
 
         # The year as formatted string (dd-mm-yy HH:MM:SS)
         # Converts the thread creation date into a comparable time format
@@ -99,9 +121,10 @@ class r_rest_Notification_Panel:
         temp_creation_date_of_thread_converted_1 = datetime.datetime.fromtimestamp(
             temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
 
-        # Gets the plain naked year here
+        # Gets the plain naked year here [i.e. 2015]
         thread_year = temp_creation_date_of_thread_converted_1[6:10]
 
+        # Necessary value assignment to variables
         mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(thread_year)]
         mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
 
@@ -110,6 +133,14 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def get_thread_submission():
+        """Receives the thread information live from Reddit via the Reddit-API
+
+        Args:
+            -
+        Returns:
+            -
+        """
+
         global reddit_submission
 
         # print("<< in method get_thread_submission() >>")
@@ -118,6 +149,14 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def fill_misc_thread_data():
+        """Retrieves the creation time stamp and the thread author from the submission
+
+        Args:
+            -
+        Returns:
+            -
+        """
+
         global thread_created_utc
         global thread_author
 
@@ -128,6 +167,14 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def fill_left_n_top_panel_data(self):
+        """Fills data to the left and the top panel
+
+        Args:
+            self:   Self representation of the class [necessary to use methods within the class itself]
+        Returns:
+            -
+        """
+
         global thread_title
         global thread_duration
         global thread_id
@@ -142,12 +189,19 @@ class r_rest_Notification_Panel:
 
         # Calls external methods for calculation purpose
         thread_downs = self.calculate_down_votes()
-        thread_duration = self.calculate_time_until_now()
-
-        # Unanswered questions will be calculated by fill_righ_panel_data()
+        # thread_duration = self.calculate_thread_duration_until_now()
+        thread_duration = self.calculate_time_difference(thread_created_utc, int(time.time()))
 
     @staticmethod
     def fill_right_panel_data(self):
+        """Calculates various statistics for the right panel of the page
+
+        Args:
+            self:   Self representation of the class [necessary to use methods within the class itself]
+        Returns:
+            -
+        """
+
         global thread_amount_questions
         global thread_amount_unanswered_questions
         global thread_time_stamp_last_question
@@ -168,7 +222,6 @@ class r_rest_Notification_Panel:
 
         # Iterates over every comment within that thread
         for i, val in enumerate(comments_cursor):
-            # print(i, len(comments_cursor))
 
             comment_text = val.get("body")
             comment_author = val.get("author")
@@ -177,6 +230,7 @@ class r_rest_Notification_Panel:
             comment_id = val.get("name")
             comment_ups = val.get("ups")
 
+            # Whenever the comment text, the author and the comments' parent_id is not None
             if comment_text is not None and comment_author is not None and comment_parent_id is not None:
                 bool_comment_is_question = self.checker_comment_is_question(comment_text)
                 bool_comment_is_question_on_tier_1 = self.checker_comment_is_question_on_tier_1(comment_parent_id)
@@ -252,53 +306,35 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def calculate_down_votes():
+        """Calculates the amount of down votes of a thread
+
+        Args:
+            -
+        Returns:
+            object (int): The amount of time difference between two values in seconds
+        """
 
         # print("<< in method calculate_down_votes() >>")
 
         # Because down votes are not accessable via reddit API, we have calculated it by our own here
         ratio = reddit_Instance.get_submission(reddit_submission.permalink).upvote_ratio
 
+        # Calculates the total score amount
         total_votes = int(round((ratio * reddit_submission.score) / (2 * ratio - 1))
                           if ratio != 0.5 else round(reddit_submission.score / 2))
 
         return total_votes - reddit_submission.score
 
     @staticmethod
-    def calculate_time_until_now():
-        global thread_duration
-
-        # print("<< in method calculate_time_until_now() >>")
-
-        # Converts the thread creation date into a comparable time format
-        temp_creation_date_of_thread = float(thread_created_utc)
-
-        temp_creation_date_of_thread_converted_1 = datetime.datetime.fromtimestamp(
-            temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
-
-        # Reformatation of time string
-        temp_creation_date_of_thread_converted_2 = datetime.datetime.strptime(
-            temp_creation_date_of_thread_converted_1, '%d-%m-%Y %H:%M:%S')
-
-        # Converts the current time into a comparable time format
-        time_now = int(time.time())
-
-        temp_time_now = float(time_now)
-
-        temp_time_now_converted_1 = datetime.datetime.fromtimestamp(
-            temp_time_now).strftime('%d-%m-%Y %H:%M:%S')
-
-        # Reformatation of time string
-        temp_time_now_converted_2 = datetime.datetime.strptime(
-            temp_time_now_converted_1, '%d-%m-%Y %H:%M:%S')
-
-        # Contains the amount of time units (minutes)
-        time_diff_minutes = (temp_time_now_converted_2 - temp_creation_date_of_thread_converted_2).total_seconds() / 60
-
-        thread_duration = time_diff_minutes
-
-
-    @staticmethod
     def calculate_time_difference(time_value_1, time_value_2):
+        """Calculates the time difference between two floats in epoch style and returns seconds
+
+        Args:
+            time_value_1 (float): The first time value to be used for calculation
+            time_value_2 (float): The second time value to be used for calculation
+        Returns:
+            time_diff_seconds (int): The amount of time difference in seconds
+        """
 
         # print("<< in method calculate_time_difference() >>")
 
@@ -327,9 +363,17 @@ class r_rest_Notification_Panel:
 
         return time_diff_seconds
 
-
     @staticmethod
     def calculate_question_stats(self):
+        """Calculates remaining question statistics, like average question score, reaction time and question creation
+            interval in seconds
+
+        Args:
+            self:   Self representation of the class [necessary to use methods within the class itself]
+        Returns:
+            -
+        """
+
         global thread_average_question_score
         global thread_average_reaction_time_host
         global thread_new_question_every_x_sec
@@ -370,7 +414,7 @@ class r_rest_Notification_Panel:
         # Iterates over every question
         for i in range(0, len(question_every_x_sec_timestamp_holder)):
 
-            # Avoids index out of bounds..
+            # Avoids index out of bounds error message
             if i != len(question_every_x_sec_timestamp_holder) - 1:
                 question_every_x_sec.append(self.calculate_time_difference(question_every_x_sec_timestamp_holder[i + 1],
                                                                            question_every_x_sec_timestamp_holder[i]))
@@ -380,10 +424,22 @@ class r_rest_Notification_Panel:
         thread_average_reaction_time_host = np.mean(question_host_reaction_time)
         thread_new_question_every_x_sec = np.mean(question_every_x_sec)
 
-    # Checker methods below here for correct data calculation (notification panel [right])
+    # Checker methods below here for correct data calculation (right information panel of the webpage)
     @staticmethod
     def checker_comment_is_question(string_to_check):
+        """Simply checks whether a given string is a question or not
 
+        1. This method simply checks wether a question mark exists within that string or not..
+            This is just that simple because messing around with natural processing kits to determine the semantic sense
+            would blow up my bachelor work...
+
+        Args:
+            string_to_check (str) : The string which will be checked for a question mark
+        Returns:
+            True (bool): Whenever the given string is a question
+            False (bool): Whenever the given string is not a question
+
+        """
         # print("<< in method checker_comment_is_question() >>")
 
         if "?" in string_to_check:
@@ -393,7 +449,16 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def checker_comment_is_question_on_tier_1(string_to_check):
+        """Simply checks whether a given string is a question posted on tier 1 or not
 
+        1. This method simply checks whether a question has been posted on tier 1 by looking whether the given
+            string contains the substring "t3_" or not
+
+        Args:
+            string_to_check (str): The string which will be checked for "t3_" appearance in it
+        Returns:
+            -
+        """
         # print("<< in method checker_comment_is_question_on_tier_1() >>")
 
         if "t3_" in string_to_check:
@@ -403,6 +468,18 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def checker_comment_is_not_from_thread_author(author_of_thread, comment_author):
+        """Checks whether both strings are equal or not
+
+        1. This method simply checks wether both strings match each other or not.
+            I have built this extra method to have a better overview in the main code..
+
+        Args:
+            author_of_thread (str) : The name of the thread author (iAMA-Host)
+            comment_author (str) : The name of the comments author
+        Returns:
+            True (bool): Whenever the strings do not match
+            False (bool): Whenever the strings do match that given question
+        """
 
         # print("<< in method checker_comment_is_not_from_thread_author() >>")
 
@@ -414,6 +491,25 @@ class r_rest_Notification_Panel:
     @staticmethod
     def check_if_comment_has_been_answered_by_thread_author(self, author_of_thread, comment_acutal_id,
                                                             comment_timestamp, comments_cursor):
+        """Checks whether both strings are equal or not
+
+        1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp will
+            be created in the beginning.
+        2. Then the method iterates over every comment within that thread
+            1.1. Whenever an answer is from the iAMA hosts and the processed comments 'parent_id' matches the iAMA hosts
+                comments (answers) id, the returned dict will contain appropriate values and will be returned
+            1.2. If this is not the case, it will be returned in its default condition
+
+        Args:
+            self:   Self representation of the class [necessary to use methods within the class itself]
+            author_of_thread (str) : The name of the thread author (iAMA-Host)
+            comment_acutal_id (str) : The id of the actually processed comment
+            comment_timestamp (float): The timestamp of the currently processed comment
+            comments_cursor (Cursor) : The cursor which shows to the amount of comments which can be iterated
+        Returns:
+            True (bool): Whenever the strings do not match
+            False (bool): Whenever the strings do match
+        """
 
         # print("<< in method check_if_comment_has_been_answered_by_thread_author() >>")
 
@@ -442,3 +538,23 @@ class r_rest_Notification_Panel:
 
         # This is the case whenever a comment has not a single thread or the comment / question has not been answered
         return dict_to_be_returned
+
+    @staticmethod
+    def test_calculated_values():
+        print("bin am Ende")
+
+        print("Creation time stamp: " + str(thread_created_utc))
+        print("Thread_Author: " + str(thread_author))
+        print("Thread Title: " + str(thread_title))
+        print("Thread_amount_questions: " + str(thread_amount_questions))
+        print("Thread_amount_unanswered:" + str(thread_amount_unanswered_questions))
+        print("thread_duration: " + str(thread_duration))
+        print("thread_id: " + str(thread_id))
+        print(str(thread_ups), str(thread_downs))
+        print("thread_time_stamp_last_question: " + str(thread_time_stamp_last_question))
+        print("thread_average_question_score: " + str(thread_average_question_score))
+        print("thread_average_reaction_time_host: " + str(thread_average_reaction_time_host))
+        print("thread_new_question_every_x_sec: " + str(thread_new_question_every_x_sec))
+        print("thread_amount_questions_tier_1: " + str(thread_amount_questions_tier_1))
+        print("thread_amount_questions_tier_x: " + str(thread_amount_questions_tier_x))
+        print("thread_question_top_score: " + str(thread_question_top_score))

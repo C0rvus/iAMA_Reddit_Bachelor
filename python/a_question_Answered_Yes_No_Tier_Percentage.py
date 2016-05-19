@@ -331,7 +331,7 @@ def check_if_comment_is_a_question(given_string):
         would blow up my bachelor work...
 
     Args:
-        given_string (int) : The string which will be checked for a question mark
+        given_string (str) : The string which will be checked for a question mark
     Returns:
         True (bool): Whenever the given string is a question
         False (bool): Whenever the given string is not a question
@@ -384,11 +384,9 @@ def check_if_comment_is_not_from_thread_author(author_of_thread, comment_author)
 
 
 def check_if_comment_is_answer_from_thread_author(author_of_thread, comment_actual_id, comments_cursor):
-    """Checks whether both strings are equal or not
+    """Iterates over ewery comment, while compraing the ids and the comments creation author
 
-    1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp will
-        be created in the beginning.
-    2. Then the method iterates over every comment within that thread
+    1. the method iterates over every comment within that thread
         1.1. Whenever an answer is from the iAMA hosts and the processed comments 'parent_id' matches the iAMA hosts
             comments (answers) id, the returned dict will contain appropriate values and will be returned
         1.2. If this is not the case, it will be returned in its default condition

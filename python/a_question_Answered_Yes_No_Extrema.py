@@ -345,7 +345,7 @@ def check_if_comment_is_a_question(given_string):
         would blow up my bachelor work...
 
     Args:
-        given_string (int) : The string which will be checked for a question mark
+        given_string (str) : The string which will be checked for a question mark
     Returns:
         True (bool): Whenever the given string is a question
         False (bool): Whenever the given string is not a question
