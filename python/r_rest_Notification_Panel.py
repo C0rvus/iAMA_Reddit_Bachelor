@@ -2,13 +2,20 @@
 # (19.05.2016 @ 15:43) -
 # https://stackoverflow.com/questions/17474211/how-to-sort-python-list-of-strings-of-numbers
 
+#### TODO Quelle fehlt wegen dem K-Lambda sorting
+#### TODO: Quelle noch einpflegen: https://stackoverflow.com/a/73465
+
 import praw                      # Necessary to receive live data from reddit
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
 import datetime                  # Necessary for calculating time differences
 import time                      # Necessary to do some time calculations
 import numpy as np               # Necessary for mean calculation
+import sys                       # Necessary to print out unicode console logs
+import collections               # Necessary to sort the dictionary before they will be appended to a list
+import operator
 
 from pymongo import MongoClient  # Necessary to make use of MongoDB
+from random import shuffle       # Necessary to shuffle the questions by selecting "random" on the webpage
 
 # Instanciates necessary database instances
 mongo_DB_Client_Instance = MongoClient('localhost', 27017)
@@ -57,14 +64,47 @@ thread_answered_questions = []              # Value received by (MongoDB - offli
 # noinspection PyPep8Naming
 class r_rest_Notification_Panel:
 
-    def main_method(self):
+    def main_method(self, un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
+                    un_sorting_direction, un_sorting_type,
+                    an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
+                    an_sorting_direction, an_sorting_type):
+
+        # print(str(filter_tier), str(filter_score_equals), str(filter_score_numeric),
+        #       str(sorting_direction), str(sorting_type))
+
         """Defines the main method which will be called by listening on a certain REST-Interface
 
         Args:
             self:   Self representation of the class [necessary to use methods within the class itself]
+
+            un_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
+             for unanswered questions
+            un_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / gtr / ltr)
+             for unanswered questions
+            un_filter_score_numeric(str): The "number" of score / upvote which will be used to filter the questions
+             (int)for unanswered questions
+            un_sorting_direction(str): The direction the questions will be filtered after (asc / desc)
+             for unanswered questions
+            un_sorting_type(str): The type of information the questions will be filtered after
+             (author, creation, score, random) for unanswered questions
+
+            an_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
+             for answered questions
+            an_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / gtr / ltr)
+             for answered questions
+            an_filter_score_numeric(str): The "number" of score / upvote which will be used to filter the questions
+             (int) for answered questions
+            an_sorting_direction(str): The direction the questions will be filtered after (asc / desc)
+             for answered questions
+            an_sorting_type(str): The type of information the questions will be filtered after
+            (author, creation, score, random) for answered questions
+
         Returns:
             -
         """
+
+        # Clears all variables to not return objects / questions twice
+        self.clear_variables()
 
         # Assigns the reddit thread submission to an appropriate object
         self.get_thread_submission()
@@ -88,8 +128,16 @@ class r_rest_Notification_Panel:
         # Calculates necessary question statistics
         self.calculate_question_stats(self)
 
+        # Processes the unanswered questions depending on the information given
+        # self.sort_n_filter_questions(self, thread_unanswered_questions, str(un_filter_tier), str(un_filter_score_equals),
+        #                              str(un_filter_score_numeric), str(un_sorting_direction), str(un_sorting_type))
+
+        # Processes the answered questions depending on the information given
+        self.sort_n_filter_questions(self, thread_answered_questions, str(an_filter_tier), str(an_filter_score_equals),
+                                     str(an_filter_score_numeric), str(an_sorting_direction), str(an_sorting_type))
+
         # Simple test method for checking the correct assignment of the variables / values
-        self.test_calculated_values()
+        # self.test_calculated_values()
 
         # The value which is to be returned (JSON-Object)
         return "At the moment I have no data for you!"
@@ -274,11 +322,13 @@ class r_rest_Notification_Panel:
                     if comment_has_been_answered_by_thread_author["question_answered_from_host"] is True:
 
                         # Append it to the answered questions list
+                        dict_question = collections.OrderedDict(sorted(dict_question.items()))
                         thread_answered_questions.append(dict_question)
 
                     elif comment_has_been_answered_by_thread_author["question_answered_from_host"] is False:
 
                         # Append it to the unanswered questions list
+                        dict_question = collections.OrderedDict(sorted(dict_question.items()))
                         thread_unanswered_questions.append(dict_question)
                         thread_amount_unanswered_questions += 1
 
@@ -558,3 +608,185 @@ class r_rest_Notification_Panel:
         print("thread_amount_questions_tier_1: " + str(thread_amount_questions_tier_1))
         print("thread_amount_questions_tier_x: " + str(thread_amount_questions_tier_x))
         print("thread_question_top_score: " + str(thread_question_top_score))
+        print("!!!!!!!! Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
+        print("!!!!!!!! Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
+
+    @staticmethod
+    def sort_n_filter_questions(self, questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
+                                sorting_direction, sorting_type):
+
+        # Sources: http://stackoverflow.com/questions/497426/deleting-multiple-elements-from-a-list
+        # It is necessary to delete the highest indices first !!
+
+        indices_to_be_deleted = []
+
+        print(str(filter_score_numeric))
+
+        # Iterates over every question
+        for i, val in enumerate(questions_to_be_sorted):
+
+            # Checking for tier filtering
+            if filter_tier == "1":
+                if val["question_on_tier_1"] is False:
+                    indices_to_be_deleted.append(i)
+            elif filter_tier == "x":
+                if val["question_on_tier_1"] is True:
+                    indices_to_be_deleted.append(i)
+                    pass
+            else:
+                # Continue as if nothing ever happened
+                pass
+
+            # Checking for upvote score here
+            # Excluding empty sorting variables first here
+            if filter_score_numeric != "" or filter_score_numeric is not None:
+
+                if filter_score_equals == "eql":
+                    if val["question_upvote_score"] != int(filter_score_numeric):
+                        indices_to_be_deleted.append(i)
+                elif filter_score_equals == "gtr":
+                    if val["question_upvote_score"] < int(filter_score_numeric):
+                        indices_to_be_deleted.append(i)
+                elif filter_score_equals == "ltr":
+                    if val["question_upvote_score"] > int(filter_score_numeric):
+                        indices_to_be_deleted.append(i)
+                else:
+                    # Continue as if nothing ever happened
+                    pass
+            # Do nothing here
+            else:
+                pass
+
+        # Kicks the indices out of the question list.. beginning with the highest index number
+        for i in sorted(indices_to_be_deleted, reverse=True):
+
+            # print(i, len(indices_to_be_deleted))
+
+            del questions_to_be_sorted[i]
+
+        # Whenever the questions should be sorted the ascending way
+        if str(sorting_direction) == "asc":
+
+            if str(sorting_type) == "author":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_author'), reverse=False)
+
+            elif str(sorting_type) == "creation":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_timestamp'), reverse=False)
+
+            elif str(sorting_type) == "score":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_upvote_score'), reverse=False)
+
+            else:
+                pass
+
+        # Whenever the questions should be sorted the descending way
+        elif str(sorting_direction) == "des":
+
+            if str(sorting_type) == "author":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_author'), reverse=True)
+
+            elif str(sorting_type) == "creation":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_timestamp'), reverse=True)
+
+            elif str(sorting_type) == "score":
+                questions_to_be_sorted.sort(key=operator.itemgetter('question_upvote_score'), reverse=True)
+
+        # Do as nothing would have happened
+        else:
+            pass
+
+        # Shuffle all questions if selected from the page
+        if str(sorting_type) == "random":
+
+            np.random.shuffle(questions_to_be_sorted)
+
+        # Otherwise do nothing here
+        else:
+            pass
+
+        # Testwise printing of sorting was correct
+        self.uprint(thread_answered_questions)
+        print("Ausgabe laenge der beantworteten Fragen !!!: " + str(len(thread_answered_questions)))
+        # print(thread_answered_questions)
+        # print(questions_to_be_sorted)
+        #
+
+    def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+        enc = file.encoding
+        if enc == 'UTF-8':
+            print(*objects, sep=sep, end=end, file=file)
+        else:
+            f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+            print(*map(f, objects), sep=sep, end=end, file=file)
+
+    @staticmethod
+    def clear_variables():
+
+        global mongo_DB_Client_Instance
+        global mongo_DB_Threads_Instance
+        global mongo_DB_Thread_Collection
+        global mongo_DB_Comments_Instance
+        global mongo_DB_Comments_Collection
+        global reddit_Instance
+        global reddit_submission
+        global thread_created_utc
+        global thread_author
+        global thread_title
+        global thread_amount_questions
+        global thread_amount_unanswered_questions
+        global thread_duration
+        global thread_id
+        global thread_ups
+        global thread_downs
+        global thread_time_stamp_last_question
+        global thread_average_question_score
+        global thread_average_reaction_time_host
+        global thread_new_question_every_x_sec
+        global thread_amount_questions_tier_1
+        global thread_amount_questions_tier_x
+        global thread_question_top_score
+        global thread_unanswered_questions
+        global thread_answered_questions
+
+        mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+
+        mongo_DB_Threads_Instance = None
+        mongo_DB_Thread_Collection = None
+
+        mongo_DB_Comments_Instance = None
+        mongo_DB_Comments_Collection = None
+
+        # Instanciates a reddit instance
+        reddit_Instance = praw.Reddit(
+            user_agent="University_Regensburg_iAMA_Crawler_0.001")  # main reddit functionality
+        reddit_submission = None
+
+        # Refers to the thread creation date
+        thread_created_utc = 0
+        thread_author = ""
+
+        # Left side panel information will be stored here
+        thread_title = ""
+        thread_amount_questions = 0
+        thread_amount_unanswered_questions = 0
+        thread_duration = 0
+        thread_id = ""
+
+        # Top panel
+        thread_ups = 0
+        thread_downs = 0
+
+        # Right (stats) panel
+        thread_time_stamp_last_question = 0
+
+        thread_average_question_score = 0
+        thread_average_reaction_time_host = 0
+        thread_new_question_every_x_sec = 0
+
+        thread_amount_questions_tier_1 = 0
+        thread_amount_questions_tier_x = 0
+        thread_question_top_score = 0
+
+        # Middle of screen
+        thread_unanswered_questions = []
+        thread_answered_questions = []
