@@ -16,6 +16,7 @@ import numpy as np  # Necessary for mean calculation
 import sys  # Necessary to print out unicode console logs
 import collections  # Necessary to sort the dictionary before they will be appended to a list
 import operator  # Necessary for correct dictionary sorting
+import json      # Necessary for creating json objects
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 # Instanciates necessary database instances
@@ -61,12 +62,17 @@ thread_question_top_score = 0  # Value received by (MongoDB - offline)
 thread_unanswered_questions = []  # Value received by (MongoDB - offline)
 thread_answered_questions = []  # Value received by (MongoDB - offline)
 
+# Charts within the webpage
+stats_left = []
+stats_middle = []
+stats_right = []
+
 # Object to return (JSON)
-object_to_return = []
+json_object_to_return = []
 
 
 # noinspection PyPep8Naming
-class r_rest_Notification_Panel:
+class r_rest_Calculate_Data:
     def main_method(self, un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
                     un_sorting_direction, un_sorting_type,
                     an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
@@ -136,11 +142,20 @@ class r_rest_Notification_Panel:
         self.sort_n_filter_questions(thread_answered_questions, str(an_filter_tier), str(an_filter_score_equals),
                                      str(an_filter_score_numeric), str(an_sorting_direction), str(an_sorting_type))
 
+        # Creates the first chart data which is to be displayed via high charts
+        self.create_chart_1()
+
         # Simple test method for checking the correct assignment of the variables / values
         self.test_calculated_values()
 
+        # Builds the JSON object for correct return
+        self.create_json_object()
+
         # The value which is to be returned (JSON-Object)
-        return "At the moment I have no data for you!"
+        if json_object_to_return != "" or json_object_to_return is not None:
+            return json_object_to_return
+        else:
+            return "At the moment I have no data for you!"
 
     @staticmethod
     def init_DB():
@@ -790,7 +805,10 @@ class r_rest_Notification_Panel:
         global thread_question_top_score
         global thread_unanswered_questions
         global thread_answered_questions
-        global object_to_return
+        global json_object_to_return
+        global stats_left
+        global stats_middle
+        global stats_right
 
         mongo_DB_Client_Instance = MongoClient('localhost', 27017)
 
@@ -801,8 +819,7 @@ class r_rest_Notification_Panel:
         mongo_DB_Comments_Collection = None
 
         # Instanciates a reddit instance
-        reddit_Instance = praw.Reddit(
-            user_agent="University_Regensburg_iAMA_Crawler_0.001")  # main reddit functionality
+        reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
         reddit_submission = None
 
         # Refers to the thread creation date
@@ -835,5 +852,220 @@ class r_rest_Notification_Panel:
         thread_unanswered_questions = []
         thread_answered_questions = []
 
-        # Object to return (JSON)
-        object_to_return = []
+        # Charts within the webpage
+        stats_left = []
+        stats_middle = []
+        stats_right = []
+
+        # Object which is to be returned (JSON)
+        json_object_to_return = []
+
+    @staticmethod
+    def create_json_object():
+        """Builds a JSON object consisting of all values which have been calculated
+
+          Args:
+              -
+          Returns:
+              -
+          """
+
+        global json_object_to_return
+
+        data = {}
+
+        returned_json_left_panel = [{
+            "thread_title": thread_title,
+            "thread_amount_questions": thread_amount_questions,
+            "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
+            "thread_duration": thread_duration,
+            "thread_id": thread_id
+        }]
+
+        returned_json_top_panel = [{
+            "thread_ups": thread_ups,
+            "thread_downs": thread_downs
+        }]
+
+        returned_json_right_panel = [{
+            "thread_time_stamp_last_question": thread_time_stamp_last_question,
+            "thread_average_question_score": thread_average_question_score,
+            "thread_average_reaction_time_host": thread_average_reaction_time_host,
+            "thread_new_question_every_x_sec": thread_new_question_every_x_sec,
+            "thread_amount_questions_tier_1": thread_amount_questions_tier_1,
+            "thread_amount_questions_tier_x": thread_amount_questions_tier_x,
+            "thread_question_top_score": thread_question_top_score,
+        }]
+
+        returned_json_questions = [{
+            "unanswered_questions": thread_unanswered_questions,
+            "answered_questions": thread_answered_questions
+        }]
+
+        data["left_panel"] = returned_json_left_panel
+        data["top_panel"] = returned_json_top_panel
+        data["right_panel"] = returned_json_right_panel
+        data["middle_screen"] = returned_json_questions
+
+        # Dumps that data into JSON
+        json_data = json.dumps(data)
+
+        # Assign the json data to the generic object
+        json_object_to_return = json_data
+
+    @staticmethod
+    def create_chart_1():
+        print("creating chart_1.. at least i try to ...")
+
+        # 1. Ueber alle Fragen drueber gehen und zaehlen um welche Uhrzeit welche Frage gestellt wurde
+        # Also dabei quasi den Zeitwert wieder umwandeln und die Stundenzahl nehmen
+
+        dict_questions_tier_all = {
+            "00": 0,
+            "01": 0,
+            "02": 0,
+            "03": 0,
+            "04": 0,
+            "05": 0,
+            "06": 0,
+            "07": 0,
+            "08": 0,
+            "09": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+
+        dict_questions_tier_1 = {
+            "00": 0,
+            "01": 0,
+            "02": 0,
+            "03": 0,
+            "04": 0,
+            "05": 0,
+            "06": 0,
+            "07": 0,
+            "08": 0,
+            "09": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+
+        dict_questions_tier_x = {
+            "00": 0,
+            "01": 0,
+            "02": 0,
+            "03": 0,
+            "04": 0,
+            "05": 0,
+            "06": 0,
+            "07": 0,
+            "08": 0,
+            "09": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+
+        def check_time(given_tier, given_timestamp):
+
+            # Conversion of time to string and reducing to hours only is done here
+            temp_given_timestamp = float(given_timestamp)
+            temp_given_timestamp_stringified = datetime.datetime.fromtimestamp(temp_given_timestamp).\
+                strftime('%d-%m-%Y %H:%M:%S')
+
+            # The converted time in hours only (int)
+            temp_given_timestamp_stringified_hours = int(temp_given_timestamp_stringified[11:13])
+
+            # Raise the appropriate value by one for all questions here
+            dict_questions_tier_all[str(temp_given_timestamp_stringified_hours)] += 1
+
+            # Whenever the given tier is one raise the appropriate time measure by one
+            if given_tier == 1:
+                dict_questions_tier_1[str(temp_given_timestamp_stringified_hours)] += 1
+
+            # Whenever the given tier is one raise the appropriate time measure by one
+            elif given_tier == 0:
+                dict_questions_tier_x[str(temp_given_timestamp_stringified_hours)] += 1
+
+            else:
+                pass
+
+        # Iterates over all answered questions
+        for i, val in enumerate(thread_answered_questions):
+
+            # Whenever the question is on tier 1
+            if val["question_on_tier_1"] is True:
+                check_time(1, val["question_timestamp"])
+
+            # Whenever the question is on any other tier
+            elif val["question_on_tier_1"] is False:
+                check_time(0, val["question_timestamp"])
+
+            # React like nothing ever happened
+            else:
+                pass
+
+        # Iterates over all unanswered questions
+        for i, val in enumerate(thread_unanswered_questions):
+
+            # Whenever the question is on tier 1
+            if val["question_on_tier_1"] is True:
+                check_time(1, val["question_timestamp"])
+
+            # Whenever the question is on any other tier
+            elif val["question_on_tier_1"] is False:
+                check_time(0, val["question_timestamp"])
+
+            # React like nothing ever happened
+            else:
+                pass
+
+        print(dict_questions_tier_all)
+        print(dict_questions_tier_1)
+        print(dict_questions_tier_x)
+
+
+        # Das ganze auch fuer die unanswered questions machen
+        # Mehr dicts machen fuer answered / unanswered? Gibt dem Nutzer genauere Infos, und waere fuer BA besser !
+        # Dict noch sortieren ( ordered dict!)
+        # Gibt Mapping probleme (wohl wegen der Zeit, weil ich ned weiß, ob die zwei Stellen bei <12h hat oder ned und
+        # weil ich ned weiß, wie die 24h umgewandelt werden !)
+
+
+
+

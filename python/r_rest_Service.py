@@ -1,12 +1,15 @@
+# Sources used within this class:
+# 1. (25.05.2016 @ 16:27) -
+# http://www.adamburvill.com/2015/04/debugging-flask-app-with-pycharm.html
+
 from flask import Flask
-from r_rest_Notification_Panel import r_rest_Notification_Panel
-# TODO: http://www.adamburvill.com/2015/04/debugging-flask-app-with-pycharm.html
+from r_rest_Calculate_Data import r_rest_Calculate_Data
 
 app = Flask(__name__)
-nPanel = r_rest_Notification_Panel()
+nPanel = r_rest_Calculate_Data()
 
 
-@app.route('/refreshNotificationPanel/'
+@app.route('/calculate_data/'
            '<string:un_filter_tier>_'
            '<string:un_filter_score_equals>_<string:un_filter_score_numeric>_'
            '<string:un_sorting_direction>_<string:un_sorting_type>__'
