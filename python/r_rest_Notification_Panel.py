@@ -4,6 +4,7 @@
 
 #### TODO Quelle fehlt wegen dem K-Lambda sorting
 #### TODO: Quelle noch einpflegen: https://stackoverflow.com/a/73465
+#### TODO: Object, welches returned werden soll muss auch ned deleted werden!
 
 import praw                      # Necessary to receive live data from reddit
 import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
@@ -12,10 +13,8 @@ import time                      # Necessary to do some time calculations
 import numpy as np               # Necessary for mean calculation
 import sys                       # Necessary to print out unicode console logs
 import collections               # Necessary to sort the dictionary before they will be appended to a list
-import operator
-
+import operator                  # Necessary for correct dictionary sorting
 from pymongo import MongoClient  # Necessary to make use of MongoDB
-from random import shuffle       # Necessary to shuffle the questions by selecting "random" on the webpage
 
 # Instanciates necessary database instances
 mongo_DB_Client_Instance = MongoClient('localhost', 27017)
@@ -68,9 +67,6 @@ class r_rest_Notification_Panel:
                     un_sorting_direction, un_sorting_type,
                     an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
                     an_sorting_direction, an_sorting_type):
-
-        # print(str(filter_tier), str(filter_score_equals), str(filter_score_numeric),
-        #       str(sorting_direction), str(sorting_type))
 
         """Defines the main method which will be called by listening on a certain REST-Interface
 
@@ -129,15 +125,15 @@ class r_rest_Notification_Panel:
         self.calculate_question_stats(self)
 
         # Processes the unanswered questions depending on the information given
-        # self.sort_n_filter_questions(self, thread_unanswered_questions, str(un_filter_tier), str(un_filter_score_equals),
-        #                              str(un_filter_score_numeric), str(un_sorting_direction), str(un_sorting_type))
+        self.sort_n_filter_questions(thread_unanswered_questions, str(un_filter_tier), str(un_filter_score_equals),
+                                     str(un_filter_score_numeric), str(un_sorting_direction), str(un_sorting_type))
 
         # Processes the answered questions depending on the information given
-        self.sort_n_filter_questions(self, thread_answered_questions, str(an_filter_tier), str(an_filter_score_equals),
+        self.sort_n_filter_questions(thread_answered_questions, str(an_filter_tier), str(an_filter_score_equals),
                                      str(an_filter_score_numeric), str(an_sorting_direction), str(an_sorting_type))
 
         # Simple test method for checking the correct assignment of the variables / values
-        # self.test_calculated_values()
+        self.test_calculated_values()
 
         # The value which is to be returned (JSON-Object)
         return "At the moment I have no data for you!"
@@ -159,8 +155,6 @@ class r_rest_Notification_Panel:
 
         global mongo_DB_Comments_Instance
         global mongo_DB_Comments_Collection
-
-        # print("<< in method init_DB() >>")
 
         # The year as formatted string (dd-mm-yy HH:MM:SS)
         # Converts the thread creation date into a comparable time format
@@ -191,8 +185,6 @@ class r_rest_Notification_Panel:
 
         global reddit_submission
 
-        # print("<< in method get_thread_submission() >>")
-
         reddit_submission = reddit_Instance.get_submission(submission_id='3deloy')
 
     @staticmethod
@@ -207,8 +199,6 @@ class r_rest_Notification_Panel:
 
         global thread_created_utc
         global thread_author
-
-        # print("<< in method get_thread_submission() >>")
 
         thread_created_utc = float(reddit_submission.created_utc)
         thread_author = str(reddit_submission.author)
@@ -228,8 +218,6 @@ class r_rest_Notification_Panel:
         global thread_id
         global thread_ups
         global thread_downs
-
-        # print("<< in method fill_left_panel_data() >>")
 
         thread_title = reddit_submission.title
         thread_id = reddit_submission.id
@@ -261,8 +249,6 @@ class r_rest_Notification_Panel:
         global thread_question_top_score
         global thread_unanswered_questions
         global thread_answered_questions
-
-        # print("<< in method fill_right_panel_data() >>")
 
         comments_collection = mongo_DB_Comments_Instance[thread_id]
         comments_cursor = list(comments_collection.find())
@@ -364,8 +350,6 @@ class r_rest_Notification_Panel:
             object (int): The amount of time difference between two values in seconds
         """
 
-        # print("<< in method calculate_down_votes() >>")
-
         # Because down votes are not accessable via reddit API, we have calculated it by our own here
         ratio = reddit_Instance.get_submission(reddit_submission.permalink).upvote_ratio
 
@@ -385,8 +369,6 @@ class r_rest_Notification_Panel:
         Returns:
             time_diff_seconds (int): The amount of time difference in seconds
         """
-
-        # print("<< in method calculate_time_difference() >>")
 
         # Converts the the first time unit into a comparable format
         temp_time_value_1 = float(time_value_1)
@@ -428,8 +410,6 @@ class r_rest_Notification_Panel:
         global thread_average_reaction_time_host
         global thread_new_question_every_x_sec
 
-        # print("<< in method calculate_question_stats() >>")
-
         # Will contain all scores of every question
         question_scores = []
         # Will contain the reaction time of the iama host
@@ -442,8 +422,6 @@ class r_rest_Notification_Panel:
         # Iterates over the unanswered questions
         for i, val in enumerate(thread_unanswered_questions):
             question_scores.append(val['question_upvote_score'])
-
-            # print(type(val['question_timestamp']))
 
             # noinspection PyTypeChecker
             question_every_x_sec_timestamp_holder.append(float(val['question_timestamp']))
@@ -490,7 +468,6 @@ class r_rest_Notification_Panel:
             False (bool): Whenever the given string is not a question
 
         """
-        # print("<< in method checker_comment_is_question() >>")
 
         if "?" in string_to_check:
             return True
@@ -509,7 +486,6 @@ class r_rest_Notification_Panel:
         Returns:
             -
         """
-        # print("<< in method checker_comment_is_question_on_tier_1() >>")
 
         if "t3_" in string_to_check:
             return True
@@ -530,8 +506,6 @@ class r_rest_Notification_Panel:
             True (bool): Whenever the strings do not match
             False (bool): Whenever the strings do match that given question
         """
-
-        # print("<< in method checker_comment_is_not_from_thread_author() >>")
 
         if author_of_thread != comment_author:
             return True
@@ -561,8 +535,6 @@ class r_rest_Notification_Panel:
             False (bool): Whenever the strings do match
         """
 
-        # print("<< in method check_if_comment_has_been_answered_by_thread_author() >>")
-
         dict_to_be_returned = {
             "question_answered_from_host": False,
             "question_host_reaction_time": 0
@@ -591,8 +563,6 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def test_calculated_values():
-        print("bin am Ende")
-
         print("Creation time stamp: " + str(thread_created_utc))
         print("Thread_Author: " + str(thread_author))
         print("Thread Title: " + str(thread_title))
@@ -608,11 +578,11 @@ class r_rest_Notification_Panel:
         print("thread_amount_questions_tier_1: " + str(thread_amount_questions_tier_1))
         print("thread_amount_questions_tier_x: " + str(thread_amount_questions_tier_x))
         print("thread_question_top_score: " + str(thread_question_top_score))
-        print("!!!!!!!! Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
-        print("!!!!!!!! Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
+        print("Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
+        print("Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
 
     @staticmethod
-    def sort_n_filter_questions(self, questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
+    def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
                                 sorting_direction, sorting_type):
 
         # Sources: http://stackoverflow.com/questions/497426/deleting-multiple-elements-from-a-list
@@ -620,48 +590,76 @@ class r_rest_Notification_Panel:
 
         indices_to_be_deleted = []
 
-        print(str(filter_score_numeric))
-
         # Iterates over every question
         for i, val in enumerate(questions_to_be_sorted):
 
-            # Checking for tier filtering
+            # Checks for the given REST parameter
             if filter_tier == "1":
+
+                # Whenever the iterated question is not on tier 1
                 if val["question_on_tier_1"] is False:
-                    indices_to_be_deleted.append(i)
-            elif filter_tier == "x":
-                if val["question_on_tier_1"] is True:
-                    indices_to_be_deleted.append(i)
-                    pass
-            else:
-                # Continue as if nothing ever happened
-                pass
 
-            # Checking for upvote score here
-            # Excluding empty sorting variables first here
-            if filter_score_numeric != "" or filter_score_numeric is not None:
+                    if filter_score_numeric != "" or filter_score_numeric is not None:
 
-                if filter_score_equals == "eql":
-                    if val["question_upvote_score"] != int(filter_score_numeric):
-                        indices_to_be_deleted.append(i)
-                elif filter_score_equals == "gtr":
-                    if val["question_upvote_score"] < int(filter_score_numeric):
-                        indices_to_be_deleted.append(i)
-                elif filter_score_equals == "ltr":
-                    if val["question_upvote_score"] > int(filter_score_numeric):
+                        if filter_score_equals == "eql":
+                            if val["question_upvote_score"] != int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        elif filter_score_equals == "gtr":
+                            if val["question_upvote_score"] < int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        elif filter_score_equals == "ltr":
+                            if val["question_upvote_score"] > int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        else:
+                            # Continue as if nothing ever happened
+                            pass
+                    else:
                         indices_to_be_deleted.append(i)
                 else:
-                    # Continue as if nothing ever happened
                     pass
-            # Do nothing here
+
+            # Checks for the given REST parameter
+            elif filter_tier == "x":
+
+                # Whenever the iterated question is on tier 1
+                if val["question_on_tier_1"] is True:
+
+                    # Whenever a numeric filtering score has been given via REST
+                    if filter_score_numeric != "" or filter_score_numeric is not None:
+
+                        if filter_score_equals == "eql":
+                            if val["question_upvote_score"] != int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        elif filter_score_equals == "gtr":
+                            if val["question_upvote_score"] < int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        elif filter_score_equals == "ltr":
+                            if val["question_upvote_score"] > int(filter_score_numeric):
+                                indices_to_be_deleted.append(i)
+
+                        else:
+                            # Continue as if nothing ever happened
+                            pass
+
+                    # Whenever no filtering score has been given
+                    else:
+                        indices_to_be_deleted.append(i)
+                else:
+                    pass
+
+            # Continue as if nothing ever happened
             else:
                 pass
 
         # Kicks the indices out of the question list.. beginning with the highest index number
         for i in sorted(indices_to_be_deleted, reverse=True):
 
-            # print(i, len(indices_to_be_deleted))
-
+            # Removes messages from the original question list, which have been "flagged" before
             del questions_to_be_sorted[i]
 
         # Whenever the questions should be sorted the ascending way
@@ -703,13 +701,6 @@ class r_rest_Notification_Panel:
         # Otherwise do nothing here
         else:
             pass
-
-        # Testwise printing of sorting was correct
-        self.uprint(thread_answered_questions)
-        print("Ausgabe laenge der beantworteten Fragen !!!: " + str(len(thread_answered_questions)))
-        # print(thread_answered_questions)
-        # print(questions_to_be_sorted)
-        #
 
     def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
         enc = file.encoding

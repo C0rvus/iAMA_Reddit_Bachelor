@@ -1,5 +1,6 @@
 from flask import Flask
 from r_rest_Notification_Panel import r_rest_Notification_Panel
+# TODO: http://www.adamburvill.com/2015/04/debugging-flask-app-with-pycharm.html
 
 app = Flask(__name__)
 nPanel = r_rest_Notification_Panel()
