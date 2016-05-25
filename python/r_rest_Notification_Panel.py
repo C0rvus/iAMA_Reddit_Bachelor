@@ -1,19 +1,21 @@
 # Sources used within this class:
-# (19.05.2016 @ 15:43) -
+# 1. (19.05.2016 @ 15:43) -
 # https://stackoverflow.com/questions/17474211/how-to-sort-python-list-of-strings-of-numbers
+# 2. (24.05.2016 @ 16:29) -
+# https://stackoverflow.com/a/73465
+# 3. (24.05.2016 @ 18:32) -
+# http://stackoverflow.com/questions/497426/deleting-multiple-elements-from-a-list
+# 4. (25.05.2016 @ 15:26) -
+# https://stackoverflow.com/a/29988426
 
-#### TODO Quelle fehlt wegen dem K-Lambda sorting
-#### TODO: Quelle noch einpflegen: https://stackoverflow.com/a/73465
-#### TODO: Object, welches returned werden soll muss auch ned deleted werden!
-
-import praw                      # Necessary to receive live data from reddit
-import copy                      # Necessary to copy value of the starting year - needed for correct csv file name
-import datetime                  # Necessary for calculating time differences
-import time                      # Necessary to do some time calculations
-import numpy as np               # Necessary for mean calculation
-import sys                       # Necessary to print out unicode console logs
-import collections               # Necessary to sort the dictionary before they will be appended to a list
-import operator                  # Necessary for correct dictionary sorting
+import praw  # Necessary to receive live data from reddit
+import copy  # Necessary to copy value of the starting year - needed for correct csv file name
+import datetime  # Necessary for calculating time differences
+import time  # Necessary to do some time calculations
+import numpy as np  # Necessary for mean calculation
+import sys  # Necessary to print out unicode console logs
+import collections  # Necessary to sort the dictionary before they will be appended to a list
+import operator  # Necessary for correct dictionary sorting
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 # Instanciates necessary database instances
@@ -26,43 +28,45 @@ mongo_DB_Comments_Instance = None
 mongo_DB_Comments_Collection = None
 
 # Instanciates a reddit instance
-reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")  # main reddit functionality
+reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")  # Main reddit functionality
 reddit_submission = None
 
 # Refers to the thread creation date
-thread_created_utc = 0                      # Value received by (Reddit API - live)
-thread_author = ""                          # Value received by (Reddit API - live)
+thread_created_utc = 0  # Value received by (Reddit API - live)
+thread_author = ""  # Value received by (Reddit API - live)
 
 # Left side panel information will be stored here
-thread_title = ""                           # Value received by (Reddit API - live)
-thread_amount_questions = 0                 # Value received by (MongoDB - offline)
-thread_amount_unanswered_questions = 0      # Value received by (MongoDB - offline)
-thread_duration = 0                         # Value received by (Reddit API - live)
-thread_id = ""                              # Value received by (Reddit API - live)
+thread_title = ""  # Value received by (Reddit API - live)
+thread_amount_questions = 0  # Value received by (MongoDB - offline)
+thread_amount_unanswered_questions = 0  # Value received by (MongoDB - offline)
+thread_duration = 0  # Value received by (Reddit API - live)
+thread_id = ""  # Value received by (Reddit API - live)
 
 # Top panel
-thread_ups = 0                              # Value received by (Reddit API - live)
-thread_downs = 0                            # Value received by (Reddit API - live)
+thread_ups = 0  # Value received by (Reddit API - live)
+thread_downs = 0  # Value received by (Reddit API - live)
 
 # Right (stats) panel
-thread_time_stamp_last_question = 0         # Value received by (MongoDB - offline)
+thread_time_stamp_last_question = 0  # Value received by (MongoDB - offline)
 
-thread_average_question_score = 0           # Value received by (MongoDB - offline)
-thread_average_reaction_time_host = 0       # Value received by (MongoDB - offline)
-thread_new_question_every_x_sec = 0         # Value received by (MongoDB - offline)
+thread_average_question_score = 0  # Value received by (MongoDB - offline)
+thread_average_reaction_time_host = 0  # Value received by (MongoDB - offline)
+thread_new_question_every_x_sec = 0  # Value received by (MongoDB - offline)
 
-thread_amount_questions_tier_1 = 0          # Value received by (MongoDB - offline)
-thread_amount_questions_tier_x = 0          # Value received by (MongoDB - offline)
-thread_question_top_score = 0               # Value received by (MongoDB - offline)
+thread_amount_questions_tier_1 = 0  # Value received by (MongoDB - offline)
+thread_amount_questions_tier_x = 0  # Value received by (MongoDB - offline)
+thread_question_top_score = 0  # Value received by (MongoDB - offline)
 
 # Middle of screen
-thread_unanswered_questions = []            # Value received by (MongoDB - offline)
-thread_answered_questions = []              # Value received by (MongoDB - offline)
+thread_unanswered_questions = []  # Value received by (MongoDB - offline)
+thread_answered_questions = []  # Value received by (MongoDB - offline)
+
+# Object to return (JSON)
+object_to_return = []
 
 
 # noinspection PyPep8Naming
 class r_rest_Notification_Panel:
-
     def main_method(self, un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
                     un_sorting_direction, un_sorting_type,
                     an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
@@ -75,7 +79,7 @@ class r_rest_Notification_Panel:
 
             un_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
              for unanswered questions
-            un_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / gtr / ltr)
+            un_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / grt / lrt)
              for unanswered questions
             un_filter_score_numeric(str): The "number" of score / upvote which will be used to filter the questions
              (int)for unanswered questions
@@ -86,7 +90,7 @@ class r_rest_Notification_Panel:
 
             an_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
              for answered questions
-            an_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / gtr / ltr)
+            an_filter_score_equals(str) : The kind of comparison the questions will be filtered on (eql / grt / lrt)
              for answered questions
             an_filter_score_numeric(str): The "number" of score / upvote which will be used to filter the questions
              (int) for answered questions
@@ -444,8 +448,9 @@ class r_rest_Notification_Panel:
 
             # Avoids index out of bounds error message
             if i != len(question_every_x_sec_timestamp_holder) - 1:
-                question_every_x_sec.append(self.calculate_time_difference(question_every_x_sec_timestamp_holder[i + 1],
-                                                                           question_every_x_sec_timestamp_holder[i]))
+                question_every_x_sec.append(
+                    self.calculate_time_difference(question_every_x_sec_timestamp_holder[i + 1],
+                                                   question_every_x_sec_timestamp_holder[i]))
 
         # Assigns necessary values for correct calculation
         thread_average_question_score = np.mean(question_scores)
@@ -517,8 +522,8 @@ class r_rest_Notification_Panel:
                                                             comment_timestamp, comments_cursor):
         """Checks whether both strings are equal or not
 
-        1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp will
-            be created in the beginning.
+        1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp
+            willbe created in the beginning.
         2. Then the method iterates over every comment within that thread
             1.1. Whenever an answer is from the iAMA hosts and the processed comments 'parent_id' matches the iAMA hosts
                 comments (answers) id, the returned dict will contain appropriate values and will be returned
@@ -549,7 +554,6 @@ class r_rest_Notification_Panel:
             # Whenever the iterated comment is from the iAMA-Host and that comment has the question as parent_id
             if (self.checker_comment_is_not_from_thread_author(str(author_of_thread), actual_comment_author) is False) \
                     and (check_comment_parent_id == comment_acutal_id):
-
                 dict_to_be_returned["question_answered_from_host"] = True
 
                 # The difference between timestamp of the hosts answer and the questions timestamp
@@ -563,6 +567,14 @@ class r_rest_Notification_Panel:
 
     @staticmethod
     def test_calculated_values():
+        """This method is for debugging purpose only. It shows if all values have been calculated the correct way.
+
+        Args:
+            -
+        Returns:
+            -
+        """
+
         print("Creation time stamp: " + str(thread_created_utc))
         print("Thread_Author: " + str(thread_author))
         print("Thread Title: " + str(thread_title))
@@ -584,10 +596,26 @@ class r_rest_Notification_Panel:
     @staticmethod
     def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
                                 sorting_direction, sorting_type):
+        """Sorts and filters given question lists depending on parameters received via REST call
 
-        # Sources: http://stackoverflow.com/questions/497426/deleting-multiple-elements-from-a-list
-        # It is necessary to delete the highest indices first !!
+        Args:
+            questions_to_be_sorted (list): Contains all questions which will be processed later on
 
+            filter_tier (str): Contains the information, which questions, depending on the tier, will be sorted out
+                (all / 1 / X)
+            filter_score_equals(str): Contains the information to filter a tier depending on a special score
+                (eql [equal] / grt [greather than] / lrt [lesser than])
+            filter_score_numeric(str): The upvote score which will be used for filtering
+
+            sorting_direction(str): The direction which will be used for sorting the questions
+                (asc [ascending] / des [descending])
+            sorting_type(str): The kind of type which will be used for sorting
+                (author / creation / score / random)
+        Returns:
+            -
+        """
+
+        # Contains the index numbers of questions which are to be deleted later on
         indices_to_be_deleted = []
 
         # Iterates over every question
@@ -605,11 +633,11 @@ class r_rest_Notification_Panel:
                             if val["question_upvote_score"] != int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "gtr":
+                        elif filter_score_equals == "grt":
                             if val["question_upvote_score"] < int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "ltr":
+                        elif filter_score_equals == "lrt":
                             if val["question_upvote_score"] > int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
@@ -634,11 +662,11 @@ class r_rest_Notification_Panel:
                             if val["question_upvote_score"] != int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "gtr":
+                        elif filter_score_equals == "grt":
                             if val["question_upvote_score"] < int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "ltr":
+                        elif filter_score_equals == "lrt":
                             if val["question_upvote_score"] > int(filter_score_numeric):
                                 indices_to_be_deleted.append(i)
 
@@ -658,7 +686,6 @@ class r_rest_Notification_Panel:
 
         # Kicks the indices out of the question list.. beginning with the highest index number
         for i in sorted(indices_to_be_deleted, reverse=True):
-
             # Removes messages from the original question list, which have been "flagged" before
             del questions_to_be_sorted[i]
 
@@ -702,16 +729,41 @@ class r_rest_Notification_Panel:
         else:
             pass
 
+    # noinspection PyUnresolvedReferences
+    @staticmethod
     def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+        """This method is also for debugging purpose only. It helps printing out questions which can not be printed out
+            the normal way because of errors displaying unicode characters (Windows has some problems with it...)
+
+        Args:
+            *objects(object) : The kind of object, which will be used for printing
+            sep(str) : The seperator to seperated the printed text
+            end(str) : Defines whenever the printing should stop
+            file(object) : Defines where to print that object to
+        Returns:
+            -
+        """
+
         enc = file.encoding
         if enc == 'UTF-8':
+            # noinspection PyArgumentList
             print(*objects, sep=sep, end=end, file=file)
         else:
-            f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+            def f(x):
+                str(x).encode(enc, errors='backslashreplace').decode(enc)
+
             print(*map(f, objects), sep=sep, end=end, file=file)
 
     @staticmethod
     def clear_variables():
+        """Resets all variables, to not return duplicated objects.
+            Because the REST-Service won't destruct the objects by it self we have to do it manually
+
+        Args:
+            -
+        Returns:
+            -
+        """
 
         global mongo_DB_Client_Instance
         global mongo_DB_Threads_Instance
@@ -738,6 +790,7 @@ class r_rest_Notification_Panel:
         global thread_question_top_score
         global thread_unanswered_questions
         global thread_answered_questions
+        global object_to_return
 
         mongo_DB_Client_Instance = MongoClient('localhost', 27017)
 
@@ -781,3 +834,6 @@ class r_rest_Notification_Panel:
         # Middle of screen
         thread_unanswered_questions = []
         thread_answered_questions = []
+
+        # Object to return (JSON)
+        object_to_return = []
