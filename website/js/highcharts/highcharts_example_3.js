@@ -1,61 +1,65 @@
+// Data gathered from http://populationpyramid.net/germany/2015/
 $(function () {
-    $('#container_example_3').highcharts({
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: 'Historic and Estimated Worldwide Population Growth by Region'
-        },
-        subtitle: {
-            text: 'Source: Wikipedia.org'
-        },
-        xAxis: {
-            categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Billions'
+    // Age categories
+    var categories = ['0-4', '5-9', '10-14', '15-19'];
+    $(document).ready(function () {
+        $('#container_example_3').highcharts({
+            chart: {
+                type: 'bar'
             },
-            labels: {
+            title: {
+                text: 'Population pyramid for Germany, 2015'
+            },
+            subtitle: {
+                text: 'Source: <a href="http://populationpyramid.net/germany/2015/">Population Pyramids of the World from 1950 to 2100</a>'
+            },
+            xAxis: [{
+                categories: categories,
+                reversed: false,
+                labels: {
+                    step: 1
+                }
+            }, { // mirror axis on right side
+                opposite: true,
+                reversed: false,
+                categories: categories,
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
+            }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '%';
+                    }
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
                 formatter: function () {
-                    return this.value / 1000;
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                 }
-            }
-        },
-        tooltip: {
-            shared: true,
-            valueSuffix: ' millions'
-        },
-        plotOptions: {
-            area: {
-                stacking: 'normal',
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
-                    lineWidth: 1,
-                    lineColor: '#666666'
-                }
-            }
-        },
-        series: [{
-            name: 'Asia',
-            data: [502, 635, 809, 947, 1402, 3634, 5268]
-        }, {
-            name: 'Africa',
-            data: [106, 107, 111, 133, 221, 767, 1766]
-        }, {
-            name: 'Europe',
-            data: [163, 203, 276, 408, 547, 729, 628]
-        }, {
-            name: 'America',
-            data: [18, 31, 54, 156, 339, 818, 1201]
-        }, {
-            name: 'Oceania',
-            data: [2, 2, 2, 6, 13, 30, 46]
-        }]
+            },
+
+            series: [{
+                name: 'Male',
+                data: [-2.2, -2.2, -2.3, -2.5]
+            }, {
+                name: 'Female',
+                data: [2.1, 2.0, 2.2, 2.4]
+            }]
+        });
     });
+
 });

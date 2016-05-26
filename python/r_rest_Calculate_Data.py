@@ -19,6 +19,10 @@ import operator  # Necessary for correct dictionary sorting
 import json      # Necessary for creating json objects
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
+# TODO: Outsource Chart - logic into an extra class
+# TODO: Chart mit x = Anzahl Score von Frage [BarChart]
+
+
 # Instanciates necessary database instances
 mongo_DB_Client_Instance = MongoClient('localhost', 27017)
 
@@ -144,6 +148,12 @@ class r_rest_Calculate_Data:
 
         # Creates the first chart data which is to be displayed via high charts
         self.create_chart_1()
+
+        # Creates the second chart data which is to be displayed via high charts
+        self.create_chart_2()
+
+        # Creates the third chart data which is to be displayed via high charts
+        self.create_chart_3()
 
         # Simple test method for checking the correct assignment of the variables / values
         self.test_calculated_values()
@@ -913,24 +923,75 @@ class r_rest_Calculate_Data:
         # Assign the json data to the generic object
         json_object_to_return = json_data
 
+    # Thats the line chart within here, containing the distribution of questions asked at a certain day time
     @staticmethod
     def create_chart_1():
         print("creating chart_1.. at least i try to ...")
 
-        # 1. Ueber alle Fragen drueber gehen und zaehlen um welche Uhrzeit welche Frage gestellt wurde
-        # Also dabei quasi den Zeitwert wieder umwandeln und die Stundenzahl nehmen
-
-        dict_questions_tier_all = {
-            "00": 0,
-            "01": 0,
-            "02": 0,
-            "03": 0,
-            "04": 0,
-            "05": 0,
-            "06": 0,
-            "07": 0,
-            "08": 0,
-            "09": 0,
+        # Contains all unanswered questions
+        dict_questions_tier_all_unanswered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+        dict_questions_tier_1_unanswered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+        dict_questions_tier_x_unanswered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
             "10": 0,
             "11": 0,
             "12": 0,
@@ -947,17 +1008,70 @@ class r_rest_Calculate_Data:
             "23": 0
         }
 
-        dict_questions_tier_1 = {
-            "00": 0,
-            "01": 0,
-            "02": 0,
-            "03": 0,
-            "04": 0,
-            "05": 0,
-            "06": 0,
-            "07": 0,
-            "08": 0,
-            "09": 0,
+        # Contains all answered questions
+        dict_questions_tier_all_answered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+        dict_questions_tier_1_answered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+        }
+        dict_questions_tier_x_answered = {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
             "10": 0,
             "11": 0,
             "12": 0,
@@ -974,34 +1088,8 @@ class r_rest_Calculate_Data:
             "23": 0
         }
 
-        dict_questions_tier_x = {
-            "00": 0,
-            "01": 0,
-            "02": 0,
-            "03": 0,
-            "04": 0,
-            "05": 0,
-            "06": 0,
-            "07": 0,
-            "08": 0,
-            "09": 0,
-            "10": 0,
-            "11": 0,
-            "12": 0,
-            "13": 0,
-            "14": 0,
-            "15": 0,
-            "16": 0,
-            "17": 0,
-            "18": 0,
-            "19": 0,
-            "20": 0,
-            "21": 0,
-            "22": 0,
-            "23": 0
-        }
-
-        def check_time(given_tier, given_timestamp):
+        # Checks the time of a given question and fills the regarding dictionary appropriately
+        def check_time(given_tier, bool_answered, given_timestamp):
 
             # Conversion of time to string and reducing to hours only is done here
             temp_given_timestamp = float(given_timestamp)
@@ -1011,61 +1099,211 @@ class r_rest_Calculate_Data:
             # The converted time in hours only (int)
             temp_given_timestamp_stringified_hours = int(temp_given_timestamp_stringified[11:13])
 
-            # Raise the appropriate value by one for all questions here
-            dict_questions_tier_all[str(temp_given_timestamp_stringified_hours)] += 1
+            # Whenever a question has been answered correctly
+            if bool_answered is True:
 
-            # Whenever the given tier is one raise the appropriate time measure by one
-            if given_tier == 1:
-                dict_questions_tier_1[str(temp_given_timestamp_stringified_hours)] += 1
+                # Raise the appropriate value by one for all questions here
+                dict_questions_tier_all_answered[str(temp_given_timestamp_stringified_hours)] += 1
 
-            # Whenever the given tier is one raise the appropriate time measure by one
-            elif given_tier == 0:
-                dict_questions_tier_x[str(temp_given_timestamp_stringified_hours)] += 1
+                if given_tier == 1:
+                    dict_questions_tier_1_answered[str(temp_given_timestamp_stringified_hours)] += 1
+
+                # Whenever the given tier is one raise the appropriate time measure by one
+                elif given_tier == 0:
+                    dict_questions_tier_x_answered[str(temp_given_timestamp_stringified_hours)] += 1
+
+                else:
+                    pass
+
+            # Whenever a question has not been answered correctly
+            elif bool_answered is False:
+
+                # Raise the appropriate value by one for all questions here
+                dict_questions_tier_all_unanswered[str(temp_given_timestamp_stringified_hours)] += 1
+
+                if given_tier == 1:
+                    dict_questions_tier_1_unanswered[str(temp_given_timestamp_stringified_hours)] += 1
+
+                # Whenever the given tier is one raise the appropriate time measure by one
+                elif given_tier == 0:
+                    dict_questions_tier_x_unanswered[str(temp_given_timestamp_stringified_hours)] += 1
+
+                else:
+                    pass
+
+            # Else tree is just for completeness reasons
+            else:
+                pass
+
+        # Iterates over a list of questions doing misc stuff
+        def iterate_questions(questions_to_be_iterated):
+
+            for i, val in enumerate(questions_to_be_iterated):
+
+                # Whenever the question is on tier 1
+                if val["question_on_tier_1"] is True:
+
+                    if val["question_answered_by_host"] is True:
+                        check_time(1, True, val["question_timestamp"])
+
+                    elif val["question_answered_by_host"] is False:
+                        check_time(1, False, val["question_timestamp"])
+
+                    # React like nothing ever happened
+                    else:
+                        pass
+
+                # Whenever the question is on any other tier
+                elif val["question_on_tier_1"] is False:
+
+                    if val["question_answered_by_host"] is True:
+                        check_time(0, True, val["question_timestamp"])
+
+                    elif val["question_answered_by_host"] is False:
+                        check_time(0, False, val["question_timestamp"])
+
+                    # React like nothing ever happened
+                    else:
+                        pass
+
+                # React like nothing ever happened
+                else:
+                    pass
+
+        iterate_questions(thread_answered_questions)
+        iterate_questions(thread_unanswered_questions)
+
+        # Sorts all dicts in an ascending way
+        dict_questions_tier_all_unanswered = collections.OrderedDict(sorted(dict_questions_tier_all_unanswered.items()))
+        dict_questions_tier_1_unanswered = collections.OrderedDict(sorted(dict_questions_tier_1_unanswered.items()))
+        dict_questions_tier_x_unanswered = collections.OrderedDict(sorted(dict_questions_tier_x_unanswered.items()))
+
+        dict_questions_tier_all_answered = collections.OrderedDict(sorted(dict_questions_tier_all_answered.items()))
+        dict_questions_tier_1_answered = collections.OrderedDict(sorted(dict_questions_tier_1_answered.items()))
+        dict_questions_tier_x_answered = collections.OrderedDict(sorted(dict_questions_tier_x_answered.items()))
+
+        # print(dict_questions_tier_all_unanswered)
+        # print(dict_questions_tier_1_unanswered)
+        # print(dict_questions_tier_x_unanswered)
+        # print(dict_questions_tier_all_answered)
+        # print(dict_questions_tier_1_answered)
+        # print(dict_questions_tier_x_answered)
+
+    # Thats the pie chart within here, containing the distribution of questioners
+    @staticmethod
+    def create_chart_2():
+        print("Ich bin im zweiten Chart drinnen !")
+
+        questioners_tier_1 = []
+        questioners_tier_x = []
+
+        # Iterates over every question and adds the question author, depending on the tier the question has been asked
+        # on to the appropriate list
+        def iterate_questions(questions_to_iterate_over):
+
+            for i, val in enumerate(questions_to_iterate_over):
+
+                # Whenever the question has been posted on tier 1
+                if val["question_on_tier_1"] is True:
+
+                    # Whenever the question author has not been added to the list
+                    if val["question_author"] not in questioners_tier_1:
+                        questioners_tier_1.append(val["question_author"])
+
+                    # Otherwise do nothing at all
+                    else:
+                        pass
+
+                # Whenever the question has been posted on tier x
+                elif val["question_on_tier_1"] is False:
+
+                    # Whenever the question author has not been added to the list
+                    if val["question_author"] not in questioners_tier_x:
+                        questioners_tier_x.append(val["question_author"])
+
+                    # Otherwise do nothing at all
+                    else:
+                        pass
+
+                # Else tree is here just for optical reasons
+                else:
+                    pass
+
+        iterate_questions(thread_answered_questions)
+        iterate_questions(thread_unanswered_questions)
+
+        whole_amount_of_questions = int(len(questioners_tier_1)) + int(len(questioners_tier_x))
+
+        # The amount of questions asked on any tier except tier 1
+        percentage_tier_x_on_whole = float((100 / whole_amount_of_questions)) * float(len(questioners_tier_x))
+
+        # The amount of questions asked on tier 1
+        percentage_tier_1_on_whole = 100 - percentage_tier_x_on_whole
+
+    # A third chart will be created here
+    @staticmethod
+    def create_chart_3():
+        print("bin in chart 3")
+
+        dict_question_scores = {
+
+            "is_0": 0,
+
+            "pos_1_to_5": 0,
+            "pos_6_to_15": 0,
+            "pos_16_to_50": 0,
+            "pos_grt_51": 0,
+
+            "neg_1_to_5": 0,
+            "neg_6_to_15": 0,
+            "neg_16_to_50": 0,
+            "neg_grt_51": 0
+
+        }
+
+        # Raises the appropriate value, depending on the given value ("value_to_add")
+        def raise_counter_within_dict(value_to_add):
+
+            if value_to_add == 0:
+                dict_question_scores["is_0"] += 1
+
+            # Negative values will be processed first here
+            elif -1 >= value_to_add >= -5:
+                dict_question_scores["neg_1_to_5"] += 1
+
+            elif -6 >= value_to_add >= -15:
+                dict_question_scores["neg_6_to_15"] += 1
+
+            elif -16 >= value_to_add >= -50:
+                dict_question_scores["neg_16_to_50"] += 1
+
+            elif value_to_add <= -51:
+                dict_question_scores["neg_grt_51"] += 1
+
+            # Positive values will be processed down below here
+
+            elif 1 <= value_to_add <= 5:
+                dict_question_scores["pos_1_to_5"] += 1
+
+            elif 6 <= value_to_add <= 15:
+                dict_question_scores["pos_6_to_15"] += 1
+
+            elif 16 <= value_to_add <= 50:
+                dict_question_scores["pos_16_to_50"] += 1
+
+            elif value_to_add >= 51:
+                dict_question_scores["pos_grt_51"] += 1
 
             else:
                 pass
 
-        # Iterates over all answered questions
-        for i, val in enumerate(thread_answered_questions):
+        # Iterates over every question
+        def iterate_questions(questions_to_iterate):
 
-            # Whenever the question is on tier 1
-            if val["question_on_tier_1"] is True:
-                check_time(1, val["question_timestamp"])
+            # Iterates over every question, checking the question upvote score
+            for i, val in enumerate(questions_to_iterate):
+                raise_counter_within_dict(int(val["question_upvote_score"]))
 
-            # Whenever the question is on any other tier
-            elif val["question_on_tier_1"] is False:
-                check_time(0, val["question_timestamp"])
-
-            # React like nothing ever happened
-            else:
-                pass
-
-        # Iterates over all unanswered questions
-        for i, val in enumerate(thread_unanswered_questions):
-
-            # Whenever the question is on tier 1
-            if val["question_on_tier_1"] is True:
-                check_time(1, val["question_timestamp"])
-
-            # Whenever the question is on any other tier
-            elif val["question_on_tier_1"] is False:
-                check_time(0, val["question_timestamp"])
-
-            # React like nothing ever happened
-            else:
-                pass
-
-        print(dict_questions_tier_all)
-        print(dict_questions_tier_1)
-        print(dict_questions_tier_x)
-
-
-        # Das ganze auch fuer die unanswered questions machen
-        # Mehr dicts machen fuer answered / unanswered? Gibt dem Nutzer genauere Infos, und waere fuer BA besser !
-        # Dict noch sortieren ( ordered dict!)
-        # Gibt Mapping probleme (wohl wegen der Zeit, weil ich ned weiß, ob die zwei Stellen bei <12h hat oder ned und
-        # weil ich ned weiß, wie die 24h umgewandelt werden !)
-
-
-
+        iterate_questions(thread_answered_questions)
+        iterate_questions(thread_unanswered_questions)
 
