@@ -1307,3 +1307,5 @@ class r_rest_Calculate_Data:
         iterate_questions(thread_answered_questions)
         iterate_questions(thread_unanswered_questions)
 
+        print(dict_question_scores)
+
