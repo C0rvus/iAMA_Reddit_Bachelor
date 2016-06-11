@@ -30,15 +30,51 @@ To make use of this repository please follow the instructions below.
 1. Run the scripts with the prefix "***c_***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
-You will be having database of two types:
+You will be having database of three types:
+
+>iAMA\_Reddit\_Authors
 
 >iAMA\_Reddit\_Threads_{year}
 
 >iAMA\_Reddit\_Comments_{year}
 
-Each database contains a collection with the name of the appropriate crawled thread.
+Each database contains a collection with the name of the appropriate crawled thread, except 'iAMA_Reddit_Authors'.
 
-In the "iAMA\_Reddit\_Threads_{year}" database each document only holds one collection containing the 
+
+In the ">iAMA\_Reddit\_Authors" database each document only holds one collection containing information about the
+author. It contains all authors who actively participated in an iAMA. Authors of iAMA-Request were filtered out.
+The database is structured as following:
+
+>	"_id"	 =		The dynamically generated id from the mongo db
+
+>	"amount_creation_iama_threads"	    =		The amount of iAMAs the author created
+
+>	"amount_creation_other_threads"	    =		The amount of any other thread created by the author
+
+>	"amount_of_comments_except_iama"	=		The amount of comments the author did, not in the iAMA subreddit
+
+>	"amount_of_comments_iama"	        =       The amount of comments the author did within the iAMA subreddit 		
+
+>	"author_birth_date"	                =		The birthdate of the authors account (epoch utc)
+
+>	"author_comment_karma_amount"		=		The amount of comment karma received
+
+>	"author_link_karma_amount"		    =		The amount of link / thread karma received
+
+>	"author_name"		                =		The name of the author
+
+>	"comment_creation_every_x_sec"		=		The time in seconds .. (author creates every x sec a new comment)
+
+>	"thread_creation_every_x_sec"		=		The time in seconds .. (author creates every x sec a new thread)
+
+>	"time_acc_birth_first_iama_thread"	=		The time difference in seconds betweeen acc birth and first iAMA thread
+
+>	"time_diff_acc_creation_n_first_comment"	=		The time difference between acc birth and first comment
+
+>	"time_diff_acc_creation_n_first_thread"		=		The time difference between acc birth and first thread
+
+
+In the "iAMA\_Reddit\_Threads_{year}" database each collection only holds one document containing the 
 following thread information:
 
 >	"_id"	 =		The dynamically generated id from the mongo db
@@ -57,7 +93,7 @@ following thread information:
 
 >	"ups"		=		The amount of upvotes
 
-In the "iAMA\_Reddit\_Comments_{year}" database  each document holds one collection for every comment within that thread,
+In the "iAMA\_Reddit\_Comments_{year}" database each collection holds one document for every comment within that thread,
 containing the following information:
 
 >	"_id"		=		The dynamically generated id from the mongo db
@@ -80,10 +116,10 @@ By initially crawling information about threads and database you can sometimes h
 between the databases. This is because crawling uses some sort of amazon cloud search which is not always working 
 reliable.
 
-    python crawl_differences.py {year_beginning} {year_ending} {direction}
+    python c_crawl_Differences.py {year_beginning} {year_ending} {direction}
     
     
-* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the start
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want to start
  the crawling process on 
 
 * **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling
@@ -97,15 +133,15 @@ reliable.
 
 *Usage examples shown down below*
 
-    python crawl_differences.py 2009 2010 backward
-    python crawl_differences.py 2009 2016 forward
-    python crawl_differences.py 2009 2009 forward
+    python c_crawl_Differences.py 2009 2010 backward
+    python c_crawl_Differences.py 2009 2016 forward
+    python c_crawl_Differences.py 2009 2009 forward
 
 
 ## c\_crawl\_Threads\_N\_Comments.py
 Crawls threads and comments into the regarding databases
 
-    python crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
+    python c_crawl_threads_n_comments.py {crawl_type} {year_begin} {year_end} {shift_hours}
 
     
 * **crawl_type** = **[threads || comments]** *The type of data you want to be crawled and written into the database*
@@ -122,9 +158,34 @@ Crawls threads and comments into the regarding databases
 
 *Usage examples shown down below*
 
-    python crawl_threads_n_comments.py threads 2009 2014 96
-    python crawl_threads_n_comments.py threads 2009 2014 96
-    python crawl_threads_n_comments.py threads 2009 today 128
+    python c_crawl_threads_n_comments.py threads 2009 2014 96
+    python c_crawl_threads_n_comments.py threads 2009 2014 96
+    python c_crawl_threads_n_comments.py threads 2009 today 128
+
+
+## c\_crawl\_Author\_Information.py
+Iterates over every thread within the database and crawls all authors data possible.
+
+    python c_crawl_Author_Information.py {year_beginning} {year_ending} {direction}
+    
+    
+* **year_begin** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want to start
+ the crawling process on 
+
+* **year_end** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** The year you want the crawling
+ process to stop. The year defined here is included (!!) within the crawling process..
+
+* **direction** = **[forward || backward]** Defines the direction in which the comparison and crawling process 
+ should be started (from the last to the first collection - and vice versa). This is helpful if you want to speed up 
+ the crawling process so you can start one crawler forward and the other one backward. The scripts have a fallback 
+ mechanism which enables them to not write information twice into the database. So before every write process into the 
+ database it will be checked whether that actually processed collection already exists in the database or not.
+
+*Usage examples shown down below*
+
+    python c_crawl_Author_Information.py 2009 2010 backward
+    python c_crawl_Author_Information.py 2009 2016 forward
+    python c_crawl_Author_Information.py 2009 2009 forward
 
 
 # Analyze data:
@@ -152,9 +213,19 @@ You get those two .csv files by running
 It printlines the various calculation results into the console output.
 
 
+## a\_author\_Information.py
+
+This script retrieves all data possible from the **Reddit_iAMA_Authors** database and creates a .csv file out of it.
+This csv-file can later be analyzed by using **a__everything_Big_CSV_analyzer.py**. It uses no arguments.
+
+*Usage example shown down below*
+
+    python a_iAMA_Commenttime.py
+
+
 ## a\_iAMA\_Commenttime.py
 
-This script script calculates the time the iAma host needs to react / respond to a comment / question which has been
+This script calculates the time the iAma host needs to react / respond to a comment / question which has been
 posted in his thread.
 It also creates .csv-values with all values for the currently processed year (and all years) and additionally
  creates an interactive chart which gives you some visual insight into the data and relations.
