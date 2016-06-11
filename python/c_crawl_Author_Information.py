@@ -3,7 +3,8 @@
 # http://alan-wright.com/programming/tutorial/python/2014/03/09/praw-tutorial/
 # 2. (09.06.2016 @ 22:30) -
 # https://m.reddit.com/r/RequestABot/comments/42lmgv/need_a_bot_that_can_pull_all_users_and_account/
-# 3. (09.06.2016 @ 22:42) - https://github.com/alanwright/RedditBots/blob/master/scripts/UserGoneWild.py
+# 3. (09.06.2016 @ 22:42) -
+# https://github.com/alanwright/RedditBots/blob/master/scripts/UserGoneWild.py
 
 import praw                         # Necessary to access the reddit api
 import sys                          # Necessary to use script arguments
