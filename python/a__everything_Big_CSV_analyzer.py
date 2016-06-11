@@ -12,13 +12,11 @@
 # 6. (23.04.2016 @ 18:19) -
 # https://stackoverflow.com/questions/12838993/scipy-normaltest-how-is-it-used
 
-# Necessary to copy value of the starting year - needed for correct csv
-# file name
-import copy
+import copy                         # Necessary to copy value of the starting year - needed for correct csv file name
 import pandas                       # Necessary to do statistical calculation
-from scipy.stats import pearsonr
-from scipy.stats import spearmanr
-from scipy.stats import kendalltau
+from scipy.stats import pearsonr    # Necessary to calculate pearson correlation
+from scipy.stats import spearmanr   # Necessary to calculate spearman correlation
+from scipy.stats import kendalltau  # Necessary to calculate kendall correlation
 
 
 # By looking at all generated csv files we can use the following parameters for calculating various things:
@@ -71,23 +69,31 @@ from scipy.stats import kendalltau
 # Thread life span until last question
 # ----
 
+author_information = pandas.read_csv(
+    'a_author_Information.csv',
+    sep=',',
+    na_values="None")
 
 thread_information = pandas.read_csv(
     'd_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv',
     sep=',',
     na_values="None")
+
 question_information = pandas.read_csv(
     'a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
     sep=',',
     na_values="None",
     low_memory=False)
+
 # Would replace NaN with zeroes:
 # thread_information.fillna(0, inplace=True)
 # thread_information.dropna(0, inplace=True)
 # question_information.fillna(0, inplace=True)
 
-# Skips NaN-Values here which is necessary for correct t-test (signifance)
-# calculation
+# Skips NaN-Values here which is necessary for correct t-test (significance) calculation
+# NaN-Values for authors won't be skipped here, because there are many authors who only create one iAMA thread
+# and nothing else.. Therefore some values (i.E. author_thread_creation_every_x_sec) can be NaN. But dropping them
+# would skew the author calculation.
 for column in copy.copy(thread_information):
     thread_information = thread_information[
         pandas.notnull(thread_information['' + str(column)])]
@@ -95,6 +101,21 @@ for column in copy.copy(thread_information):
 for column in copy.copy(question_information):
     question_information = question_information[
         pandas.notnull(question_information['' + str(column)])]
+
+
+author_amount_creation_iama_threads = author_information['amount_creation_iama_threads']
+author_amount_creation_other_threads = author_information['amount_creation_other_threads']
+author_amount_of_comments_except_iama = author_information['amount_of_comments_except_iama']
+author_amount_of_comments_iama = author_information['amount_of_comments_iama']
+author_author_birth_date = author_information['author_birth_date']
+author_author_comment_karma_amount = author_information['author_comment_karma_amount']
+author_author_link_karma_amount = author_information['author_link_karma_amount']
+author_author_name = author_information['author_name']
+author_comment_creation_every_x_sec = author_information['comment_creation_every_x_sec']
+author_thread_creation_every_x_sec = author_information['thread_creation_every_x_sec']
+author_time_acc_birth_first_iama_thread = author_information['time_acc_birth_first_iama_thread']
+author_time_diff_acc_creation_n_first_comment = author_information['time_diff_acc_creation_n_first_comment']
+author_time_diff_acc_creation_n_first_thread = author_information['time_diff_acc_creation_n_first_thread']
 
 
 thread_year = thread_information['Year']
@@ -232,7 +253,7 @@ def relation_question_upvotes_with_amount_of_questions_answered_by_iama_host():
 
 
 # Average means of different values
-def average_means_of_values():
+def average_means_of_values_f_threads():
     """Calculation of the average means of different values
 
     Args:
@@ -3140,45 +3161,107 @@ def question_overall_correlation():
     print(str(question_information.corr()))
 
 
+# Calculates various arithmetic means for author data
+def average_means_of_values_f_authors():
+    """Calculation of the average means of different values for author data
+    
+    Args:
+        -
+    Returns:
+        -
+    """
+
+    global author_information
+    
+    print("----")
+    print("Calculating arithmetic average means for the author here")
+    print("")
+
+    print("Average arithmetic mean - author_amount_creation_iama_threads: " + str(
+        author_amount_creation_iama_threads.mean()))
+
+    print("Average arithmetic mean - author_amount_creation_other_threads: " + str(
+        author_amount_creation_other_threads.mean()))
+
+    print("Average arithmetic mean - author_amount_of_comments_except_iama: " + str(
+        author_amount_of_comments_except_iama.mean()))
+
+    print("Average arithmetic mean - author_amount_of_comments_iama: " + str(
+        author_amount_of_comments_iama.mean()))
+
+    print("Average arithmetic mean - author_author_comment_karma_amount: " + str(
+        author_author_comment_karma_amount.mean()))
+
+    print("Average arithmetic mean - author_author_link_karma_amount: " + str(
+        author_author_link_karma_amount.mean()))
+
+    print("Average arithmetic mean - author_time_acc_birth_first_iama_thread: " + str(
+        author_time_acc_birth_first_iama_thread.mean()))
+
+    print("----")
+    print("Skipping all NaN values here and calculating the remaining data means")
+    print("----")
+
+    # Dropping all NaN values here
+    for values in copy.copy(author_information):
+        author_information = author_information[
+            pandas.notnull(author_information['' + str(values)])]
+
+    print("Average arithmetic mean - author_comment_creation_every_x_sec: " + str(
+        author_comment_creation_every_x_sec.mean()))
+
+    print("Average arithmetic mean - author_thread_creation_every_x_sec: " + str(
+        author_thread_creation_every_x_sec.mean()))
+
+    print("Average arithmetic mean - author_time_diff_acc_creation_n_first_comment: " + str(
+        author_time_diff_acc_creation_n_first_comment.mean()))
+
+    print("Average arithmetic mean - author_time_diff_acc_creation_n_first_thread: " + str(
+        author_time_diff_acc_creation_n_first_thread.mean()))
+
+
 # Start that calculation
 
-relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
-
-average_means_of_values()
-
-relation_thread_upvotes_with_amount_of_comments()
-relation_thread_upvotes_with_amount_of_questions()
-relation_thread_downvotes_with_amount_of_comments()
-relation_thread_downvotes_with_amount_of_questions()
-
-relation_thread_upvotes_and_iama_host_response_time_comments()
-relation_thread_upvotes_and_iama_host_response_time_questions()
-relation_thread_downvotes_and_iama_host_response_time_comments()
-relation_thread_downvotes_and_iama_host_response_time_questions()
-
-relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-relation_thread_lifespan_to_last_comment_and_amount_of_questions()
-relation_thread_lifespan_to_last_question_and_amount_of_comments()
-relation_thread_lifespan_to_last_question_and_amount_of_question()
-
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-
-relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-
-relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
-
-relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
-
-thread_overall_correlation()
-question_overall_correlation()
+# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+#
+# average_means_of_values_f_threads()
+#
+average_means_of_values_f_authors()
+#
+#
+# relation_thread_upvotes_with_amount_of_comments()
+# relation_thread_upvotes_with_amount_of_questions()
+# relation_thread_downvotes_with_amount_of_comments()
+# relation_thread_downvotes_with_amount_of_questions()
+#
+# relation_thread_upvotes_and_iama_host_response_time_comments()
+# relation_thread_upvotes_and_iama_host_response_time_questions()
+# relation_thread_downvotes_and_iama_host_response_time_comments()
+# relation_thread_downvotes_and_iama_host_response_time_questions()
+#
+# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+# relation_thread_lifespan_to_last_question_and_amount_of_comments()
+# relation_thread_lifespan_to_last_question_and_amount_of_question()
+#
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+#
+# relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
+#
+# relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
+#
+# thread_overall_correlation()
+# question_overall_correlation()
