@@ -477,7 +477,7 @@ def get_author_information(name_of_author):
         "author_link_karma_amount": author_link_karma_amount,
         "thread_creation_every_x_sec": thread_creation_every_x_sec,
         "comment_creation_every_x_sec": comment_creation_every_x_sec,
-        "time_acc_birth_first_iama_thread": calculate_time_difference(author_birthday, timestamp_first_iama)
+        "time_acc_birth_first_iama_thread": calculate_time_difference(timestamp_first_iama, author_birthday)
     }
 
     # Sorts that dictionary so the dictionary is in alphabetically ascending order
