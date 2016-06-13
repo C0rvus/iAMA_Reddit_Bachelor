@@ -4,7 +4,7 @@ $(function () {
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
-            type: 'pie'
+            type: 'pie',
         },
         title: {
             text: 'Browser market shares January, 2015 to May, 2015'

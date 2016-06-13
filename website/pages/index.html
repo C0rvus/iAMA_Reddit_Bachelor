@@ -26,6 +26,9 @@
     <!-- Custom CSS 2 -->
     <link href="../dist/css/custom.css" rel="stylesheet">
 
+    <!-- Test CSS 2 -->
+    <!--<link href="../dist/css/test.css" rel="stylesheet">-->
+
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -183,67 +186,70 @@
 
                 <!-- Statistics panel -->
 
-                    <!-- Contains -->
-                    <div class="panel panel-default">
+                <!-- Contains misc stats -->
+                <div class="panel panel-default">
 
-                        <!-- Contains the statistics panel header -->
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Statistics panel
+                    <!-- Contains the statistics panel header -->
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Statistics panel
+                    </div>
+
+                    <!-- Contains the statistics panel content -->
+                    <div class="panel-body">
+
+                        <!-- Amount answered questions -->
+                        <div id="element_1">
+                            <i class="fa fa-check  fa-fw"></i>
+                            Answered questions
+                            <span class="pull-right text-muted small"><em> xx / yy </em></span>
                         </div>
 
-                        <!-- Contains the statistics panel content -->
-                        <div class="panel-body">
+                        <!-- Average Question score -->
+                        <div id="element_2">
+                            <i class="fa fa-exchange  fa-fw"></i>
+                            Ø question score
+                            <span class="pull-right text-muted small"><em>x,xx</em></span>
+                        </div>
 
-                            <!-- Amount answered questions -->
-                            <div id="element_1">
-                                <i class="fa fa-check  fa-fw"></i>
-                                Answered questions
-                                <span class="pull-right text-muted small"><em> xx / yy </em></span>
-                            </div>
+                        <!-- Reaction time -->
+                        <div id="element_3">
+                            <i class="fa fa-fire  fa-fw"></i>
+                            Reaction time
+                            <span class="pull-right text-muted small"><em>yy sec</em></span>
+                        </div>
 
-                            <!-- Average Question score -->
-                            <div id="element_2">
-                                <i class="fa fa-exchange  fa-fw"></i>
-                                Ø question score
-                                <span class="pull-right text-muted small"><em>x,xx</em></span>
-                            </div>
+                        <!-- New question every -->
+                        <div id="element_4">
+                            <i class="fa fa-repeat  fa-fw"></i>
+                            New question every
+                            <span class="pull-right text-muted small"><em>zz sec</em></span>
+                        </div>
 
-                            <!-- Reaction time -->
-                            <div id="element_3">
-                                <i class="fa fa-fire  fa-fw"></i>
-                                Reaction time
-                                <span class="pull-right text-muted small"><em>yy sec</em></span>
-                            </div>
+                        <!-- Amount questions tier 1 -->
+                        <div id="element_5">
+                            <i class="fa fa-hand-o-up  fa-fw"></i>
+                            Questions Tier 1
+                            <span class="pull-right text-muted small"><em>uuu</em></span>
+                        </div>
 
-                            <!-- New question every -->
-                            <div id="element_4">
-                                <i class="fa fa-repeat  fa-fw"></i>
-                                New question every
-                                <span class="pull-right text-muted small"><em>zz sec</em></span>
-                            </div>
+                        <!-- Amount questions tier X -->
+                        <div id="element_6">
+                            <i class="fa fa-hand-o-down   fa-fw"></i>
+                            Questions Tier X
+                            <span class="pull-right text-muted small"><em>yyy</em></span>
+                        </div>
 
-                            <!-- Amount questions tier 1 -->
-                            <div id="element_5">
-                                <i class="fa fa-hand-o-up  fa-fw"></i>
-                                Questions Tier 1
-                                    <span class="pull-right text-muted small"><em>uuu</em></span>
-                            </div>
-
-                            <!-- Amount questions tier X -->
-                            <div id="element_6">
-                                <i class="fa fa-hand-o-down   fa-fw"></i>
-                                Questions Tier X
-                                <span class="pull-right text-muted small"><em>yyy</em></span>
-                            </div>
-
-                            <!-- Score best question -->
-                            <div id="element_7">
-                                <i class="fa fa-star fa-fw"></i>
-                                Best question score
-                                <span class="pull-right text-muted small"><em>tttt</em></span>
-                            </div>
+                        <!-- Score best question -->
+                        <div id="element_7">
+                            <i class="fa fa-star fa-fw"></i>
+                            Best question score
+                            <span class="pull-right text-muted small"><em>tttt</em></span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Example graph 2 -->
+                <!--<div id="container_example_1" style="min-width: 240px; height: 200px; margin: 0 auto"></div>-->
             </div>
         </div>
 
@@ -253,11 +259,11 @@
     <div id="page-wrapper">
 
         <!-- 1st row containing signal symbols -->
-        <div class="row">
+        <div class="row small">
 
             <!-- New questions symbol -->
-            <div class="col-lg-7 col-md-6">
-                <div class="panel panel-primary">
+            <div class="col-lg-3">
+                <div class="panel panel-red">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
@@ -265,7 +271,24 @@
                             </div>
                             <div class="col-xs-9 text-center">
                                 <div class="huge">xxx</div>
-                                <div align="center">Unanswered Questions</div>
+                                <div align="center">Unanswered questions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questioners symbol -->
+            <div class="col-lg-2">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-male fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-center">
+                                <div class="huge">yyy</div>
+                                <div>Questioners</div>
                             </div>
                         </div>
                     </div>
@@ -273,7 +296,7 @@
             </div>
 
             <!-- Scores symbol -->
-            <div class="col-lg-2 col-md-2">
+            <div class="col-lg-2">
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
@@ -281,7 +304,7 @@
                                 <i class="fa fa-thumbs-o-up fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-center">
-                                <div class="huge">3950</div>
+                                <div class="huge">zz</div>
                                 <div>Upvotes</div>
                             </div>
                         </div>
@@ -289,17 +312,34 @@
                 </div>
             </div>
 
-            <!-- Thread duration symbol -->
-            <div class="col-lg-3 col-md-2">
+            <!-- New question every x sec -->
+            <div class="col-lg-3">
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-clock-o fa-5x"></i>
+                                <i class="fa fa-pencil-square-o fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-center">
                                 <div class="huge">xxx</div>
-                                <div>Thread duration (days)</div>
+                                <div>New questions per sec</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thread duration symbol -->
+            <div class="col-lg-2">
+                <div class="panel panel-yellow-alternative">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-clock-o fa-5x text-center"></i>
+                            </div>
+                            <div class="col-xs-9 text-center">
+                                <div class="huge">xxx</div>
+                                <div>Duration (days)</div>
                             </div>
                         </div>
                     </div>
@@ -309,10 +349,10 @@
         </div>
 
         <!-- 2nd row containing questions (left) / notify panel (right) -->
-        <div class="row">
+        <div class="row small">
 
             <!-- Questions are here -->
-            <div class="col-lg-7">
+            <div class="col-lg-8">
 
                 <!-- Contains the whole question panel -->
                 <div class="chat-panel panel panel-default">
@@ -333,7 +373,7 @@
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="pull-right">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-chevron-down"></i>
                             </button> Sorting
@@ -401,7 +441,7 @@
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="pull-right">
                             <button id="filter_dropdown_2" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-chevron-down"></i>
                             </button> Filter
@@ -508,7 +548,7 @@
                                 <div class="input-group">
                                     <input id="btn-input_y" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat_2">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat_5">
                                         Send
                                     </button>
                                 </span>
@@ -565,14 +605,69 @@
 
                             </li>
 
+                            <!-- Example Text -->
+                            <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <strong class="primary-font">User X</strong>
+
+                                        <!-- Posting time -->
+                                        <small class="pull-right text-muted">
+                                            ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
+                                        </small>
+
+                                        <br />
+
+                                        <!-- Score ID -->
+                                        <small class="pull-right text-muted">
+                                            xxx points <i class="fa fa-bullseye fa-fw"></i>
+                                        </small>
+
+                                        <br />
+
+                                        <!-- Question ID -->
+                                        <small class="pull-right text-muted">
+                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
+                                        </small>
+
+                                    </div>
+
+                                    <br />
+
+                                    <p>
+                                        My short bio: I have a store in Manhattan. I teach component level electronics repair on youtube http://youtube.com/rossmanngroup which seems to be a dying art. I am currently fighting with the digital right to repair to try and get a bill passed that will allow all independent service centers access to manuals and parts required to do their jobs.
+                                        <br>My Proof: https://www.rossmanngroup.com/started-iama-reddit-today-yes/
+                                        <br>EDIT:
+                                        <br>I am still replying to comments, but I am so far behind that I am still about ten pages down from new comments. I am doing my best to continue. If I drop off, I'll be back tomorrow around 12 PM. Still commenting now though, at 12 AM.
+                                        <br>EDIT 2:
+                                        <br>Ok, I cave... my hands are tired. I will be back at 12 PM tomorrow. It is my goal to answer every question. Even if it looks like I haven't gotten to yours, I will do my best to do all of them, but it is impossible to do in realtime, because you are asking faster than I can type. But thanks for joining!
+                                        <br>EDIT 3: I lied, I stayed until 4:15 AM to answer... and now I will go to sleep for real, and be back at 12 PM.
+                                    </p>
+                                </div>
+
+                                <br />
+                                <div class="input-group">
+                                    <input id="btn-input_asd" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat_2">
+                                        Send
+                                    </button>
+                                </span>
+                                </div>
+
+                            </li>
+
                         </ul>
                     </div>
-
                 </div>
+
             </div>
 
-            <!-- Contains the responsive time line -->
-            <div class="col-lg-5">
+            <!-- Contains the answered questions -->
+            <div class="col-lg-4">
                 <div class="chat-panel panel panel-default">
                     <div class="panel-heading">
 
@@ -587,7 +682,7 @@
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="pull-right">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-chevron-down"></i>
                             </button> Sorting
@@ -655,7 +750,7 @@
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="pull-right">
                             <button id="filter_dropdown" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-chevron-down"></i>
                             </button> Filter
@@ -794,30 +889,28 @@
                     </div>
 
                 </div>
+                <!--</div>-->
+                
             </div>
 
+            <!-- 3rd row containing charts -->
+            <div class="row">
 
+                <!--&lt;!&ndash; Example graph 1 &ndash;&gt;-->
+                <!--<div class="col-lg-7">-->
+                <!--<div id="container_example_1" style="min-width: 310px; height: 200px; margin: 0 auto"></div>-->
+                <!--</div>-->
 
-        </div>
+                <!-- Example graph 2 -->
+                <!--<div class="col-lg-5">-->
+                <!--<div id="container_example_2" style="min-width: 310px; height: 200px; margin: 0 auto"></div>-->
+                <!--</div>-->
 
-        <!-- 3rd row containing charts -->
-        <div class="row">
-
-            <!-- Example graph 1 -->
-            <div class="col-lg-7">
-                <div id="container_example_1" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
-            </div>
-
-            <!-- Example graph 2 -->
-            <div class="col-lg-5">
-                <div id="container_example_2" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
             </div>
 
         </div>
 
     </div>
-
-
 </div>
 
 <!-- jQuery -->
@@ -844,6 +937,9 @@
 <!-- Java script example things -->
 <script src="../js/dropdown_stay.js"></script>
 <script src="../js/rest_service_test.js"></script>
+
+<!-- Resize testing -->
+<script src="../js/resize_me.js"></script>
 
 </body>
 

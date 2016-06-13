@@ -317,9 +317,11 @@ table.dataTable thead .sorting:after {
     color: #3d8b3d;
 }
 
+
 .panel-red {
     border-color: #d9534f;
 }
+
 
 .panel-red .panel-heading {
     border-color: #d9534f;
@@ -351,4 +353,23 @@ table.dataTable thead .sorting:after {
 
 .panel-yellow a:hover {
     color: #df8a13;
+}
+
+
+.panel-yellow-alternative {
+    border-color: yellowgreen;
+}
+
+.panel-yellow-alternative .panel-heading {
+    border-color: yellowgreen;
+    color: #fff;
+    background-color: yellowgreen;
+}
+
+.panel-yellow-alternative a {
+    color: yellowgreen;
+}
+
+.panel-yellow-alternative a:hover {
+    color: greenyellow;
 }

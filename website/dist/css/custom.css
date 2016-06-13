@@ -1,3 +1,12 @@
 body{
-    min-width:470px;
+    height: 100%;
+    width:100%;
+    min-width:405px;
 }
+
+
+.chat-panel .panel-body{
+    /*Will be overwritten because of automatic java script adaption depending on screen resolution*/
+    height: 400px;
+}
+
