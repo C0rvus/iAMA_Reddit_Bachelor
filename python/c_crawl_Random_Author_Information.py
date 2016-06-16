@@ -50,12 +50,19 @@ def initialize_mongo_db_parameters():
     """
 
     global mongo_db_client_instance
-    global mongo_db_author_instance
-    global mongo_db_author_collection
+    global mongo_db_random_author_instance
+    global mongo_db_random_author_collection
+    global mongo_db_iama_author_instance
+    global mongo_db_iama_author_collection
+    global mongo_db_iama_author_collection_amount
 
     mongo_db_client_instance = MongoClient('localhost', 27017)
-    mongo_db_author_instance = mongo_db_client_instance['iAMA_Reddit_Authors_Random']
-    mongo_db_author_collection = mongo_db_author_instance.collection_names()
+    mongo_db_random_author_instance = mongo_db_client_instance['iAMA_Reddit_Authors_Random']
+    mongo_db_random_author_collection = mongo_db_random_author_instance.collection_names()
+    
+    mongo_db_iama_author_instance = mongo_db_client_instance['iAMA_Reddit_Authors']
+    mongo_db_iama_author_collection = mongo_db_iama_author_instance.collection_names()
+    mongo_db_iama_author_collection_amount = len(mongo_db_iama_author_collection)
 
 
 def start_data_generation_for_analysis():
@@ -71,7 +78,11 @@ def start_data_generation_for_analysis():
     # The counter which gets added up per iteration
     actual_counter = 0
 
-    while actual_counter != argument_limit_crawling_amount:
+    # As long as the iteration limit is not reached and the amount of entries within the 'random' database does not
+    # exceed the amount of entries within the iama data base
+    while actual_counter != argument_limit_crawling_amount and \
+                    len(mongo_db_client_instance['iAMA_Reddit_Authors_Random'].collection_names()) != \
+                    mongo_db_iama_author_collection_amount:
 
         # Defines variables per random
         rand_submission = reddit_instance.get_random_submission()
@@ -133,7 +144,7 @@ def generate_data_now(randomized_author_name):
         if returned_value is not None:
 
             # Writes the crawled information into the mongoDB
-            collection = mongo_db_author_instance[str(randomized_author_name)]
+            collection = mongo_db_random_author_instance[str(randomized_author_name)]
 
             # Write the dictionary "returned_value" into the mongo db right now!
             collection.insert_one(returned_value)
@@ -405,11 +416,20 @@ argument_limit_crawling_amount = None
 # The mongo client, necessary to connect to mongoDB
 mongo_db_client_instance = None
 
-# The data base instance for all author information
-mongo_db_author_instance = None
+# The data base instance for all random author information
+mongo_db_random_author_instance = None
 
-# Will contain all author names later on
-mongo_db_author_collection = None
+# Will contain all author (random) names later on
+mongo_db_random_author_collection = None
+
+# The data base instance for all iama authors
+mongo_db_iama_author_instance = None
+
+# Will contain all authors from the iAMA-DB
+mongo_db_iama_author_collection = None
+
+# Will contain the amount of entries within the original author data base
+mongo_db_iama_author_collection_amount = 0
 
 # Instanciates the reddit instace for crawling behaviour
 reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
