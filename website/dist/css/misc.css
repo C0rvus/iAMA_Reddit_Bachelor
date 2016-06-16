@@ -1,0 +1,93 @@
+/*!
+ * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ * Slightly modified and adapted by Benedikt Hierl
+ */
+
+body {
+    background-color: #f8f8f8;
+    height: 100%;
+    width: 100%;
+    min-width: 405px;
+}
+
+#wrapper {
+    width: 100%;
+}
+
+#page-wrapper {
+    padding: 0 15px;
+    min-height: 568px;
+    background-color: #fff;
+}
+
+@media (min-width: 768px) {
+    #page-wrapper {
+        position: inherit;
+        margin: 0 0 0 250px;
+        padding: 0 30px;
+        border-left: 1px solid #e7e7e7;
+    }
+    .sidebar {
+        z-index: 1;
+        position: absolute;
+        width: 250px;
+        margin-top: 51px;
+    }
+    .navbar-top-links .dropdown-messages,
+    .navbar-top-links .dropdown-tasks,
+    .navbar-top-links .dropdown-alerts {
+        margin-left: auto;
+    }
+}
+
+.panel .slidedown .glyphicon,
+.chat .glyphicon {
+    margin-right: 5px;
+}
+
+.login-panel {
+    margin-top: 25%;
+}
+
+.huge {
+    font-size: 40px;
+}
+
+.input-group input {
+    border-radius: 10px;
+    top: 6px;
+}
+
+.input-group button {
+    border-radius: 10px;
+    top: 6px;
+}
+
+.ruler-answered-questions {
+    width: 30%;
+    align-content: center;
+    border-color: green;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.ruler-unanswered-questions {
+    width: 30%;
+    align-content: center;
+    border-color: green;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+
+/*Nur zum Testn von paar Funktionen da*/
+
+.chat-answered-questions {
+    margin: 0;
+}

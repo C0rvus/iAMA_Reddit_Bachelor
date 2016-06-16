@@ -6,7 +6,7 @@
 var setElementHeight = function () {
     // 225 has been manually chosen here
     // The choice was necessary because the template is a little bit inconsistent to use
-    var height = $(window).height() - 225;
+    var height = $(window).height() - 230;
     $('.chat-panel .panel-body').css('height', (height));
 };
 

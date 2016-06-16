@@ -1,0 +1,54 @@
+/*!
+ * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ * Slightly modified and adapted by Benedikt Hierl
+ */
+
+.chat {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chat li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-style: none;
+}
+
+.chat li.left .chat-body {
+    margin-left: 60px;
+}
+
+.chat li.right .chat-body {
+    margin-right: 60px;
+}
+
+.chat li .chat-body p {
+    margin: 0;
+}
+
+.chat-panel .panel-body {
+    /*Will be overwritten because of automatic java script adaption depending on screen resolution*/
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.chat-message-0 {
+    background: ghostwhite;
+    border-radius: 10px;
+}
+
+.chat-message-1 {
+    background: floralwhite;
+    border-radius: 10px;
+}
+
+.chat-alignment-right {
+    text-align: right;
+}
+
+.chat-alignment-left {
+    text-align: left;
+}

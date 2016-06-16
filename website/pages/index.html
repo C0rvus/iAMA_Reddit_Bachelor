@@ -14,20 +14,13 @@
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- MetisMenu CSS -->
-    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Timeline CSS -->
-    <link href="../dist/css/timeline.css" rel="stylesheet">
-
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom CSS 2 -->
-    <link href="../dist/css/custom.css" rel="stylesheet">
-
-    <!-- Test CSS 2 -->
-    <!--<link href="../dist/css/test.css" rel="stylesheet">-->
+    <link href="../dist/css/buttons.css" rel="stylesheet">
+    <link href="../dist/css/chat.css" rel="stylesheet">
+    <link href="../dist/css/misc.css" rel="stylesheet">
+    <link href="../dist/css/navbar.css" rel="stylesheet">
+    <link href="../dist/css/panels.css" rel="stylesheet">
+    <link href="../dist/css/sidebar.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -43,16 +36,15 @@
 
 <body>
 
+<!-- Defines the whole page here -->
 <div id="wrapper">
 
     <!-- The navigation top bar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 
+        <!-- Header of the navigation bar -->
         <div class="navbar-header">
 
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-            </button>
             <a class="navbar-brand" href="index.html">Reddit iAMA Extension</a>
 
         </div>
@@ -60,16 +52,18 @@
         <!-- Navigation bar buttons -->
         <ul class="nav navbar-top-links navbar-right">
 
-            <!-- The mail icon -->
+            <!-- Mail icon -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
+
+                <!-- Mail list overview -->
                 <ul class="dropdown-menu dropdown-messages">
                     <li>
                         <a href="#">
                             <div>
-                                <strong>John Smith</strong>
+                                <p class="strong">John Smith</p>
                                     <span class="pull-right text-muted">
                                         <em>Yesterday</em>
                                     </span>
@@ -77,11 +71,14 @@
                             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
                         </a>
                     </li>
+
+                    <!-- 'Optimized' horizontal ruler -->
                     <li class="divider"></li>
+
                     <li>
                         <a href="#">
                             <div>
-                                <strong>John Smith</strong>
+                                <p class="strong">John Smith</p>
                                     <span class="pull-right text-muted">
                                         <em>Yesterday</em>
                                     </span>
@@ -89,11 +86,14 @@
                             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
                         </a>
                     </li>
+
+                    <!-- 'Optimized' horizontal ruler -->
                     <li class="divider"></li>
+
                     <li>
                         <a href="#">
                             <div>
-                                <strong>John Smith</strong>
+                                <p class="strong">John Smith</p>
                                     <span class="pull-right text-muted">
                                         <em>Yesterday</em>
                                     </span>
@@ -101,22 +101,26 @@
                             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
                         </a>
                     </li>
+
+                    <!-- 'Optimized' horizontal ruler -->
                     <li class="divider"></li>
+
                     <li>
                         <a class="text-center" href="#">
-                            <strong>Read All Messages</strong>
+                            <p class="strong">Read All Messages</p>
                             <i class="fa fa-angle-right"></i>
                         </a>
                     </li>
                 </ul>
-                <!-- /.dropdown-messages -->
             </li>
 
             <!-- User profile icon -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
+
+                <!-- Menu entries for user profile icon -->
                 <ul class="dropdown-menu dropdown-user">
                     <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
@@ -126,7 +130,6 @@
                     <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
-                <!-- /.dropdown-user -->
             </li>
 
         </ul>
@@ -135,58 +138,62 @@
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
 
-                <!-- Overview of all hosts threads -->
+                <!-- Overview of all iAMA threads from the host -->
                 <ul class="nav" id="side-menu">
+
+                    <!-- iAMA example 1 -->
                     <li>
                         <a href="index.html">
                             <i class="fa fa-th fa-fw"></i> thread_title_1
-                            <br />
+                            <br>
 
                             <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
-                            <br />
+                            <br>
 
                             <i class="fa fa-clock-o  fa-fw"></i> thread_duration
-                            <br />
+                            <br>
 
                             <i class="fa fa-tag  fa-fw"></i> id_thread_1
                         </a>
                     </li>
+
+                    <!-- iAMA example 2 -->
                     <li>
                         <a href="index.html">
                             <i class="fa fa-th fa-fw"></i> thread_title_2
-                            <br />
+                            <br>
 
                             <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
-                            <br />
+                            <br>
 
                             <i class="fa fa-clock-o  fa-fw"></i> thread_duration
-                            <br />
+                            <br>
 
                             <i class="fa fa-tag  fa-fw"></i> id_thread_2
                         </a>
                     </li>
+
+                    <!-- iAMA example 3 -->
                     <li>
                         <a href="index.html">
                             <i class="fa fa-th fa-fw"></i> thread_title_3
-                            <br />
+                            <br>
 
                             <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
-                            <br />
+                            <br>
 
                             <i class="fa fa-clock-o  fa-fw"></i> thread_duration
-                            <br />
+                            <br>
 
                             <i class="fa fa-tag  fa-fw"></i> id_thread_3
                         </a>
                     </li>
-                </ul>
 
+                </ul>
 
                 <hr>
 
                 <!-- Statistics panel -->
-
-                <!-- Contains misc stats -->
                 <div class="panel panel-default">
 
                     <!-- Contains the statistics panel header -->
@@ -245,11 +252,10 @@
                             Best question score
                             <span class="pull-right text-muted small"><em>tttt</em></span>
                         </div>
+
                     </div>
                 </div>
 
-                <!-- Example graph 2 -->
-                <!--<div id="container_example_1" style="min-width: 240px; height: 200px; margin: 0 auto"></div>-->
             </div>
         </div>
 
@@ -266,9 +272,12 @@
                 <div class="panel panel-red">
                     <div class="panel-heading">
                         <div class="row">
+                            <!-- Panel icon (question) -->
                             <div class="col-xs-3">
                                 <i class="fa fa-question-circle fa-5x"></i>
                             </div>
+
+                            <!-- Panel text (question) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge">xxx</div>
                                 <div align="center">Unanswered questions</div>
@@ -279,13 +288,16 @@
             </div>
 
             <!-- Questioners symbol -->
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
+                            <!-- Panel icon (questioners) -->
                             <div class="col-xs-3">
                                 <i class="fa fa-male fa-5x"></i>
                             </div>
+
+                            <!-- Panel text (questioners) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge">yyy</div>
                                 <div>Questioners</div>
@@ -300,9 +312,12 @@
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
+                            <!-- Panel icon (upvotes) -->
                             <div class="col-xs-3">
                                 <i class="fa fa-thumbs-o-up fa-5x"></i>
                             </div>
+
+                            <!-- Panel text (upvotes) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge">zz</div>
                                 <div>Upvotes</div>
@@ -313,13 +328,16 @@
             </div>
 
             <!-- New question every x sec -->
-            <div class="col-lg-3">
+            <div class="col-lg-2">
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
                         <div class="row">
+                            <!-- Panel icon (new question every x sec) -->
                             <div class="col-xs-3">
                                 <i class="fa fa-pencil-square-o fa-5x"></i>
                             </div>
+
+                            <!-- Panel text (new question every x sec) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge">xxx</div>
                                 <div>New questions per sec</div>
@@ -334,9 +352,12 @@
                 <div class="panel panel-yellow-alternative">
                     <div class="panel-heading">
                         <div class="row">
+                            <!-- Panel icon (questioners) -->
                             <div class="col-xs-3">
                                 <i class="fa fa-clock-o fa-5x text-center"></i>
                             </div>
+
+                            <!-- Panel text (questioners) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge">xxx</div>
                                 <div>Duration (days)</div>
@@ -351,10 +372,10 @@
         <!-- 2nd row containing questions (left) / notify panel (right) -->
         <div class="row small">
 
-            <!-- Questions are here -->
+            <!-- Contains unasked questions -->
             <div class="col-lg-8">
 
-                <!-- Contains the whole question panel -->
+                <!-- The whole question panel -->
                 <div class="chat-panel panel panel-default">
 
                     <!-- Contains all buttons of that panel -->
@@ -364,19 +385,23 @@
                         <i class="fa fa-comments fa-fw pull-left"></i>Unanswered Questions
 
                         <!-- Refresh button -->
-                        <div class="pull-right">
+                        <div class="btn-group pull-right">
 
-                            <button id="asd" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <button id="asd" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
                                 <i class="fa fa-refresh fa-fw"></i>
-                            </button> Refresh
+                            </button>
+                            <br>
 
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="pull-right">
+                        <div class="btn-group pull-right">
+
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-chevron-down"></i>
-                            </button> Sorting
+                                <i class="fa fa-sort-numeric-asc"></i>
+                            </button>
+
                             <ul class="dropdown-menu slidedown">
 
                                 <!-- Author name as-/descending is described here -->
@@ -429,8 +454,10 @@
                                     </a>
                                 </li>
 
-                                <!-- Divides the view -->
+                                <!-- 'Optimized' horizontal ruler -->
                                 <li class="divider"></li>
+
+                                <!-- Closes the dropdown window -->
                                 <li>
                                     <a href="#">
                                         <i class="fa fa-sign-out fa-fw"></i> Close dropdown
@@ -438,13 +465,17 @@
                                 </li>
 
                             </ul>
+
+                            <br>
+
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="pull-right">
-                            <button id="filter_dropdown_2" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-chevron-down"></i>
-                            </button> Filter
+                        <div class="btn-group pull-right">
+                            <button id="filter_dropdown_2" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-filter"></i>
+                            </button>
                             <ul class="dropdown-menu slidedown">
 
                                 <!-- Tier filtering is described here -->
@@ -494,6 +525,7 @@
                                 </li>
 
                             </ul>
+                            <br>
                         </div>
                     </div>
 
@@ -502,155 +534,197 @@
                         <ul class="chat">
 
                             <!-- Example Text -->
-                            <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
-                                    </span>
+                            <li class="left clearfix chat-message-0">
+
+                                <!-- Question mark image -->
+                                <span class="chat-img pull-left">
+                                    <img src="/../website/img/question_mark_little.png" alt="User Avatar"
+                                         class="img-circle"/>
+                                </span>
+
+                                <!-- Container with user name and misc question data -->
                                 <div class="chat-body clearfix">
                                     <div class="header">
-                                        <strong class="primary-font">User X</strong>
+                                        <p class="primary-font strong">User X</p>
 
                                         <!-- Posting time -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Score ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             xxx points <i class="fa fa-bullseye fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Question ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </small>
-
+                                        </p>
                                     </div>
 
-                                    <br />
+                                    <br>
 
+                                    <!-- Question text below here -->
                                     <p>
-                                        My short bio: I have a store in Manhattan. I teach component level electronics repair on youtube http://youtube.com/rossmanngroup which seems to be a dying art. I am currently fighting with the digital right to repair to try and get a bill passed that will allow all independent service centers access to manuals and parts required to do their jobs.
+                                        My short bio: I have a store in Manhattan. I teach component level electronics
+                                        repair on youtube http://youtube.com/rossmanngroup which seems to be a dying
+                                        art. I am currently fighting with the digital right to repair to try and get a
+                                        bill passed that will allow all independent service centers access to manuals
+                                        and parts required to do their jobs.
                                         <br>My Proof: https://www.rossmanngroup.com/started-iama-reddit-today-yes/
                                         <br>EDIT:
-                                        <br>I am still replying to comments, but I am so far behind that I am still about ten pages down from new comments. I am doing my best to continue. If I drop off, I'll be back tomorrow around 12 PM. Still commenting now though, at 12 AM.
+                                        <br>I am still replying to comments, but I am so far behind that I am still
+                                        about ten pages down from new comments. I am doing my best to continue. If I
+                                        drop off, I'll be back tomorrow around 12 PM. Still commenting now though, at 12
+                                        AM.
                                         <br>EDIT 2:
-                                        <br>Ok, I cave... my hands are tired. I will be back at 12 PM tomorrow. It is my goal to answer every question. Even if it looks like I haven't gotten to yours, I will do my best to do all of them, but it is impossible to do in realtime, because you are asking faster than I can type. But thanks for joining!
-                                        <br>EDIT 3: I lied, I stayed until 4:15 AM to answer... and now I will go to sleep for real, and be back at 12 PM.
+                                        <br>Ok, I cave... my hands are tired. I will be back at 12 PM tomorrow. It is my
+                                        goal to answer every question. Even if it looks like I haven't gotten to yours,
+                                        I will do my best to do all of them, but it is impossible to do in realtime,
+                                        because you are asking faster than I can type. But thanks for joining!
+                                        <br>EDIT 3: I lied, I stayed until 4:15 AM to answer... and now I will go to
+                                        sleep for real, and be back at 12 PM.
                                     </p>
                                 </div>
 
-                                <br />
+                                <br>
+
+                                <!-- Answer input field defined below here -->
                                 <div class="input-group">
-                                    <input id="btn-input_y" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat_5">
-                                        Send
-                                    </button>
-                                </span>
+                                    <input id="btn-input_y" type="text" class="form-control input-sm"
+                                           placeholder="Type your answer here..."/>
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat_5">Send</button>
+                                    </span>
                                 </div>
 
                             </li>
 
+                            <!-- 'Optimized' horizontal ruler -->
+                            <li class="divider">
+
+                            </li>
+
                             <!-- Example Text -->
-                            <li class="left clearfix">
+                            <li class="left clearfix chat-message-1">
                                     <span class="chat-img pull-left">
-                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
+                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar"
+                                             class="img-circle"/>
                                     </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
-                                        <strong class="primary-font">User X</strong>
+                                        <p class="primary-font strong">User X</p>
 
                                         <!-- Posting time -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Score ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             xxx points <i class="fa fa-bullseye fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Question ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </small>
+                                        </p>
 
                                     </div>
 
-                                    <br />
+                                    <br>
 
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                        ornare dolor, quis ullamcorper ligula sodales.
                                     </p>
                                 </div>
 
-                                <br />
+                                <br>
                                 <div class="input-group">
-                                    <input id="btn-input_x" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
+                                    <input id="btn-input_x" type="text" class="form-control input-sm"
+                                           placeholder="Type your answer here..."/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-warning btn-sm" id="btn-chat">
                                         Send
                                     </button>
                                 </span>
                                 </div>
+                            </li>
+
+                            <!-- 'Optimized' horizontal ruler -->
+                            <li class="divider">
 
                             </li>
 
                             <!-- Example Text -->
-                            <li class="left clearfix">
+                            <li class="left clearfix chat-message-0">
                                     <span class="chat-img pull-left">
-                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar" class="img-circle" />
+                                        <img src="/../website/img/question_mark_little.png" alt="User Avatar"
+                                             class="img-circle"/>
                                     </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
-                                        <strong class="primary-font">User X</strong>
+                                        <p class="primary-font strong">User X</p>
 
                                         <!-- Posting time -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Score ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             xxx points <i class="fa fa-bullseye fa-fw"></i>
-                                        </small>
+                                        </p>
 
-                                        <br />
+                                        <br>
 
                                         <!-- Question ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small">
                                             abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </small>
+                                        </p>
 
                                     </div>
 
-                                    <br />
+                                    <br>
 
                                     <p>
-                                        My short bio: I have a store in Manhattan. I teach component level electronics repair on youtube http://youtube.com/rossmanngroup which seems to be a dying art. I am currently fighting with the digital right to repair to try and get a bill passed that will allow all independent service centers access to manuals and parts required to do their jobs.
+                                        My short bio: I have a store in Manhattan. I teach component level electronics
+                                        repair on youtube http://youtube.com/rossmanngroup which seems to be a dying
+                                        art. I am currently fighting with the digital right to repair to try and get a
+                                        bill passed that will allow all independent service centers access to manuals
+                                        and parts required to do their jobs.
                                         <br>My Proof: https://www.rossmanngroup.com/started-iama-reddit-today-yes/
                                         <br>EDIT:
-                                        <br>I am still replying to comments, but I am so far behind that I am still about ten pages down from new comments. I am doing my best to continue. If I drop off, I'll be back tomorrow around 12 PM. Still commenting now though, at 12 AM.
+                                        <br>I am still replying to comments, but I am so far behind that I am still
+                                        about ten pages down from new comments. I am doing my best to continue. If I
+                                        drop off, I'll be back tomorrow around 12 PM. Still commenting now though, at 12
+                                        AM.
                                         <br>EDIT 2:
-                                        <br>Ok, I cave... my hands are tired. I will be back at 12 PM tomorrow. It is my goal to answer every question. Even if it looks like I haven't gotten to yours, I will do my best to do all of them, but it is impossible to do in realtime, because you are asking faster than I can type. But thanks for joining!
-                                        <br>EDIT 3: I lied, I stayed until 4:15 AM to answer... and now I will go to sleep for real, and be back at 12 PM.
+                                        <br>Ok, I cave... my hands are tired. I will be back at 12 PM tomorrow. It is my
+                                        goal to answer every question. Even if it looks like I haven't gotten to yours,
+                                        I will do my best to do all of them, but it is impossible to do in realtime,
+                                        because you are asking faster than I can type. But thanks for joining!
+                                        <br>EDIT 3: I lied, I stayed until 4:15 AM to answer... and now I will go to
+                                        sleep for real, and be back at 12 PM.
                                     </p>
                                 </div>
 
-                                <br />
+                                <br>
                                 <div class="input-group">
-                                    <input id="btn-input_asd" type="text" class="form-control input-sm" placeholder="Type your answer here..." />
+                                    <input id="btn-input_asd" type="text" class="form-control input-sm"
+                                           placeholder="Type your answer here..."/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-warning btn-sm" id="btn-chat_2">
                                         Send
@@ -660,32 +734,45 @@
 
                             </li>
 
+                            <!-- 'Optimized' horizontal ruler -->
+                            <li class="divider">
+
+                            </li>
+
                         </ul>
                     </div>
+
                 </div>
 
             </div>
 
             <!-- Contains the answered questions -->
             <div class="col-lg-4">
+
+                <!-- The whole answered q&a - panel -->
                 <div class="chat-panel panel panel-default">
+
+                    <!-- Heading of "Answered questions -->
                     <div class="panel-heading">
 
                         <!-- Question symbol -->
-                        <i class="fa fa-check  fa-fw"></i> Answered Questions
+                        <i class="fa fa-check fa-fw"></i> Answered Questions
 
                         <!-- Refresh button -->
-                        <div class="pull-right">
-                            <button id="asd_1" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <div class="btn-gorup pull-right">
+                            <button id="asd_1" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
                                 <i class="fa fa-refresh fa-fw"></i>
-                            </button> Refresh
+                            </button>
+
+                            <br>
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="pull-right">
+                        <div class="btn-group pull-right">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-chevron-down"></i>
-                            </button> Sorting
+                                <i class="fa fa-sort-numeric-asc"></i>
+                            </button>
                             <ul class="dropdown-menu slidedown">
 
                                 <!-- Author name as-/descending is described here -->
@@ -747,13 +834,16 @@
                                 </li>
 
                             </ul>
+
+                            <br>
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="pull-right">
-                            <button id="filter_dropdown" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-chevron-down"></i>
-                            </button> Filter
+                        <div class="btn-group pull-right">
+                            <button id="filter_dropdown" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-filter"></i>
+                            </button>
                             <ul class="dropdown-menu slidedown">
 
                                 <!-- Tier filtering is described here -->
@@ -803,6 +893,7 @@
                                 </li>
 
                             </ul>
+                            <br>
                         </div>
 
                     </div>
@@ -811,72 +902,236 @@
                     <div class="panel-body">
                         <ul class="chat">
 
-                            <!-- Example question no 1 -->
-                            <li class="left clearfix">
+                            <!-- Example answered q&a no 1 -->
+                            <li class="left clearfix chat-message-0">
+
                                 <!-- Example question 1 -->
                                 <div class="left clearfix">
 
                                     <div class="header">
-                                        <strong class="primary-font">User X</strong>
+                                        <p class="pull-left primary-font strong">User X</p>
 
                                         <!-- Posting time -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small chat-answered-questions">
                                             ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
-                                        </small>
-
-                                        <br />
+                                        </p>
+                                        <br>
 
                                         <!-- Score ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small chat-answered-questions">
                                             xxx points <i class="fa fa-bullseye fa-fw"></i>
-                                        </small>
-
-                                        <br />
+                                        </p>
+                                        <br>
 
                                         <!-- Question ID -->
-                                        <small class="pull-right text-muted">
+                                        <p class="pull-right text-muted small chat-answered-questions">
                                             abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </small>
+                                        </p>
+                                        <br>
+                                        <br>
 
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                                        <!-- The answer text per se -->
+                                        <p class="chat-alignment-left">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
                                         </p>
 
                                     </div>
 
                                 </div>
 
-                                <HR WIDTH="30%" ALIGN="Center">
+                                <!-- Separates questions froms answers -->
+                                <hr class="ruler-answered-questions">
 
                                 <!-- Example answer 1 -->
                                 <div class="right clearfix">
-
                                     <div class="header">
 
-                                        <strong class="pull-right primary-font">You</strong>
+                                        <p class="pull-right primary-font strong">You</p>
+                                        <br>
 
                                         <!-- Posting time -->
-                                        <small class="pull-left text-muted">
+                                        <p class="pull-left text-muted small chat-answered-questions">
                                             <i class="fa fa-clock-o fa-fw"></i> ~ x mins ago
-                                        </small>
+                                        </p>
+                                        <br>
 
-                                        <br />
-
-                                        <!-- Score ID -->
-                                        <small class="pull-left text-muted">
+                                        <!--Score ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
                                             <i class="fa fa-bullseye fa-fw"></i> xxx points
-                                        </small>
-
-                                        <br />
+                                        </p>
+                                        <br>
 
                                         <!-- Question ID -->
-                                        <small class="pull-left text-muted">
+                                        <p class="pull-left text-muted small chat-answered-questions">
                                             <i class="fa fa-bookmark fa-fw"></i> abcdefg - ID
-                                        </small>
+                                        </p>
 
-                                        <br />
-                                        <p align="right">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                                        <br>
+                                        <br>
+
+                                        <!-- Answer text -->
+                                        <p class="chat-alignment-right">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            </li>
+
+                            <!-- Example answered q&a no 2 -->
+                            <li class="left clearfix chat-message-1">
+
+                                <!-- Example question 1 -->
+                                <div class="left clearfix">
+
+                                    <div class="header">
+                                        <p class="pull-left primary-font strong">User X</p>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Score ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            xxx points <i class="fa fa-bullseye fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
+                                        </p>
+                                        <br>
+                                        <br>
+
+                                        <!-- The answer text per se -->
+                                        <p class="chat-alignment-left">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Separates questions froms answers -->
+                                <hr class="ruler-answered-questions">
+
+                                <!-- Example answer 1 -->
+                                <div class="right clearfix">
+                                    <div class="header">
+
+                                        <p class="pull-right primary-font strong">You</p>
+                                        <br>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-clock-o fa-fw"></i> ~ x mins ago
+                                        </p>
+                                        <br>
+
+                                        <!--Score ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bullseye fa-fw"></i> xxx points
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bookmark fa-fw"></i> abcdefg - ID
+                                        </p>
+
+                                        <br>
+                                        <br>
+
+                                        <!-- Answer text -->
+                                        <p class="chat-alignment-right">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            </li>
+
+                            <!-- Example answered q&a no 3 -->
+                            <li class="left clearfix chat-message-0">
+
+                                <!-- Example question 1 -->
+                                <div class="left clearfix">
+
+                                    <div class="header">
+                                        <p class="pull-left primary-font strong">User X</p>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Score ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            xxx points <i class="fa fa-bullseye fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
+                                        </p>
+                                        <br>
+                                        <br>
+
+                                        <!-- The answer text per se -->
+                                        <p class="chat-alignment-left">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Separates questions froms answers -->
+                                <hr class="ruler-answered-questions">
+
+                                <!-- Example answer 1 -->
+                                <div class="right clearfix">
+                                    <div class="header">
+
+                                        <p class="pull-right primary-font strong">You</p>
+                                        <br>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-clock-o fa-fw"></i> ~ x mins ago
+                                        </p>
+                                        <br>
+
+                                        <!--Score ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bullseye fa-fw"></i> xxx points
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bookmark fa-fw"></i> abcdefg - ID
+                                        </p>
+
+                                        <br>
+                                        <br>
+
+                                        <!-- Answer text -->
+                                        <p class="chat-alignment-right">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
                                         </p>
 
                                     </div>
@@ -885,32 +1140,16 @@
                             </li>
 
                         </ul>
-
                     </div>
 
                 </div>
-                <!--</div>-->
-                
-            </div>
-
-            <!-- 3rd row containing charts -->
-            <div class="row">
-
-                <!--&lt;!&ndash; Example graph 1 &ndash;&gt;-->
-                <!--<div class="col-lg-7">-->
-                <!--<div id="container_example_1" style="min-width: 310px; height: 200px; margin: 0 auto"></div>-->
-                <!--</div>-->
-
-                <!-- Example graph 2 -->
-                <!--<div class="col-lg-5">-->
-                <!--<div id="container_example_2" style="min-width: 310px; height: 200px; margin: 0 auto"></div>-->
-                <!--</div>-->
 
             </div>
 
         </div>
 
     </div>
+
 </div>
 
 <!-- jQuery -->
@@ -925,20 +1164,9 @@
 <!-- Custom Theme JavaScript -->
 <script src="../dist/js/sb-admin-2.js"></script>
 
-<!-- Highcharts necessary files -->
-<script src="../js/highcharts/highcharts_highcharts.js"></script>
-<script src="../js/highcharts/highcharts_exporting.js"></script>
-
-<!-- Highcharts example graphs -->
-<script src="../js/highcharts/highcharts_example_1.js"></script>
-<script src="../js/highcharts/highcharts_example_2.js"></script>
-<script src="../js/highcharts/highcharts_example_3.js"></script>
-
-<!-- Java script example things -->
+<!-- Misc scripts -->
 <script src="../js/dropdown_stay.js"></script>
 <script src="../js/rest_service_test.js"></script>
-
-<!-- Resize testing -->
 <script src="../js/resize_me.js"></script>
 
 </body>
