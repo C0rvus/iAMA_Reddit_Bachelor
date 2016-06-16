@@ -596,10 +596,66 @@
 
                                 <!-- Answer input field defined below here -->
                                 <div class="input-group">
+
+                                    <!-- Template button for pre-defined answers -->
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
+                                        data-toggle="dropdown">Template
+                                        <i class="fa fa-chevron-down fa-fw"></i>
+                                        </button>
+
+                                        <!-- Slide down menu for answer templates -->
+                                        <ul class="dropdown-menu slidedown">
+
+                                            <!-- Tier filtering is described here -->
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-indent fa-fw"></i> Thank you for your question.
+                                                    It has already been answered, so please look at question --link --.
+                                                </a>
+                                            </li>
+
+                                            <!-- Score filtering is described here -->
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-signal fa-fw"></i> Score
+
+                                                    <select name="score_selection" title="score_selection">
+
+                                                        <option value="equal">equal</option>
+                                                        <option value="grt">greater than</option>
+                                                        <option value="lst">lesser than</option>
+
+                                                    </select>
+
+                                                    <input type="number" placeholder="numeric value...">
+                                                </a>
+                                            </li>
+
+                                            <!-- To reset all selected filtering methods -->
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-times fa-fw"></i> Reset filtering options
+                                                </a>
+                                            </li>
+
+                                            <!-- Divides the view -->
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                                </a>
+                                            </li>
+
+                                        </ul>
+
+                                    </span>
+
+                                    <!-- Send button to send that message -->
                                     <input id="btn-input_y" type="text" class="form-control input-sm"
                                            placeholder="Type your answer here..."/>
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat_5">Send</button>
+                                        <span class="input-group-btn">
+                                        <button class="btn btn-warning btn-sm" id="btn-chat_5">Send</button>
                                     </span>
                                 </div>
 

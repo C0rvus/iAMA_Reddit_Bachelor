@@ -3199,6 +3199,30 @@ def average_means_of_values_f_authors():
         author_time_acc_birth_first_iama_thread.mean()))
 
     print("----")
+    print("Calculating arithmetic medians for the author here")
+    print("")
+    print("Median - author_amount_creation_iama_threads: " + str(
+        author_amount_creation_iama_threads.median()))
+
+    print("Median - author_amount_creation_other_threads: " + str(
+        author_amount_creation_other_threads.median()))
+
+    print("Median - author_amount_of_comments_except_iama: " + str(
+        author_amount_of_comments_except_iama.median()))
+
+    print("Median - author_amount_of_comments_iama: " + str(
+        author_amount_of_comments_iama.median()))
+
+    print("Median - author_author_comment_karma_amount: " + str(
+        author_author_comment_karma_amount.median()))
+
+    print("Median - author_author_link_karma_amount: " + str(
+        author_author_link_karma_amount.median()))
+
+    print("Median - author_time_acc_birth_first_iama_thread: " + str(
+        author_time_acc_birth_first_iama_thread.median()))
+
+    print("----")
     print("Skipping all NaN values here and calculating the remaining data means")
     print("----")
 
