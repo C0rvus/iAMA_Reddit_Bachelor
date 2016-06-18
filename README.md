@@ -30,20 +30,24 @@ To make use of this repository please follow the instructions below.
 1. Run the scripts with the prefix "***c_***" within **./python/** - folder.
 
 The Crawling scripts automatically create the databases they write their information into by theirselves. 
-You will be having database of three types:
+You will be having database of four types:
 
 >iAMA\_Reddit\_Authors
 
->iAMA\_Reddit\_Threads_{year}
+>iAMA\_Reddit\_Authors\_Random
 
->iAMA\_Reddit\_Comments_{year}
+>iAMA\_Reddit\_Threads\_{year}
+
+>iAMA\_Reddit\_Comments\_{year}
 
 Each database contains a collection with the name of the appropriate crawled thread, except 'iAMA_Reddit_Authors'.
 
 
-In the ">iAMA\_Reddit\_Authors" database each document only holds one collection containing information about the
-author. It contains all authors who actively participated in an iAMA. Authors of iAMA-Request were filtered out.
-The database is structured as following:
+In the "iAMA\_Reddit\_Authors" and "iAMA\_Reddit\_Authors\_Random" database each document only holds one collection 
+containing information about the author. It contains all authors who actively participated in an iAMA. 
+Authors of iAMA-Request were filtered out. "iAMA\_Reddit\_Authors\_Random" contains random authors from misc subreddits 
+within reddit, "iAMA\_Reddit\_Authors" contains authors from iAMA subreddit only. 
+Their database is structured as following:
 
 >	"_id"	 =		The dynamically generated id from the mongo db
 
@@ -188,6 +192,20 @@ Iterates over every thread within the database and crawls all authors data possi
     python c_crawl_Author_Information.py 2009 2009 forward
 
 
+## c\_crawl\_Random\_Author\_Information.py
+Crawls randoms others out of reddit. Authors who have created a topic within iAMA subreddit have been filtered ozut
+
+    python c_crawl_Random_Author_Information.py {crawling_limit}
+    
+    
+* **crawling_limit** = **[int]** The amount of random authors which are to be crawled
+
+*Usage examples shown down below*
+
+    python c_crawl_Random_Author_Information.py 1000
+    python c_crawl_Random_Author_Information.py 3
+    python c_crawl_Random_Author_Information.py 1337
+
 # Analyze data:
 1. Run the scripts with the prefix ***"a_"*** within **./python/** - folder.
 
@@ -215,12 +233,21 @@ It printlines the various calculation results into the console output.
 
 ## a\_author\_Information.py
 
-This script retrieves all data possible from the **Reddit_iAMA_Authors** database and creates a .csv file out of it.
+This script retrieves all data possible from the **Reddit_iAMA_Authors** or **Reddit_iAMA_Authors_Random** database 
+and creates a .csv file out of it.
 This csv-file can later be analyzed by using **a__everything_Big_CSV_analyzer.py**. It uses no arguments.
+        
+    python a_author_Information.py {author_db_to_choose_from}
 
-*Usage example shown down below*
+* **author_db_to_choose_from** = **[iama || random]** iama gets you the original iAMA authors, random gets you random
+ authors
 
-    python a_iAMA_Commenttime.py
+        
+*Usage examples shown down below*
+
+    python a_author_Information.py iama
+    python a_author_Information.py random
+    python a_author_Information.py Rand
 
 
 ## a\_iAMA\_Commenttime.py
@@ -326,9 +353,9 @@ The year which is to be used for the calculation and represents when the calcula
 
 *Usage examples shown down below*
 
-    python analyze_tier_question_distribution_pieChart.py 2009 2016
-    python analyze_tier_question_distribution_pieChart.py 2011 2012
-    python analyze_tier_question_distribution_pieChart.py 2010 2013
+    python a_question_Tier_Distribution.py 2009 2016
+    python a_question_Tier_Distribution.py 2011 2012
+    python a_question_Tier_Distribution.py 2010 2013
 
 
 ## a\_thread\_Lifespan\_N\_Average\_Commenttime.py

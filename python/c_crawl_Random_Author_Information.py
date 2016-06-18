@@ -88,6 +88,7 @@ def start_data_generation_for_analysis():
         rand_submission = reddit_instance.get_random_submission()
         rand_submission_subreddit = str(rand_submission.subreddit).lower()
 
+        # Make sure, the submissions subreddit is not iAMA, because we already have that data in the original author db
         if rand_submission_subreddit != "iama":
 
             # Describes the randomly crawled author
@@ -104,7 +105,7 @@ def start_data_generation_for_analysis():
 
 
 def generate_data_now(randomized_author_name):
-    """Crawls author information and writes them into the mongoDB database with the name 'iAMA_Reddit_Authors'
+    """Crawls author information and writes them into the mongoDB database with the name 'iAMA_Reddit_Authors_Random'
 
     It does this by first checking the given crawling direction. The ability to crawl bidirectional allows you to build
     up you database in a much more faster way, because you can start one instance crawling forward while the other
@@ -133,7 +134,8 @@ def generate_data_now(randomized_author_name):
     print("Crawling random author data for '" + randomized_author_name + "' now...")
 
     # Refreshes the collection initialization for prevention of duplicate writing errors
-    if (str(randomized_author_name)) in mongo_db_client_instance['iAMA_Reddit_Authors_Random'].collection_names():
+    if (str(randomized_author_name)) in mongo_db_client_instance['iAMA_Reddit_Authors_Random'].collection_names() or \
+            (str(randomized_author_name) in mongo_db_iama_author_collection):
         print("Author: " + str(randomized_author_name) + " already exists in data base.. Skipping crawling"
                                                      " this author.")
 

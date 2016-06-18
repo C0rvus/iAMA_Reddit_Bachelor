@@ -69,16 +69,25 @@ from scipy.stats import kendalltau  # Necessary to calculate kendall correlation
 # Thread life span until last question
 # ----
 
-author_information = pandas.read_csv(
-    'a_author_Information.csv',
+# Reads the .csv file containing information about all 'iAMA' authors to the given database date
+author_information_iama = pandas.read_csv(
+    'a_author_information_iama.csv',
     sep=',',
     na_values="None")
 
+# Reads the .csv file containing information about all, randomly chosen authors to the given database date
+author_information_random = pandas.read_csv(
+    'a_author_Information_random.csv',
+    sep=',',
+    na_values="None")
+
+# Reads the .csv file which will contain information about all iAMA threads posted
 thread_information = pandas.read_csv(
     'd_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv',
     sep=',',
     na_values="None")
 
+# Reads the .csv file which will contain all information about all questions asked
 question_information = pandas.read_csv(
     'a_question_Answered_Yes_No_Tier_Percentage_2009_until_2016_ALL_tier_any.csv',
     sep=',',
@@ -102,22 +111,38 @@ for column in copy.copy(question_information):
     question_information = question_information[
         pandas.notnull(question_information['' + str(column)])]
 
+# Variables regarding 'iAMA' authors are defined here
+author_amount_creation_iama_threads = author_information_iama['amount_creation_iama_threads']
+author_amount_creation_other_threads = author_information_iama['amount_creation_other_threads']
+author_amount_of_comments_except_iama = author_information_iama['amount_of_comments_except_iama']
+author_amount_of_comments_iama = author_information_iama['amount_of_comments_iama']
+author_author_birth_date = author_information_iama['author_birth_date']
+author_author_comment_karma_amount = author_information_iama['author_comment_karma_amount']
+author_author_link_karma_amount = author_information_iama['author_link_karma_amount']
+author_author_name = author_information_iama['author_name']
+author_comment_creation_every_x_sec = author_information_iama['comment_creation_every_x_sec']
+author_thread_creation_every_x_sec = author_information_iama['thread_creation_every_x_sec']
+author_time_acc_birth_first_iama_thread = author_information_iama['time_acc_birth_first_iama_thread']
+author_time_diff_acc_creation_n_first_comment = author_information_iama['time_diff_acc_creation_n_first_comment']
+author_time_diff_acc_creation_n_first_thread = author_information_iama['time_diff_acc_creation_n_first_thread']
 
-author_amount_creation_iama_threads = author_information['amount_creation_iama_threads']
-author_amount_creation_other_threads = author_information['amount_creation_other_threads']
-author_amount_of_comments_except_iama = author_information['amount_of_comments_except_iama']
-author_amount_of_comments_iama = author_information['amount_of_comments_iama']
-author_author_birth_date = author_information['author_birth_date']
-author_author_comment_karma_amount = author_information['author_comment_karma_amount']
-author_author_link_karma_amount = author_information['author_link_karma_amount']
-author_author_name = author_information['author_name']
-author_comment_creation_every_x_sec = author_information['comment_creation_every_x_sec']
-author_thread_creation_every_x_sec = author_information['thread_creation_every_x_sec']
-author_time_acc_birth_first_iama_thread = author_information['time_acc_birth_first_iama_thread']
-author_time_diff_acc_creation_n_first_comment = author_information['time_diff_acc_creation_n_first_comment']
-author_time_diff_acc_creation_n_first_thread = author_information['time_diff_acc_creation_n_first_thread']
+# Variables regarding all random authors, who are not involved in 'iAMA' posts are made here
+random_author_amount_creation_iama_threads = author_information_random['amount_creation_iama_threads']
+random_author_amount_creation_other_threads = author_information_random['amount_creation_other_threads']
+random_author_amount_of_comments_except_iama = author_information_random['amount_of_comments_except_iama']
+random_author_amount_of_comments_iama = author_information_random['amount_of_comments_iama']
+random_author_author_birth_date = author_information_random['author_birth_date']
+random_author_author_comment_karma_amount = author_information_random['author_comment_karma_amount']
+random_author_author_link_karma_amount = author_information_random['author_link_karma_amount']
+random_author_author_name = author_information_random['author_name']
+random_author_comment_creation_every_x_sec = author_information_random['comment_creation_every_x_sec']
+random_author_thread_creation_every_x_sec = author_information_random['thread_creation_every_x_sec']
+random_author_time_acc_birth_first_iama_thread = author_information_random['time_acc_birth_first_iama_thread']
+random_author_time_diff_acc_creation_n_first_comment = \
+    author_information_random['time_diff_acc_creation_n_first_comment']
+random_author_time_diff_acc_creation_n_first_thread = author_information_random['time_diff_acc_creation_n_first_thread']
 
-
+# Variables regarding all 'iAMA' threads are defined here
 thread_year = thread_information['Year']
 thread_id = thread_information['Thread id']
 thread_author = thread_information['Thread author']
@@ -212,6 +237,7 @@ thread_life_span_until_last_comment = thread_information[
 thread_life_span_until_last_question = thread_information[
     'Thread life span until last question']
 
+# Variables regarding all 'iAMA' questions are defined here
 question_ups = question_information['Question ups']
 question_answered_by_iAMA_host = question_information[
     'Question answered by iAMA host']
@@ -3171,10 +3197,10 @@ def average_means_of_values_f_authors():
         -
     """
 
-    global author_information
+    global author_information_iama, author_information_random
     
     print("----")
-    print("Calculating arithmetic average means for the author here")
+    print("Calculating arithmetic average means for 'iAMA' author here")
     print("")
 
     print("Average arithmetic mean - author_amount_creation_iama_threads: " + str(
@@ -3199,7 +3225,7 @@ def average_means_of_values_f_authors():
         author_time_acc_birth_first_iama_thread.mean()))
 
     print("----")
-    print("Calculating arithmetic medians for the author here")
+    print("Calculating arithmetic medians for the 'iAMA' author here")
     print("")
     print("Median - author_amount_creation_iama_threads: " + str(
         author_amount_creation_iama_threads.median()))
@@ -3227,9 +3253,9 @@ def average_means_of_values_f_authors():
     print("----")
 
     # Dropping all NaN values here
-    for values in copy.copy(author_information):
-        author_information = author_information[
-            pandas.notnull(author_information['' + str(values)])]
+    for values in copy.copy(author_information_iama):
+        author_information_iama = author_information_iama[
+            pandas.notnull(author_information_iama['' + str(values)])]
 
     print("Average arithmetic mean - author_comment_creation_every_x_sec: " + str(
         author_comment_creation_every_x_sec.mean()))
@@ -3242,6 +3268,76 @@ def average_means_of_values_f_authors():
 
     print("Average arithmetic mean - author_time_diff_acc_creation_n_first_thread: " + str(
         author_time_diff_acc_creation_n_first_thread.mean()))
+
+    print("----")
+    print("!! Calculating data for random reddit users here !!")
+    print("----")
+
+    print("Average arithmetic mean - random_author_amount_creation_iama_threads: " + str(
+        random_author_amount_creation_iama_threads.mean()))
+
+    print("Average arithmetic mean - random_author_amount_creation_other_threads: " + str(
+        random_author_amount_creation_other_threads.mean()))
+
+    print("Average arithmetic mean - random_author_amount_of_comments_except_iama: " + str(
+        random_author_amount_of_comments_except_iama.mean()))
+
+    print("Average arithmetic mean - random_author_amount_of_comments_iama: " + str(
+        random_author_amount_of_comments_iama.mean()))
+
+    print("Average arithmetic mean - random_author_author_comment_karma_amount: " + str(
+        random_author_author_comment_karma_amount.mean()))
+
+    print("Average arithmetic mean - random_author_author_link_karma_amount: " + str(
+        random_author_author_link_karma_amount.mean()))
+
+    print("Average arithmetic mean - random_author_time_acc_birth_first_iama_thread: " + str(
+        random_author_time_acc_birth_first_iama_thread.mean()))
+
+    print("----")
+    print("Calculating arithmetic medians for the 'iAMA' author here")
+    print("")
+    print("Median - random_author_amount_creation_iama_threads: " + str(
+        random_author_amount_creation_iama_threads.median()))
+
+    print("Median - random_author_amount_creation_other_threads: " + str(
+        random_author_amount_creation_other_threads.median()))
+
+    print("Median - random_author_amount_of_comments_except_iama: " + str(
+        random_author_amount_of_comments_except_iama.median()))
+
+    print("Median - random_author_amount_of_comments_iama: " + str(
+        random_author_amount_of_comments_iama.median()))
+
+    print("Median - random_author_author_comment_karma_amount: " + str(
+        random_author_author_comment_karma_amount.median()))
+
+    print("Median - random_author_author_link_karma_amount: " + str(
+        random_author_author_link_karma_amount.median()))
+
+    print("Median - random_author_time_acc_birth_first_iama_thread: " + str(
+        random_author_time_acc_birth_first_iama_thread.median()))
+
+    print("----")
+    print("Skipping all NaN values here and calculating the remaining data means")
+    print("----")
+
+    # Dropping all NaN values here
+    for values in copy.copy(author_information_random):
+        author_information_random = author_information_random[
+            pandas.notnull(author_information_random['' + str(values)])]
+
+    print("Average arithmetic mean - random_author_comment_creation_every_x_sec: " + str(
+        random_author_comment_creation_every_x_sec.mean()))
+
+    print("Average arithmetic mean - random_author_thread_creation_every_x_sec: " + str(
+        random_author_thread_creation_every_x_sec.mean()))
+
+    print("Average arithmetic mean - random_author_time_diff_acc_creation_n_first_comment: " + str(
+        random_author_time_diff_acc_creation_n_first_comment.mean()))
+
+    print("Average arithmetic mean - random_author_time_diff_acc_creation_n_first_thread: " + str(
+        random_author_time_diff_acc_creation_n_first_thread.mean()))
 
 
 # Start that calculation
