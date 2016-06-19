@@ -5,6 +5,10 @@
  * Slightly modified and adapted by Benedikt Hierl
  */
 
+.navbar {
+    margin-bottom: 0;
+}
+
 .navbar-top-links {
     margin-right: 0;
 }
@@ -61,4 +65,8 @@
 .navbar-top-links .dropdown-user {
     right: 0;
     left: auto;
+}
+
+.navbar-default .nav li.thread_selected {
+    background-color: lightyellow;
 }
