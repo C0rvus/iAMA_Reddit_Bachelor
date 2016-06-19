@@ -26,9 +26,6 @@ IAMA_Extension.MainController = function () {
             $(body).trigger('Main_To_UI_Unanswered_Questions', givenData);
         },
 
-
-
-
         // Triggers the refresh functionality for unanswered questions to the rest controller
         _onThreadSelected = function (event, givenData) {
             $(body).trigger('rest_Thread_Selected', givenData);

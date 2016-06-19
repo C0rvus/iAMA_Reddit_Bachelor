@@ -944,12 +944,14 @@ class r_rest_Calculate_Data:
 
         returned_json_statistics_panel = [{
             "thread_time_stamp_last_question": thread_time_stamp_last_question,
-            "thread_average_question_score": thread_average_question_score,
-            "thread_average_reaction_time_host": thread_average_reaction_time_host,
-            "thread_new_question_every_x_sec": thread_new_question_every_x_sec,
+            "thread_average_question_score": "%.2f" % thread_average_question_score,
+            "thread_average_reaction_time_host": "%.2f" % thread_average_reaction_time_host,
+            "thread_new_question_every_x_sec": "%.2f" % thread_new_question_every_x_sec,
             "thread_amount_questions_tier_1": thread_amount_questions_tier_1,
             "thread_amount_questions_tier_x": thread_amount_questions_tier_x,
             "thread_question_top_score": thread_question_top_score,
+            "thread_amount_questions": thread_amount_questions,
+            "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
         }]
 
         returned_json_questions = [{
