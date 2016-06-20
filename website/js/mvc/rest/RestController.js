@@ -14,10 +14,10 @@ IAMA_Extension.RestController = function () {
             $(body).trigger('Rest_To_Main_TopPanel', dataArray);
         },
         _giveAnsweredQuestionsToMainController = function (event, dataArray){
-            $(body).trigger('Rest_To_Main_AnsweredQuestions', dataArray);
+            $(body).trigger('Rest_To_Main_AnsweredQuestions', [dataArray]);
         },
         _giveUnansweredQuestionsToMainController= function (event, dataArray){
-            $(body).trigger('Rest_To_Main_UnansweredQuestions', dataArray);
+            $(body).trigger('Rest_To_Main_UnansweredQuestions', [dataArray]);
         },
     // Starts a REST call to receive that data from within the database
         _getThreadDataFromDB = function (event, clickedThreadID) {

@@ -825,23 +825,37 @@ class r_rest_Calculate_Data:
         for i, val_1 in enumerate(thread_answered_questions):
 
             # Will contain the question (1st place) and the answer to it (2nd place)
-            temp_list_q_n_a = []
+            temp_list_q_n_a = {
+                "question_id": val_1.get("question_id"),
+                "question_author": val_1.get("question_author"),
+                "question_timestamp": val_1.get("question_timestamp"),
+                "question_upvote_score": val_1.get("question_upvote_score"),
+                "question_text": val_1.get("question_text"),
 
+                "answer_id": None,
+                "answer_timestamp": None,
+                "answer_upvote_score": None,
+                "answer_text": None
+            }
+
+            # Iterates over every answer of the host
             for j, val_2 in enumerate(thread_answers_of_host):
 
                 # Whenever the answer of a given question has been found append them to the q_n_a - list
                 if val_2.get('id_of_related_q') == val_1.get('question_id'):
 
-                    temp_list_q_n_a.append(val_1)
-                    temp_list_q_n_a.append(val_2)
+                    # Refers to necessary variables
+                    temp_list_q_n_a["answer_id"] = val_2.get('id_of_answer')
+                    temp_list_q_n_a["answer_timestamp"] = val_2.get('created_utc')
+                    temp_list_q_n_a["answer_upvote_score"] = val_2.get('ups')
+                    temp_list_q_n_a["answer_text"] = val_2.get('answer_text')
 
-                    # Prevents unnecessary iterations here
-                    continue
+                    # Append that q & a combination to the global list
+                    thread_questions_n_answers.append(temp_list_q_n_a)
+
                 else:
                     pass
 
-            # Append that q & a combination to the global list
-            thread_questions_n_answers.append(temp_list_q_n_a)
 
     # noinspection PyUnresolvedReferences
     @staticmethod
@@ -902,6 +916,7 @@ class r_rest_Calculate_Data:
         global thread_amount_questions_tier_x
         global thread_question_top_score
         global thread_answers_of_host
+        global thread_questions_n_answers
         global thread_unanswered_questions
         global thread_answered_questions
         global thread_amount_questioners
@@ -949,7 +964,8 @@ class r_rest_Calculate_Data:
         # Middle of screen
         thread_unanswered_questions = []
         thread_answered_questions = []
-        thread_answers_of_host = []  # Value received by (MongoDB - offline)
+        thread_answers_of_host = []
+        thread_questions_n_answers = []
 
         # Object which is to be returned (JSON)
         json_object_to_return = []
@@ -1005,7 +1021,9 @@ class r_rest_Calculate_Data:
         data["thread_overview"] = returned_json_thread_overview
         data["top_panel"] = returned_json_top_panel
         data["statistics_panel"] = returned_json_statistics_panel
-        data["middle_screen"] = returned_json_questions
+        # data["middle_screen"] = returned_json_questions
+        data["question_n_answers"] = thread_questions_n_answers
+        data["open_questions"] = thread_unanswered_questions
 
         # Dumps that data into JSON
         json_data = json.dumps(data)

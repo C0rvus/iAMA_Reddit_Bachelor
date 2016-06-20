@@ -21,8 +21,8 @@ IAMA_Extension.UIController = function () {
 
         },
 
-        _giveAnsweredQuestionsToUnansweredPanel = function (event, data) {
-            $(body).trigger("answered_Questions_To_DOM", data);
+        _giveAnsweredQuestionsToUnansweredPanel = function (event, dataArray) {
+            $(body).trigger("answered_Questions_To_DOM", [dataArray]);
         },
 
         _giveThreadInformationToThreadPanel = function (event, data) {

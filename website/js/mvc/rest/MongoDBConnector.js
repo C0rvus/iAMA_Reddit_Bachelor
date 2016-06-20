@@ -6,7 +6,7 @@ IAMA_Extension.MongoDBConnector = function () {
         body,
 
         _onSuccess = function(content) {
-            console.log(content);
+            // console.log(content);
 
             // Parses the JSON response into an java script accessable object
             var response = $.parseJSON(content);
@@ -16,14 +16,14 @@ IAMA_Extension.MongoDBConnector = function () {
                 var thread_overview = response['thread_overview'][0];
                 var statistics_panel = response['statistics_panel'][0];
                 var top_panel = response['top_panel'][0];
-                var answered_questions = response['middle_screen'][0]['answered_questions'];
-                var unanswered_questions = response['middle_screen'][0]['unanswered_questions'];
+                var answered_questions = response['question_n_answers'];
+                var unanswered_questions = response['open_questions'];
 
                 $(body).trigger('rest_Thread_Overview_Array', thread_overview);
                 $(body).trigger('rest_Statistics_Panel_Array', statistics_panel);
                 $(body).trigger('rest_Top_Panel_Array', top_panel);
-                $(body).trigger('rest_Answered_Questions_Array', answered_questions);
-                $(body).trigger('rest_Unanswered_Questions_Array', unanswered_questions);
+                $(body).trigger('rest_Answered_Questions_Array', [answered_questions]);
+                $(body).trigger('rest_Unanswered_Questions_Array', [unanswered_questions]);
 
                 // $.each( answered_questions, function( key, value ) {
                 //     console.log( key + ": " + value );
