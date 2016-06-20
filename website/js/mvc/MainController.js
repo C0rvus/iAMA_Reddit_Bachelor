@@ -15,7 +15,7 @@ IAMA_Extension.MainController = function () {
         },
 
         _onTopPanelToUIController = function(event, givenData) {
-            $(body).trigger('Main_To_UI_Top_Panel', givenData);
+            $(body).trigger('Main_To_UI_Topbar', givenData);
         },
 
         _onAnsweredQuestionsToUIController = function(event, givenData) {

@@ -14,7 +14,7 @@ IAMA_Extension.UIController = function () {
         },
 
         _giveTopBar = function (event, data) {
-
+            $(body).trigger("top_Data_To_DOM", data);
         },
 
         _giveUnansweredQuestionsToUnansweredPanel = function (event, data) {
@@ -22,7 +22,7 @@ IAMA_Extension.UIController = function () {
         },
 
         _giveAnsweredQuestionsToUnansweredPanel = function (event, data) {
-
+            $(body).trigger("answered_Questions_To_DOM", data);
         },
 
         _giveThreadInformationToThreadPanel = function (event, data) {
@@ -58,8 +58,10 @@ IAMA_Extension.UIController = function () {
         _initModules = function () {
             console.log("UIcontroller: _initModules");
 
+            topbar = IAMA_Extension.UITopBar.init();
             thread_Overview = IAMA_Extension.UIThreadOverview.init();
             stats_Overview = IAMA_Extension.UIStatsOverview.init();
+            answered_Questions = IAMA_Extension.UIAnsweredQuestions.init();
 
         },
 

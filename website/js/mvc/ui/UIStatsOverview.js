@@ -10,10 +10,8 @@ IAMA_Extension.UIStatsOverview = function () {
         stats_amount_q_tier_x,
         stats_best_q_score,
 
-
+        // Applies the statistics data to the stats panel on the web page
         _onStatsToDOM = function (event, data) {
-          console.log("sss: " + data);
-
             var thread_amount_questions_tier_x = data['thread_amount_questions_tier_x'],
                 thread_average_question_score = data['thread_average_question_score'],
                 thread_average_reaction_time_host = data['thread_average_reaction_time_host'],
@@ -24,8 +22,6 @@ IAMA_Extension.UIStatsOverview = function () {
                 thread_amount_unanswered_questions = data['thread_amount_unanswered_questions'],
                 thread_time_stamp_last_question = data['thread_time_stamp_last_question'];
 
-            console.log("AUSGABE REF REF: " + stats_q_score.val());
-            console.log("AUSGABE REF REF: " + stats_q_score.text());
             stats_amount_answered_q.text(thread_amount_unanswered_questions + " / " + thread_amount_questions);
             stats_q_score.text(thread_average_question_score);
             stats_react_time.text(thread_average_reaction_time_host + " s");
@@ -36,7 +32,7 @@ IAMA_Extension.UIStatsOverview = function () {
         },
 
     // Initializes necessary variables for triggering
-        _initVars = function () {
+        _initUI = function () {
             body = $(document.body);
             statsPanel = $('#iAMA_Stats');
 
@@ -58,7 +54,7 @@ IAMA_Extension.UIStatsOverview = function () {
 
 
     that.init = function () {
-        _initVars();
+        _initUI();
         _initEvents();
     };
     return that;

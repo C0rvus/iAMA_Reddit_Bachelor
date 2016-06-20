@@ -49,7 +49,7 @@ thread_id = ""  # Value received by (Reddit API - live)
 thread_ups = 0  # Value received by (Reddit API - live)
 thread_downs = 0  # Value received by (Reddit API - live)
 
-# Right (stats) panel
+# Left (stats) panel
 thread_time_stamp_last_question = 0  # Value received by (MongoDB - offline)
 
 thread_average_question_score = 0  # Value received by (MongoDB - offline)
@@ -65,10 +65,12 @@ thread_amount_questioners = 0   # Value received by (MongoDB - offline)
 thread_unanswered_questions = []  # Value received by (MongoDB - offline)
 thread_answered_questions = []  # Value received by (MongoDB - offline)
 
-# Charts within the webpage
-stats_left = []
-stats_middle = []
-stats_right = []
+# Contains the answers the author made.. Will be merged later with the answers done on
+thread_answers_of_host = []  # Value received by (MongoDB - offline)
+
+# Contains all questions and the appropriate answers to it
+# I have to do this separately because otherwise this whole script would be needed to be reworked then..
+thread_questions_n_answers = []
 
 # Object to return (JSON)
 json_object_to_return = []
@@ -152,6 +154,9 @@ class r_rest_Calculate_Data:
         self.sort_n_filter_questions(thread_answered_questions, str(an_filter_tier), str(an_filter_score_equals),
                                      str(an_filter_score_numeric), str(an_sorting_direction), str(an_sorting_type))
 
+        # This method merges answered questions and their respective answers in a way to easen the display in the page
+        self.build_list_containing_q_n_a()
+
         # # Creates the first chart data which is to be displayed via high charts
         # self.create_chart_1()
         #
@@ -162,7 +167,7 @@ class r_rest_Calculate_Data:
         # self.create_chart_3()
 
         # Simple test method for checking the correct assignment of the variables / values
-        # self.test_calculated_values()
+        self.test_calculated_values()
 
         # Builds the JSON object for correct return
         self.create_json_object()
@@ -605,6 +610,9 @@ class r_rest_Calculate_Data:
             False (bool): Whenever the strings do match
         """
 
+        # Necessary to refer to this variable, to add the answers to it
+        global thread_answers_of_host
+
         dict_to_be_returned = {
             "question_answered_from_host": False,
             "question_host_reaction_time": 0
@@ -624,6 +632,17 @@ class r_rest_Calculate_Data:
                 # The difference between timestamp of the hosts answer and the questions timestamp
                 dict_to_be_returned["question_host_reaction_time"] = self.calculate_time_difference(
                     comment_timestamp, val.get("created_utc"))
+
+                # A dict containing the answer, the host made
+                dict_to_add_to_answers_of_host_list = {
+                    "answer_text": val.get("body"),
+                    "created_utc": val.get("created_utc"),
+                    "ups": val.get("ups"),
+                    "id_of_answer": val.get("name"),
+                    "id_of_related_q": val.get("parent_id")
+                }
+
+                thread_answers_of_host.append(dict_to_add_to_answers_of_host_list)
 
                 return dict_to_be_returned
 
@@ -657,6 +676,10 @@ class r_rest_Calculate_Data:
         print("thread_question_top_score: " + str(thread_question_top_score))
         print("Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
         print("Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
+        print("------")
+        print("Ausgabe antworten Laenge-Host: " + str(len(thread_answers_of_host)))
+        print("------")
+
 
     @staticmethod
     def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
@@ -794,6 +817,32 @@ class r_rest_Calculate_Data:
         else:
             pass
 
+    @staticmethod
+    def build_list_containing_q_n_a():
+        global thread_questions_n_answers
+
+        # Iterates over every answered question and subiterates its answers
+        for i, val_1 in enumerate(thread_answered_questions):
+
+            # Will contain the question (1st place) and the answer to it (2nd place)
+            temp_list_q_n_a = []
+
+            for j, val_2 in enumerate(thread_answers_of_host):
+
+                # Whenever the answer of a given question has been found append them to the q_n_a - list
+                if val_2.get('id_of_related_q') == val_1.get('question_id'):
+
+                    temp_list_q_n_a.append(val_1)
+                    temp_list_q_n_a.append(val_2)
+
+                    # Prevents unnecessary iterations here
+                    continue
+                else:
+                    pass
+
+            # Append that q & a combination to the global list
+            thread_questions_n_answers.append(temp_list_q_n_a)
+
     # noinspection PyUnresolvedReferences
     @staticmethod
     def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
@@ -852,13 +901,11 @@ class r_rest_Calculate_Data:
         global thread_amount_questions_tier_1
         global thread_amount_questions_tier_x
         global thread_question_top_score
+        global thread_answers_of_host
         global thread_unanswered_questions
         global thread_answered_questions
         global thread_amount_questioners
         global json_object_to_return
-        global stats_left
-        global stats_middle
-        global stats_right
 
         mongo_DB_Client_Instance = MongoClient('localhost', 27017)
 
@@ -902,11 +949,7 @@ class r_rest_Calculate_Data:
         # Middle of screen
         thread_unanswered_questions = []
         thread_answered_questions = []
-
-        # Charts within the webpage
-        stats_left = []
-        stats_middle = []
-        stats_right = []
+        thread_answers_of_host = []  # Value received by (MongoDB - offline)
 
         # Object which is to be returned (JSON)
         json_object_to_return = []
@@ -956,7 +999,7 @@ class r_rest_Calculate_Data:
 
         returned_json_questions = [{
             "unanswered_questions": thread_unanswered_questions,
-            "answered_questions": thread_answered_questions
+            "answered_questions": thread_questions_n_answers
         }]
 
         data["thread_overview"] = returned_json_thread_overview
