@@ -9,14 +9,11 @@ IAMA_Extension.UIAnsweredQuestions = function () {
 
     // Assigns necessary thread data to the top panel
         _onAnswersToDOM = function (event, data) {
-            console.log("CORRRRRRRRRRRRRRRRRRECT");
-
-            console.log(data);
-
+ 
             // Removes the first example answer here
             $( "#iAMA_Answer_Panel").find("> li" ).remove();
 
-            // Iterates over every q&a combination
+            // Iterates over every q&a combination and patches the DOM elements together
             $.each( data, function( key, value ) {
 
                 var answer_id = value['answer_id'],
@@ -31,6 +28,20 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                     question_upvote_score = value['question_upvote_score'],
 
                     li_top = null;
+
+                // Mini logic to correctly format the timestamp here
+                if (answer_upvote_score == 1) {
+                    answer_upvote_score = answer_upvote_score.toString() + " upvote";
+                } else {
+                    answer_upvote_score = answer_upvote_score.toString() + " upvotes"
+                }
+
+                // Mini logic to correctly format the timestamp here
+                if (question_upvote_score == 1) {
+                    question_upvote_score = question_upvote_score.toString() + " upvote";
+                } else {
+                    question_upvote_score = question_upvote_score.toString() + " upvotes"
+                }
 
                 // Necessary for different messaging color
                 if (key % 2 === 0 || key === 0) {
@@ -85,15 +96,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
 
                 // Adds that combination to the answer panel
                 answer_Panel.append(li_top);
-
-
-                //TODO: Timestamp conversion (subtraction to today)
-
             });
-
-
-
-
         },
 
     // References UI elements in here

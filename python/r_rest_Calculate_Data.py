@@ -155,7 +155,7 @@ class r_rest_Calculate_Data:
                                      str(an_filter_score_numeric), str(an_sorting_direction), str(an_sorting_type))
 
         # This method merges answered questions and their respective answers in a way to easen the display in the page
-        self.build_list_containing_q_n_a()
+        self.build_list_containing_q_n_a(self)
 
         # # Creates the first chart data which is to be displayed via high charts
         # self.create_chart_1()
@@ -818,7 +818,7 @@ class r_rest_Calculate_Data:
             pass
 
     @staticmethod
-    def build_list_containing_q_n_a():
+    def build_list_containing_q_n_a(self):
         global thread_questions_n_answers
 
         # Iterates over every answered question and subiterates its answers
@@ -828,7 +828,8 @@ class r_rest_Calculate_Data:
             temp_list_q_n_a = {
                 "question_id": val_1.get("question_id"),
                 "question_author": val_1.get("question_author"),
-                "question_timestamp": val_1.get("question_timestamp"),
+                "question_timestamp": self.convert_epoch_to_time
+                (self.calculate_time_difference(val_1.get('question_timestamp'), int(time.time()))),
                 "question_upvote_score": val_1.get("question_upvote_score"),
                 "question_text": val_1.get("question_text"),
 
@@ -846,7 +847,8 @@ class r_rest_Calculate_Data:
 
                     # Refers to necessary variables
                     temp_list_q_n_a["answer_id"] = val_2.get('id_of_answer')
-                    temp_list_q_n_a["answer_timestamp"] = val_2.get('created_utc')
+                    temp_list_q_n_a["answer_timestamp"] = self.convert_epoch_to_time\
+                        (self.calculate_time_difference(val_2.get('created_utc'), int(time.time())))
                     temp_list_q_n_a["answer_upvote_score"] = val_2.get('ups')
                     temp_list_q_n_a["answer_text"] = val_2.get('answer_text')
 
@@ -881,6 +883,34 @@ class r_rest_Calculate_Data:
                 str(x).encode(enc, errors='backslashreplace').decode(enc)
 
             print(*map(f, objects), sep=sep, end=end, file=file)
+
+    @staticmethod
+    def convert_epoch_to_time(timeAsString):
+
+        time_to_days = int(int(timeAsString) / 60 / 60 / 24)
+        time_to_hours = int(int(timeAsString) / 60 / 60)
+        value_to_return = None
+
+        if time_to_days == 1:
+            value_to_return = str(time_to_days) + " day ago"
+
+        elif time_to_days >= 2:
+            value_to_return = str(time_to_days) + " days ago"
+
+        # happened within 24 h
+        elif time_to_days <= 0:
+
+            if time_to_hours <= 1:
+                value_to_return = "recently"
+            else:
+                value_to_return = str(time_to_hours) + " hours ago"
+
+        else:
+            pass
+
+        return value_to_return
+
+
 
     @staticmethod
     def clear_variables():
