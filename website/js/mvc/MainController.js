@@ -23,7 +23,7 @@ IAMA_Extension.MainController = function () {
         },
 
         _onUnansweredQuestionsToUIController = function(event, givenData) {
-            $(body).trigger('Main_To_UI_Unanswered_Questions', givenData);
+            $(body).trigger('Main_To_UI_Unanswered_Questions', [givenData]);
         },
 
         // Triggers the refresh functionality for unanswered questions to the rest controller

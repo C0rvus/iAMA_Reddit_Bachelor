@@ -52,3 +52,20 @@
 .chat-alignment-left {
     text-align: left;
 }
+
+.custom_chat {
+    width: 100%;
+    resize: vertical;
+}
+
+.chat_button_wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+.chat_template_button {
+    float:left;
+}
+.chat_send_button {
+    float:right;
+    overflow: hidden;
+}

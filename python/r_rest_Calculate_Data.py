@@ -70,7 +70,12 @@ thread_answers_of_host = []  # Value received by (MongoDB - offline)
 
 # Contains all questions and the appropriate answers to it
 # I have to do this separately because otherwise this whole script would be needed to be reworked then..
-thread_questions_n_answers = []
+thread_questions_n_answers = []  # Value received by (MongoDB - offline)
+
+# Contains the unanswered questions prepared
+# Prepared means 1. removal of unnecessary values for return and 2. timestamp conversion
+# I have to do this separately because otherwise this whole script would be needed to be reworked then..
+thread_unanswered_questions_converted = []  # Value received by (MongoDB - offline)
 
 # Object to return (JSON)
 json_object_to_return = []
@@ -168,6 +173,10 @@ class r_rest_Calculate_Data:
 
         # Simple test method for checking the correct assignment of the variables / values
         self.test_calculated_values()
+
+        # Prepares the unanswered questions for JSON transport and removes unncessary data, which was necessary
+        # before due to calculation of stats
+        self.prepare_unanswered_questions(self)
 
         # Builds the JSON object for correct return
         self.create_json_object()
@@ -680,7 +689,6 @@ class r_rest_Calculate_Data:
         print("Ausgabe antworten Laenge-Host: " + str(len(thread_answers_of_host)))
         print("------")
 
-
     @staticmethod
     def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
                                 sorting_direction, sorting_type):
@@ -847,8 +855,9 @@ class r_rest_Calculate_Data:
 
                     # Refers to necessary variables
                     temp_list_q_n_a["answer_id"] = val_2.get('id_of_answer')
-                    temp_list_q_n_a["answer_timestamp"] = self.convert_epoch_to_time\
-                        (self.calculate_time_difference(val_2.get('created_utc'), int(time.time())))
+                    temp_list_q_n_a["answer_timestamp"] = self.convert_epoch_to_time(self.calculate_time_difference
+                                                                                     (val_2.get('created_utc'),
+                                                                                      int(time.time())))
                     temp_list_q_n_a["answer_upvote_score"] = val_2.get('ups')
                     temp_list_q_n_a["answer_text"] = val_2.get('answer_text')
 
@@ -858,6 +867,21 @@ class r_rest_Calculate_Data:
                 else:
                     pass
 
+    @staticmethod
+    def prepare_unanswered_questions(self):
+
+        # Iterates over all unanswered questions and assigns necessary values
+        for i, val in enumerate(thread_unanswered_questions):
+            dict_to_append = {
+                "question_id": val['question_id'],
+                "question_author": val['question_author'],
+                "question_timestamp": self.convert_epoch_to_time(self.calculate_time_difference(
+                    val['question_timestamp'], int(time.time()))),
+                "question_upvote_score": val['question_upvote_score'],
+                "question_text": val['question_text']
+            }
+
+            thread_unanswered_questions_converted.append(dict_to_append)
 
     # noinspection PyUnresolvedReferences
     @staticmethod
@@ -910,8 +934,6 @@ class r_rest_Calculate_Data:
 
         return value_to_return
 
-
-
     @staticmethod
     def clear_variables():
         """Resets all variables, to not return duplicated objects.
@@ -947,6 +969,7 @@ class r_rest_Calculate_Data:
         global thread_question_top_score
         global thread_answers_of_host
         global thread_questions_n_answers
+        global thread_unanswered_questions_converted
         global thread_unanswered_questions
         global thread_answered_questions
         global thread_amount_questioners
@@ -996,6 +1019,7 @@ class r_rest_Calculate_Data:
         thread_answered_questions = []
         thread_answers_of_host = []
         thread_questions_n_answers = []
+        thread_unanswered_questions_converted = []
 
         # Object which is to be returned (JSON)
         json_object_to_return = []
@@ -1043,17 +1067,11 @@ class r_rest_Calculate_Data:
             "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
         }]
 
-        returned_json_questions = [{
-            "unanswered_questions": thread_unanswered_questions,
-            "answered_questions": thread_questions_n_answers
-        }]
-
         data["thread_overview"] = returned_json_thread_overview
         data["top_panel"] = returned_json_top_panel
         data["statistics_panel"] = returned_json_statistics_panel
-        # data["middle_screen"] = returned_json_questions
         data["question_n_answers"] = thread_questions_n_answers
-        data["open_questions"] = thread_unanswered_questions
+        data["open_questions"] = thread_unanswered_questions_converted
 
         # Dumps that data into JSON
         json_data = json.dumps(data)

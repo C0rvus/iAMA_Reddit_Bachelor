@@ -9,7 +9,9 @@ IAMA_Extension.UIAnsweredQuestions = function () {
 
     // Assigns necessary thread data to the top panel
         _onAnswersToDOM = function (event, data) {
- 
+
+            console.log("BIN HIER DRINANSASDNDANSDANSSDAN");
+
             // Removes the first example answer here
             $( "#iAMA_Answer_Panel").find("> li" ).remove();
 
@@ -110,7 +112,6 @@ IAMA_Extension.UIAnsweredQuestions = function () {
     // References misc listeners here
         _initEvents = function () {
             $(body).on('answered_Questions_To_DOM', _onAnswersToDOM);
-
         };
 
 

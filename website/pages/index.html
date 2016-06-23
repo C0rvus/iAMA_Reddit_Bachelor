@@ -81,30 +81,30 @@
 
                     <!-- iAMA thread 1 -->
                     <li id="3yypuk">
-                                <i class="fa fa-th fa-fw"></i> thread_title_1
-                                <br>
+                        <i class="fa fa-th fa-fw"></i> thread_title_1
+                        <br>
 
-                                <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
-                                <br>
+                        <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                        <br>
 
-                                <i class="fa fa-clock-o  fa-fw"></i> thread_duration
-                                <br>
+                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <br>
 
-                                <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
                     </li>
 
                     <!-- iAMA thread 2 -->
                     <li id="3z1znd">
-                            <i class="fa fa-th fa-fw"></i> thread_title_1
-                            <br>
+                        <i class="fa fa-th fa-fw"></i> thread_title_1
+                        <br>
 
-                            <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
-                            <br>
+                        <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                        <br>
 
-                            <i class="fa fa-clock-o  fa-fw"></i> thread_duration
-                            <br>
+                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <br>
 
-                            <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
                     </li>
 
                 </ul>
@@ -126,7 +126,8 @@
                         <div>
                             <i class="fa fa-check  fa-fw"></i>
                             Answered questions
-                            <span class="pull-right text-muted small"><em id="iAMA_Stats_Answered_Q"> xx / yy </em></span>
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Answered_Q"> xx / yy </em></span>
                         </div>
 
                         <!-- Average Question score -->
@@ -154,14 +155,16 @@
                         <div>
                             <i class="fa fa-hand-o-up  fa-fw"></i>
                             Questions Tier 1
-                            <span class="pull-right text-muted small"><em id="iAMA_Stats_Amount_Q_Tier_1">uuu</em></span>
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Amount_Q_Tier_1">uuu</em></span>
                         </div>
 
                         <!-- Amount questions tier X -->
                         <div>
                             <i class="fa fa-hand-o-down   fa-fw"></i>
                             Questions Tier X
-                            <span class="pull-right text-muted small"><em id="iAMA_Stats_Amount_Q_Tier_X">yyy</em></span>
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Amount_Q_Tier_X">yyy</em></span>
                         </div>
 
                         <!-- Score best question -->
@@ -450,9 +453,9 @@
                     <!-- Contains the question and answer part -->
                     <div class="panel-body">
 
-                        <ul class="chat">
+                        <ul class="chat" id="iAMA_Question_Panel">
 
-                            <!-- Example Text -->
+                            <!-- Example question -->
                             <li class="left clearfix chat-message-0">
 
                                 <!-- Question mark image -->
@@ -490,54 +493,65 @@
 
                                     <!-- Question text below here -->
                                     <p>
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                                        tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                                        vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                                        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+                                        amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                                        labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                                        et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+                                        sanctus est Lorem ipsum dolor sit amet.
                                     </p>
                                 </div>
 
                                 <br>
 
                                 <!-- Answer input field defined below here -->
-                                <div class="input-group">
+                                <div class="chat-body">
 
-                                    <!-- Already answered button is defined here -->
-                                    <div class="input-group-btn">
+                                    <!-- Input field to enter your message -->
+                                    <textarea class="custom_chat" id="btn-input_y" rows="3">Type your answer here...</textarea>
+
+                                    <!-- Container which contains template and send button -->
+                                    <div class="input-group-btn" id="chat_button_wrapper">
 
                                         <!-- Already answered button is defined here -->
-                                        <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
-                                        data-toggle="dropdown">Already answered
+                                        <div class="chat_template_button">
 
-                                        <i class="fa fa-check fa-fw"></i>
+                                            <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
+                                                    data-toggle="dropdown">Already answered
+                                                <i class="fa fa-check fa-fw"></i></button>
 
-                                        </button>
+                                            <!-- Slide down menu for answering options -->
+                                            <ul class="dropdown-menu slidedown">
 
-                                        <!-- Slide down menu for answering options -->
-                                        <ul class="dropdown-menu slidedown">
+                                                <!-- Answer selector -->
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-crosshairs fa-fw"></i> Click here and select the
+                                                        answer from the side panel on the right
+                                                    </a>
+                                                </li>
 
-                                            <!-- Answer selector -->
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-crosshairs fa-fw"></i> Click here and select the answer from the side panel on the right
-                                                </a>
-                                            </li>
+                                                <!-- Divides the view -->
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                                    </a>
+                                                </li>
 
-                                            <!-- Divides the view -->
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-sign-out fa-fw"></i> Close dropdown
-                                                </a>
-                                            </li>
+                                            </ul>
 
-                                        </ul>
+                                        </div>
+
+                                        <!-- Send button to send that message -->
+                                        <div class="chat_send_button">
+                                            <button class="btn btn-warning btn-sm " id="btn-chat_5">Send</button>
+                                        </div>
 
                                     </div>
 
-                                    <!-- Send button to send that message -->
-                                    <input id="btn-input_y" type="text" class="form-control input-sm"
-                                           placeholder="Type your answer here..."/>
-                                        <span class="input-group-btn">
-                                        <button class="btn btn-warning btn-sm" id="btn-chat_5">Send</button>
-                                    </span>
                                 </div>
 
                             </li>

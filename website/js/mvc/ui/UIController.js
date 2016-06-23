@@ -17,7 +17,8 @@ IAMA_Extension.UIController = function () {
             $(body).trigger("top_Data_To_DOM", data);
         },
 
-        _giveUnansweredQuestionsToUnansweredPanel = function (event, data) {
+        _giveUnansweredQuestionsToUnansweredPanel = function (event, dataArray) {
+            $(body).trigger("unanswered_Questions_To_DOM", [dataArray]);
 
         },
 
@@ -62,6 +63,7 @@ IAMA_Extension.UIController = function () {
             thread_Overview = IAMA_Extension.UIThreadOverview.init();
             stats_Overview = IAMA_Extension.UIStatsOverview.init();
             answered_Questions = IAMA_Extension.UIAnsweredQuestions.init();
+            unanswered_Questions = IAMA_Extension.UIUnansweredQuestions.init();
 
         },
 
