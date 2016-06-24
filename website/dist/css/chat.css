@@ -58,10 +58,6 @@
     resize: vertical;
 }
 
-.chat_button_wrapper {
-    width: 100%;
-    overflow: hidden;
-}
 .chat_template_button {
     float:left;
 }

@@ -53,7 +53,17 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     q_p_posting_time = $("<p class='pull-right text-muted small'>" + question_timestamp + "<i class='fa fa-clock-o fa-fw'></i> </p> <br>"),
                     q_p_score = $("<p class='pull-right text-muted small'>" + question_upvote_score + "<i class='fa fa-bullseye fa-fw'> </i> </p> <br>"),
                     q_p_question_id = $("<p class='pull-right text-muted small'>" + question_id + "<i class='fa fa-bookmark fa-fw'> </i> </p>"),
-                    q_p_text = $("<br> <p>" + question_text + "</p>");
+                    q_p_text = $("<br> <p>" + question_text + "</p>"),
+                    
+                    q_answer_uber_container = $("<div class='chat-body'></div>"),
+                    q_answer_text_area = $("<textarea class='custom_chat' id='btn-input_y' rows='3'>Type your answer here...</textarea>"),
+                    
+                    q_answer_buttons_uber_container = $("<div class='input-group-btn'> </div>"),
+                    q_answer_buttons_template_container = $("<div class='chat_template_button'>"),
+                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' id='btn-template_1' data-toggle='dropdown'>Already answered <i class='fa fa-check fa-fw'></i></button>"),
+
+                    q_answer_buttons_send_container = $("<div class='chat_send_button'></div>"),
+                    q_answer_buttons_send_button = $("<button class='btn btn-warning btn-sm'>Send</button>");
 
                 // Chains the question objects all together
                 q_header.appendTo(q_uber_container);
@@ -63,12 +73,24 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 q_p_question_id.appendTo(q_header);
                 q_p_text.appendTo(q_header);
 
-                // TODO: Input Group is missing
+                // Chains answer possibilities together here
+                q_answer_text_area.appendTo(q_answer_uber_container);
+
+                // Appends single dom elements to answer button template
+                q_answer_buttons_template_container.appendTo(q_answer_buttons_uber_container);
+                q_answer_buttons_template_button.appendTo(q_answer_buttons_template_container);
+
+                q_answer_buttons_template_container.appendTo(q_answer_uber_container);
+
+                // Builds together the send button
+                q_answer_buttons_send_button.appendTo(q_answer_buttons_send_container);
+                q_answer_buttons_send_container.appendTo(q_answer_uber_container);
+
 
                 // Appends all container objects to the top level DOM <li> element
                 q_image.appendTo(li_top);
-
                 q_uber_container.appendTo(li_top);
+                q_answer_uber_container.appendTo(li_top);
 
                 // Adds that combination to the answer panel
                 question_Panel.append(li_top);

@@ -12,15 +12,18 @@
     <title>Reddit iAMA Extension</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/buttons.css" rel="stylesheet">
-    <link href="../dist/css/chat.css" rel="stylesheet">
-    <link href="../dist/css/misc.css" rel="stylesheet">
-    <link href="../dist/css/navbar.css" rel="stylesheet">
-    <link href="../dist/css/panels.css" rel="stylesheet">
-    <link href="../dist/css/sidebar.css" rel="stylesheet">
+    <link href="../dist/css/buttons.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/chat.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/misc.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/navbar.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/panels.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/sidebar.css" rel="stylesheet" type="text/css">
+
+    <link href="../dist/css/bootstrap-dialog.css" rel="stylesheet" type="text/css">
+
 
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -294,7 +297,7 @@
         <div class="row small">
 
             <!-- Contains unasked questions -->
-            <div class="col-lg-8">
+            <div class="col-lg-8" id="iAMA_Unanswered_Uber_Div">
 
                 <!-- The whole question panel -->
                 <div class="chat-panel panel panel-default" id="iAMA_Unanswered_Questions">
@@ -513,7 +516,7 @@
                                     <textarea class="custom_chat" id="btn-input_y" rows="3">Type your answer here...</textarea>
 
                                     <!-- Container which contains template and send button -->
-                                    <div class="input-group-btn" id="chat_button_wrapper">
+                                    <div class="input-group-btn">
 
                                         <!-- Already answered button is defined here -->
                                         <div class="chat_template_button">
@@ -521,27 +524,6 @@
                                             <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
                                                     data-toggle="dropdown">Already answered
                                                 <i class="fa fa-check fa-fw"></i></button>
-
-                                            <!-- Slide down menu for answering options -->
-                                            <ul class="dropdown-menu slidedown">
-
-                                                <!-- Answer selector -->
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="fa fa-crosshairs fa-fw"></i> Click here and select the
-                                                        answer from the side panel on the right
-                                                    </a>
-                                                </li>
-
-                                                <!-- Divides the view -->
-                                                <li class="divider"></li>
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
-                                                    </a>
-                                                </li>
-
-                                            </ul>
 
                                         </div>
 
@@ -570,7 +552,7 @@
             </div>
 
             <!-- Contains the answered questions -->
-            <div class="col-lg-4">
+            <div class="col-lg-4" id="iAMA_Answered_Uber_Div">
 
                 <!-- The whole answered q&a - panel -->
                 <div class="chat-panel panel panel-default" id="iAMA_Answered_Questions">
@@ -726,7 +708,7 @@
                         <ul class="chat" id="iAMA_Answer_Panel">
 
                             <!-- Answered q&a no 1 -->
-                            <li class="left clearfix chat-message-0">
+                            <li class="left clearfix chat-message-0" id="FUCKER">
 
                                 <!-- Example question 1 -->
                                 <div class="left clearfix">
@@ -856,7 +838,10 @@
 <!-- Misc scripts -->
 <!--<script src="../js/dropdown_stay.js"></script>-->
 <!--<script src="../js/rest_service_test.js"></script>-->
-<!--<script src="../js/resize_me.js"></script>-->
+<script src="../js/resize_me.js"></script>
+
+<script src="../js/bootstrap3-dialog/bootstrap-dialog.js"></script>
+<script src="../js/test_klick_answerer.js"></script>
 
 </body>
 
