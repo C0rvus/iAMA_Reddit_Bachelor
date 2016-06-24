@@ -48,7 +48,7 @@
         <!-- Header of the navigation bar -->
         <div class="navbar-header">
 
-            <a class="navbar-brand" href="index.html">Reddit iAMA Extension</a>
+            <a class="navbar-brand">Reddit iAMA Extension</a>
 
         </div>
 
@@ -189,7 +189,7 @@
     <div id="page-wrapper">
 
         <!-- 1st row containing signal symbols -->
-        <div class="row small">
+        <div class="row small" id="iAMA_Top_Bar_Div">
 
             <!-- New questions symbol -->
             <div class="col-lg-3">
@@ -309,7 +309,7 @@
                         <i class="fa fa-comments fa-fw pull-left"></i>Unanswered Questions
 
                         <!-- Refresh button -->
-                        <div class="btn-group pull-right">
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Refresh">
 
                             <button id="asd" type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
@@ -320,7 +320,7 @@
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Sorting">
 
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-sort-numeric-asc"></i>
@@ -395,8 +395,8 @@
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="btn-group pull-right">
-                            <button id="filter_dropdown_2" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Filter">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-filter"></i>
                             </button>
@@ -708,7 +708,7 @@
                         <ul class="chat" id="iAMA_Answer_Panel">
 
                             <!-- Answered q&a no 1 -->
-                            <li class="left clearfix chat-message-0" id="FUCKER">
+                            <li class="left clearfix chat-message-0" id="example_id">
 
                                 <!-- Example question 1 -->
                                 <div class="left clearfix">
@@ -812,11 +812,8 @@
 
 <!-- Classes -->
 <script src="../js/mvc/IAMA_Extension.js"></script>
-
 <script src="../js/mvc/MainController.js"></script>
-
 <script src="../js/mvc/ui/UIController.js"></script>
-
 <script src="../js/mvc/rest/RestController.js"></script>
 
 <!-- UI Scripts -->
@@ -825,23 +822,18 @@
 <script src="../js/mvc/ui/UIUnansweredQuestions.js"></script>
 <script src="../js/mvc/ui/UITopBar.js"></script>
 <script src="../js/mvc/ui/UIStatsOverview.js"></script>
+<script src="../js/mvc/ui/UIGenericMethods.js"></script>
 
 <!-- REST Scripts -->
 <script src="../js/mvc/rest/MongoDBConnector.js"></script>
+
+<!-- Misc Scripts -->
+<script src="../js/bootstrap3-dialog/bootstrap-dialog.js"></script>
 
 <!-- Fully loads up JS logic for the dashboard -->
 <script>
     IAMA_Extension.init();
 </script>
-
-
-<!-- Misc scripts -->
-<!--<script src="../js/dropdown_stay.js"></script>-->
-<!--<script src="../js/rest_service_test.js"></script>-->
-<script src="../js/resize_me.js"></script>
-
-<script src="../js/bootstrap3-dialog/bootstrap-dialog.js"></script>
-<script src="../js/test_klick_answerer.js"></script>
 
 </body>
 

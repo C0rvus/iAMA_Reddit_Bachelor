@@ -1,4 +1,5 @@
 // Source: https://nakupanda.github.io/bootstrap3-dialog/
+// Source: http://stackoverflow.com/questions/1160008/which-keycode-for-escape-key-with-jquery
 
 $( "#btn-template_1" ).click(function() {
 
@@ -13,18 +14,25 @@ $( "#btn-template_1" ).click(function() {
             cssClass: 'btn-primary',
             autospin: true,
             action: function(dialogRef){
+                //noinspection JSCheckFunctionSignatures
                 dialogRef.enableButtons(false);
                 dialogRef.setClosable(false);
                 dialogRef.getModalBody().html('Loading up necessary javascripts...');
 
+                $("#iAMA_Top_Bar_Div").fadeToggle();
+                $("#iAMA_Thread_Overview").fadeToggle();
                 $("#iAMA_Unanswered_Uber_Div").fadeToggle();
+
 
                 $("#iAMA_Answered_Uber_Div").removeClass("col-lg-4");
                 $("#iAMA_Answered_Uber_Div").addClass("col-lg-12");
 
+                // On click (answer selection) behaviour
                 $('#iAMA_Answer_Panel > li' ).on('click', function () {
                     alert(this.id);
 
+                    $("#iAMA_Top_Bar_Div").fadeToggle();
+                    $("#iAMA_Thread_Overview").fadeToggle();
                     $("#iAMA_Unanswered_Uber_Div").fadeToggle();
 
                     $("#iAMA_Answered_Uber_Div").removeClass("col-lg-12");
@@ -34,6 +42,13 @@ $( "#btn-template_1" ).click(function() {
 
                     $('#iAMA_Answer_Panel > li').unbind( "click" );
 
+                });
+
+                // Whenever ESC has been clicked
+                $(document).keyup(function(e) {
+                    if (e.keyCode === 27) {
+                        alert("do it like previously defined - restore anything !!");
+                    };
                 });
 
 

@@ -7,6 +7,7 @@ IAMA_Extension.UIController = function () {
         stats_Overview,
         unanswered_Questions,
         answered_Questions,
+        ui_Generic_Methods,
 
         //
         _giveStatsToStatsPanel = function (event, data) {
@@ -64,12 +65,13 @@ IAMA_Extension.UIController = function () {
             stats_Overview = IAMA_Extension.UIStatsOverview.init();
             answered_Questions = IAMA_Extension.UIAnsweredQuestions.init();
             unanswered_Questions = IAMA_Extension.UIUnansweredQuestions.init();
+            ui_Generic_Methods = IAMA_Extension.UIGenericMethods.init();
 
         },
 
     // Initializes remaining variables
-        _initOtherVars = function () {
-            console.log("UIcontroller: _initOtherVars");
+        _initVars = function () {
+            console.log("UIcontroller: _initVars");
 
             body = $(document.body);
 
@@ -83,7 +85,7 @@ IAMA_Extension.UIController = function () {
     // Initializes the UI Controller
     that.init = function () {
 
-        _initOtherVars();
+        _initVars();
         _initEvents();
         _initModules();
 
