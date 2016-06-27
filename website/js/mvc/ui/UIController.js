@@ -31,6 +31,11 @@ IAMA_Extension.UIController = function () {
 
         },
 
+        // Whenever refresh within the unanswered question panel has been clicked
+        _refreshUnansweredQuestions = function (event, dataArray) {
+            $(body).trigger("UI_To_Main_Unanswered_Questions_Refresh", [dataArray]);
+        },
+
         // Triggers the clicked event to the MainController
         _onThreadClicked = function (event, data) {
             console.log("UIController - _onThreadClicked: " + data);
@@ -53,6 +58,8 @@ IAMA_Extension.UIController = function () {
             body.on('Main_To_UI_Unanswered_Questions', _giveUnansweredQuestionsToUnansweredPanel);
 
             body.on('Main_To_UI_Answered_Questions', _giveAnsweredQuestionsToUnansweredPanel);
+
+            body.on('Unanswered_Refresh_To_UI', _refreshUnansweredQuestions);
 
         },
 

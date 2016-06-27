@@ -25,21 +25,13 @@ IAMA_Extension.MongoDBConnector = function () {
                 $(body).trigger('rest_Answered_Questions_Array', [answered_questions]);
                 $(body).trigger('rest_Unanswered_Questions_Array', [unanswered_questions]);
 
-                // $.each( answered_questions, function( key, value ) {
-                //     console.log( key + ": " + value );
-                // });
-
-                // $.response.each(response.statistics_panel, function(k, v) {
-                //    console.log(k, v);
-                // });
-
-
             } else {
                 alert("Error receiving JSON! Please fix python data conversion for REST");
             }
 
         },
 
+        // Whenever a thread has been clicked on the left side panel
         _getThreadDataFromDB = function(event, threadID) {
             // The ajax call which gets information through REST from the reddit API and the mongoDB
             $.ajax({

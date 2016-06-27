@@ -25,6 +25,11 @@ IAMA_Extension.RestController = function () {
 
         },
 
+        _getThreadDataFromDBWithFilteringNSorting = function (event, data) {
+            console.log("Checking Array data here.. need to gather information for answered also");
+            console.log([data]);
+        },
+
     // Initializes custom events the UI controllers listens to
         _initEvents = function () {
             // UIThreadOverview -> UIController -> MainController -> RestController
@@ -36,6 +41,8 @@ IAMA_Extension.RestController = function () {
             body.on('rest_Top_Panel_Array', _giveTopPanelToMainController);
             body.on('rest_Answered_Questions_Array', _giveAnsweredQuestionsToMainController);
             body.on('rest_Unanswered_Questions_Array', _giveUnansweredQuestionsToMainController);
+
+            body.on('Main_To_Rest_UnansweredQuestions_Refresh', _getThreadDataFromDBWithFilteringNSorting);
 
         },
 

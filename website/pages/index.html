@@ -407,10 +407,10 @@
                                     <a href="#">
                                         <i class="fa fa-indent fa-fw"></i> Tier
 
-                                        <select name="tier_selection" title="tier_selection">
-                                            <option value="equal">all</option>
-                                            <option value="grt">1</option>
-                                            <option value="lst">x</option>
+                                        <select name="tier_selection" title="tier_selection" id="iAMA_Unanswered_Filtering_Tier_Selection">
+                                            <option value="all">all</option>
+                                            <option value="1">1</option>
+                                            <option value="x">x</option>
                                         </select>
 
                                     </a>
@@ -421,21 +421,21 @@
                                     <a href="#">
                                         <i class="fa fa-signal fa-fw"></i> Score
 
-                                        <select name="score_selection" title="score_selection">
+                                        <select name="score_selection" title="score_selection" id="iAMA_Unanswered_Filtering_Score_Selection">
 
-                                            <option value="equal">equal</option>
+                                            <option value="eql">equal</option>
                                             <option value="grt">greater than</option>
                                             <option value="lst">lesser than</option>
 
                                         </select>
 
-                                        <input type="number" placeholder="numeric value...">
+                                        <input type="number" placeholder="numeric value..." id="iAMA_Unanswered_Filtering_Score_Concrete">
                                     </a>
                                 </li>
 
                                 <!-- To reset all selected filtering methods -->
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="iAMA_Filtering_Reset">
                                         <i class="fa fa-times fa-fw"></i> Reset filtering options
                                     </a>
                                 </li>
@@ -564,7 +564,7 @@
                         <i class="fa fa-check fa-fw"></i> Answered Questions
 
                         <!-- Refresh button -->
-                        <div class="btn-gorup pull-right">
+                        <div class="btn-group pull-right" id="iAMA_Answered_Refresh">
                             <button id="asd_1" type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-refresh fa-fw"></i>
@@ -574,7 +574,7 @@
                         </div>
 
                         <!-- Sorting drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="btn-group pull-right" id="iAMA_Answered_Sorting">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-sort-numeric-asc"></i>
                             </button>
@@ -595,7 +595,7 @@
                                 </li>
 
                                 <!-- Creation time as-/descending is described here -->
-                                <li>
+                                <li class="sorting_Selected">
                                     <a href="#">
                                         <i class="fa fa-clock-o fa-fw"></i>
                                         <i class="fa fa-chevron-circle-up fa-fw"></i> Creation time ascending
@@ -644,7 +644,7 @@
                         </div>
 
                         <!-- Filter drop down -->
-                        <div class="btn-group pull-right">
+                        <div class="btn-group pull-right" id="iAMA_Answered_Filter">
                             <button id="filter_dropdown" type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-filter"></i>
@@ -656,10 +656,10 @@
                                     <a href="#">
                                         <i class="fa fa-indent fa-fw"></i> Tier
 
-                                        <select name="tier_selection" title="tier_selection">
-                                            <option value="equal">all</option>
-                                            <option value="grt">1</option>
-                                            <option value="lst">x</option>
+                                        <select name="tier_selection" title="tier_selection" id="iAMA_Answered_Filtering_Tier_Selection">
+                                            <option value="all">all</option>
+                                            <option value="1">1</option>
+                                            <option value="x">x</option>
                                         </select>
 
                                     </a>
@@ -670,15 +670,15 @@
                                     <a href="#">
                                         <i class="fa fa-signal fa-fw"></i> Score
 
-                                        <select name="score_selection" title="score_selection">
+                                        <select name="score_selection" title="score_selection" id="iAMA_Answered_Filtering_Score_Selection">
 
-                                            <option value="equal">equal</option>
+                                            <option value="eql">equal</option>
                                             <option value="grt">greater than</option>
                                             <option value="lst">lesser than</option>
 
                                         </select>
 
-                                        <input type="number" placeholder="numeric value...">
+                                        <input type="number" placeholder="numeric value..." id="iAMA_Answered_Filtering_Score_Concrete">
                                     </a>
                                 </li>
 

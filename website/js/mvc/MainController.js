@@ -36,7 +36,10 @@ IAMA_Extension.MainController = function () {
             $(body).trigger('misc_Log_Out', givenData);
         },
 
-
+        // Triggers the refresh request to the REST controller
+        _onUnansweredQuestionsToRestRefresh = function (event, dataArray) {
+            $(body).trigger("Main_To_Rest_UnansweredQuestions_Refresh", [dataArray]);
+        },
 
     //Initializes custom events the MainControllers listenes to
         _initEvents = function () {
@@ -48,6 +51,8 @@ IAMA_Extension.MainController = function () {
             body.on('Rest_To_Main_TopPanel', _onTopPanelToUIController);
             body.on('Rest_To_Main_AnsweredQuestions', _onAnsweredQuestionsToUIController);
             body.on('Rest_To_Main_UnansweredQuestions', _onUnansweredQuestionsToUIController);
+
+            body.on('UI_To_Main_Unanswered_Questions_Refresh', _onUnansweredQuestionsToRestRefresh);
 
             body.on('log_Out', _onLogOut);
 

@@ -91,3 +91,7 @@ body {
 .chat-answered-questions {
     margin: 0;
 }
+
+.sorting_Selected {
+    background-color: lightskyblue;
+}

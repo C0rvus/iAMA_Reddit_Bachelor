@@ -3,6 +3,7 @@
 // http://stackoverflow.com/questions/24678799/how-to-unbind-keyup-event
 // http://stackoverflow.com/questions/1927593/cant-update-textarea-with-javascript-after-writing-to-it-manualy
 // http://stackoverflow.com/questions/17414034/change-mouse-cursor-in-javascript-or-jquery
+// https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
 
 IAMA_Extension.UIUnansweredQuestions = function () {
     var that = {},
@@ -15,13 +16,168 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
         question_Panel = null,
 
-        filter_Button = null,
+        unanswered_Filter_Button = null,
 
-        filter_Settings = null,
-        sorting_Settings = null,
+        unanswered_Filter_Settings_Tier = null,
+        unanswered_Filter_Settings_Score_Compare = null,
+        unanswered_Filter_Settings_Score_Value = null,
+        unanswered_Sorting_Settings_Type = null,
+        unanswered_Sorting_Settings_Asc_Des = null,
 
-        sorting_Button = null,
-        refresh_Button = null,
+        unanswered_Sorting_Button = null,
+        unanswered_Refresh_Button = null,
+
+        answered_Filter_Settings_Tier = null,
+        answered_Filter_Settings_Score_Compare = null,
+        answered_Filter_Settings_Score_Value = null,
+
+        answered_Sorting_Settings_Type = null,
+        answered_Sorting_Settings_Asc_Des = null,
+
+        _getDataForAnsweredQuestionsFromWebSite = function () {
+
+            var sorting_Selection_Answered_Found = null;
+
+            answered_Filter_Settings_Tier = $('#iAMA_Answered_Filtering_Tier_Selection').val();
+            answered_Filter_Settings_Score_Compare = $('#iAMA_Answered_Filtering_Score_Selection').val();
+
+
+            // Settings score will be defined here (whenever nothing has been input)
+            if ($('#iAMA_Answered_Filtering_Score_Concrete').val() === "") {
+                answered_Filter_Settings_Score_Value = -99999
+            } else {
+                answered_Filter_Settings_Score_Value = $('#iAMA_Answered_Filtering_Score_Concrete').val();
+            }
+
+
+            // Iterates over every elements and checks whether it has been selected or not!
+            $('#iAMA_Answered_Sorting').find('li').each(function () {
+
+                // Whenever a highlighted sorting has been found apply that value into an appropriate variable
+                if ($(this).hasClass("sorting_Selected") === true) {
+
+                    sorting_Selection_Answered_Found = ($.trim($(this).text()));
+                }
+            });
+
+
+            // Correctly converts the "Settings Type" value into REST compatible information
+            switch(sorting_Selection_Answered_Found) {
+
+                case null:
+                    answered_Sorting_Settings_Type = "random";
+                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    break;
+
+                case "Random":
+                    answered_Sorting_Settings_Type = "random";
+                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    break;
+
+                case "Author name ascending":
+                    answered_Sorting_Settings_Type = "author";
+                    answered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Author name descending":
+                    answered_Sorting_Settings_Type = "author";
+                    answered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                case "Creation time ascending":
+                    answered_Sorting_Settings_Type = "creation";
+                    answered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Creation time descending":
+                    answered_Sorting_Settings_Type = "creation";
+                    answered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                case "Score ascending":
+                    answered_Sorting_Settings_Type = "score";
+                    answered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Score descending":
+                    answered_Sorting_Settings_Type = "score";
+                    answered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                default:
+                    answered_Sorting_Settings_Type = "random";
+                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+            }
+
+
+            return [answered_Filter_Settings_Tier, answered_Filter_Settings_Score_Compare, answered_Filter_Settings_Score_Value,
+                answered_Sorting_Settings_Type, answered_Sorting_Settings_Asc_Des]
+
+
+
+        },
+
+        _getDataForUnansweredQuestionsFromWebSite = function () {
+            unanswered_Filter_Settings_Tier = $('#iAMA_Unanswered_Filtering_Tier_Selection').val();
+            unanswered_Filter_Settings_Score_Compare = $('#iAMA_Unanswered_Filtering_Score_Selection').val();
+
+            // Settings score will be defined here (whenever nothing has been input)
+            if ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === "") {
+                unanswered_Filter_Settings_Score_Value = -99999
+            } else {
+                unanswered_Filter_Settings_Score_Value = $('#iAMA_Unanswered_Filtering_Score_Concrete').val();
+            }
+
+            // Correctly converts the "Settings Type" value into REST compatible information
+            switch(unanswered_Sorting_Settings_Type) {
+                case null:
+                    unanswered_Sorting_Settings_Type = "random";
+                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    break;
+
+                case "Random":
+                    unanswered_Sorting_Settings_Type = "random";
+                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    break;
+
+                case "Author name ascending":
+                    unanswered_Sorting_Settings_Type = "author";
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Author name descending":
+                    unanswered_Sorting_Settings_Type = "author";
+                    unanswered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                case "Creation time ascending":
+                    unanswered_Sorting_Settings_Type = "creation";
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Creation time descending":
+                    unanswered_Sorting_Settings_Type = "creation";
+                    unanswered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                case "Score ascending":
+                    unanswered_Sorting_Settings_Type = "score";
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
+                    break;
+
+                case "Score descending":
+                    unanswered_Sorting_Settings_Type = "score";
+                    unanswered_Sorting_Settings_Asc_Des = "des";
+                    break;
+
+                default:
+                    unanswered_Sorting_Settings_Type = "random";
+                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+            }
+
+            return [unanswered_Filter_Settings_Tier, unanswered_Filter_Settings_Score_Compare, unanswered_Filter_Settings_Score_Value,
+                unanswered_Sorting_Settings_Type, unanswered_Sorting_Settings_Asc_Des];
+        },
 
     // Appends an onclick listener to the "already answered" button
         _appendOnClickListenerForAlreadyAnswered = function (dom_Element, id_Of_Question) {
@@ -216,23 +372,92 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
     // Whenever the refresh button has been clicked
         _onRefreshClicked = function () {
-            refresh_Button.click(function () {
+            unanswered_Refresh_Button.click(function () {
                 console.log("On refresh clicked");
+
+                // Defines two arrays which will contain information about the various statemenets
+                // Necessary to also get information for the answered questions, due to the way the REST mechanism was
+                // built
+                var information_Unanswered_Questions = _getDataForUnansweredQuestionsFromWebSite(),
+                    information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite();
+
+                // TODO: Ein Array bestehend aus zwei Arrays hier übergeben also triggern..
+
+                console.log(information_Unanswered_Questions);
+                console.log(information_Answered_Questions);
+
+                // $(body).trigger('Unanswered_Refresh_To_UI',
+                //     [[unanswered_Filter_Settings_Tier, unanswered_Filter_Settings_Score_Compare, unanswered_Filter_Settings_Score_Value,
+                //         unanswered_Sorting_Settings_Type, unanswered_Sorting_Settings_Asc_Des]]);
+
+                console.log("Printing out unanswered information ------");
+
+                console.log("A:" + unanswered_Filter_Settings_Tier);
+                console.log("B:" + unanswered_Filter_Settings_Score_Compare);
+                console.log("C:" + unanswered_Filter_Settings_Score_Value);
+                console.log("D:" + unanswered_Sorting_Settings_Type);
+                console.log("E:" + unanswered_Sorting_Settings_Asc_Des);
+
+                console.log("Printing out answered information ------");
+
+                console.log("A:" + answered_Filter_Settings_Tier);
+                console.log("B:" + answered_Filter_Settings_Score_Compare);
+                console.log("C:" + answered_Filter_Settings_Score_Value);
+                console.log("D:" + answered_Sorting_Settings_Type);
+                console.log("E:" + answered_Sorting_Settings_Asc_Des);
+
+                
             });
         },
 
     // Whenever the filter button has been clicked
         _onFilterClicked = function () {
-            filter_Button.click(function () {
-                console.log("On filter clicked...");
+
+            // Defines the click listener for tier selection
+            $('#iAMA_Unanswered_Filtering_Tier_Selection').click(function () {
+                unanswered_Filter_Settings_Tier = $(this).find('option:selected').text();
+                console.log("SEPP: " + unanswered_Filter_Settings_Tier);
+            });
+
+            // Defines the click listener for score comparison selection
+            $('#iAMA_Unanswered_Filtering_Score_Selection').click(function () {
+                unanswered_Filter_Settings_Score_Compare = $(this).find('option:selected').text();
+                console.log("Score Compare: " + unanswered_Filter_Settings_Score_Compare);
+            });
+
+            // Defines the concrete numeric value to be input into the score field
+            $('#iAMA_Unanswered_Filtering_Score_Concrete').click(function () {
+                unanswered_Filter_Settings_Score_Value = $(this).val();
+                console.log("Score Compare: " + unanswered_Filter_Settings_Score_Value);
+            });
+
+            // Defines the reset button for filtering methods
+            $('#iAMA_Filtering_Reset').click(function () {
+
+                // Reset the values within the code to null here
+                unanswered_Filter_Settings_Tier = null;
+                unanswered_Filter_Settings_Score_Compare = null;
+                unanswered_Filter_Settings_Score_Value = null;
+
+                // Reset the frontend changes previously made
+                $('#iAMA_Unanswered_Filtering_Tier_Selection').val("equal");
+                $('#iAMA_Unanswered_Filtering_Score_Selection').val("equal");
+                $('#iAMA_Unanswered_Filtering_Score_Concrete').val(null);
+
             });
         },
 
     // Whenever the sprtomg button has been clicked
         _onSortingClicked = function () {
-            sorting_Button.click(function () {
-                console.log("On sorting clicked...");
-            });
+            // Appends a click listener for every dom element
+            unanswered_Sorting_Button.find("li").each(function () {
+                $(this).click(function () {
+                    var text_Of_Clicked_Element = $.trim($(this).text());
+                    if (text_Of_Clicked_Element !== "Close dropdown") {
+                        unanswered_Sorting_Settings_Type = text_Of_Clicked_Element;
+                    }
+                })
+            })
         },
 
     // References UI elements in here
@@ -247,13 +472,13 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
             question_Panel = $('#iAMA_Question_Panel');
 
-            filter_Button = $('#iAMA_Unanswered_Filter');
+            unanswered_Filter_Button = $('#iAMA_Unanswered_Filter');
             _onFilterClicked();
 
-            sorting_Button = $('#iAMA_Unanswered_Sorting');
+            unanswered_Sorting_Button = $('#iAMA_Unanswered_Sorting');
             _onSortingClicked();
 
-            refresh_Button = $('#iAMA_Unanswered_Refresh');
+            unanswered_Refresh_Button = $('#iAMA_Unanswered_Refresh');
             _onRefreshClicked();
 
         },
