@@ -19,15 +19,13 @@ IAMA_Extension.RestController = function () {
         _giveUnansweredQuestionsToMainController= function (event, dataArray){
             $(body).trigger('Rest_To_Main_UnansweredQuestions', [dataArray]);
         },
-    // Starts a REST call to receive that data from within the database
-        _getThreadDataFromDB = function (event, clickedThreadID) {
-            body.trigger('rest_Get_Data_From_DB', clickedThreadID);
 
-        },
+        // Starts a REST call to receive that data from within the database
+    //TODO : der Threadoverview muss überarbeitet werden, da jener nur nen String une ned String + Array + Array schickt
 
-        _getThreadDataFromDBWithFilteringNSorting = function (event, data) {
-            console.log("Checking Array data here.. need to gather information for answered also");
-            console.log([data]);
+        _getThreadDataFromDB = function (event, data) {
+            body.trigger('rest_Get_Data_From_DB', [data]);
+
         },
 
     // Initializes custom events the UI controllers listens to
@@ -42,19 +40,18 @@ IAMA_Extension.RestController = function () {
             body.on('rest_Answered_Questions_Array', _giveAnsweredQuestionsToMainController);
             body.on('rest_Unanswered_Questions_Array', _giveUnansweredQuestionsToMainController);
 
-            body.on('Main_To_Rest_UnansweredQuestions_Refresh', _getThreadDataFromDBWithFilteringNSorting);
+            // UI(Un)AnsweredQuestions -> UIController -> MainController -> RestController
+            body.on('Main_To_Rest_Refresh', _getThreadDataFromDB);
 
         },
 
     // Initializes necessary modules
         _initModules = function () {
-            console.log("RestController: _initModules");
             mongoDBConnector = IAMA_Extension.MongoDBConnector.init();
         },
 
     // Initializes remaining variables
         _initVars = function () {
-            console.log("RestController: _initVars");
             body = $(document.body);
         };
 

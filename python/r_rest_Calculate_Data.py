@@ -172,7 +172,7 @@ class r_rest_Calculate_Data:
         # self.create_chart_3()
 
         # Simple test method for checking the correct assignment of the variables / values
-        self.test_calculated_values()
+        # self.test_calculated_values()
 
         # Prepares the unanswered questions for JSON transport and removes unncessary data, which was necessary
         # before due to calculation of stats
@@ -692,6 +692,7 @@ class r_rest_Calculate_Data:
     @staticmethod
     def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
                                 sorting_direction, sorting_type):
+
         """Sorts and filters given question lists depending on parameters received via REST call
 
         Args:
@@ -714,69 +715,60 @@ class r_rest_Calculate_Data:
         # Contains the index numbers of questions which are to be deleted later on
         indices_to_be_deleted = []
 
-        # Iterates over every question
+        # Iterates over every question and filtering them depending on the settings given
         for i, val in enumerate(questions_to_be_sorted):
 
-            # Checks for the given REST parameter
-            if filter_tier == "1":
+            # Whenever the tier filter '1' has been selected
+            if filter_tier == "1" and (filter_score_numeric != "" or filter_score_numeric is not None):
 
-                # Whenever the iterated question is not on tier 1
                 if val["question_on_tier_1"] is False:
+                    indices_to_be_deleted.append(i)
 
-                    if filter_score_numeric != "" or filter_score_numeric is not None:
+                elif filter_score_equals == "eql" and (val["question_upvote_score"] != int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        if filter_score_equals == "eql":
-                            if val["question_upvote_score"] != int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
+                elif filter_score_equals == "grt" and (val["question_upvote_score"] < int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "grt":
-                            if val["question_upvote_score"] < int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
+                elif filter_score_equals == "lrt" and (val["question_upvote_score"] > int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "lrt":
-                            if val["question_upvote_score"] > int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
-
-                        else:
-                            # Continue as if nothing ever happened
-                            pass
-                    else:
-                        indices_to_be_deleted.append(i)
                 else:
                     pass
 
-            # Checks for the given REST parameter
-            elif filter_tier == "x":
+            # Whenever the tier filter 'x' has been selected
+            elif filter_tier == "x" and (filter_score_numeric != "" or filter_score_numeric is not None):
 
-                # Whenever the iterated question is on tier 1
                 if val["question_on_tier_1"] is True:
+                    indices_to_be_deleted.append(i)
 
-                    # Whenever a numeric filtering score has been given via REST
-                    if filter_score_numeric != "" or filter_score_numeric is not None:
+                elif filter_score_equals == "eql" and (val["question_upvote_score"] != int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        if filter_score_equals == "eql":
-                            if val["question_upvote_score"] != int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
+                elif filter_score_equals == "grt" and (val["question_upvote_score"] < int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "grt":
-                            if val["question_upvote_score"] < int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
+                elif filter_score_equals == "lrt" and (val["question_upvote_score"] > int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
 
-                        elif filter_score_equals == "lrt":
-                            if val["question_upvote_score"] > int(filter_score_numeric):
-                                indices_to_be_deleted.append(i)
-
-                        else:
-                            # Continue as if nothing ever happened
-                            pass
-
-                    # Whenever no filtering score has been given
-                    else:
-                        indices_to_be_deleted.append(i)
                 else:
                     pass
 
-            # Continue as if nothing ever happened
+            # Whenever the tier filter 'all' has been selected
+            elif filter_tier == "all" and (filter_score_numeric != "" or filter_score_numeric is not None):
+
+                if filter_score_equals == "eql" and (val["question_upvote_score"] != int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
+
+                elif filter_score_equals == "grt" and (val["question_upvote_score"] < int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
+
+                elif filter_score_equals == "lrt" and (val["question_upvote_score"] > int(filter_score_numeric)):
+                    indices_to_be_deleted.append(i)
+
+                else:
+                    pass
+
             else:
                 pass
 
@@ -799,7 +791,6 @@ class r_rest_Calculate_Data:
 
             else:
                 pass
-
         # Whenever the questions should be sorted the descending way
         elif str(sorting_direction) == "des":
 
@@ -811,7 +802,6 @@ class r_rest_Calculate_Data:
 
             elif str(sorting_type) == "score":
                 questions_to_be_sorted.sort(key=operator.itemgetter('question_upvote_score'), reverse=True)
-
         # Do as nothing would have happened
         else:
             pass

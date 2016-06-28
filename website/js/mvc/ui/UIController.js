@@ -32,20 +32,18 @@ IAMA_Extension.UIController = function () {
         },
 
         // Whenever refresh within the unanswered question panel has been clicked
-        _refreshUnansweredQuestions = function (event, dataArray) {
-            $(body).trigger("UI_To_Main_Unanswered_Questions_Refresh", [dataArray]);
+        _refreshQuestionPanels = function (event, dataArray) {
+            $(body).trigger("UI_To_Main_Refresh", [dataArray]);
         },
 
         // Triggers the clicked event to the MainController
         _onThreadClicked = function (event, data) {
-            console.log("UIController - _onThreadClicked: " + data);
-            $('body').trigger('thread_Selected', data);
+            $('body').trigger('thread_Selected', [data]);
         },
 
     // Initializes custom events the UI controllers listens to
         _initEvents = function () {
 
-            console.log("UIcontroller: _initEvents");
 
             thread_Overview.on('thread_Clicked_To_Load', _onThreadClicked);
 
@@ -59,13 +57,12 @@ IAMA_Extension.UIController = function () {
 
             body.on('Main_To_UI_Answered_Questions', _giveAnsweredQuestionsToUnansweredPanel);
 
-            body.on('Unanswered_Refresh_To_UI', _refreshUnansweredQuestions);
+            body.on('Refresh_To_UI', _refreshQuestionPanels);
 
         },
 
     // Initializes necessary modules
         _initModules = function () {
-            console.log("UIcontroller: _initModules");
 
             topbar = IAMA_Extension.UITopBar.init();
             thread_Overview = IAMA_Extension.UIThreadOverview.init();
@@ -78,7 +75,6 @@ IAMA_Extension.UIController = function () {
 
     // Initializes remaining variables
         _initVars = function () {
-            console.log("UIcontroller: _initVars");
 
             body = $(document.body);
 

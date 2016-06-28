@@ -17,6 +17,8 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         question_Panel = null,
 
         unanswered_Filter_Button = null,
+        unanswered_Sorting_Button = null,
+        unanswered_Refresh_Button = null,
 
         unanswered_Filter_Settings_Tier = null,
         unanswered_Filter_Settings_Score_Compare = null,
@@ -24,15 +26,32 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         unanswered_Sorting_Settings_Type = null,
         unanswered_Sorting_Settings_Asc_Des = null,
 
-        unanswered_Sorting_Button = null,
-        unanswered_Refresh_Button = null,
-
         answered_Filter_Settings_Tier = null,
         answered_Filter_Settings_Score_Compare = null,
         answered_Filter_Settings_Score_Value = null,
-
         answered_Sorting_Settings_Type = null,
         answered_Sorting_Settings_Asc_Des = null,
+
+        _closeBootStrapDialog = function () {
+            BootstrapDialog.closeAll()
+        },
+
+        _getThreadID = function () {
+
+            var id_Of_Actual_Selected_Thread = null;
+
+            $('#iAMA_Thread_Overview').find('li').each(function () {
+
+                // Iterates over all threads trying to find the selected / highlighted one
+                if ($(this).hasClass("thread_selected") === true) {
+                    id_Of_Actual_Selected_Thread = $(this).attr('id');
+
+                }
+            });
+
+            return id_Of_Actual_Selected_Thread;
+
+        },
 
         _getDataForAnsweredQuestionsFromWebSite = function () {
 
@@ -43,8 +62,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
 
             // Settings score will be defined here (whenever nothing has been input)
-            if ($('#iAMA_Answered_Filtering_Score_Concrete').val() === "") {
-                answered_Filter_Settings_Score_Value = -99999
+            if ($('#iAMA_Answered_Filtering_Score_Concrete').val() === "" || $('#iAMA_Answered_Filtering_Score_Concrete').val() === null) {
+                answered_Filter_Settings_Score_Value = -99999;
+                answered_Filter_Settings_Score_Compare = "grt";
             } else {
                 answered_Filter_Settings_Score_Value = $('#iAMA_Answered_Filtering_Score_Concrete').val();
             }
@@ -109,11 +129,8 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
             }
 
-
             return [answered_Filter_Settings_Tier, answered_Filter_Settings_Score_Compare, answered_Filter_Settings_Score_Value,
                 answered_Sorting_Settings_Type, answered_Sorting_Settings_Asc_Des]
-
-
 
         },
 
@@ -122,8 +139,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             unanswered_Filter_Settings_Score_Compare = $('#iAMA_Unanswered_Filtering_Score_Selection').val();
 
             // Settings score will be defined here (whenever nothing has been input)
-            if ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === "") {
-                unanswered_Filter_Settings_Score_Value = -99999
+            if ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === "" || ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === null)) {
+                unanswered_Filter_Settings_Score_Value = -99999;
+                unanswered_Filter_Settings_Score_Compare = "grt";
             } else {
                 unanswered_Filter_Settings_Score_Value = $('#iAMA_Unanswered_Filtering_Score_Concrete').val();
             }
@@ -280,8 +298,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
     // Assigns necessary thread data to the top panel
         _onQuestionsToDOM = function (event, data) {
 
-            console.log("Ich bin hier drinnen !!!", data);
-
+            _closeBootStrapDialog();
             // Removes the first example answer here
             $("#iAMA_Question_Panel").find("> li").remove();
 
@@ -373,40 +390,23 @@ IAMA_Extension.UIUnansweredQuestions = function () {
     // Whenever the refresh button has been clicked
         _onRefreshClicked = function () {
             unanswered_Refresh_Button.click(function () {
-                console.log("On refresh clicked");
 
                 // Defines two arrays which will contain information about the various statemenets
                 // Necessary to also get information for the answered questions, due to the way the REST mechanism was
                 // built
                 var information_Unanswered_Questions = _getDataForUnansweredQuestionsFromWebSite(),
-                    information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite();
+                    information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite(),
+                    selected_Thread_ID = _getThreadID();
 
-                // TODO: Ein Array bestehend aus zwei Arrays hier übergeben also triggern..
+                $(body).trigger('Refresh_To_UI',[[selected_Thread_ID, [information_Unanswered_Questions],[information_Answered_Questions]]]);
 
-                console.log(information_Unanswered_Questions);
-                console.log(information_Answered_Questions);
+                // Shows a short warning message to prevent user interaction while receiving data
+                BootstrapDialog.show({
+                    title: 'Fetching data from data base',
+                    message: 'Please wait a few seconds until the newly loaded data arrives...',
+                    type: BootstrapDialog.TYPE_WARNING,
+                    closable: false});
 
-                // $(body).trigger('Unanswered_Refresh_To_UI',
-                //     [[unanswered_Filter_Settings_Tier, unanswered_Filter_Settings_Score_Compare, unanswered_Filter_Settings_Score_Value,
-                //         unanswered_Sorting_Settings_Type, unanswered_Sorting_Settings_Asc_Des]]);
-
-                console.log("Printing out unanswered information ------");
-
-                console.log("A:" + unanswered_Filter_Settings_Tier);
-                console.log("B:" + unanswered_Filter_Settings_Score_Compare);
-                console.log("C:" + unanswered_Filter_Settings_Score_Value);
-                console.log("D:" + unanswered_Sorting_Settings_Type);
-                console.log("E:" + unanswered_Sorting_Settings_Asc_Des);
-
-                console.log("Printing out answered information ------");
-
-                console.log("A:" + answered_Filter_Settings_Tier);
-                console.log("B:" + answered_Filter_Settings_Score_Compare);
-                console.log("C:" + answered_Filter_Settings_Score_Value);
-                console.log("D:" + answered_Sorting_Settings_Type);
-                console.log("E:" + answered_Sorting_Settings_Asc_Des);
-
-                
             });
         },
 
@@ -416,23 +416,32 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             // Defines the click listener for tier selection
             $('#iAMA_Unanswered_Filtering_Tier_Selection').click(function () {
                 unanswered_Filter_Settings_Tier = $(this).find('option:selected').text();
-                console.log("SEPP: " + unanswered_Filter_Settings_Tier);
             });
 
             // Defines the click listener for score comparison selection
             $('#iAMA_Unanswered_Filtering_Score_Selection').click(function () {
                 unanswered_Filter_Settings_Score_Compare = $(this).find('option:selected').text();
-                console.log("Score Compare: " + unanswered_Filter_Settings_Score_Compare);
             });
 
             // Defines the concrete numeric value to be input into the score field
             $('#iAMA_Unanswered_Filtering_Score_Concrete').click(function () {
-                unanswered_Filter_Settings_Score_Value = $(this).val();
-                console.log("Score Compare: " + unanswered_Filter_Settings_Score_Value);
+
+                // Whenever nothing has been initially selected
+                if ($(this).val() === null || $(this).val() === "") {
+                    // Setting the values to these high values prevents unexpected user behaviour and prevents
+                    // that the original setting "eql 0" gets triggered (which will display no data..)
+                    
+                    unanswered_Filter_Settings_Score_Compare = "grt";
+                    unanswered_Filter_Settings_Score_Value = "-9999999";
+
+                } else {
+                    unanswered_Filter_Settings_Score_Value = $(this).val();
+                }
+                
             });
 
             // Defines the reset button for filtering methods
-            $('#iAMA_Filtering_Reset').click(function () {
+            $('#iAMA_Unanswered_Filtering_Reset').click(function () {
 
                 // Reset the values within the code to null here
                 unanswered_Filter_Settings_Tier = null;
@@ -440,18 +449,27 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 unanswered_Filter_Settings_Score_Value = null;
 
                 // Reset the frontend changes previously made
-                $('#iAMA_Unanswered_Filtering_Tier_Selection').val("equal");
-                $('#iAMA_Unanswered_Filtering_Score_Selection').val("equal");
+                $('#iAMA_Unanswered_Filtering_Tier_Selection').val("all");
+                $('#iAMA_Unanswered_Filtering_Score_Selection').val("eql");
                 $('#iAMA_Unanswered_Filtering_Score_Concrete').val(null);
 
             });
         },
 
-    // Whenever the sprtomg button has been clicked
+    // Whenever the sorting button has been clicked
         _onSortingClicked = function () {
             // Appends a click listener for every dom element
             unanswered_Sorting_Button.find("li").each(function () {
                 $(this).click(function () {
+
+                    // 1st. Remove the class "sorting_Selected" from every element
+                    // 2nd. Add that class to the selected element
+                    unanswered_Sorting_Button.find("li").each(function () {
+                        $(this).removeClass("sorting_Selected");
+                    });
+
+                    $(this).addClass("sorting_Selected");
+
                     var text_Of_Clicked_Element = $.trim($(this).text());
                     if (text_Of_Clicked_Element !== "Close dropdown") {
                         unanswered_Sorting_Settings_Type = text_Of_Clicked_Element;

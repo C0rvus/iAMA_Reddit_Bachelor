@@ -12,7 +12,6 @@ IAMA_Extension.UITopBar = function () {
 
         // Assigns necessary thread data to the top panel
         _onTopToDOM = function (event, data) {
-            console.log("Bin in top to dom !!");
 
             var thread_amount_unanswered_questions = data['thread_amount_unanswered_questions'],
                 thread_new_question_every_x_sec = data['thread_new_question_every_x_sec'],

@@ -28,7 +28,7 @@ IAMA_Extension.MainController = function () {
 
         // Triggers the refresh functionality for unanswered questions to the rest controller
         _onThreadSelected = function (event, givenData) {
-            $(body).trigger('rest_Thread_Selected', givenData);
+            $(body).trigger('rest_Thread_Selected', [givenData]);
         },
 
         // Triggers logout functionality for that website
@@ -37,8 +37,8 @@ IAMA_Extension.MainController = function () {
         },
 
         // Triggers the refresh request to the REST controller
-        _onUnansweredQuestionsToRestRefresh = function (event, dataArray) {
-            $(body).trigger("Main_To_Rest_UnansweredQuestions_Refresh", [dataArray]);
+        _onRefreshToRest = function (event, dataArray) {
+            $(body).trigger("Main_To_Rest_Refresh", [dataArray]);
         },
 
     //Initializes custom events the MainControllers listenes to
@@ -52,7 +52,7 @@ IAMA_Extension.MainController = function () {
             body.on('Rest_To_Main_AnsweredQuestions', _onAnsweredQuestionsToUIController);
             body.on('Rest_To_Main_UnansweredQuestions', _onUnansweredQuestionsToUIController);
 
-            body.on('UI_To_Main_Unanswered_Questions_Refresh', _onUnansweredQuestionsToRestRefresh);
+            body.on('UI_To_Main_Refresh', _onRefreshToRest);
 
             body.on('log_Out', _onLogOut);
 
@@ -60,14 +60,12 @@ IAMA_Extension.MainController = function () {
 
     //Initializes necessary modules
         _initModules = function () {
-            console.log("Maincontroller: _initModules");
             uiController = IAMA_Extension.UIController.init();
             restController = IAMA_Extension.RestController.init();
         },
 
     //Initializes remaining variables
         _initVars = function () {
-            console.log("Maincontroller: _initVars");
             body = $(document.body);
         };
 

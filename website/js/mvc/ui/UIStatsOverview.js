@@ -22,7 +22,7 @@ IAMA_Extension.UIStatsOverview = function () {
                 thread_amount_unanswered_questions = data['thread_amount_unanswered_questions'],
                 thread_time_stamp_last_question = data['thread_time_stamp_last_question'];
 
-            stats_amount_answered_q.text(thread_amount_unanswered_questions + " / " + thread_amount_questions);
+            stats_amount_answered_q.text(thread_amount_questions - thread_amount_unanswered_questions + " / " + thread_amount_questions);
             stats_q_score.text(thread_average_question_score);
             stats_react_time.text(thread_average_reaction_time_host + " s");
             stats_new_q_every_x_sec.text(thread_new_question_every_x_sec + " s");

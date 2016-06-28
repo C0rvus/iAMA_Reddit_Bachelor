@@ -143,7 +143,7 @@
                         <!-- Reaction time -->
                         <div>
                             <i class="fa fa-fire  fa-fw"></i>
-                            Reaction time
+                            Your reaction time
                             <span class="pull-right text-muted small"><em id="iAMA_Stats_React_Time">yy sec</em></span>
                         </div>
 
@@ -264,7 +264,7 @@
                             <!-- Panel text (new question every x sec) -->
                             <div class="col-xs-9 text-center">
                                 <div class="huge" id="iAMA_Top_New_Q_Every_X">xxx</div>
-                                <div>New questions every sec</div>
+                                <div>Seconds btwn. questions</div>
                             </div>
                         </div>
                     </div>
@@ -296,7 +296,7 @@
         <!-- 2nd row containing questions (left) / answers (right) -->
         <div class="row small">
 
-            <!-- Contains unasked questions -->
+            <!-- Contains unanswered questions -->
             <div class="col-lg-8" id="iAMA_Unanswered_Uber_Div">
 
                 <!-- The whole question panel -->
@@ -311,7 +311,7 @@
                         <!-- Refresh button -->
                         <div class="btn-group pull-right" id="iAMA_Unanswered_Refresh">
 
-                            <button id="asd" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-refresh fa-fw"></i>
                             </button>
@@ -424,8 +424,8 @@
                                         <select name="score_selection" title="score_selection" id="iAMA_Unanswered_Filtering_Score_Selection">
 
                                             <option value="eql">equal</option>
-                                            <option value="grt">greater than</option>
-                                            <option value="lst">lesser than</option>
+                                            <option value="grt">greater or equal</option>
+                                            <option value="lst">lesser or equal</option>
 
                                         </select>
 
@@ -435,7 +435,7 @@
 
                                 <!-- To reset all selected filtering methods -->
                                 <li>
-                                    <a href="#" id="iAMA_Filtering_Reset">
+                                    <a href="#" id="iAMA_Unanswered_Filtering_Reset">
                                         <i class="fa fa-times fa-fw"></i> Reset filtering options
                                     </a>
                                 </li>
@@ -513,7 +513,7 @@
                                 <div class="chat-body">
 
                                     <!-- Input field to enter your message -->
-                                    <textarea class="custom_chat" id="btn-input_y" rows="3">Type your answer here...</textarea>
+                                    <textarea class="custom_chat" rows="3">Type your answer here...</textarea>
 
                                     <!-- Container which contains template and send button -->
                                     <div class="input-group-btn">
@@ -565,7 +565,7 @@
 
                         <!-- Refresh button -->
                         <div class="btn-group pull-right" id="iAMA_Answered_Refresh">
-                            <button id="asd_1" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-refresh fa-fw"></i>
                             </button>
@@ -595,7 +595,7 @@
                                 </li>
 
                                 <!-- Creation time as-/descending is described here -->
-                                <li class="sorting_Selected">
+                                <li>
                                     <a href="#">
                                         <i class="fa fa-clock-o fa-fw"></i>
                                         <i class="fa fa-chevron-circle-up fa-fw"></i> Creation time ascending
@@ -645,7 +645,7 @@
 
                         <!-- Filter drop down -->
                         <div class="btn-group pull-right" id="iAMA_Answered_Filter">
-                            <button id="filter_dropdown" type="button" class="btn btn-default btn-xs dropdown-toggle"
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
                                     data-toggle="dropdown">
                                 <i class="fa fa-filter"></i>
                             </button>
@@ -673,8 +673,8 @@
                                         <select name="score_selection" title="score_selection" id="iAMA_Answered_Filtering_Score_Selection">
 
                                             <option value="eql">equal</option>
-                                            <option value="grt">greater than</option>
-                                            <option value="lst">lesser than</option>
+                                            <option value="grt">greater or equal</option>
+                                            <option value="lst">lesser or equal</option>
 
                                         </select>
 
@@ -684,7 +684,7 @@
 
                                 <!-- To reset all selected filtering methods -->
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="iAMA_Answered_Filtering_Reset">
                                         <i class="fa fa-times fa-fw"></i> Reset filtering options
                                     </a>
                                 </li>
@@ -708,7 +708,7 @@
                         <ul class="chat" id="iAMA_Answer_Panel">
 
                             <!-- Answered q&a no 1 -->
-                            <li class="left clearfix chat-message-0" id="example_id">
+                            <li class="left clearfix chat-message-0">
 
                                 <!-- Example question 1 -->
                                 <div class="left clearfix">

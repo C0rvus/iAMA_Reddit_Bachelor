@@ -19,7 +19,8 @@ nPanel = r_rest_Calculate_Data()
            '<string:un_sorting_direction>_<string:un_sorting_type>__'
            '<string:an_filter_tier>_'
            '<string:an_filter_score_equals>_<string:an_filter_score_numeric>_'
-           '<string:an_sorting_direction>_<string:an_sorting_type>')
+           '<string:an_sorting_direction>_<string:an_sorting_type>',
+           methods=['GET'])
 # Refreshes the notification panel of the dashboard
 def notification_panel(thread_id,
 

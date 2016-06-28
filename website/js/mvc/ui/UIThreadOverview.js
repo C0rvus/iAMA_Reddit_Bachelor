@@ -29,7 +29,18 @@ IAMA_Extension.UIThreadOverview = function () {
 
                         // Triggers event -> UIController -> MainController -> RestController ->...
                         // This will load thread specific data to the website
-                        $(this).trigger('thread_Clicked_To_Load', $(this).attr('id'));
+
+
+                        // $(this).trigger('thread_Clicked_To_Load', $(this).attr('id'));
+                        //TODO: Hier kommentieren, dass man zwei nuller arrays braucht, wegen der einen _getThreadDataFromDB methode
+                        $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
+
+                        // Shows a short warning message to prevent user interaction while receiving data
+                        BootstrapDialog.show({
+                            title: 'Fetching data from data base',
+                            message: 'Please wait a few seconds until the newly loaded data arrives...',
+                            type: BootstrapDialog.TYPE_WARNING,
+                            closable: false});
                     }
 
                 });
@@ -52,7 +63,6 @@ IAMA_Extension.UIThreadOverview = function () {
 
 
     that.init = function () {
-        console.log("UIThreadOverview: _initMethod");
         _initUI();
         _initListeners();
     };
