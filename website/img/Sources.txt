@@ -1,3 +1,0 @@
-question_mark.png	:	https://cdn3.iconfinder.com/data/icons/ose/Help-and-Support.png
-checkmark.png		:	http://cliparts.co/cliparts/qcB/Bex/qcBBexbc5.png
-

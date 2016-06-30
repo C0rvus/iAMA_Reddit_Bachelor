@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Reddit iAMA Extension</title>
+
+    <!--The favicon is defined here -->
+    <link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <link href="css/buttons.css" rel="stylesheet" type="text/css">
+    <link href="css/chat.css" rel="stylesheet" type="text/css">
+    <link href="css/misc.css" rel="stylesheet" type="text/css">
+    <link href="css/navbar.css" rel="stylesheet" type="text/css">
+    <link href="css/panels.css" rel="stylesheet" type="text/css">
+    <link href="css/sidebar.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom bootstrap modal dialog -->
+    <link href="css/bootstrap-dialog.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="js/compatibility/html5shiv.js"></script>
+    <script src="js/compatibility/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<!-- Defines the whole page here -->
+<div id="wrapper">
+
+    <!-- The navigation top bar -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" id="iAMA_Topbar">
+
+        <!-- Header of the navigation bar -->
+        <div class="navbar-header">
+
+            <a class="navbar-brand">Reddit iAMA Extension</a>
+
+        </div>
+
+        <!-- Navigation bar buttons -->
+        <ul class="nav navbar-top-links navbar-right">
+
+            <!-- User profile icon -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+
+                <!-- Menu entries for user profile icon -->
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+
+        <!-- Left side bar -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+
+                <!-- Overview of all iAMA threads from the host -->
+                <ul class="nav" id="iAMA_Thread_Overview">
+
+                    <!-- iAMA thread 1 -->
+                    <li id="3yypuk">
+                        <i class="fa fa-th fa-fw"></i> thread_title_1
+                        <br>
+
+                        <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                        <br>
+
+                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <br>
+
+                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                    </li>
+
+                    <!-- iAMA thread 2 -->
+                    <li id="3z1znd">
+                        <i class="fa fa-th fa-fw"></i> thread_title_1
+                        <br>
+
+                        <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
+                        <br>
+
+                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <br>
+
+                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                    </li>
+
+                </ul>
+
+                <hr>
+
+                <!-- Statistics panel -->
+                <div class="panel panel-default">
+
+                    <!-- Contains the statistics panel header -->
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Statistics panel
+                    </div>
+
+                    <!-- Contains the statistics panel content -->
+                    <div class="panel-body" id="iAMA_Stats">
+
+                        <!-- Amount answered questions -->
+                        <div>
+                            <i class="fa fa-check  fa-fw"></i>
+                            Answered questions
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Answered_Q"> xx / yy </em></span>
+                        </div>
+
+                        <!-- Average Question score -->
+                        <div>
+                            <i class="fa fa-exchange  fa-fw"></i>
+                            Ø question score
+                            <span class="pull-right text-muted small"><em id="iAMA_Stats_Q_Score">x,xx</em></span>
+                        </div>
+
+                        <!-- Reaction time -->
+                        <div>
+                            <i class="fa fa-fire  fa-fw"></i>
+                            Your reaction time
+                            <span class="pull-right text-muted small"><em id="iAMA_Stats_React_Time">yy sec</em></span>
+                        </div>
+
+                        <!-- New question every -->
+                        <div>
+                            <i class="fa fa-repeat  fa-fw"></i>
+                            New question every
+                            <span class="pull-right text-muted small"><em id="iAMA_Stats_New_Q">zz sec</em></span>
+                        </div>
+
+                        <!-- Amount questions tier 1 -->
+                        <div>
+                            <i class="fa fa-hand-o-up  fa-fw"></i>
+                            Questions Tier 1
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Amount_Q_Tier_1">uuu</em></span>
+                        </div>
+
+                        <!-- Amount questions tier X -->
+                        <div>
+                            <i class="fa fa-hand-o-down   fa-fw"></i>
+                            Questions Tier X
+                            <span class="pull-right text-muted small"><em
+                                    id="iAMA_Stats_Amount_Q_Tier_X">yyy</em></span>
+                        </div>
+
+                        <!-- Score best question -->
+                        <div>
+                            <i class="fa fa-star fa-fw"></i>
+                            Best question score
+                            <span class="pull-right text-muted small"><em id="iAMA_Stats_Best_Q_Score">tttt</em></span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <!-- The rest beside the navigation top bar -->
+    <div id="page-wrapper">
+
+        <!-- 1st row containing signal symbols -->
+        <div class="row small" id="iAMA_Top_Bar_Div">
+
+            <!-- New questions symbol -->
+            <div class="col-lg-3">
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <!-- Panel icon (question) -->
+                            <div class="col-xs-3">
+                                <i class="fa fa-question-circle fa-5x"></i>
+                            </div>
+
+                            <!-- Panel text (question) -->
+                            <div class="col-xs-9 text-center">
+                                <div class="huge" id="iAMA_Top_Unanswered_Q">xxx</div>
+                                <div align="center">Unanswered questions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questioners symbol -->
+            <div class="col-lg-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <!-- Panel icon (questioners) -->
+                            <div class="col-xs-3">
+                                <i class="fa fa-male fa-5x"></i>
+                            </div>
+
+                            <!-- Panel text (questioners) -->
+                            <div class="col-xs-9 text-center">
+                                <div class="huge" id="iAMA_Top_Amount_Q">yyy</div>
+                                <div>Questioners</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scores symbol -->
+            <div class="col-lg-2">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <!-- Panel icon (upvotes) -->
+                            <div class="col-xs-3">
+                                <i class="fa fa-thumbs-o-up fa-5x"></i>
+                            </div>
+
+                            <!-- Panel text (upvotes) -->
+                            <div class="col-xs-9 text-center">
+                                <div class="huge" id="iAMA_Top_Upvotes">zz</div>
+                                <div>Upvotes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New question every x sec -->
+            <div class="col-lg-2">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <!-- Panel icon (new question every x sec) -->
+                            <div class="col-xs-3">
+                                <i class="fa fa-pencil-square-o fa-5x"></i>
+                            </div>
+
+                            <!-- Panel text (new question every x sec) -->
+                            <div class="col-xs-9 text-center">
+                                <div class="huge" id="iAMA_Top_New_Q_Every_X">xxx</div>
+                                <div>Seconds btwn. questions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thread duration symbol -->
+            <div class="col-lg-2">
+                <div class="panel panel-yellow-alternative">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <!-- Panel icon (questioners) -->
+                            <div class="col-xs-3">
+                                <i class="fa fa-clock-o fa-5x text-center"></i>
+                            </div>
+
+                            <!-- Panel text (questioners) -->
+                            <div class="col-xs-9 text-center">
+                                <div class="huge" id="iAMA_Top_Duration_D">xxx</div>
+                                <div>Duration (days)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2nd row containing questions (left) / answers (right) -->
+        <div class="row small">
+
+            <!-- Contains unanswered questions -->
+            <div class="col-lg-8" id="iAMA_Unanswered_Uber_Div">
+
+                <!-- The whole question panel -->
+                <div class="chat-panel panel panel-default" id="iAMA_Unanswered_Questions">
+
+                    <!-- Contains all buttons of that panel -->
+                    <div class="panel-heading">
+
+                        <!-- Question symbol -->
+                        <i class="fa fa-comments fa-fw pull-left"></i>Unanswered Questions
+
+                        <!-- Refresh button -->
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Refresh">
+
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-refresh fa-fw"></i>
+                            </button>
+                            <br>
+
+                        </div>
+
+                        <!-- Sorting drop down -->
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Sorting">
+
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-sort-numeric-asc"></i>
+                            </button>
+
+                            <ul class="dropdown-menu slidedown">
+
+                                <!-- Author name as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Author name ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down  fa-fw"></i> Author name descending
+                                    </a>
+                                </li>
+
+                                <!-- Creation time as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-clock-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Creation time ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-clock-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down fa-fw"></i> Creation time descending
+                                    </a>
+                                </li>
+
+                                <!-- Score as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Score ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down fa-fw"></i> Score descending
+                                    </a>
+                                </li>
+
+                                <!-- Random sort is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-ellipsis-h  fa-fw"></i>
+                                        <i class="fa fa-cloud  fa-fw"></i> Random
+                                    </a>
+                                </li>
+
+                                <!-- 'Optimized' horizontal ruler -->
+                                <li class="divider"></li>
+
+                                <!-- Closes the dropdown window -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                            <br>
+
+                        </div>
+
+                        <!-- Filter drop down -->
+                        <div class="btn-group pull-right" id="iAMA_Unanswered_Filter">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-filter"></i>
+                            </button>
+                            <ul class="dropdown-menu slidedown">
+
+                                <!-- Tier filtering is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-indent fa-fw"></i> Tier
+
+                                        <select name="tier_selection" title="tier_selection" id="iAMA_Unanswered_Filtering_Tier_Selection">
+                                            <option value="all">all</option>
+                                            <option value="1">1</option>
+                                            <option value="x">x</option>
+                                        </select>
+
+                                    </a>
+                                </li>
+
+                                <!-- Score filtering is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-signal fa-fw"></i> Score
+
+                                        <select name="score_selection" title="score_selection" id="iAMA_Unanswered_Filtering_Score_Selection">
+
+                                            <option value="eql">equal</option>
+                                            <option value="grt">greater or equal</option>
+                                            <option value="lst">lesser or equal</option>
+
+                                        </select>
+
+                                        <input type="number" placeholder="numeric value..." id="iAMA_Unanswered_Filtering_Score_Concrete">
+                                    </a>
+                                </li>
+
+                                <!-- To reset all selected filtering methods -->
+                                <li>
+                                    <a href="#" id="iAMA_Unanswered_Filtering_Reset">
+                                        <i class="fa fa-times fa-fw"></i> Reset filtering options
+                                    </a>
+                                </li>
+
+                                <!-- Divides the view -->
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <br>
+                        </div>
+                    </div>
+
+                    <!-- Contains the question and answer part -->
+                    <div class="panel-body">
+
+                        <ul class="chat" id="iAMA_Question_Panel">
+
+                            <!-- Example question -->
+                            <li class="left clearfix chat-message-0">
+
+                                <!-- Question mark image -->
+                                <span class="chat-img pull-left">
+                                    <img src="img/question_mark_little.png" alt="User Avatar"
+                                         class="img-circle"/>
+                                </span>
+
+                                <!-- Container with user name and misc question data -->
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <p class="primary-font strong">User X</p>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-right text-muted small">
+                                            ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
+                                        </p>
+
+                                        <br>
+
+                                        <!-- Score ID -->
+                                        <p class="pull-right text-muted small">
+                                            xxx points <i class="fa fa-bullseye fa-fw"></i>
+                                        </p>
+
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-right text-muted small">
+                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
+                                        </p>
+                                    </div>
+
+                                    <br>
+
+                                    <!-- Question text below here -->
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                                        tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                                        vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                                        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+                                        amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                                        labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                                        et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+                                        sanctus est Lorem ipsum dolor sit amet.
+                                    </p>
+                                </div>
+
+                                <br>
+
+                                <!-- Answer input field defined below here -->
+                                <div class="chat-body">
+
+                                    <!-- Input field to enter your message -->
+                                    <textarea class="custom_chat" rows="3">Type your answer here...</textarea>
+
+                                    <!-- Container which contains template and send button -->
+                                    <div class="input-group-btn">
+
+                                        <!-- Already answered button is defined here -->
+                                        <div class="chat_template_button">
+
+                                            <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
+                                                    data-toggle="dropdown">Already answered
+                                                <i class="fa fa-check fa-fw"></i></button>
+
+                                        </div>
+
+                                        <!-- Send button to send that message -->
+                                        <div class="chat_send_button">
+                                            <button class="btn btn-warning btn-sm " id="btn-chat_5">Send</button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </li>
+
+                            <!-- 'Optimized' horizontal ruler -->
+                            <li class="divider">
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Contains the answered questions -->
+            <div class="col-lg-4" id="iAMA_Answered_Uber_Div">
+
+                <!-- The whole answered q&a - panel -->
+                <div class="chat-panel panel panel-default" id="iAMA_Answered_Questions">
+
+                    <!-- Heading of "Answered questions -->
+                    <div class="panel-heading">
+
+                        <!-- Question symbol -->
+                        <i class="fa fa-check fa-fw"></i> Answered Questions
+
+                        <!-- Refresh button -->
+                        <div class="btn-group pull-right" id="iAMA_Answered_Refresh">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-refresh fa-fw"></i>
+                            </button>
+
+                            <br>
+                        </div>
+
+                        <!-- Sorting drop down -->
+                        <div class="btn-group pull-right" id="iAMA_Answered_Sorting">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-sort-numeric-asc"></i>
+                            </button>
+                            <ul class="dropdown-menu slidedown">
+
+                                <!-- Author name as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Author name ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down  fa-fw"></i> Author name descending
+                                    </a>
+                                </li>
+
+                                <!-- Creation time as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-clock-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Creation time ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-clock-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down fa-fw"></i> Creation time descending
+                                    </a>
+                                </li>
+
+                                <!-- Score as-/descending is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-up fa-fw"></i> Score ascending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                                        <i class="fa fa-chevron-circle-down fa-fw"></i> Score descending
+                                    </a>
+                                </li>
+
+                                <!-- Random sort is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-ellipsis-h  fa-fw"></i>
+                                        <i class="fa fa-cloud  fa-fw"></i> Random
+                                    </a>
+                                </li>
+
+                                <!-- Divides the view -->
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                            <br>
+                        </div>
+
+                        <!-- Filter drop down -->
+                        <div class="btn-group pull-right" id="iAMA_Answered_Filter">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-filter"></i>
+                            </button>
+                            <ul class="dropdown-menu slidedown">
+
+                                <!-- Tier filtering is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-indent fa-fw"></i> Tier
+
+                                        <select name="tier_selection" title="tier_selection" id="iAMA_Answered_Filtering_Tier_Selection">
+                                            <option value="all">all</option>
+                                            <option value="1">1</option>
+                                            <option value="x">x</option>
+                                        </select>
+
+                                    </a>
+                                </li>
+
+                                <!-- Score filtering is described here -->
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-signal fa-fw"></i> Score
+
+                                        <select name="score_selection" title="score_selection" id="iAMA_Answered_Filtering_Score_Selection">
+
+                                            <option value="eql">equal</option>
+                                            <option value="grt">greater or equal</option>
+                                            <option value="lst">lesser or equal</option>
+
+                                        </select>
+
+                                        <input type="number" placeholder="numeric value..." id="iAMA_Answered_Filtering_Score_Concrete">
+                                    </a>
+                                </li>
+
+                                <!-- To reset all selected filtering methods -->
+                                <li>
+                                    <a href="#" id="iAMA_Answered_Filtering_Reset">
+                                        <i class="fa fa-times fa-fw"></i> Reset filtering options
+                                    </a>
+                                </li>
+
+                                <!-- Divides the view -->
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-sign-out fa-fw"></i> Close dropdown
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <br>
+                        </div>
+
+                    </div>
+
+                    <!-- Section containing all answered questions is defined here -->
+                    <div class="panel-body">
+                        <ul class="chat" id="iAMA_Answer_Panel">
+
+                            <!-- Answered q&a no 1 -->
+                            <li class="left clearfix chat-message-0">
+
+                                <!-- Example question 1 -->
+                                <div class="left clearfix">
+
+                                    <div class="header">
+                                        <p class="pull-left primary-font strong">User X</p>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            ~ x mins ago <i class="fa fa-clock-o fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Score ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            xxx points <i class="fa fa-bullseye fa-fw"></i>
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-right text-muted small chat-answered-questions">
+                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
+                                        </p>
+                                        <br>
+                                        <br>
+
+                                        <!-- The question text per se -->
+                                        <p class="chat-alignment-left">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Separates questions froms answers -->
+                                <hr class="ruler-answered-questions">
+
+                                <!-- Example answer 1 -->
+                                <div class="right clearfix">
+                                    <div class="header">
+
+                                        <p class="pull-right primary-font strong">You</p>
+                                        <br>
+
+                                        <!-- Posting time -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-clock-o fa-fw"></i> ~ x mins ago
+                                        </p>
+                                        <br>
+
+                                        <!--Score -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bullseye fa-fw"></i> xxx points
+                                        </p>
+                                        <br>
+
+                                        <!-- Question ID -->
+                                        <p class="pull-left text-muted small chat-answered-questions">
+                                            <i class="fa fa-bookmark fa-fw"></i> abcdefg - ID
+                                        </p>
+                                        <br>
+                                        <br>
+
+                                        <!-- Answer text -->
+                                        <p class="chat-alignment-right">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                            ornare dolor, quis ullamcorper ligula sodales.
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- jQuery -->
+<script src="js/misc/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="js/misc/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="js/misc/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="js/misc/sb-admin-2.js"></script>
+
+<!-- Classes -->
+<script src="js/mvc/IAMA_Extension.js"></script>
+<script src="js/mvc/MainController.js"></script>
+<script src="js/mvc/ui/UIController.js"></script>
+<script src="js/mvc/rest/RestController.js"></script>
+
+<!-- UI Scripts -->
+<script src="js/mvc/ui/UIThreadOverview.js"></script>
+<script src="js/mvc/ui/UIAnsweredQuestions.js"></script>
+<script src="js/mvc/ui/UIUnansweredQuestions.js"></script>
+<script src="js/mvc/ui/UITopBar.js"></script>
+<script src="js/mvc/ui/UIStatsOverview.js"></script>
+<script src="js/mvc/ui/UIGenericMethods.js"></script>
+
+<!-- REST Scripts -->
+<script src="js/mvc/rest/MongoDBConnector.js"></script>
+
+<!-- Misc Scripts -->
+<script src="js/bootstrap3-dialog/bootstrap-dialog.js"></script>
+
+<!-- Fully loads up JS logic for the dashboard -->
+<script>
+    IAMA_Extension.init();
+</script>
+
+</body>
+
+</html>
