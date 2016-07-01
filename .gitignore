@@ -26,3 +26,4 @@ python/batch_files/2016_forward.bat
 python/a_author_Information_iama.csv
 python/a_author_Information_random.csv
 website/js/bootstrap3-dialog/bootstrap3-dialog-master.zip
+*.pyc

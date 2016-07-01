@@ -10,14 +10,17 @@ from flask.ext.cors import CORS
 from flask import request
 
 from r_rest_Calculate_Data import r_rest_Calculate_Data
+from r_rest_Crawl_N_Calculate import r_rest_Crawl_N_Calculate
 from r_rest_Login_Behaviour import r_rest_Login_Behaviour
-
-# TODO: Set debugging to false, which starts the iama page just once
+from r_rest_Crawl_Author_Data import r_rest_Crawl_Author_Data
 
 app = Flask(__name__, static_url_path='')
 CORS(app)
 nPanel = r_rest_Calculate_Data()
 iLogin = r_rest_Login_Behaviour()
+cAuthor = r_rest_Crawl_Author_Data()
+cReceiver = r_rest_Crawl_N_Calculate()
+
 username_to_return = None
 
 
@@ -31,15 +34,14 @@ username_to_return = None
            '<string:an_sorting_direction>_<string:an_sorting_type>',
            methods=['GET'])
 # Refreshes the notification panel of the dashboard
-def notification_panel(thread_id,
+def get_data(thread_id,
 
-                       un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
-                       un_sorting_direction, un_sorting_type,
+             un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
+             un_sorting_direction, un_sorting_type,
 
-                       an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
-                       an_sorting_direction, an_sorting_type
-                       ):
-
+             an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
+             an_sorting_direction, an_sorting_type
+             ):
     return nPanel.main_method(thread_id,
 
                               un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
@@ -47,6 +49,57 @@ def notification_panel(thread_id,
 
                               an_filter_tier, an_filter_score_equals, an_filter_score_numeric,
                               an_sorting_direction, an_sorting_type)
+
+
+@app.route('/crawl_author_data/')
+def crawl_author_data():
+
+    extracted_author_name = request.args.get('an')
+    cAuthor.start_crawling(extracted_author_name)
+
+    # Only returns that message, when the crawling process is really completed
+    return "Crawling completed"
+
+
+@app.route('/crawl_n_calculate/')
+def crawl_n_calculate_data():
+    extracted_username = request.args.get('un')
+    extracted_thread_id = request.args.get('t_id')
+
+    extracted_un_filter_tier = request.args.get('u_f_t')
+    extracted_un_filter_score_equals = request.args.get('u_s_e')
+    extracted_un_filter_score_numeric = request.args.get('u_s_n')
+    extracted_un_sorting_direction = request.args.get('u_s_d')
+    extracted_un_sorting_type = request.args.get('u_s_t')
+
+    extracted_an_filter_tier = request.args.get('a_f_t')
+    extracted_an_filter_score_equals = request.args.get('a_s_e')
+    extracted_an_filter_score_numeric = request.args.get('a_s_n')
+    extracted_an_sorting_direction = request.args.get('a_s_d')
+    extracted_an_sorting_type = request.args.get('a_s_t')
+
+    print("Given Username: " + str(extracted_username))
+    print("Given ThreadID: " + str(extracted_thread_id))
+    print("Given extracted_un_filter_tier: " + str(extracted_un_filter_tier))
+    print("Given extracted_un_filter_score_equals: " + str(extracted_un_filter_score_equals))
+    print("Given extracted_un_filter_score_numeric: " + str(extracted_un_filter_score_numeric))
+    print("Given extracted_un_sorting_direction: " + str(extracted_un_sorting_direction))
+    print("Given extracted_un_sorting_type: " + str(extracted_un_sorting_type))
+    print("Given extracted_an_filter_tier: " + str(extracted_an_filter_tier))
+    print("Given extracted_an_filter_score_equals: " + str(extracted_an_filter_score_equals))
+    print("Given extracted_an_filter_score_numeric: " + str(extracted_an_filter_score_numeric))
+    print("Given extracted_an_sorting_direction: " + str(extracted_an_sorting_direction))
+    print("Given extracted_an_sorting_type: " + str(extracted_an_sorting_type))
+
+    return cReceiver.main_method(extracted_username, extracted_thread_id,
+
+                                 extracted_un_filter_tier, extracted_un_filter_score_equals,
+                                 extracted_un_filter_score_numeric,
+                                 extracted_un_sorting_direction, extracted_un_sorting_type,
+
+                                 extracted_an_filter_tier, extracted_an_filter_score_equals,
+                                 extracted_an_filter_score_numeric, extracted_an_sorting_direction,
+                                 extracted_an_sorting_type)
 
 
 # Route for reddit programming api callback
@@ -107,6 +160,6 @@ def return_font_files(font_file):
 
 # Necessary to run the script on the local host
 if __name__ == '__main__':
-    iLogin.go_to_login_page()
+    # iLogin.go_to_login_page()
     app.run(host="0.0.0.0", debug=True)
-
+# TODO: Set debugging to false, which starts the iama page just once
