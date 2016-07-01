@@ -25,8 +25,13 @@ IAMA_Extension.RestController = function () {
 
         _getThreadDataFromDB = function (event, data) {
             body.trigger('rest_Get_Data_From_DB', [data]);
-
         },
+
+        _giveInitialThreadOverViewToMainController = function (event, data) {
+            body.trigger('Rest_To_Main_Thread_Overview_Initial', [data]);
+        },
+
+
 
     // Initializes custom events the UI controllers listens to
         _initEvents = function () {
@@ -43,6 +48,11 @@ IAMA_Extension.RestController = function () {
             // UI(Un)AnsweredQuestions -> UIController -> MainController -> RestController
             body.on('Main_To_Rest_Refresh', _getThreadDataFromDB);
 
+            // MongoDBConnector -> RestController -> MainController -> UIController -> ThreadOverview
+            body.on('rest_Initial_Thread_Overview_Array', _giveInitialThreadOverViewToMainController);
+
+
+
         },
 
     // Initializes necessary modules
@@ -54,8 +64,7 @@ IAMA_Extension.RestController = function () {
         _initVars = function () {
             body = $(document.body);
         };
-
-
+    
     // Initializes the UI Controller
     that.init = function () {
 

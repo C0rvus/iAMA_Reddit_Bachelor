@@ -41,6 +41,12 @@ IAMA_Extension.MainController = function () {
             $(body).trigger("Main_To_Rest_Refresh", [dataArray]);
         },
 
+        // Triggers the event whenever thread overview data gets initially displayed
+        // (loading the website for the first time)
+        _onThreadOverviewInitialToUIController = function (event, dataArray) {
+            $(body).trigger("Main_To_UI_Thread_Initial_Load", [dataArray]);
+        },
+
     //Initializes custom events the MainControllers listenes to
         _initEvents = function () {
             // UIThreadOverview -> UIController -> MainController
@@ -53,6 +59,8 @@ IAMA_Extension.MainController = function () {
             body.on('Rest_To_Main_UnansweredQuestions', _onUnansweredQuestionsToUIController);
 
             body.on('UI_To_Main_Refresh', _onRefreshToRest);
+
+            body.on('Rest_To_Main_Thread_Overview_Initial', _onThreadOverviewInitialToUIController);
 
             body.on('log_Out', _onLogOut);
 

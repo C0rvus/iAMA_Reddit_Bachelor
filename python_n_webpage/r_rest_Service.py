@@ -19,7 +19,8 @@ cData = r_rest_Calculate_Data()
 iLogin = r_rest_Login_Behaviour()
 tOverview = r_rest_Thread_Overview()
 
-username_to_return = None
+# username_to_return = None
+username_to_return = "uni_r_test_acc_1"
 
 
 @app.route('/crawl_n_calculate/')
@@ -58,13 +59,13 @@ def crawl_n_calculate_data():
             or extracted_thread_id == "None":
 
         # Simply crawl author information (threads n comments of them) into the appropriate databases
-        cData.get_n_write_author_information(str(extracted_author_name))
+        cData.get_n_write_author_information(str(username_to_return))
 
-        return tOverview.get_n_return_thread_data(str(extracted_author_name))
+        return tOverview.get_n_return_thread_data(str(username_to_return))
 
     else:
 
-        return cData.main_method(extracted_author_name,
+        return cData.main_method(username_to_return,
                                                  extracted_thread_id,
 
                                                  extracted_un_filter_tier, extracted_un_filter_score_equals,

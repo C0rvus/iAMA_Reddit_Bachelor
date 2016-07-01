@@ -5,6 +5,18 @@ IAMA_Extension.MongoDBConnector = function () {
     var that = {},
         body,
 
+        _closeBootStrapDialog = function () {
+            BootstrapDialog.closeAll()
+        },
+
+        _onSuccessInitialCall = function (content) {
+            console.log(content);
+
+            _closeBootStrapDialog();
+            $(body).trigger('rest_Initial_Thread_Overview_Array', [content]);
+
+        },
+
         _onSuccess = function(content) {
             // console.log(content);
 
@@ -93,20 +105,23 @@ IAMA_Extension.MongoDBConnector = function () {
 
                 // url: "http://127.0.0.1:5000/calculate_data/" + threadID + "_all_grt_-99999_asc_random__all_grt_-99999_asc_random",
 
-                url: "http://127.0.0.1:5000/calculate_data/" + threadID +
-                "_" + unanswered_Filter_Settings_Tier +
-                "_" + unanswered_Filter_Settings_Score_Compare +
-                "_" + unanswered_Filter_Settings_Score_Value +
-                "_" + unanswered_Sorting_Settings_Asc_Des +
-                "_" + unanswered_Sorting_Settings_Type +
-                "_" +
-                "_" + answered_Filter_Settings_Tier +
-                "_" + answered_Filter_Settings_Score_Compare +
-                "_" + answered_Filter_Settings_Score_Value +
-                "_" + answered_Sorting_Settings_Asc_Des +
-                "_" + answered_Sorting_Settings_Type,
-                // data: { get_param: 'value' },
-                // dataType: 'json',
+                url: "http://127.0.0.1:5000/crawl_n_calculate/" +
+
+                "?an=None" +
+                "&t_id=" + threadID +
+
+                "&u_f_t" + unanswered_Filter_Settings_Tier +
+                "&u_s_e" + unanswered_Filter_Settings_Score_Compare +
+                "&u_s_n" + unanswered_Filter_Settings_Score_Value +
+                "&u_s_d" + unanswered_Sorting_Settings_Asc_Des +
+                "&u_s_t" + unanswered_Sorting_Settings_Type +
+
+                "&a_f_t" + answered_Filter_Settings_Tier +
+                "&a_s_e" + answered_Filter_Settings_Score_Compare +
+                "&a_s_n" + answered_Filter_Settings_Score_Value +
+                "&a_s_d" + answered_Sorting_Settings_Asc_Des +
+                "&a_s_t" + answered_Sorting_Settings_Type,
+                
                 success: _onSuccess,
                 error: function(){
                     alert("Thread not found in database.. Please check ID of thread and DB consistency!");
@@ -126,12 +141,41 @@ IAMA_Extension.MongoDBConnector = function () {
     // References misc listeners here
         _initEvents = function () {
             body.on('rest_Get_Data_From_DB', _getThreadDataFromDB);
+        },
+
+    // Does the initial REST-Call to start the iAMA Experience
+        _initialRestCall = function () {
+
+            console.log("Doing initial REST-Call here !!");
+
+            // I know this is bad style here, but before triggering around like hell just get this straight.
+            BootstrapDialog.show({
+                title: 'Fetching data from Reddit and the local data base',
+                message: 'Please wait a few seconds until the requested data arrives...',
+                type: BootstrapDialog.TYPE_WARNING,
+                closable: false});
+
+            $.ajax({
+                type: "GET",
+                // dataType json is necessary here, otherwise arrays wouldn't get loaded
+                dataType: "json",
+                url: "http://127.0.0.1:5000/crawl_n_calculate/?an=uni_r_test_acc_1&t_id=&u_f_t=all&u_s_e=grt&u_s_n=-99999&u_s_d=asc&u_s_t=author&a_f_t=all&a_s_e=grt&a_s_n=-99999&a_s_d=asc&a_s_t=random",
+                success: _onSuccessInitialCall,
+                error: function(){
+                    alert("Thread not found in database.. Please check ID of thread and DB consistency!");
+                },
+                timeout: 30000 // Throws an error after 25 seconds of inactivity
+            });
+
         };
 
 
     that.init = function () {
+
         _initVars();
         _initEvents();
+        _initialRestCall();
+
     };
     return that;
 }();

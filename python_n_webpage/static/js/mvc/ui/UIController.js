@@ -41,6 +41,10 @@ IAMA_Extension.UIController = function () {
             $('body').trigger('thread_Selected', [data]);
         },
 
+        _giveInitialThreadInformationToThreadOverView = function (event, data) {
+            $('body').trigger('UI_To_Thread_Overview_Initial', [data]);
+        },
+
     // Initializes custom events the UI controllers listens to
         _initEvents = function () {
 
@@ -57,7 +61,11 @@ IAMA_Extension.UIController = function () {
 
             body.on('Main_To_UI_Answered_Questions', _giveAnsweredQuestionsToUnansweredPanel);
 
+            body.on('Main_To_UI_Thread_Initial_Load', _giveInitialThreadInformationToThreadOverView);
+
             body.on('Refresh_To_UI', _refreshQuestionPanels);
+
+
 
         },
 
