@@ -22,16 +22,17 @@ from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
 # Instanciates necessary database instances
-mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+mongo_db_client_instance = MongoClient('localhost', 27017)
 
-mongo_DB_Threads_Instance = None
-mongo_DB_Thread_Collection = None
+mongo_db_author_fake_iama_instance = mongo_db_client_instance['fake_iAMA_Reddit_Authors']
+mongo_db_author_fake_iama_collection_names = mongo_db_author_fake_iama_instance.collection_names()
 
-mongo_DB_Comments_Instance = None
-mongo_DB_Comments_Collection = None
+mongo_db_author_comments_instance = mongo_db_client_instance['fake_iAMA_Reddit_Comments']
+mongo_db_author_comments_collection = mongo_db_author_comments_instance.collection_names()
 
 # Instanciates a reddit instance
-reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")  # Main reddit functionality
+reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")  # Main reddit functionality
+
 reddit_submission = None
 
 # Refers to the thread creation date
@@ -83,8 +84,10 @@ json_object_to_return = []
 
 # noinspection PyPep8Naming
 class r_rest_Calculate_Data:
+
     def main_method(self,
 
+                    author_name,
                     id_thread,
 
                     un_filter_tier, un_filter_score_equals, un_filter_score_numeric,
@@ -99,6 +102,8 @@ class r_rest_Calculate_Data:
             self:   Self representation of the class [necessary to use methods within the class itself]
 
             id_thread(str): The ID of the thread which will be searched for within the database
+
+            author_name(str): The name of the author which is to be crawled
 
             un_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
              for unanswered questions
@@ -126,6 +131,9 @@ class r_rest_Calculate_Data:
             -
         """
 
+        # Crawl and write that author information (threads + comments from it) into the various databases
+        self.get_n_write_author_information(author_name)
+
         # Clears all variables to not return objects / questions twice
         self.clear_variables()
 
@@ -135,18 +143,11 @@ class r_rest_Calculate_Data:
         # Assigns the thread created_utc data
         self.fill_misc_thread_data()
 
-        # <editor-fold desc="Initializes the database">
-        # Initializes the database to get necessary information from
-        # Necessary to first get the thread submission, otherwise we could not get the timestamp of the thread
-        # That timestamp is necessary to look inside the correct database instance
-        # </editor-fold>
-        self.init_DB()
-
         # Assigns data to left and top panel
         self.fill_left_n_top_panel_data(self)
 
         # Assigns data to the right panel
-        self.fill_right_panel_data(self)
+        self.fill_right_panel_data(self, str(id_thread))
 
         # Calculates necessary question statistics
         self.calculate_question_stats(self)
@@ -162,18 +163,6 @@ class r_rest_Calculate_Data:
         # This method merges answered questions and their respective answers in a way to easen the display in the page
         self.build_list_containing_q_n_a(self)
 
-        # # Creates the first chart data which is to be displayed via high charts
-        # self.create_chart_1()
-        #
-        # # Creates the second chart data which is to be displayed via high charts
-        # self.create_chart_2()
-        #
-        # # Creates the third chart data which is to be displayed via high charts
-        # self.create_chart_3()
-
-        # Simple test method for checking the correct assignment of the variables / values
-        # self.test_calculated_values()
-
         # Prepares the unanswered questions for JSON transport and removes unncessary data, which was necessary
         # before due to calculation of stats
         self.prepare_unanswered_questions(self)
@@ -188,39 +177,73 @@ class r_rest_Calculate_Data:
             return "At the moment I have no data for you!"
 
     @staticmethod
-    def init_DB():
-        """Initializes the database with all necessary instances
+    def get_n_write_author_information(name_of_author):
 
-        Args:
-            -
-        Returns:
-            -
-        """
+        # Anonymous inner method to write comments into the database
+        def write_comments_into_db(id_of_thread):
 
-        global mongo_DB_Client_Instance
+            # Drop comments collections here, before they will be recrawled
+            mongo_db_author_comments_instance.drop_collection(id_of_thread)
 
-        global mongo_DB_Threads_Instance
-        global mongo_DB_Thread_Collection
+            # Retrieves the submission object from reddit
+            submission = reddit_instance.get_submission(submission_id=id_of_thread)
 
-        global mongo_DB_Comments_Instance
-        global mongo_DB_Comments_Collection
+            # Breaks up comments hierarchy
+            submission.replace_more_comments(limit=None, threshold=0)
+            flat_comments = praw.helpers.flatten_tree(submission.comments)
 
-        # The year as formatted string (dd-mm-yy HH:MM:SS)
-        # Converts the thread creation date into a comparable time format
-        temp_creation_date_of_thread = float(thread_created_utc)
+            # Iterates over the loosened comments hierarchy
+            for idx, val in enumerate(flat_comments):
+                # noinspection PyTypeChecker
+                returned_json_data = dict({
+                    'author': str(val.author),
+                    'body': str(val.body),
+                    'created_utc': str(val.created_utc),
+                    'name': str(val.name),
+                    'parent_id': str(val.parent_id),
+                    'ups': int(val.score)
+                })
 
-        temp_creation_date_of_thread_converted_1 = datetime.datetime.fromtimestamp(
-            temp_creation_date_of_thread).strftime('%d-%m-%Y %H:%M:%S')
+                # Sorts the dictionary alphabetically correct
+                returned_json_data = collections.OrderedDict(sorted(returned_json_data.items()))
 
-        # Gets the plain naked year here [i.e. 2015]
-        thread_year = temp_creation_date_of_thread_converted_1[6:10]
+                # Defines the position where the calculated information should be written into
+                collection = mongo_db_author_comments_instance[str(id_of_thread)]
 
-        # Necessary value assignment to variables
-        mongo_DB_Threads_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Threads_' + str(thread_year)]
-        mongo_DB_Thread_Collection = mongo_DB_Threads_Instance.collection_names()
+                # Writes that information into the database
+                collection.insert_one(returned_json_data)
 
-        mongo_DB_Comments_Instance = mongo_DB_Client_Instance['iAMA_Reddit_Comments_' + str(thread_year)]
-        mongo_DB_Comments_Collection = mongo_DB_Comments_Instance.collection_names()
+        # Amount of threads created by the author is defined here
+        amount_of_threads = []
+
+        # Drop that author collection (recrawl that information anew)
+        mongo_db_author_fake_iama_instance.drop_collection(str(name_of_author))
+
+        # The instance of the thread iama host
+        reddit_thread_host = reddit_instance.get_redditor(name_of_author)
+
+        # Contains all submissions of the thread creator
+        submitted = reddit_thread_host.get_submitted(limit=None)
+
+        # Iterates over every submission the author made
+        for link in submitted:
+            # Truncate the thread id (removes 't3_' on top of the thread)
+            threads_id = str(link.name)[3:]
+            amount_of_threads.append(threads_id)
+
+            # Write comments into the database
+            write_comments_into_db(threads_id)
+
+        # The dict to be returned
+        dict_to_be_returned = {
+            "threads": amount_of_threads,
+        }
+
+        # Select the collection into which the data will be written
+        collection_to_write = mongo_db_author_fake_iama_instance[str(name_of_author)]
+
+        # Write that data into the mongo db right now!
+        collection_to_write.insert_one(dict_to_be_returned)
 
     @staticmethod
     def get_thread_submission(id_of_thread):
@@ -234,7 +257,7 @@ class r_rest_Calculate_Data:
 
         global reddit_submission
 
-        reddit_submission = reddit_Instance.get_submission(submission_id=id_of_thread)
+        reddit_submission = reddit_instance.get_submission(submission_id=id_of_thread)
 
     @staticmethod
     def fill_misc_thread_data():
@@ -274,15 +297,15 @@ class r_rest_Calculate_Data:
 
         # Calls external methods for calculation purpose
         thread_downs = self.calculate_down_votes()
-        # thread_duration = self.calculate_thread_duration_until_now()
         thread_duration = self.calculate_time_difference(thread_created_utc, int(time.time()))
 
     @staticmethod
-    def fill_right_panel_data(self):
+    def fill_right_panel_data(self, id_of_thread):
         """Calculates various statistics for the right panel of the page
 
         Args:
             self:   Self representation of the class [necessary to use methods within the class itself]
+            id_of_thread: some stuff
         Returns:
             -
         """
@@ -299,7 +322,8 @@ class r_rest_Calculate_Data:
         global thread_unanswered_questions
         global thread_answered_questions
 
-        comments_collection = mongo_DB_Comments_Instance[thread_id]
+        # Needs to get reinitialized because of previous deleting / recrawling behaviour
+        comments_collection = mongo_db_client_instance['fake_iAMA_Reddit_Comments'][id_of_thread]
         comments_cursor = list(comments_collection.find())
         cursor_copy = copy.copy(comments_cursor)
 
@@ -400,7 +424,7 @@ class r_rest_Calculate_Data:
         """
 
         # Because down votes are not accessable via reddit API, we have calculated it by our own here
-        ratio = reddit_Instance.get_submission(reddit_submission.permalink).upvote_ratio
+        ratio = reddit_instance.get_submission(reddit_submission.permalink).upvote_ratio
 
         # Calculates the total score amount
         total_votes = int(round((ratio * reddit_submission.score) / (2 * ratio - 1))
@@ -520,7 +544,14 @@ class r_rest_Calculate_Data:
 
         # Assigns necessary values for correct calculation
         thread_average_question_score = np.mean(question_scores)
-        thread_average_reaction_time_host = np.mean(question_host_reaction_time)
+
+        # Whenever the host has not yet reacted (made no comment or whatsoever)(
+        if len(question_host_reaction_time) == 0:
+            # Prevents some errors during mean creation
+            thread_average_reaction_time_host = 0
+        else:
+            thread_average_reaction_time_host = np.mean(question_host_reaction_time)
+
         thread_new_question_every_x_sec = np.mean(question_every_x_sec)
         thread_amount_questioners = len(questioner_holder)
 
@@ -806,7 +837,7 @@ class r_rest_Calculate_Data:
         else:
             pass
 
-        # Shuffle all questions if selected from the page
+        # Shuffle all questions if 'random' has been selected on the website
         if str(sorting_type) == "random":
 
             np.random.shuffle(questions_to_be_sorted)
@@ -935,12 +966,12 @@ class r_rest_Calculate_Data:
             -
         """
 
-        global mongo_DB_Client_Instance
-        global mongo_DB_Threads_Instance
-        global mongo_DB_Thread_Collection
-        global mongo_DB_Comments_Instance
-        global mongo_DB_Comments_Collection
-        global reddit_Instance
+        global mongo_db_client_instance
+        global mongo_db_author_fake_iama_instance
+        global mongo_db_author_fake_iama_collection_names
+        global mongo_db_author_comments_instance
+        global mongo_db_author_comments_collection
+        global reddit_instance
         global reddit_submission
         global thread_created_utc
         global thread_author
@@ -965,16 +996,16 @@ class r_rest_Calculate_Data:
         global thread_amount_questioners
         global json_object_to_return
 
-        mongo_DB_Client_Instance = MongoClient('localhost', 27017)
+        mongo_db_client_instance = MongoClient('localhost', 27017)
 
-        mongo_DB_Threads_Instance = None
-        mongo_DB_Thread_Collection = None
+        mongo_db_author_fake_iama_instance = None
+        mongo_db_author_fake_iama_collection_names = None
 
-        mongo_DB_Comments_Instance = None
-        mongo_DB_Comments_Collection = None
+        mongo_db_author_comments_instance = None
+        mongo_db_author_comments_collection = None
 
         # Instanciates a reddit instance
-        reddit_Instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
+        reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
         reddit_submission = None
 
         # Refers to the thread creation date
