@@ -102,9 +102,6 @@ IAMA_Extension.MongoDBConnector = function () {
             // The ajax call which gets information through REST from the reddit API and the mongoDB
             $.ajax({
                 type: "GET",
-
-                // url: "http://127.0.0.1:5000/calculate_data/" + threadID + "_all_grt_-99999_asc_random__all_grt_-99999_asc_random",
-
                 url: "http://127.0.0.1:5000/crawl_n_calculate/" +
 
                 "?an=None" +

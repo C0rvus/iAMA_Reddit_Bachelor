@@ -83,7 +83,7 @@ json_object_to_return = []
 
 
 # noinspection PyPep8Naming
-class r_rest_Calculate_Data:
+class r_rest_Crawl_N_Calculate_Data:
 
     def main_method(self,
 

@@ -19,26 +19,22 @@ class r_rest_Login_Behaviour:
 
     @staticmethod
     def sign_in_with_returned_key(sign_key):
-        print("Ausgabe key" + sign_key)
 
         # noinspection PyUnusedLocal
         # This statement needs to be set otherwise we can not operate with the users name
         access_information = r.get_access_information(sign_key)
 
-        refresh_token = access_information.get('refresh_token')
+        # Refreshes the access token to be valid for 60 minutes
+        # noinspection PyUnusedLocal
+        access_information.get('refresh_token')
 
         r.set_access_credentials(**access_information)
         authenticated_user = r.get_me()
 
-        print(authenticated_user.name, authenticated_user.link_karma)
-
         # noinspection PyTypeChecker
         dict_to_return = dict({
-            'access_information': access_information,
-            'refresh_token': refresh_token,
             'username': authenticated_user.name,
             'r_object': r
         })
 
-        # return str(authenticated_user.name)
         return dict_to_return
