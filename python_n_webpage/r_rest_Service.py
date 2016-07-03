@@ -33,10 +33,54 @@ thread_actually_used = ""                       # The actually selected thread (
 r_object = None                                 # The PRAW (r)-object, which allows authorization and posting
 
 
+# ############# REST description below here
+
+
+# REST: Authorization callback handling inside here
+@app.route('/authorize_callback/', methods=['GET'])
+def use_signin_key():
+    """Handles the call, whenever the user clicked "allow access" on Reddit-OAUTH2 - website
+
+        Whenever the user successfully logged on to reddit he will be redirect to this route.
+
+        After redirection, the given sign_key will be extracted and authentification within PRAW will be done with that
+        key.
+
+    Args:
+        request.args.get('code') (str) : The sign key returned by reddit
+
+    Returns:
+        app.send_static_file('index.html'): If the authetification was successful the iAMA experience prototype will be
+        displayed
+
+    """
+
+    global username_actually_logged_in
+    global r_object
+
+    # Extracts the username sign in key from the url
+    # This allows us to do posts etc on the page
+    sign_key = request.args.get('code')
+
+    # Whenever the user clicked the OAUTH2 - 'allow' button on the reddit page
+    if sign_key is not None:
+
+        dict_with_values = iLogin.sign_in_with_returned_key(sign_key)
+        username_actually_logged_in = dict_with_values['username']
+        r_object = dict_with_values['r_object']
+
+        # Send the index.html file to the browser window
+        return app.send_static_file('index.html')
+
+    # Whenever the user did not click allow...
+    else:
+        return "User not yet signed in"
+
+
 # REST: Crawl author data and prepare Q&A
 @app.route('/crawl_n_calculate/', methods=['GET'])
 def crawl_n_calculate_data():
-    """Generates the data which will be written into csv and plotted later on
+    """Crawls author data, writes them into databases and prepares questions and answers depending on given parameters
 
         This route is active, whenever the user
         - clicked the refresh button on the (un)answered panel
@@ -61,30 +105,29 @@ def crawl_n_calculate_data():
     Returns:
         1. thread_over_view_data (whenever if will be entered) (dict):
 
-            'title': (str)                 [The written title of the thread]
-            'amount_answered': (str)       [The amount of questions already answered]
-            'amount_of_questions': (str)   [The overall amount of questions]
-            'duration': (str)              [The duration of the thread (in hours / days) depending on internal calc]
-            'thread_id': (str)             [The id of the thread]
+            'title' (str):                  [The written title of the thread]
+            'amount_answered' (str):        [The amount of questions already answered]
+            'amount_of_questions' (str):    [The overall amount of questions]
+            'duration' (str):               [The duration of the thread (in hours / days) depending on internal calc]
+            'thread_id' (str):              [The id of the thread]
 
         2. (un)answered question information sorted / filtered (dict):
 
-            'extracted_an_filter_score_equals': (str)       [Answered q: The score comparison (eql / grt / lrt)]
-            'extracted_an_filter_score_numeric': (str)      [Answered q: The score value (int)]
-            'extracted_an_filter_tier': (str)               [Answered q: The tier - filter (all / 1 / Xx]
-            'extracted_an_sorting_direction': (str)         [Answered q: The sorting direction (asc / des)]
-            'extracted_an_sorting_type': (str)              [Answered q: The sorting type
+            'extracted_an_filter_score_equals' (str):       [Answered q: The score comparison (eql / grt / lrt)]
+            'extracted_an_filter_score_numeric' (str):      [Answered q: The score value (int)]
+            'extracted_an_filter_tier' (str):               [Answered q: The tier - filter (all / 1 / Xx]
+            'extracted_an_sorting_direction' (str):         [Answered q: The sorting direction (asc / des)]
+            'extracted_an_sorting_type' (str):              [Answered q: The sorting type
                                                             (author / creation / score / random)]
 
-            'extracted_thread_id': (str)                    [The ID of the processed thread]
+            'extracted_thread_id' (str):                    [The ID of the processed thread]
 
-            'extracted_un_filter_score_equals': (str)       [Unanswered q: The score comparison (eql / grt / lrt)]
-            'extracted_un_filter_score_numeric': (str)      [Unanswered q: The score value (int)]
-            'extracted_un_filter_tier': (str)               [Unanswered q: The tier - filter (all / 1 / Xx]
-            'extracted_un_sorting_direction': (str)         [Unanswered q: The sorting direction (asc / des)]
-            'extracted_un_sorting_type': (str)              [Unanswered q: The sorting type
+            'extracted_un_filter_score_equals' (str):       [Unanswered q: The score comparison (eql / grt / lrt)]
+            'extracted_un_filter_score_numeric' (str):      [Unanswered q: The score value (int)]
+            'extracted_un_filter_tier' (str):               [Unanswered q: The tier - filter (all / 1 / Xx]
+            'extracted_un_sorting_direction' (str):         [Unanswered q: The sorting direction (asc / des)]
+            'extracted_un_sorting_type' (str):              [Unanswered q: The sorting type
                                                             (author / creation / score / random)]
-
     """
 
     global thread_actually_used
@@ -133,20 +176,33 @@ def crawl_n_calculate_data():
                                                  extracted_an_sorting_type)
 
 
-# <editor-fold desc="Explanation of route inside here">
-# This route is active, whenever the user clicks the "send" button within the unanswered questions panel
-# It works the following way:
-#
-# 1. A REST-POST message, with the text inside its body to be uploaded to reddit will retreived
-#   1.1. That post will be uploaded to reddit
-#
-# 2. The new information will be crawled from reddit and written into the database
-#   Crawling it live from reddit instead of directly writing it into the database is more precise (i.E. in cases of utc)
-# ----
-# This route processes (sorting / filtering) settings for (un)answered questions panel
-# </editor-fold>
+# REST: Post comment to reddit
 @app.route('/post_to_reddit/', methods=['POST'])
 def post_comment_to_reddit():
+    """Whenever the user clicked 'send' on the iAMA Experience prototype this route will be accessed and the comment
+    will be posted to reddit
+
+        This route is active, whenever the user clicks the "send" button within the unanswered questions panel
+        It works the following way:
+
+        1. A REST-POST message, with the text inside its body to be uploaded to reddit will retreived
+          1.1. That post will be uploaded to reddit
+
+        2. The new information will be crawled from reddit and written into the database
+          Crawling it live from reddit instead of directly writing it into the database is more precise
+          (i.E. in cases of utc epoch timestamp)
+        ----
+        This route processes (sorting / filtering) settings for (un)answered questions panel
+
+    Args:
+        request.args.get('c_id') (str) : The ID of the comment the author replied to
+        request.json['text'] (str) : The answer text of the author
+
+    Returns:
+        "Processed your posting request" (str) : The string, which will be given in return does not matter.
+        After successful return of that string a new ajax - REST - Call triggering information recrawl will be done.
+
+    """
 
     # Extracts the text of the REST-POST body
     json_text = str(request.json['text'])
@@ -165,76 +221,90 @@ def post_comment_to_reddit():
     return "Processed your posting request"
 
 
-# <editor-fold desc="Explanation of route inside here">
-# Whenever the user is on the "authorize" Website and clicks "allow", he will be redirected to this route.
-# The redirection to this route is defined within the reddits app setting
-# </editor-fold>
-@app.route('/authorize_callback/', methods=['GET'])
-def use_signin_key():
-    global username_actually_logged_in
-    global r_object
-
-    # Extracts the username sign in key from the url
-    # This allows us to do posts etc on the page
-    sign_key = request.args.get('code')
-
-    # Whenever the user clicked the OAUTH2 - 'allow' button on the reddit page
-    if sign_key is not None:
-
-        dict_with_values = iLogin.sign_in_with_returned_key(sign_key)
-        username_actually_logged_in = dict_with_values['username']
-        r_object = dict_with_values['r_object']
-
-        # Send the index.html file to the browser window
-        return app.send_static_file('index.html')
-
-    else:
-        return "User not yet signed in"
+# ############# Webserver  description below here
 
 
-# <editor-fold desc="Webserver: Returns font - files">
-# This route returns font files the webpage requested
-# </editor-fold>
+# Webserver: Returns font - files
 @app.route('/authorize_callback/fonts/<path:font_file>', methods=['GET'])
 def return_font_files(font_file):
+    """Whenever the webpage tries to access font files they will be returned to it
+
+    Args:
+        font_file (str): The path to the requested font file
+
+    Returns:
+        (File): The requested font file
+
+    """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/fonts'), font_file)
 
 
-# <editor-fold desc="Webserver: Returns .js - files">
-# This route returns .js files the webpage requested
-# </editor-fold>
+# Webserver: Returns .js - files
 @app.route('/authorize_callback/js/<path:js_file>', methods=['GET'])
 def return_js_files(js_file):
+    """Whenever the webpage tries to access javascript files they will be returned to it
+
+    Args:
+        js_file (str): The path to the requested .js file
+
+    Returns:
+        (File): The requested .js file
+
+    """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/js'), js_file)
 
 
-# <editor-fold desc="Webserver: Returns .css - files">
-# This route returns .css files the webpage requested
-# </editor-fold>
+# Webserver: Returns .css - files
 @app.route('/authorize_callback/css/<path:css_file>', methods=['GET'])
 def return_css_files(css_file):
+    """Whenever the webpage tries to access .css files they will be returned to it
+
+    Args:
+       css_file (str): The path to the requested .css - file
+
+    Returns:
+        (File): The requested .css - file
+
+    """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/css'), css_file)
 
 
-# <editor-fold desc="Webserver: Returns image - files">
-# This route returns image files the webpage requested
-# </editor-fold>
+# Webserver: Returns image - files
 @app.route('/authorize_callback/img/<path:img_file>', methods=['GET'])
 def return_img_files(img_file):
+    """Whenever the webpage tries to access image files they will be returned to it
+
+    Args:
+        img_file (str): The path to the requested image file
+
+    Returns:
+        (File): The requested image file
+
+    """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/img'), img_file)
 
 
-# <editor-fold desc="Webserver: Returns image - files">
-# This route returns image files the webpage requested.
-# But this route here is a bug preventation, because the website requests an image from that path, even
-# it is defined at no place, neither in html / js - code, to get image files from that location
-# </editor-fold>
+# Webserver: Returns image - files
 @app.route('/website/img/<path:img_file>', methods=['GET'])
 def return_img_files_wrongly_directed(img_file):
+    """Whenever the webpage tries to access image files they will be returned to it
+
+        Due to a unknown bug the website requests image files from within that folder.
+        That folder is mentioned nowhere, either in .html nor in .js - files.
+        Therefore we have to build this 'extra' route
+
+    Args:
+        img_file (str): The path to the requested image file
+
+    Returns:
+        (File): The requested image file
+
+    """
+
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/img'), img_file)
 
