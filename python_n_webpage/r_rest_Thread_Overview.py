@@ -1,3 +1,7 @@
+# Sources used within this class:
+# 1. (09.06.2016 @ 22:30) -
+# https://m.reddit.com/r/RequestABot/comments/42lmgv/need_a_bot_that_can_pull_all_users_and_account/
+
 from pymongo import MongoClient     # Necessary to make use of MongoDB
 import praw                         # Necessary to access the reddit api
 import datetime                     # Necessary for calculating time differences
