@@ -8,16 +8,16 @@
 # 4. (25.05.2016 @ 15:26) -
 # https://stackoverflow.com/a/29988426
 
-import praw  # Necessary to receive live data from reddit
-import copy  # Necessary to copy value of the starting year - needed for correct csv file name
-import math  # Necessary to check for nan values
-import datetime  # Necessary for calculating time differences
-import time  # Necessary to do some time calculations
-import numpy as np  # Necessary for mean calculation
-import sys  # Necessary to print out unicode console logs
-import collections  # Necessary to sort the dictionary before they will be appended to a list
-import operator  # Necessary for correct dictionary sorting
-import json      # Necessary for creating json objects
+import praw                 # Necessary to receive live data from reddit
+import copy                 # Necessary to copy value of the starting year - needed for correct csv file name
+import math                 # Necessary to check for nan values
+import datetime             # Necessary for calculating time differences
+import time                 # Necessary to do some time calculations
+import numpy as np          # Necessary for mean calculation
+import sys                  # Necessary to print out unicode console logs
+import collections          # Necessary to sort the dictionary before they will be appended to a list
+import operator             # Necessary for correct dictionary sorting
+import json                 # Necessary for creating json objects
 from pymongo import MongoClient  # Necessary to make use of MongoDB
 
 
@@ -33,20 +33,19 @@ mongo_db_author_comments_collection = mongo_db_author_comments_instance.collecti
 # Instanciates a reddit instance
 reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")  # Main reddit functionality
 
+# The necessary reddit submission
 reddit_submission = None
 
 # Refers to the thread creation date
 thread_created_utc = 0  # Value received by (Reddit API - live)
 thread_author = ""  # Value received by (Reddit API - live)
 
-# Left side panel information will be stored here
+# Various thread information are defined here
 thread_title = ""  # Value received by (Reddit API - live)
 thread_amount_questions = 0  # Value received by (MongoDB - offline)
 thread_amount_unanswered_questions = 0  # Value received by (MongoDB - offline)
 thread_duration = 0  # Value received by (Reddit API - live)
 thread_id = ""  # Value received by (Reddit API - live)
-
-# Top panel
 thread_ups = 0  # Value received by (Reddit API - live)
 thread_downs = 0  # Value received by (Reddit API - live)
 
@@ -62,7 +61,7 @@ thread_amount_questions_tier_x = 0  # Value received by (MongoDB - offline)
 thread_question_top_score = 0  # Value received by (MongoDB - offline)
 thread_amount_questioners = 0   # Value received by (MongoDB - offline)
 
-# Middle of screen
+# All (un)answreed questions will reside here
 thread_unanswered_questions = []  # Value received by (MongoDB - offline)
 thread_answered_questions = []  # Value received by (MongoDB - offline)
 
@@ -101,9 +100,10 @@ class r_rest_Crawl_N_Calculate_Data:
         Args:
             self:   Self representation of the class [necessary to use methods within the class itself]
 
+            author_name(str): The name of the author who currently processed threads
+
             id_thread(str): The ID of the thread which will be searched for within the database
 
-            author_name(str): The name of the author which is to be crawled
 
             un_filter_tier(str) : The kind of tier for which the questions will be filtered accordingly (all / 1 / x)
              for unanswered questions
@@ -128,7 +128,11 @@ class r_rest_Crawl_N_Calculate_Data:
             (author, creation, score, random) for answered questions
 
         Returns:
-            -
+            create_json_object (json): A complex json object containing
+
+                1. Information about various, thread related statistics
+                2. All (un)answered questions (& answers) sorted and filtered according to the parameters given
+
         """
 
         # Crawl and write that author information (threads + comments from it) into the various databases
@@ -178,9 +182,34 @@ class r_rest_Crawl_N_Calculate_Data:
 
     @staticmethod
     def get_n_write_author_information(name_of_author):
+        """Crawls data from the author into the mongodb
+
+            At first all previously stored data will be dropped and then the new one will be crawled.
+            This may be slow at some times but it enables us to give the user a better iAMA experience, because
+            he will immediately receive new data upon posting / requesting.
+
+        Args:
+            name_of_author (str): The name of the author whose data is to be crawled
+
+        Returns:
+            -
+
+        """
 
         # Anonymous inner method to write comments into the database
         def write_comments_into_db(id_of_thread):
+            """Writes all comments for all threads, the iAMA host created into the database.
+
+                Storing comments into the database instead of always crawling them live, when demanded, allows faster
+                retrieval and a better reactivity of the website
+
+            Args:
+                id_of_thread (str): The id of the thread whose comments are to be stored into the database.
+
+            Returns:
+                -
+
+            """
 
             # Drop comments collections here, before they will be recrawled
             mongo_db_client_instance['fake_iAMA_Reddit_Comments'].drop_collection(id_of_thread)
@@ -208,7 +237,7 @@ class r_rest_Crawl_N_Calculate_Data:
                 returned_json_data = collections.OrderedDict(sorted(returned_json_data.items()))
 
                 # Defines the position where the calculated information should be written into
-                collection = mongo_db_author_comments_instance [str(id_of_thread)]
+                collection = mongo_db_author_comments_instance[str(id_of_thread)]
 
                 # Writes that information into the database
                 collection.insert_one(returned_json_data)
@@ -249,6 +278,7 @@ class r_rest_Crawl_N_Calculate_Data:
 
         # Iterates over every submission the author made
         for link in submitted:
+
             # Truncate the thread id (removes 't3_' on top of the thread)
             threads_id = str(link.name)[3:]
             amount_of_threads.append(threads_id)
@@ -271,13 +301,105 @@ class r_rest_Crawl_N_Calculate_Data:
         collection_to_write.insert_one(dict_to_be_returned)
 
     @staticmethod
+    def clear_variables():
+        """Resets all variables, to not return duplicate objects.
+            Because the REST-Service won't destruct the objects by it self we have to reset them manually here
+
+        Args:
+            -
+
+        Returns:
+            -
+        """
+
+        global mongo_db_client_instance
+        global mongo_db_author_fake_iama_instance
+        global mongo_db_author_fake_iama_collection_names
+        global mongo_db_author_comments_instance
+        global mongo_db_author_comments_collection
+        global reddit_instance
+        global reddit_submission
+        global thread_created_utc
+        global thread_author
+        global thread_title
+        global thread_amount_questions
+        global thread_amount_unanswered_questions
+        global thread_duration
+        global thread_ups
+        global thread_downs
+        global thread_time_stamp_last_question
+        global thread_average_question_score
+        global thread_average_reaction_time_host
+        global thread_new_question_every_x_sec
+        global thread_amount_questions_tier_1
+        global thread_amount_questions_tier_x
+        global thread_question_top_score
+        global thread_answers_of_host
+        global thread_questions_n_answers
+        global thread_unanswered_questions_converted
+        global thread_unanswered_questions
+        global thread_answered_questions
+        global thread_amount_questioners
+        global json_object_to_return
+
+        # Resets the mongoclient instance
+        mongo_db_client_instance = MongoClient('localhost', 27017)
+
+        # Resets the author db - instance and collection
+        mongo_db_author_fake_iama_instance = mongo_db_client_instance['fake_iAMA_Reddit_Authors']
+        mongo_db_author_fake_iama_collection_names = mongo_db_author_fake_iama_instance.collection_names()
+
+        # Resets the comments db - instance and collection
+        mongo_db_author_comments_instance = mongo_db_client_instance['fake_iAMA_Reddit_Comments']
+        mongo_db_author_comments_collection = mongo_db_author_comments_instance.collection_names()
+
+        # Instanciates a reddit instance
+        reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
+        reddit_submission = None
+
+        # Refers to the thread creation date
+        thread_created_utc = 0
+        thread_author = ""
+
+        # Left side panel information will be stored here
+        thread_title = ""
+        thread_amount_questions = 0
+        thread_amount_unanswered_questions = 0
+        thread_duration = 0
+        thread_ups = 0
+        thread_downs = 0
+
+        thread_time_stamp_last_question = 0
+
+        thread_average_question_score = 0
+        thread_average_reaction_time_host = 0
+        thread_new_question_every_x_sec = 0
+
+        thread_amount_questions_tier_1 = 0
+        thread_amount_questions_tier_x = 0
+        thread_question_top_score = 0
+        thread_amount_questioners = 0
+
+        # Middle of screen
+        thread_unanswered_questions = []
+        thread_answered_questions = []
+        thread_answers_of_host = []
+        thread_questions_n_answers = []
+        thread_unanswered_questions_converted = []
+
+        # Object which is to be returned (JSON)
+        json_object_to_return = []
+
+    @staticmethod
     def get_thread_submission(id_of_thread):
         """Receives the thread information live from Reddit via the Reddit-API
 
         Args:
-            -
+            id_of_thread (str): The id of the thread whose data are to be retrieved and stored globally
+
         Returns:
             -
+
         """
 
         global reddit_submission
@@ -290,8 +412,10 @@ class r_rest_Crawl_N_Calculate_Data:
 
         Args:
             -
+
         Returns:
             -
+
         """
 
         global thread_created_utc
@@ -306,8 +430,10 @@ class r_rest_Crawl_N_Calculate_Data:
 
         Args:
             self:   Self representation of the class [necessary to use methods within the class itself]
+
         Returns:
             -
+
         """
 
         global thread_title
@@ -326,11 +452,13 @@ class r_rest_Crawl_N_Calculate_Data:
 
     @staticmethod
     def fill_right_panel_data(self, id_of_thread):
-        """Calculates various statistics for the right panel of the page
+        """Calculates various statistics for the left panel of the page
 
         Args:
             self:   Self representation of the class [necessary to use methods within the class itself]
-            id_of_thread: some stuff
+
+            id_of_thread: The id of the thread which is to be processed
+
         Returns:
             -
         """
@@ -364,6 +492,7 @@ class r_rest_Crawl_N_Calculate_Data:
 
             # Whenever the comment text, the author and the comments' parent_id is not None
             if comment_text is not None and comment_author is not None and comment_parent_id is not None:
+
                 bool_comment_is_question = self.checker_comment_is_question(comment_text)
                 bool_comment_is_question_on_tier_1 = self.checker_comment_is_question_on_tier_1(comment_parent_id)
                 bool_comment_is_not_from_thread_author = self.checker_comment_is_not_from_thread_author(
@@ -437,61 +566,6 @@ class r_rest_Crawl_N_Calculate_Data:
             # Whenever a comment has been deleted or has, somehow, null values in it.. do not process it
             else:
                 continue
-
-    @staticmethod
-    def calculate_down_votes():
-        """Calculates the amount of down votes of a thread
-
-        Args:
-            -
-        Returns:
-            object (int): The amount of time difference between two values in seconds
-        """
-
-        # Because down votes are not accessable via reddit API, we have calculated it by our own here
-        ratio = reddit_instance.get_submission(reddit_submission.permalink).upvote_ratio
-
-        # Calculates the total score amount
-        total_votes = int(round((ratio * reddit_submission.score) / (2 * ratio - 1))
-                          if ratio != 0.5 else round(reddit_submission.score / 2))
-
-        return total_votes - reddit_submission.score
-
-    @staticmethod
-    def calculate_time_difference(time_value_1, time_value_2):
-        """Calculates the time difference between two floats in epoch style and returns seconds
-
-        Args:
-            time_value_1 (float): The first time value to be used for calculation
-            time_value_2 (float): The second time value to be used for calculation
-        Returns:
-            time_diff_seconds (int): The amount of time difference in seconds
-        """
-
-        # Converts the the first time unit into a comparable format
-        temp_time_value_1 = float(time_value_1)
-
-        temp_time_value_1_converted_1 = datetime.datetime.fromtimestamp(
-            temp_time_value_1).strftime('%d-%m-%Y %H:%M:%S')
-
-        # Reformatation of time string
-        temp_time_value_1_converted_2 = datetime.datetime.strptime(
-            temp_time_value_1_converted_1, '%d-%m-%Y %H:%M:%S')
-
-        # Converts the current time into a comparable time format
-        temp_time_value_2 = float(time_value_2)
-
-        temp_time_value_2_converted_1 = datetime.datetime.fromtimestamp(
-            temp_time_value_2).strftime('%d-%m-%Y %H:%M:%S')
-
-        # Reformatation of time string
-        temp_time_value_2_converted_2 = datetime.datetime.strptime(
-            temp_time_value_2_converted_1, '%d-%m-%Y %H:%M:%S')
-
-        # Contains the amount of time units (minutes)
-        time_diff_seconds = (temp_time_value_2_converted_2 - temp_time_value_1_converted_2).total_seconds()
-
-        return time_diff_seconds
 
     @staticmethod
     def calculate_question_stats(self):
@@ -600,7 +674,67 @@ class r_rest_Crawl_N_Calculate_Data:
         else:
             pass
 
-    # Checker methods below here for correct data calculation (right information panel of the webpage)
+    @staticmethod
+    def calculate_down_votes():
+        """Calculates the amount of down votes of a thread
+
+            This is actually not necessary anymore but will be left inside, whenever downvotes will be reimplemented
+            to the website.
+
+        Args:
+            -
+
+        Returns:
+            object (int): The amount of time difference between two values in seconds
+
+        """
+
+        # Because down votes are not accessable via reddit API, we have calculated it by our own here
+        ratio = reddit_instance.get_submission(reddit_submission.permalink).upvote_ratio
+
+        # Calculates the total score amount
+        total_votes = int(round((ratio * reddit_submission.score) / (2 * ratio - 1))
+                          if ratio != 0.5 else round(reddit_submission.score / 2))
+
+        return total_votes - reddit_submission.score
+
+    @staticmethod
+    def calculate_time_difference(time_value_1, time_value_2):
+        """Calculates the time difference between two floats in epoch style and returns seconds
+
+        Args:
+            time_value_1 (float): The first time value to be used for calculation
+            time_value_2 (float): The second time value to be used for calculation
+        Returns:
+            time_diff_seconds (int): The amount of time difference in seconds
+        """
+
+        # Converts the the first time unit into a comparable format
+        temp_time_value_1 = float(time_value_1)
+
+        temp_time_value_1_converted_1 = datetime.datetime.fromtimestamp(
+            temp_time_value_1).strftime('%d-%m-%Y %H:%M:%S')
+
+        # Reformatation of time string
+        temp_time_value_1_converted_2 = datetime.datetime.strptime(
+            temp_time_value_1_converted_1, '%d-%m-%Y %H:%M:%S')
+
+        # Converts the current time into a comparable time format
+        temp_time_value_2 = float(time_value_2)
+
+        temp_time_value_2_converted_1 = datetime.datetime.fromtimestamp(
+            temp_time_value_2).strftime('%d-%m-%Y %H:%M:%S')
+
+        # Reformatation of time string
+        temp_time_value_2_converted_2 = datetime.datetime.strptime(
+            temp_time_value_2_converted_1, '%d-%m-%Y %H:%M:%S')
+
+        # Contains the amount of time units (minutes)
+        time_diff_seconds = (temp_time_value_2_converted_2 - temp_time_value_1_converted_2).total_seconds()
+
+        return time_diff_seconds
+
+    # Checker methods below here for correct data calculation
     @staticmethod
     def checker_comment_is_question(string_to_check):
         """Simply checks whether a given string is a question or not
@@ -611,6 +745,7 @@ class r_rest_Crawl_N_Calculate_Data:
 
         Args:
             string_to_check (str) : The string which will be checked for a question mark
+
         Returns:
             True (bool): Whenever the given string is a question
             False (bool): Whenever the given string is not a question
@@ -631,8 +766,10 @@ class r_rest_Crawl_N_Calculate_Data:
 
         Args:
             string_to_check (str): The string which will be checked for "t3_" appearance in it
+
         Returns:
             -
+
         """
 
         if "t3_" in string_to_check:
@@ -650,9 +787,11 @@ class r_rest_Crawl_N_Calculate_Data:
         Args:
             author_of_thread (str) : The name of the thread author (iAMA-Host)
             comment_author (str) : The name of the comments author
+
         Returns:
             True (bool): Whenever the strings do not match
             False (bool): Whenever the strings do match that given question
+
         """
 
         if author_of_thread != comment_author:
@@ -666,7 +805,7 @@ class r_rest_Crawl_N_Calculate_Data:
         """Checks whether both strings are equal or not
 
         1. A dictionary containing flags whether that a question is answered by the host with the appropriate timestamp
-            willbe created in the beginning.
+            will be created in the beginning.
         2. Then the method iterates over every comment within that thread
             1.1. Whenever an answer is from the iAMA hosts and the processed comments 'parent_id' matches the iAMA hosts
                 comments (answers) id, the returned dict will contain appropriate values and will be returned
@@ -678,9 +817,11 @@ class r_rest_Crawl_N_Calculate_Data:
             comment_acutal_id (str) : The id of the actually processed comment
             comment_timestamp (float): The timestamp of the currently processed comment
             comments_cursor (Cursor) : The cursor which shows to the amount of comments which can be iterated
+
         Returns:
             True (bool): Whenever the strings do not match
             False (bool): Whenever the strings do match
+
         """
 
         # Necessary to refer to this variable, to add the answers to it
@@ -723,40 +864,8 @@ class r_rest_Crawl_N_Calculate_Data:
         return dict_to_be_returned
 
     @staticmethod
-    def test_calculated_values():
-        """This method is for debugging purpose only. It shows if all values have been calculated the correct way.
-
-        Args:
-            -
-        Returns:
-            -
-        """
-
-        print("Creation time stamp: " + str(thread_created_utc))
-        print("Thread_Author: " + str(thread_author))
-        print("Thread Title: " + str(thread_title))
-        print("Thread_amount_questions: " + str(thread_amount_questions))
-        print("Thread_amount_unanswered:" + str(thread_amount_unanswered_questions))
-        print("thread_duration: " + str(thread_duration))
-        print("thread_id: " + str(thread_id))
-        print(str(thread_ups), str(thread_downs))
-        print("thread_time_stamp_last_question: " + str(thread_time_stamp_last_question))
-        print("thread_average_question_score: " + str(thread_average_question_score))
-        print("thread_average_reaction_time_host: " + str(thread_average_reaction_time_host))
-        print("thread_new_question_every_x_sec: " + str(thread_new_question_every_x_sec))
-        print("thread_amount_questions_tier_1: " + str(thread_amount_questions_tier_1))
-        print("thread_amount_questions_tier_x: " + str(thread_amount_questions_tier_x))
-        print("thread_question_top_score: " + str(thread_question_top_score))
-        print("Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
-        print("Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
-        print("------")
-        print("Ausgabe antworten Laenge-Host: " + str(len(thread_answers_of_host)))
-        print("------")
-
-    @staticmethod
     def sort_n_filter_questions(questions_to_be_sorted, filter_tier, filter_score_equals, filter_score_numeric,
                                 sorting_direction, sorting_type):
-
         """Sorts and filters given question lists depending on parameters received via REST call
 
         Args:
@@ -772,8 +881,10 @@ class r_rest_Crawl_N_Calculate_Data:
                 (asc [ascending] / des [descending])
             sorting_type(str): The kind of type which will be used for sorting
                 (author / creation / score / random)
+
         Returns:
             -
+
         """
 
         # Contains the index numbers of questions which are to be deleted later on
@@ -880,7 +991,46 @@ class r_rest_Crawl_N_Calculate_Data:
             pass
 
     @staticmethod
+    def convert_epoch_to_time(timeAsString):
+
+        time_to_days = int(int(timeAsString) / 60 / 60 / 24)
+        time_to_hours = int(int(timeAsString) / 60 / 60)
+        value_to_return = None
+
+        if time_to_days == 1:
+            value_to_return = str(time_to_days) + " day ago"
+
+        elif time_to_days >= 2:
+            value_to_return = str(time_to_days) + " days ago"
+
+        # happened within 24 h
+        elif time_to_days <= 0:
+
+            if time_to_hours <= 1:
+                value_to_return = "recently"
+            else:
+                value_to_return = str(time_to_hours) + " hours ago"
+
+        else:
+            pass
+
+        return value_to_return
+
+    @staticmethod
     def build_list_containing_q_n_a(self):
+        """Prepares data for display in the "answered questions" panel
+
+            This method iterates over all answered questions and all answers the host made.
+            Furthermore it merges them together into pairs for a easy display of it on the website
+
+        Args:
+            self : Self reference - necessary to use methods within this class
+
+        Returns:
+            -
+
+        """
+
         global thread_questions_n_answers
 
         # Iterates over every answered question and subiterates its answers
@@ -923,6 +1073,19 @@ class r_rest_Crawl_N_Calculate_Data:
 
     @staticmethod
     def prepare_unanswered_questions(self):
+        """Re-prepares the unanswered questions for correct display on the website
+
+            It is necessary to re-prepare and strip down information from the questions.
+            If we would not do this there would be huge overhead in JSON - rest-transfer..
+            (i.E. the website does not flags like "answered_by_host" == true, etc..)
+
+        Args:
+            self : Self reference - necessary to use methods within this class
+
+        Returns:
+            -
+
+        """
 
         # Iterates over all unanswered questions and assigns necessary values
         for i, val in enumerate(thread_unanswered_questions):
@@ -948,8 +1111,10 @@ class r_rest_Crawl_N_Calculate_Data:
             sep(str) : The seperator to seperated the printed text
             end(str) : Defines whenever the printing should stop
             file(object) : Defines where to print that object to
+
         Returns:
             -
+
         """
 
         enc = file.encoding
@@ -963,132 +1128,48 @@ class r_rest_Crawl_N_Calculate_Data:
             print(*map(f, objects), sep=sep, end=end, file=file)
 
     @staticmethod
-    def convert_epoch_to_time(timeAsString):
-
-        time_to_days = int(int(timeAsString) / 60 / 60 / 24)
-        time_to_hours = int(int(timeAsString) / 60 / 60)
-        value_to_return = None
-
-        if time_to_days == 1:
-            value_to_return = str(time_to_days) + " day ago"
-
-        elif time_to_days >= 2:
-            value_to_return = str(time_to_days) + " days ago"
-
-        # happened within 24 h
-        elif time_to_days <= 0:
-
-            if time_to_hours <= 1:
-                value_to_return = "recently"
-            else:
-                value_to_return = str(time_to_hours) + " hours ago"
-
-        else:
-            pass
-
-        return value_to_return
-
-    @staticmethod
-    def clear_variables():
-        """Resets all variables, to not return duplicated objects.
-            Because the REST-Service won't destruct the objects by it self we have to do it manually
+    def test_calculated_values():
+        """This method is for debugging purpose only. It shows if all values have been calculated the correct way.
 
         Args:
             -
+
         Returns:
             -
+
         """
 
-        global mongo_db_client_instance
-        global mongo_db_author_fake_iama_instance
-        global mongo_db_author_fake_iama_collection_names
-        global mongo_db_author_comments_instance
-        global mongo_db_author_comments_collection
-        global reddit_instance
-        global reddit_submission
-        global thread_created_utc
-        global thread_author
-        global thread_title
-        global thread_amount_questions
-        global thread_amount_unanswered_questions
-        global thread_duration
-        global thread_ups
-        global thread_downs
-        global thread_time_stamp_last_question
-        global thread_average_question_score
-        global thread_average_reaction_time_host
-        global thread_new_question_every_x_sec
-        global thread_amount_questions_tier_1
-        global thread_amount_questions_tier_x
-        global thread_question_top_score
-        global thread_answers_of_host
-        global thread_questions_n_answers
-        global thread_unanswered_questions_converted
-        global thread_unanswered_questions
-        global thread_answered_questions
-        global thread_amount_questioners
-        global json_object_to_return
-
-        # Resets the mongoclient instance
-        mongo_db_client_instance = MongoClient('localhost', 27017)
-
-        # Resets the author db - instance and collection
-        mongo_db_author_fake_iama_instance = mongo_db_client_instance['fake_iAMA_Reddit_Authors']
-        mongo_db_author_fake_iama_collection_names = mongo_db_author_fake_iama_instance.collection_names()
-
-        # Resets the comments db - instance and collection
-        mongo_db_author_comments_instance = mongo_db_client_instance['fake_iAMA_Reddit_Comments']
-        mongo_db_author_comments_collection = mongo_db_author_comments_instance.collection_names()
-
-        # Instanciates a reddit instance
-        reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")
-        reddit_submission = None
-
-        # Refers to the thread creation date
-        thread_created_utc = 0
-        thread_author = ""
-
-        # Left side panel information will be stored here
-        thread_title = ""
-        thread_amount_questions = 0
-        thread_amount_unanswered_questions = 0
-        thread_duration = 0
-        # thread_id = ""
-
-        # Top panel
-        thread_ups = 0
-        thread_downs = 0
-
-        # Right (stats) panel
-        thread_time_stamp_last_question = 0
-
-        thread_average_question_score = 0
-        thread_average_reaction_time_host = 0
-        thread_new_question_every_x_sec = 0
-
-        thread_amount_questions_tier_1 = 0
-        thread_amount_questions_tier_x = 0
-        thread_question_top_score = 0
-        thread_amount_questioners = 0
-
-        # Middle of screen
-        thread_unanswered_questions = []
-        thread_answered_questions = []
-        thread_answers_of_host = []
-        thread_questions_n_answers = []
-        thread_unanswered_questions_converted = []
-
-        # Object which is to be returned (JSON)
-        json_object_to_return = []
+        print("Creation time stamp: " + str(thread_created_utc))
+        print("Thread_Author: " + str(thread_author))
+        print("Thread Title: " + str(thread_title))
+        print("Thread_amount_questions: " + str(thread_amount_questions))
+        print("Thread_amount_unanswered:" + str(thread_amount_unanswered_questions))
+        print("thread_duration: " + str(thread_duration))
+        print("thread_id: " + str(thread_id))
+        print(str(thread_ups), str(thread_downs))
+        print("thread_time_stamp_last_question: " + str(thread_time_stamp_last_question))
+        print("thread_average_question_score: " + str(thread_average_question_score))
+        print("thread_average_reaction_time_host: " + str(thread_average_reaction_time_host))
+        print("thread_new_question_every_x_sec: " + str(thread_new_question_every_x_sec))
+        print("thread_amount_questions_tier_1: " + str(thread_amount_questions_tier_1))
+        print("thread_amount_questions_tier_x: " + str(thread_amount_questions_tier_x))
+        print("thread_question_top_score: " + str(thread_question_top_score))
+        print("Ausgabe Laenge un_answered questions: " + str(len(thread_unanswered_questions)))
+        print("Ausgabe Laenge answered questions: " + str(len(thread_answered_questions)))
+        print("------")
+        print("Ausgabe antworten Laenge-Host: " + str(len(thread_answers_of_host)))
+        print("------")
 
     @staticmethod
     def create_json_object():
-        """Builds a JSON object consisting of all values which have been calculated
+        """Builds a JSON object consisting of all values which have been previously calculated
 
           Args:
               -
+
           Returns:
               -
+
           """
 
         global json_object_to_return
