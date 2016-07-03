@@ -5,9 +5,9 @@ IAMA_Extension.UIThreadOverview = function () {
         body,
         overview_Container = null,
 
-    // Assigns an individual click listener per thread id ( <li> DOM - Element within ThreadOverciew )
-    // The click listener assigns the class "thread_selected" to show the user the active thread
-    // And it does a REST-Call to load data from that thread into the page
+        // Assigns an individual click listener per thread id ( <li> DOM - Element within ThreadOverciew )
+        // The click listener assigns the class "thread_selected" to show the user the active thread
+        // And it does a REST-Call to load data from that thread into the page
         _assignIndividualClickListener = function () {
 
             // Iterates over every thread possibility adding unique click listener
@@ -29,9 +29,6 @@ IAMA_Extension.UIThreadOverview = function () {
 
                         // Triggers event -> UIController -> MainController -> RestController ->...
                         // This will load thread specific data to the website
-
-
-                        // $(this).trigger('thread_Clicked_To_Load', $(this).attr('id'));
                         //TODO: Hier kommentieren, dass man zwei nuller arrays braucht, wegen der einen _getThreadDataFromDB methode
                         $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
 
@@ -52,7 +49,7 @@ IAMA_Extension.UIThreadOverview = function () {
         // Assigns initial thread data overview to panel
         _assignThreadDataToPanel = function (event, data) {
             console.log("_assignThreadDataToPanel", [data]);
-
+            console.log("Initial CALLLING !!!");
             overview_Container.find("> li").remove();
 
             // Iterates over every array within the received data object
@@ -82,6 +79,9 @@ IAMA_Extension.UIThreadOverview = function () {
 
             _assignIndividualClickListener();
             // Todo: Den ersten Listeneintrag aktiv anklicken per jQuery - macht das Sinn ?
+            $("#iAMA_Thread_Overview").find("li").first().click();
+            // $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
+
 
         },
 

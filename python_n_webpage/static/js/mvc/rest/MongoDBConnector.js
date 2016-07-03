@@ -110,18 +110,18 @@ IAMA_Extension.MongoDBConnector = function () {
                 "?an=None" +
                 "&t_id=" + threadID +
 
-                "&u_f_t" + unanswered_Filter_Settings_Tier +
-                "&u_s_e" + unanswered_Filter_Settings_Score_Compare +
-                "&u_s_n" + unanswered_Filter_Settings_Score_Value +
-                "&u_s_d" + unanswered_Sorting_Settings_Asc_Des +
-                "&u_s_t" + unanswered_Sorting_Settings_Type +
+                "&u_f_t=" + unanswered_Filter_Settings_Tier +
+                "&u_s_e=" + unanswered_Filter_Settings_Score_Compare +
+                "&u_s_n=" + unanswered_Filter_Settings_Score_Value +
+                "&u_s_d=" + unanswered_Sorting_Settings_Asc_Des +
+                "&u_s_t=" + unanswered_Sorting_Settings_Type +
 
-                "&a_f_t" + answered_Filter_Settings_Tier +
-                "&a_s_e" + answered_Filter_Settings_Score_Compare +
-                "&a_s_n" + answered_Filter_Settings_Score_Value +
-                "&a_s_d" + answered_Sorting_Settings_Asc_Des +
-                "&a_s_t" + answered_Sorting_Settings_Type,
-                
+                "&a_f_t=" + answered_Filter_Settings_Tier +
+                "&a_s_e=" + answered_Filter_Settings_Score_Compare +
+                "&a_s_n=" + answered_Filter_Settings_Score_Value +
+                "&a_s_d=" + answered_Sorting_Settings_Asc_Des +
+                "&a_s_t=" + answered_Sorting_Settings_Type,
+
                 success: _onSuccess,
                 error: function(){
                     alert("Thread not found in database.. Please check ID of thread and DB consistency!");

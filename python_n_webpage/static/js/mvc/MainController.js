@@ -84,8 +84,6 @@ IAMA_Extension.MainController = function () {
         _initEvents();
         _initModules();
 
-        body.trigger('pageLoaded');
-
         return that;
     };
 

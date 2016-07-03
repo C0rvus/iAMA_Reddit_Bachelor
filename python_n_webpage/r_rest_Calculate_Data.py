@@ -183,7 +183,7 @@ class r_rest_Calculate_Data:
         def write_comments_into_db(id_of_thread):
 
             # Drop comments collections here, before they will be recrawled
-            mongo_db_author_comments_instance.drop_collection(id_of_thread)
+            mongo_db_client_instance['fake_iAMA_Reddit_Comments'].drop_collection(id_of_thread)
 
             # Retrieves the submission object from reddit
             submission = reddit_instance.get_submission(submission_id=id_of_thread)
@@ -192,32 +192,54 @@ class r_rest_Calculate_Data:
             submission.replace_more_comments(limit=None, threshold=0)
             flat_comments = praw.helpers.flatten_tree(submission.comments)
 
-            # Iterates over the loosened comments hierarchy
-            for idx, val in enumerate(flat_comments):
+            # Whenever no comments have been made at all yet!
+            if len(flat_comments) == 0:
                 # noinspection PyTypeChecker
                 returned_json_data = dict({
-                    'author': str(val.author),
-                    'body': str(val.body),
-                    'created_utc': str(val.created_utc),
-                    'name': str(val.name),
-                    'parent_id': str(val.parent_id),
-                    'ups': int(val.score)
+                    'author': None,
+                    'body': None,
+                    'created_utc': None,
+                    'name': None,
+                    'parent_id': None,
+                    'ups': None
                 })
 
                 # Sorts the dictionary alphabetically correct
                 returned_json_data = collections.OrderedDict(sorted(returned_json_data.items()))
 
                 # Defines the position where the calculated information should be written into
-                collection = mongo_db_author_comments_instance[str(id_of_thread)]
+                collection = mongo_db_author_comments_instance [str(id_of_thread)]
 
                 # Writes that information into the database
                 collection.insert_one(returned_json_data)
+
+            else:
+                # Iterates over the loosened comments hierarchy
+                for idx, val in enumerate(flat_comments):
+                    # noinspection PyTypeChecker
+                    returned_json_data = dict({
+                        'author': str(val.author),
+                        'body': str(val.body),
+                        'created_utc': str(val.created_utc),
+                        'name': str(val.name),
+                        'parent_id': str(val.parent_id),
+                        'ups': int(val.score)
+                    })
+
+                    # Sorts the dictionary alphabetically correct
+                    returned_json_data = collections.OrderedDict(sorted(returned_json_data.items()))
+
+                    # Defines the position where the calculated information should be written into
+                    collection = mongo_db_author_comments_instance[str(id_of_thread)]
+
+                    # Writes that information into the database
+                    collection.insert_one(returned_json_data)
 
         # Amount of threads created by the author is defined here
         amount_of_threads = []
 
         # Drop that author collection (recrawl that information anew)
-        mongo_db_author_fake_iama_instance.drop_collection(str(name_of_author))
+        mongo_db_client_instance['fake_iAMA_Reddit_Authors'].drop_collection(str(name_of_author))
 
         # The instance of the thread iama host
         reddit_thread_host = reddit_instance.get_redditor(name_of_author)
@@ -233,6 +255,9 @@ class r_rest_Calculate_Data:
 
             # Write comments into the database
             write_comments_into_db(threads_id)
+
+        # Sorts the list in alphabetically order
+        amount_of_threads.sort()
 
         # The dict to be returned
         dict_to_be_returned = {
@@ -543,7 +568,10 @@ class r_rest_Calculate_Data:
                                                    question_every_x_sec_timestamp_holder[i]))
 
         # Assigns necessary values for correct calculation
-        thread_average_question_score = np.mean(question_scores)
+        if len(question_scores) == 0:
+            thread_average_question_score = 0
+        else:
+            thread_average_question_score = np.mean(question_scores)
 
         # Whenever the host has not yet reacted (made no comment or whatsoever)(
         if len(question_host_reaction_time) == 0:
@@ -552,7 +580,12 @@ class r_rest_Calculate_Data:
         else:
             thread_average_reaction_time_host = np.mean(question_host_reaction_time)
 
-        thread_new_question_every_x_sec = np.mean(question_every_x_sec)
+        # Whenever no question has been posted at all
+        if len(question_every_x_sec) == 0:
+            thread_new_question_every_x_sec = 0
+        else:
+            thread_new_question_every_x_sec = np.mean(question_every_x_sec)
+
         thread_amount_questioners = len(questioner_holder)
 
         # Prevention of nAn declaration (could mess up JSON Parsing for javascript)
@@ -855,7 +888,7 @@ class r_rest_Calculate_Data:
 
             # Will contain the question (1st place) and the answer to it (2nd place)
             temp_list_q_n_a = {
-                "question_id": val_1.get("question_id"),
+                "question_id": val_1.get("question_id")[3:],
                 "question_author": val_1.get("question_author"),
                 "question_timestamp": self.convert_epoch_to_time
                 (self.calculate_time_difference(val_1.get('question_timestamp'), int(time.time()))),
@@ -875,7 +908,7 @@ class r_rest_Calculate_Data:
                 if val_2.get('id_of_related_q') == val_1.get('question_id'):
 
                     # Refers to necessary variables
-                    temp_list_q_n_a["answer_id"] = val_2.get('id_of_answer')
+                    temp_list_q_n_a["answer_id"] = val_2.get('id_of_answer')[3:]
                     temp_list_q_n_a["answer_timestamp"] = self.convert_epoch_to_time(self.calculate_time_difference
                                                                                      (val_2.get('created_utc'),
                                                                                       int(time.time())))
@@ -894,7 +927,7 @@ class r_rest_Calculate_Data:
         # Iterates over all unanswered questions and assigns necessary values
         for i, val in enumerate(thread_unanswered_questions):
             dict_to_append = {
-                "question_id": val['question_id'],
+                "question_id": val['question_id'][3:],
                 "question_author": val['question_author'],
                 "question_timestamp": self.convert_epoch_to_time(self.calculate_time_difference(
                     val['question_timestamp'], int(time.time()))),
@@ -996,13 +1029,16 @@ class r_rest_Calculate_Data:
         global thread_amount_questioners
         global json_object_to_return
 
+        # Resets the mongoclient instance
         mongo_db_client_instance = MongoClient('localhost', 27017)
 
-        mongo_db_author_fake_iama_instance = None
-        mongo_db_author_fake_iama_collection_names = None
+        # Resets the author db - instance and collection
+        mongo_db_author_fake_iama_instance = mongo_db_client_instance['fake_iAMA_Reddit_Authors']
+        mongo_db_author_fake_iama_collection_names = mongo_db_author_fake_iama_instance.collection_names()
 
-        mongo_db_author_comments_instance = None
-        mongo_db_author_comments_collection = None
+        # Resets the comments db - instance and collection
+        mongo_db_author_comments_instance = mongo_db_client_instance['fake_iAMA_Reddit_Comments']
+        mongo_db_author_comments_collection = mongo_db_author_comments_instance.collection_names()
 
         # Instanciates a reddit instance
         reddit_instance = praw.Reddit(user_agent="University_Regensburg_iAMA_Crawler_0.001")

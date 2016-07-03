@@ -197,9 +197,66 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 unanswered_Sorting_Settings_Type, unanswered_Sorting_Settings_Asc_Des];
         },
 
+        _appendOnClickListenerForSendButton = function(dom_Element, id_of_question) {
+
+            return dom_Element.click("click", function () {
+
+                var data = { "text" : $("#" + id_of_question + "_answer_box").val() };
+
+                console.log("Ausgabe text von input field !!", $("#" + id_of_question + "_answer_box").val());
+                console.log("id_of_question", id_of_question);
+
+
+                BootstrapDialog.show({
+                    title: 'Sending data to to reddit now...',
+                    message: 'Your answer is beeing uploaded to reddit right now. Please wait a few seconds..',
+                    type: BootstrapDialog.TYPE_WARNING,
+                    closable: false});
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:5000/post_to_reddit/?c_id=" + id_of_question,
+                    processData: false,
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function() {
+
+                        // Whenever post -> REST -> Successful
+                        // Close Dialog
+                        // Refresh data
+
+                        console.log("SUCCCESSSS");
+                        _closeBootStrapDialog();
+                        // Fakeclick refresh button
+                        unanswered_Refresh_Button.click();
+
+
+
+                    }});
+
+
+            });
+
+        },
+
     // Appends an onclick listener to the "already answered" button
         _appendOnClickListenerForAlreadyAnswered = function (dom_Element, id_Of_Question) {
+
+            var id_of_actual_selected_thread = "";
+
+            // Iterates over all list elements checking which has the class "thread_selected"
+            $("#iAMA_Thread_Overview").children('li').each(function () {
+
+                if ($(this).hasClass("thread_selected") === true) {
+                    id_of_actual_selected_thread = $(this).attr('id')
+                }
+
+            });
+
+
             return dom_Element.click(function () {
+
+
 
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
@@ -249,7 +306,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                                 // Appends the clicked id to the regarding answer text box
                                 //noinspection JSJQueryEfficiency
                                 $('#' + id_Of_Question + '_answer_box').val($('#' + id_Of_Question + '_answer_box').val() + "\n" +
-                                    "https://www.reddit.com/r/iama/comments/catch_Thread_ID_Here/-/" + this.id);
+                                    "https://www.reddit.com/r/Gigan/comments/" + id_of_actual_selected_thread + "/-/" + this.id);
 
                                 // Whenever the click has been set, unbind that given behaviour
                                 $('#iAMA_Answer_Panel').find('> li').unbind("click");
@@ -347,7 +404,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                     q_answer_buttons_uber_container = $("<div class='input-group-btn'> </div>"),
                     q_answer_buttons_template_container = $("<div class='chat_template_button'>"),
-                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' id='btn-template_1' data-toggle='dropdown'>Already answered <i class='fa fa-check fa-fw'></i></button>"),
+                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' data-toggle='dropdown'>Already answered <i class='fa fa-check fa-fw'></i></button>"),
 
                     q_answer_buttons_send_container = $("<div class='chat_send_button'></div>"),
                     q_answer_buttons_send_button = $("<button class='btn btn-warning btn-sm'>Send</button>");
@@ -359,6 +416,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 q_p_score.appendTo(q_header);
                 q_p_question_id.appendTo(q_header);
                 q_p_text.appendTo(q_header);
+
 
                 // Chains answer possibilities together here
                 q_answer_text_area.appendTo(q_answer_uber_container);
@@ -376,6 +434,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 // Appends an onclick listener to the "already answered button here"
                 //noinspection JSUnusedAssignment
                 q_answer_buttons_template_container = _appendOnClickListenerForAlreadyAnswered(q_answer_buttons_template_container, question_id);
+
+                // Appends an onclick listener for the send button
+                //noinspection JSUnusedAssignment
+                q_answer_buttons_send_button = _appendOnClickListenerForSendButton(q_answer_buttons_send_button, question_id);
+
 
                 // Appends all container objects to the top level DOM <li> element
                 q_image.appendTo(li_top);
