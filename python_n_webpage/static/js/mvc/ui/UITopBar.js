@@ -1,5 +1,10 @@
-// Source: https://api.jquery.com/each/
-
+/**
+ *  @class UITopBar
+ *  The UITopbar is necessary to display important information about the actually selected thread
+ *  -
+ *  Sources used within this class:
+ *  1. (15.06.2016 @ 13:15) - https://api.jquery.com/each/
+  */
 IAMA_Extension.UITopBar = function () {
     var that = {},
         body,
@@ -9,8 +14,12 @@ IAMA_Extension.UITopBar = function () {
         upvotes = null,
         new_Q_Every_X = null,
         duration_D = null,
-
-        // Assigns necessary thread data to the top panel
+        //TODO: Daten hier genau angeben
+        /**
+         * Assigns information from the given "data" element to appropriate UI elements
+         * @param {event} event kind of event which is to be triggered
+         * @param {??} data data which is to be triggered
+         */
         _onTopToDOM = function (event, data) {
 
             var thread_amount_unanswered_questions = data['thread_amount_unanswered_questions'],
@@ -27,7 +36,9 @@ IAMA_Extension.UITopBar = function () {
             duration_D.text(thread_duration);
         },
 
-    // References UI elements in here
+    /**
+     * Refers to the single UI elements within the topbar
+     */
         _initUI = function () {
 
             unanswered_Q = $("#iAMA_Top_Unanswered_Q");
@@ -40,13 +51,18 @@ IAMA_Extension.UITopBar = function () {
 
         },
 
-    // References misc listeners here
+        /**
+         * Initializes all "trigger" events the UITopBar should listen to
+         */
         _initEvents = function () {
             $(body).on('top_Data_To_DOM', _onTopToDOM);
-
         };
 
-
+    /**
+     * Initializes the UITopBar class itself
+     *
+     * @returns {object} UITopBar
+     */
     that.init = function () {
         _initUI();
         _initEvents();

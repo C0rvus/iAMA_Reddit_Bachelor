@@ -1,16 +1,25 @@
-// Source: https://api.jquery.com/each/
-
+/**
+ * @class UIThreadOverview
+ * This class handles all the information about all threads the author created on the left side of the window
+ *  -
+ *  Sources used within this class:
+ *  1.(11.06.2016 @ 11:15) - https://api.jquery.com/each/
+ */
 IAMA_Extension.UIThreadOverview = function () {
     var that = {},
         body,
         overview_Container = null,
-
-        // Assigns an individual click listener per thread id ( <li> DOM - Element within ThreadOverciew )
-        // The click listener assigns the class "thread_selected" to show the user the active thread
-        // And it does a REST-Call to load data from that thread into the page
+        
+        /**
+         * Assigns an individual click listener per thread id ( <li> DOM - Element within ThreadOverview )
+         * The click listener assigns the class "thread_selected" to show the user the active thread
+         * And it does a REST-Call to load data from that thread into the page
+         * @private
+         */
         _assignIndividualClickListener = function () {
 
             // Iterates over every thread possibility adding unique click listener
+            //noinspection JSValidateTypes
             $(overview_Container).children('li').each(function () {
 
                 // Click listener for every iterated item
@@ -33,6 +42,7 @@ IAMA_Extension.UIThreadOverview = function () {
                         $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
 
                         // Shows a short warning message to prevent user interaction while receiving data
+                        //noinspection JSCheckFunctionSignatures
                         BootstrapDialog.show({
                             title: 'Fetching data from data base',
                             message: 'Please wait a few seconds until the newly loaded data arrives...',
@@ -46,12 +56,19 @@ IAMA_Extension.UIThreadOverview = function () {
 
         },
 
-        // Assigns initial thread data overview to panel
+        /**
+         * Assigns an initial thread data to the webpage.
+         * Whenever the webpage gets fired up, this method will be executed assigning data to the left side of the
+         * panel
+         *
+         * @params {event} {event}
+         * @params {??} {data}
+         * @private
+         *
+         */
         _assignThreadDataToPanel = function (event, data) {
-            console.log("_assignThreadDataToPanel", [data]);
-            console.log("Initial CALLLING !!!");
             overview_Container.find("> li").remove();
-
+            // TODO: Hier die Beschreibung noch entsprechend überarbeiten
             // Iterates over every array within the received data object
             $.each(data['threads_information'], function (key, value) {
 
@@ -77,27 +94,36 @@ IAMA_Extension.UIThreadOverview = function () {
 
             });
 
+            // Reassign click listener after filling thread panel data on the left side of the window panel
             _assignIndividualClickListener();
-            // Todo: Den ersten Listeneintrag aktiv anklicken per jQuery - macht das Sinn ?
+            // Now fake click the first entry to start the iAMA experience
             $("#iAMA_Thread_Overview").find("li").first().click();
-            // $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
-
 
         },
 
-    // References UI elements in here
+        /**
+         * Initializes all UI elements to get / receive data from
+         * @private
+         */
         _initUI = function () {
             overview_Container = $("#iAMA_Thread_Overview");
             body = $(document.body);
 
         },
 
-    // References event listeners here
+        /**
+         * Initializes all trigger listeners this class should use
+         * @private
+         */
         _initEvents = function () {
             $(body).on('UI_To_Thread_Overview_Initial', _assignThreadDataToPanel);
         };
 
-
+    /**
+     * Initializes this UIThreadOverview class
+     *
+     * @returns {object} UIThreadOverview object
+     */
     that.init = function () {
         _initUI();
         _initEvents();

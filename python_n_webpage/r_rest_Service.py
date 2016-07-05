@@ -311,5 +311,5 @@ def return_img_files_wrongly_directed(img_file):
 
 # Necessary to run the script on the local host
 if __name__ == '__main__':
-    # iLogin.go_to_login_page()
+    iLogin.go_to_login_page()
     app.run(host="0.0.0.0", debug=True)

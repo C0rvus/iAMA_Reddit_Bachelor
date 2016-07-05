@@ -1,26 +1,47 @@
 // Source: https://stackoverflow.com/a/5225641
 // https://xuad.net/artikel/vom-einfachen-ajax-request-zum-komplexen-objektaustausch-mit-json-mittels-jquery/
 
+// TODO: Sources used within muss ich noch einbauen !!!
+// TODO: Generell den Datenaufbau aller Methoden darstellen
+/**
+ *  @class MongoDBConnector
+ *  The MongoDBConnector triggers appropriate REST-Calls to to the REST-Service.
+ *  Those REST calls contain various information about the style the questions have to be sorted and filtered
+ */
 IAMA_Extension.MongoDBConnector = function () {
     var that = {},
         body,
 
+        /**
+         *  This breaks MVC in a little way, because this class here directly accesses an open modal window and forces
+         *  it to close.. to avoid unnecessary triggering I just simply hardcoded this in here
+         */
         _closeBootStrapDialog = function () {
             BootstrapDialog.closeAll()
         },
 
+        /**
+         * Whenever the initial REST call to retrieve the thread information data was successful, then that data
+         * will be triggered to the thread overview
+         **
+         * @param {??} content kind of event which is to be triggered
+         */
         _onSuccessInitialCall = function (content) {
-            console.log(content);
+            // TODO: content beschreiben
 
+            // Closes all open BootStrapDialog dialoges
             _closeBootStrapDialog();
             $(body).trigger('rest_Initial_Thread_Overview_Array', [content]);
-
         },
 
+        /**
+         * Whenever the retrieval of thread data from the mongodb was successful that whole data package will be split
+         * up and each part will be triggered individually to the single UI components
+         *
+         * @param {??} content ---
+         */
         _onSuccess = function(content) {
-            // console.log(content);
-
-            // BootstrapDialog.closeAll();
+            // TODO: content beschreiben
 
             // Parses the JSON response into an java script accessable object
             var response = $.parseJSON(content);
@@ -46,8 +67,15 @@ IAMA_Extension.MongoDBConnector = function () {
 
         },
 
-        // Whenever a thread has been clicked on the left side panel
-    // TODO: Hier reinschreiben, wie denn das, zu übergebende Objekt eigentlich aussieht....
+        /**
+         * Whenever a thread has been selected on the left side of the webpage a REST call containing necessary
+         * will be triggered
+         *
+         * @param {event} event kind of event which is to be triggered
+         * @param {??} data data which is to be triggered
+         *
+         */
+        // TODO: Hier reinschreiben, wie denn das, zu übergebende Objekt eigentlich aussieht....
         // [ String [ Arr ] [ Arr ] ]
         _getThreadDataFromDB = function(event, data) {
             var threadID = data[0],
@@ -65,7 +93,6 @@ IAMA_Extension.MongoDBConnector = function () {
                 answered_Filter_Settings_Score_Value = null,
                 answered_Sorting_Settings_Type = null,
                 answered_Sorting_Settings_Asc_Des = null;
-
 
             // Whenever the unanswered_Questions_Settings_Array is null
             // That means, whenever a thread has been initially clicked
@@ -129,23 +156,29 @@ IAMA_Extension.MongoDBConnector = function () {
 
         },
 
-        // Initializes necessary variables for triggering
+        /**
+         * Initializes necessary variables to work with.
+         * Which is just the body document
+         */
         _initVars = function () {
             body = $(document.body);
         },
 
-
-    // References misc listeners here
+        /**
+         * Initializes all "trigger" events the MongoDBConnector should listen to
+         */
         _initEvents = function () {
             body.on('rest_Get_Data_From_DB', _getThreadDataFromDB);
         },
 
-    // Does the initial REST-Call to start the iAMA Experience
+        /**
+         * Does THE initial REST-Call to start the iAMA experience and retrieves data from mongoDB and reddit live
+         */
         _initialRestCall = function () {
 
-            console.log("Doing initial REST-Call here !!");
-
-            // I know this is bad style here, but before triggering around like hell just get this straight.
+            // I know this is bad style here, but before triggering around like hell just get this straight and
+            // display an UI element here
+            //noinspection JSCheckFunctionSignatures
             BootstrapDialog.show({
                 title: 'Fetching data from Reddit and the local data base',
                 message: 'Please wait a few seconds until the requested data arrives...',
@@ -154,19 +187,39 @@ IAMA_Extension.MongoDBConnector = function () {
 
             $.ajax({
                 type: "GET",
-                // dataType json is necessary here, otherwise arrays wouldn't get loaded
+
+                // dataType 'json' is necessary here, otherwise arrays wouldn't get loaded
                 dataType: "json",
+
+                /**
+                 * Because there is no explicit method within the REST-Service to only calculate data explicitly for
+                 * the thread overview, I do a generic REST call here, which also includes calculation of other things
+                 * which will be discarded
+                 */
                 url: "http://127.0.0.1:5000/crawl_n_calculate/?an=uni_r_test_acc_1&t_id=&u_f_t=all&u_s_e=grt&u_s_n=-99999&u_s_d=asc&u_s_t=author&a_f_t=all&a_s_e=grt&a_s_n=-99999&a_s_d=asc&a_s_t=random",
                 success: _onSuccessInitialCall,
                 error: function(){
-                    alert("Thread not found in database.. Please check ID of thread and DB consistency!");
+
+                    // Close that previously opened BootStrapDialog dialog
+                    _closeBootStrapDialog();
+
+                    //noinspection JSCheckFunctionSignatures
+                    BootstrapDialog.show({
+                        title: 'Fatal error! thread could not be found',
+                        message: 'Thread not found in database.. Please check ID of thread and DB consistency!',
+                        type: BootstrapDialog.TYPE_WARNING,
+                        closable: true});
                 },
-                timeout: 30000 // Throws an error after 25 seconds of inactivity
+                timeout: 30000 // Throws an error after 30 seconds of inactivity
             });
 
         };
 
-
+    /**
+     * Initializes the MongoDBConnector itself
+     *
+     * @returns {object} MongoDBConnector object
+     */
     that.init = function () {
 
         _initVars();

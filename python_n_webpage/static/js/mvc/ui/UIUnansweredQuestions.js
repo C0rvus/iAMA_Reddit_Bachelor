@@ -1,10 +1,18 @@
-// Source: http://stackoverflow.com/questions/759887/how-to-create-a-dom-node-as-an-object
-// http://stackoverflow.com/questions/5076466/javascript-replace-n-with-br
-// http://stackoverflow.com/questions/24678799/how-to-unbind-keyup-event
-// http://stackoverflow.com/questions/1927593/cant-update-textarea-with-javascript-after-writing-to-it-manualy
-// http://stackoverflow.com/questions/17414034/change-mouse-cursor-in-javascript-or-jquery
-// https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
-
+/**
+ *  @class UIUnansweredQuestions
+ *  This class handles the behaviour of the questions within the unanswered questions panel.
+ *  Additionally it handles the ability to pick up and refer to already answered questions.
+ *  Furthermore it allows you to upload a comment made to reddit.
+ *  -
+ *  Sources used within this class:
+ *  1.(15.06.2016 @ 13:15) - http://stackoverflow.com/questions/759887/how-to-create-a-dom-node-as-an-object
+ *  2.(18.06.2016 @ 08:01) - http://stackoverflow.com/questions/5076466/javascript-replace-n-with-br
+ *  3.(23.06.2016 @ 13:03) - http://stackoverflow.com/questions/24678799/how-to-unbind-keyup-event
+ *  4.(26.06.2016 @ 14:05) - http://stackoverflow.com/questions/1927593/cant-update-textarea-with-javascript-after-writing-to-it-manualy
+ *  5.(27.06.2016 @ 17:27) - http://stackoverflow.com/questions/17414034/change-mouse-cursor-in-javascript-or-jquery
+ *  6.(27.06.2016 @ 07:29) - https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
+ *
+ */
 IAMA_Extension.UIUnansweredQuestions = function () {
     var that = {},
 
@@ -32,14 +40,26 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         answered_Sorting_Settings_Type = null,
         answered_Sorting_Settings_Asc_Des = null,
 
+        /**
+         * Closes an open BootstrapDialog
+         * @private
+         */
         _closeBootStrapDialog = function () {
             BootstrapDialog.closeAll()
         },
 
+        /**
+         * Iterates over all threads on the thread panel and looks for the class "thread_selected" in them
+         *
+         * @private
+         * @returns {String} id_Of_Actual_Selected_Thread : The id of the thread which is actually selected.
+         * The selected threads DOM id === the id of the thread on reddit
+         */
         _getThreadID = function () {
 
             var id_Of_Actual_Selected_Thread = null;
 
+            // Iterates ovver all "li" elements within the iAMA Thread Overview
             $('#iAMA_Thread_Overview').find('li').each(function () {
 
                 // Iterates over all threads trying to find the selected / highlighted one
@@ -53,6 +73,17 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
         },
 
+        /**
+         * Catches information about the sorting and filtering settings for the answered questions panel from the website
+         * and stores that information into globally available variables
+         * @private
+         * @returns: {Array} [] containing
+         *              - {String} answered_Filter_Settings_Tier
+         *              - {String} answered_Filter_Settings_Score_Compare
+         *              - {String} answered_Filter_Settings_Score_Value
+         *              - {String} answered_Sorting_Settings_Type
+         *              - {String} answered_Sorting_Settings_Asc_Des
+         */
         _getDataForAnsweredQuestionsFromWebSite = function () {
 
             var sorting_Selection_Answered_Found = null;
@@ -60,15 +91,14 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             answered_Filter_Settings_Tier = $('#iAMA_Answered_Filtering_Tier_Selection').val();
             answered_Filter_Settings_Score_Compare = $('#iAMA_Answered_Filtering_Score_Selection').val();
 
-
             // Settings score will be defined here (whenever nothing has been input)
+            //noinspection JSJQueryEfficiency
             if ($('#iAMA_Answered_Filtering_Score_Concrete').val() === "" || $('#iAMA_Answered_Filtering_Score_Concrete').val() === null) {
                 answered_Filter_Settings_Score_Value = -99999;
                 answered_Filter_Settings_Score_Compare = "grt";
             } else {
                 answered_Filter_Settings_Score_Value = $('#iAMA_Answered_Filtering_Score_Concrete').val();
             }
-
 
             // Iterates over every elements and checks whether it has been selected or not!
             $('#iAMA_Answered_Sorting').find('li').each(function () {
@@ -81,17 +111,19 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             });
 
 
-            // Correctly converts the "Settings Type" value into REST compatible information
+            // Correctly converts the "Sorting_Settings_Type" value into REST compatible information
             switch(sorting_Selection_Answered_Found) {
 
                 case null:
                     answered_Sorting_Settings_Type = "random";
-                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    answered_Sorting_Settings_Asc_Des = "asc";
                     break;
 
                 case "Random":
                     answered_Sorting_Settings_Type = "random";
-                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    answered_Sorting_Settings_Asc_Des = "asc";
                     break;
 
                 case "Author name ascending":
@@ -126,7 +158,8 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 default:
                     answered_Sorting_Settings_Type = "random";
-                    answered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    answered_Sorting_Settings_Asc_Des = "asc";
             }
 
             return [answered_Filter_Settings_Tier, answered_Filter_Settings_Score_Compare, answered_Filter_Settings_Score_Value,
@@ -134,11 +167,23 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
         },
 
+        /**
+         * Catches information about the sorting and filtering settings for the answered questions panel from the website
+         * and stores that information into globally available variables
+         * @private
+         * @returns: {Array} [] containing
+         *              - {String} unanswered_Filter_Settings_Tier
+         *              - {String} unanswered_Filter_Settings_Score_Compare
+         *              - {String} unanswered_Filter_Settings_Score_Value
+         *              - {String} unanswered_Sorting_Settings_Type
+         *              - {String} unanswered_Sorting_Settings_Asc_Des
+         */
         _getDataForUnansweredQuestionsFromWebSite = function () {
             unanswered_Filter_Settings_Tier = $('#iAMA_Unanswered_Filtering_Tier_Selection').val();
             unanswered_Filter_Settings_Score_Compare = $('#iAMA_Unanswered_Filtering_Score_Selection').val();
 
             // Settings score will be defined here (whenever nothing has been input)
+            //noinspection JSJQueryEfficiency
             if ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === "" || ($('#iAMA_Unanswered_Filtering_Score_Concrete').val() === null)) {
                 unanswered_Filter_Settings_Score_Value = -99999;
                 unanswered_Filter_Settings_Score_Compare = "grt";
@@ -150,12 +195,14 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             switch(unanswered_Sorting_Settings_Type) {
                 case null:
                     unanswered_Sorting_Settings_Type = "random";
-                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
                     break;
 
                 case "Random":
                     unanswered_Sorting_Settings_Type = "random";
-                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
                     break;
 
                 case "Author name ascending":
@@ -190,29 +237,38 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 default:
                     unanswered_Sorting_Settings_Type = "random";
-                    unanswered_Sorting_Settings_Asc_Des = "asc"; // Setting it to asc or desc here does not matter, because it's random
+                    // Setting it to asc or desc here does not matter, because it's random
+                    unanswered_Sorting_Settings_Asc_Des = "asc";
             }
 
             return [unanswered_Filter_Settings_Tier, unanswered_Filter_Settings_Score_Compare, unanswered_Filter_Settings_Score_Value,
                 unanswered_Sorting_Settings_Type, unanswered_Sorting_Settings_Asc_Des];
         },
 
+        /**
+         * Appends an onClick listener for the send button within the unanswered questions panel, which will trigger
+         * an ajax REST call
+         *
+         * @params: {String} dom_Element send button as DOM-Element
+         * @params: {String} id_of_question the id of the question the answer text blongs to
+         * @private
+         */
         _appendOnClickListenerForSendButton = function(dom_Element, id_of_question) {
 
             return dom_Element.click("click", function () {
 
+                //noinspection JSJQueryEfficiency
                 var data = { "text" : $("#" + id_of_question + "_answer_box").val() };
 
-                console.log("Ausgabe text von input field !!", $("#" + id_of_question + "_answer_box").val());
-                console.log("id_of_question", id_of_question);
 
-
+                //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Sending data to to reddit now...',
                     message: 'Your answer is beeing uploaded to reddit right now. Please wait a few seconds..',
                     type: BootstrapDialog.TYPE_WARNING,
                     closable: false});
 
+                //TODO: Source this out to MongoDBConnector
                 $.ajax({
                     type: "POST",
                     url: "http://127.0.0.1:5000/post_to_reddit/?c_id=" + id_of_question,
@@ -220,44 +276,40 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     contentType: 'application/json',
                     data: JSON.stringify(data),
                     success: function() {
-
-                        // Whenever post -> REST -> Successful
-                        // Close Dialog
-                        // Refresh data
-
-                        console.log("SUCCCESSSS");
+                        // Closes all open BootStrapDialog windows
                         _closeBootStrapDialog();
-                        // Fakeclick refresh button
+
+                        // Fake clicks the refresh button to trigger retrieval of new data
                         unanswered_Refresh_Button.click();
-
-
-
                     }});
-
-
             });
 
         },
 
-    // Appends an onclick listener to the "already answered" button
+        /**
+         * Appends functionality to pickup already answered question to the template button
+         *
+         *
+         * @param {String} dom_Element the "already answered" button DOM template
+         * @param {String} id_Of_Question the id of the question the "already answered" button belongs to
+         * @returns {Object} dom_Element the template button which allows the user to pick an answer from the already
+         * answered questions
+         *
+         */
         _appendOnClickListenerForAlreadyAnswered = function (dom_Element, id_Of_Question) {
 
             var id_of_actual_selected_thread = "";
 
             // Iterates over all list elements checking which has the class "thread_selected"
+            //noinspection JSValidateTypes
             $("#iAMA_Thread_Overview").children('li').each(function () {
-
                 if ($(this).hasClass("thread_selected") === true) {
                     id_of_actual_selected_thread = $(this).attr('id')
                 }
-
             });
 
-
+            //noinspection JSUnresolvedFunction
             return dom_Element.click(function () {
-
-
-
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Important information',
@@ -330,7 +382,6 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                                     // Reverts the cursor behaviour back to normal
                                     body.css('cursor','default');
-
                                 }
                             });
 
@@ -352,10 +403,18 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
         },
 
-    // Assigns necessary thread data to the top panel
+        /**
+         * Builds DOM elements out of the given questions and appends them to the unanswered questions panel
+         *
+         * @param {event} event
+         * @param {??} data
+         * @private
+         */
         _onQuestionsToDOM = function (event, data) {
 
+            // Closes all open BootStrapDialog dialogues
             _closeBootStrapDialog();
+
             // Removes the first example answer here
             $("#iAMA_Question_Panel").find("> li").remove();
 
@@ -450,7 +509,12 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             });
         },
 
-    // Whenever the refresh button has been clicked
+        /**
+         * Whenever the refresh button of the unanswered questions panel has been clicked gather all
+         * filtering / sorting data and trigger them to the MongoDBConnector
+         *
+         * @private
+         */
         _onRefreshClicked = function () {
             unanswered_Refresh_Button.click(function () {
 
@@ -461,9 +525,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite(),
                     selected_Thread_ID = _getThreadID();
 
+                // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
                 $(body).trigger('Refresh_To_UI',[[selected_Thread_ID, [information_Unanswered_Questions],[information_Answered_Questions]]]);
 
                 // Shows a short warning message to prevent user interaction while receiving data
+                //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Fetching data from data base',
                     message: 'Please wait a few seconds until the newly loaded data arrives...',
@@ -472,8 +538,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
             });
         },
-
-    // Whenever the filter button has been clicked
+        
+        /**
+         * This method contains logic for clicking 'filter' button within unanswered questions.
+         * @private
+         */
         _onFilterClicked = function () {
 
             // Defines the click listener for tier selection
@@ -491,9 +560,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 // Whenever nothing has been initially selected
                 if ($(this).val() === null || $(this).val() === "") {
+
                     // Setting the values to these high values prevents unexpected user behaviour and prevents
-                    // that the original setting "eql 0" gets triggered (which will display no data..)
-                    
+                    // that the original setting "eql 0" gets triggered (which would display no data..)
                     unanswered_Filter_Settings_Score_Compare = "grt";
                     unanswered_Filter_Settings_Score_Value = "-9999999";
 
@@ -519,7 +588,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             });
         },
 
-    // Whenever the sorting button has been clicked
+        /**
+         * Whenever the sorting button on the unanswered questions panel has been clicked, the appropriate selected
+         * element will be selected and then highlighted
+         * @private
+         */
         _onSortingClicked = function () {
             // Appends a click listener for every dom element
             unanswered_Sorting_Button.find("li").each(function () {
@@ -541,7 +614,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             })
         },
 
-    // References UI elements in here
+        /**
+         * Initializes all UI elements to retrieve data from
+         *
+         * @private
+         */
         _initUI = function () {
 
             body = $(document.body);
@@ -564,11 +641,19 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
         },
 
-    // References misc listeners here
+        /**
+         * Initializes all trigger listeners this class should use
+         * @private
+         */
         _initEvents = function () {
             $(body).on('unanswered_Questions_To_DOM', _onQuestionsToDOM);
         };
 
+    /**
+     * Initializes this UIUnansweredQuestions Panel
+     *
+     * @returns {object} UIUnansweredQuestions object
+     */
     that.init = function () {
         _initUI();
         _initEvents();

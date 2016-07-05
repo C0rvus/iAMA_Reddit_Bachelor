@@ -1,3 +1,7 @@
+/**
+ * @class UIStatsOverview
+ * This class handles the behaviour of the statistics panel on the left side of the window
+ */
 IAMA_Extension.UIStatsOverview = function () {
     var that = {},
         body,
@@ -10,7 +14,13 @@ IAMA_Extension.UIStatsOverview = function () {
         stats_amount_q_tier_x,
         stats_best_q_score,
 
-        // Applies the statistics data to the stats panel on the web page
+        /**
+         * Appends data, receveived from the statistics data object to the panel of the left side of the webpage
+         * @param {event} event
+         * @param {data} data
+         * @private
+         * //TODO: stats to dom überarbeiten
+         */
         _onStatsToDOM = function (event, data) {
             var thread_amount_questions_tier_x = data['thread_amount_questions_tier_x'],
                 thread_average_question_score = data['thread_average_question_score'],
@@ -31,12 +41,16 @@ IAMA_Extension.UIStatsOverview = function () {
             stats_best_q_score.text(thread_question_top_score);
         },
 
-    // Initializes necessary variables for triggering
+        /**
+         * Initializes all UI elements to put data into
+         * @private
+         */
         _initUI = function () {
             body = $(document.body);
+
             statsPanel = $('#iAMA_Stats');
 
-            stats_amount_answered_q = $('#iAMA_Stats_Answered_Q'),
+            stats_amount_answered_q = $('#iAMA_Stats_Answered_Q');
             stats_q_score = $('#iAMA_Stats_Q_Score');
             stats_react_time = $('#iAMA_Stats_React_Time');
             stats_new_q_every_x_sec = $('#iAMA_Stats_New_Q');
@@ -45,14 +59,20 @@ IAMA_Extension.UIStatsOverview = function () {
             stats_best_q_score = $('#iAMA_Stats_Best_Q_Score');
         },
 
-
-    // References misc listeners here
+        /**
+         * Initializes all trigger listeners this class should use
+         * @private
+         */
         _initEvents = function () {
             $(body).on('stats_Data_To_DOM', _onStatsToDOM);
 
         };
 
-
+    /**
+     * Initializes this UIStatsOverview class
+     *
+     * @returns {object} UIStatsOverview object
+     */
     that.init = function () {
         _initUI();
         _initEvents();
