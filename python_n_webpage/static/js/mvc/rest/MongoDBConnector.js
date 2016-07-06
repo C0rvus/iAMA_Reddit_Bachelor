@@ -1,12 +1,11 @@
-// Source: https://stackoverflow.com/a/5225641
-// https://xuad.net/artikel/vom-einfachen-ajax-request-zum-komplexen-objektaustausch-mit-json-mittels-jquery/
-
-// TODO: Sources used within muss ich noch einbauen !!!
-// TODO: Generell den Datenaufbau aller Methoden darstellen
 /**
  *  @class MongoDBConnector
  *  The MongoDBConnector triggers appropriate REST-Calls to to the REST-Service.
  *  Those REST calls contain various information about the style the questions have to be sorted and filtered
+ *  -
+ *  Sources used within this class:
+ *  1.(11.06.2016 @ 10:15) - https://stackoverflow.com/a/5225641
+ *  2.(13.06.2016 @ 11:01) - https://xuad.net/artikel/vom-einfachen-ajax-request-zum-komplexen-objektaustausch-mit-json-mittels-jquery/
  */
 IAMA_Extension.MongoDBConnector = function () {
     var that = {},
@@ -24,11 +23,55 @@ IAMA_Extension.MongoDBConnector = function () {
          * Whenever the initial REST call to retrieve the thread information data was successful, then that data
          * will be triggered to the thread overview
          **
-         * @param {??} content kind of event which is to be triggered
+         * @param {[]} content contains all stats & q&a for the selected thread.. It is structured as following:
+         *
+         * [thread_overview]
+         *  "thread_title":
+         *  "thread_id":
+         *  "thread_duration":
+         *  "thread_amount_unanswered_questions":
+         *  "thread_amount_questions":
+         *
+         * [top_panel]
+         *  "thread_amount_questioners":
+         *  "thread_ups":
+         *  "thread_new_question_every_x_sec":
+         *  "thread_downs":
+         *  "thread_duration":
+         *  "thread_amount_unanswered_questions":
+         *
+         * [open_questions]
+         * {
+                  * "question_id":
+                  * "question_timestamp":
+                  * "question_text":
+                  * "question_author":
+                  * "question_upvote_score":
+         }, etc.
+
+         * [question_n_answers]
+         *  "question_id":
+         *  "question_author":
+         *  "question_timestamp":
+         *  "question_upvote_score":
+         *  "question_text":
+         *  "answer_id":
+         *  "answer_timestamp":
+         *  "answer_upvote_score":
+         *  "answer_text":
+
+         * [statistics_panel]
+         *  "thread_amount_unanswered_questions"
+         *  "thread_average_question_score"
+         *  "thread_new_question_every_x_sec"
+         *  "thread_amount_questions_tier_1"
+         *  "thread_amount_questions"
+         *  "thread_amount_questions_tier_x"
+         *  "thread_question_top_score"
+         *  "thread_time_stamp_last_question"
+         *  "thread_average_reaction_time_host"
          */
         _onSuccessInitialCall = function (content) {
-            // TODO: content beschreiben
-
             // Closes all open BootStrapDialog dialoges
             _closeBootStrapDialog();
             $(body).trigger('rest_Initial_Thread_Overview_Array', [content]);
@@ -38,16 +81,60 @@ IAMA_Extension.MongoDBConnector = function () {
          * Whenever the retrieval of thread data from the mongodb was successful that whole data package will be split
          * up and each part will be triggered individually to the single UI components
          *
-         * @param {??} content ---
-         */
-        _onSuccess = function(content) {
-            // TODO: content beschreiben
+         * @param {[]} content contains all stats & q&a for the selected thread.. It is structured as following:
+         *
+         * [thread_overview]
+         *  "thread_title":
+         *  "thread_id":
+         *  "thread_duration":
+         *  "thread_amount_unanswered_questions":
+         *  "thread_amount_questions":
+         *
+         * [top_panel]
+         *  "thread_amount_questioners":
+         *  "thread_ups":
+         *  "thread_new_question_every_x_sec":
+         *  "thread_downs":
+         *  "thread_duration":
+         *  "thread_amount_unanswered_questions":
+         *
+         * [open_questions]
+         * {
+                  * "question_id":
+                  * "question_timestamp":
+                  * "question_text":
+                  * "question_author":
+                  * "question_upvote_score":
+         }, etc.
 
+         * [question_n_answers]
+         *  "question_id":
+         *  "question_author":
+         *  "question_timestamp":
+         *  "question_upvote_score":
+         *  "question_text":
+         *  "answer_id":
+         *  "answer_timestamp":
+         *  "answer_upvote_score":
+         *  "answer_text":
+
+         * [statistics_panel]
+         *  "thread_amount_unanswered_questions"
+         *  "thread_average_question_score"
+         *  "thread_new_question_every_x_sec"
+         *  "thread_amount_questions_tier_1"
+         *  "thread_amount_questions"
+         *  "thread_amount_questions_tier_x"
+         *  "thread_question_top_score"
+         *  "thread_time_stamp_last_question"
+         *  "thread_average_reaction_time_host"
+         */
+        _onSuccess = function (content) {
             // Parses the JSON response into an java script accessable object
             var response = $.parseJSON(content);
 
             // Whenever the response received is valid
-            if(!response.result) {
+            if (!response.result) {
                 var thread_overview = response['thread_overview'][0];
                 var statistics_panel = response['statistics_panel'][0];
                 var top_panel = response['top_panel'][0];
@@ -64,7 +151,6 @@ IAMA_Extension.MongoDBConnector = function () {
                 BootstrapDialog.closeAll();
                 alert("Error receiving JSON! Please fix python data conversion for REST");
             }
-
         },
 
         /**
@@ -72,12 +158,12 @@ IAMA_Extension.MongoDBConnector = function () {
          * will be triggered
          *
          * @param {event} event kind of event which is to be triggered
-         * @param {??} data data which is to be triggered
-         *
+         * @param {??} data gets data from within the database, consisting of
+         * [0] {String} threadID
+         * [1] {Array} Array containing filtering / sortings settings for answered questions
+         * [2] {Array} Array containing filtering / sortings settings for unanswered questions
          */
-        // TODO: Hier reinschreiben, wie denn das, zu übergebende Objekt eigentlich aussieht....
-        // [ String [ Arr ] [ Arr ] ]
-        _getThreadDataFromDB = function(event, data) {
+        _getThreadDataFromDB = function (event, data) {
             var threadID = data[0],
                 unanswered_Questions_Settings_Array = data[1],
                 answered_Questions_Settings_Array = data[2],
@@ -147,7 +233,7 @@ IAMA_Extension.MongoDBConnector = function () {
                 "&a_s_t=" + answered_Sorting_Settings_Type,
 
                 success: _onSuccess,
-                error: function(){
+                error: function () {
                     alert("Thread not found in database.. Please check ID of thread and DB consistency!");
                 },
                 timeout: 25000 // Throws an error after 25 seconds of inactivity
@@ -183,7 +269,8 @@ IAMA_Extension.MongoDBConnector = function () {
                 title: 'Fetching data from Reddit and the local data base',
                 message: 'Please wait a few seconds until the requested data arrives...',
                 type: BootstrapDialog.TYPE_WARNING,
-                closable: false});
+                closable: false
+            });
 
             $.ajax({
                 type: "GET",
@@ -198,7 +285,7 @@ IAMA_Extension.MongoDBConnector = function () {
                  */
                 url: "http://127.0.0.1:5000/crawl_n_calculate/?an=uni_r_test_acc_1&t_id=&u_f_t=all&u_s_e=grt&u_s_n=-99999&u_s_d=asc&u_s_t=author&a_f_t=all&a_s_e=grt&a_s_n=-99999&a_s_d=asc&a_s_t=random",
                 success: _onSuccessInitialCall,
-                error: function(){
+                error: function () {
 
                     // Close that previously opened BootStrapDialog dialog
                     _closeBootStrapDialog();
@@ -208,7 +295,8 @@ IAMA_Extension.MongoDBConnector = function () {
                         title: 'Fatal error! thread could not be found',
                         message: 'Thread not found in database.. Please check ID of thread and DB consistency!',
                         type: BootstrapDialog.TYPE_WARNING,
-                        closable: true});
+                        closable: true
+                    });
                 },
                 timeout: 30000 // Throws an error after 30 seconds of inactivity
             });

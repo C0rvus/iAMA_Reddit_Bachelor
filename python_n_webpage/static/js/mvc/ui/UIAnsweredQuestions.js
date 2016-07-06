@@ -347,8 +347,19 @@ IAMA_Extension.UIAnsweredQuestions = function () {
         /**
          * Builds DOM elements out of the given Q&A combination and appends them to the answered questions panel
          *
-         * @param {event} event
-         * @param {??} data
+         * @param {event} event which causes this method to fire
+         * @param {[]} data array containing following information about the answered questions with answers
+         * 
+         *  "question_id":
+         *  "question_author":
+         *  "question_timestamp":
+         *  "question_upvote_score":
+         *  "question_text":
+         *  "answer_id":
+         *  "answer_timestamp":
+         *  "answer_upvote_score":
+         *  "answer_text":
+         *  
          * @private
          */
         _onAnswersToDOM = function (event, data) {

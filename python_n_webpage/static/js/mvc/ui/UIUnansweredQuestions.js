@@ -407,7 +407,14 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * Builds DOM elements out of the given questions and appends them to the unanswered questions panel
          *
          * @param {event} event
-         * @param {??} data
+         * @param {[]} data information about every question
+         * Each question gets represented by an array containing following information:
+         * 
+         * question_author = "" {String} Information about the question author
+         * question_id = "" {String}    The id of the question
+         * question_text = "" {String}  The question text itself
+         * question_timestamp = "" {String} The (already prepared) timestamp
+         * question_upvote_score = {Integer} The amount of upvotes
          * @private
          */
         _onQuestionsToDOM = function (event, data) {

@@ -17,7 +17,19 @@ IAMA_Extension.UIStatsOverview = function () {
         /**
          * Appends data, receveived from the statistics data object to the panel of the left side of the webpage
          * @param {event} event
-         * @param {data} data
+         * @param {[]} data contains information about the actual selected thread (left panel). It consists of following
+         * values:
+         *
+         *  "thread_amount_unanswered_questions"
+         *  "thread_average_question_score"
+         *  "thread_new_question_every_x_sec"
+         *  "thread_amount_questions_tier_1"
+         *  "thread_amount_questions"
+         *  "thread_amount_questions_tier_x"
+         *  "thread_question_top_score"
+         *  "thread_time_stamp_last_question"
+         *  "thread_average_reaction_time_host"
+         *  
          * @private
          * //TODO: stats to dom überarbeiten
          */

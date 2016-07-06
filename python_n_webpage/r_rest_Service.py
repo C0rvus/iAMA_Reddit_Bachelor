@@ -28,7 +28,8 @@ tOverview = r_rest_Thread_Overview()            # Overview for thread informatio
 iLogin = r_rest_Login_Behaviour()               # The login behaviour is handled here
 pBehaviour = r_rest_Post_Behaviour()            # Ability to post things on reddit
 
-username_actually_logged_in = ""                # The name, with which you have authorized yourself via OAuth2 on reddit
+username_actually_logged_in = "uni_r_test_acc_1"                # The name, with which you have authorized yourself via OAuth2 on reddit
+# username_actually_logged_in = ""                # The name, with which you have authorized yourself via OAuth2 on reddit
 thread_actually_used = ""                       # The actually selected thread (necessary for calculation / retrieval)
 r_object = None                                 # The PRAW (r)-object, which allows authorization and posting
 
@@ -311,5 +312,5 @@ def return_img_files_wrongly_directed(img_file):
 
 # Necessary to run the script on the local host
 if __name__ == '__main__':
-    iLogin.go_to_login_page()
+    # iLogin.go_to_login_page()
     app.run(host="0.0.0.0", debug=True)

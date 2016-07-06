@@ -14,11 +14,16 @@ IAMA_Extension.UITopBar = function () {
         upvotes = null,
         new_Q_Every_X = null,
         duration_D = null,
-        //TODO: Daten hier genau angeben
         /**
          * Assigns information from the given "data" element to appropriate UI elements
          * @param {event} event kind of event which is to be triggered
-         * @param {??} data data which is to be triggered
+         * @param {[]} data contains some stats data about the clicked thread
+         *  thread_amount_questioners = {Integer}
+         *  thread_amount_unanswered_questions = {Integer}
+         *  thread_downs = {Integer}
+         *  thread_duration = {Integer}
+         *  thread_new_question_every_x_sec = {Integer}
+         *  thread_ups = {Integer}
          */
         _onTopToDOM = function (event, data) {
 

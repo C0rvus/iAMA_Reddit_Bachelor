@@ -18,7 +18,17 @@ IAMA_Extension.UIController = function () {
         /**
          * Triggers data from MongoDBConnector to UIStatsOverview - class (UI)
          * @param {event} event kind of event which is to be triggered
-         * @param {??} data data which is to be triggered
+         * @param {[]} data contains following information about the statistics on the left side of the page:
+         *
+         * thread_amount_questions {Integer}
+         * thread_amount_questions_tier_1 {Integer}
+         * thread_amount_questions_tier_x {Integer}
+         * thread_amount_unanswered_questions {Integer}
+         * thread_average_question_score {String}
+         * thread_average_reaction_time_host {String}
+         * thread_new_question_every_x_sec {String}
+         * thread_question_top_score {Integer}
+         * thread_time_stamp_last_question {Integer}
          */
         _giveStatsToStatsPanel = function (event, data) {
             $(body).trigger("stats_Data_To_DOM", data);
@@ -28,7 +38,13 @@ IAMA_Extension.UIController = function () {
          * Triggers data from MongoDBConnector to UITopBar - class (UI)
          *
          * @param {event} event kind of event which is to be triggered
-         * @param {??} data data which is to be triggered
+         * @param {[]} data contains some stats data about the clicked thread
+         *  thread_amount_questioners = {Integer}
+         *  thread_amount_unanswered_questions = {Integer}
+         *  thread_downs = {Integer}
+         *  thread_duration = {Integer}
+         *  thread_new_question_every_x_sec = {Integer}
+         *  thread_ups = {Integer}
          */
         _giveMiniStatsToTopBar = function (event, data) {
             $(body).trigger("top_Data_To_DOM", data);
@@ -38,7 +54,13 @@ IAMA_Extension.UIController = function () {
          * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
          *
          * @param {event} event kind of event which is to be triggered
-         * @param {??} dataArray data which is to be triggered
+         * @param {[]} dataArray contains information about questions which have to be answered by the iama host
+         * Each question gets represented by an array containing following information:
+         * question_author = "" {String} Information about the question author
+         * question_id = "" {String}    The id of the question
+         * question_text = "" {String}  The question text itself
+         * question_timestamp = "" {String} The (already prepared) timestamp
+         * question_upvote_score = {Integer} The amount of upvotes
          */
         _giveUnansweredQuestionsToUnansweredPanel = function (event, dataArray) {
             $(body).trigger("unanswered_Questions_To_DOM", [dataArray]);
@@ -49,7 +71,17 @@ IAMA_Extension.UIController = function () {
          * Triggers data from MongoDBConnector to UIAnsweredQuestions - class (UI)
          *
          * @param {event} event kind of event which is to be triggered
-         * @param {??} dataArray data which is to be triggered
+         * @param {[]} dataArray contains arrays containg the following values:
+         *
+         * answer_id = "" {String}          The id of the answer
+         * answer_text = "" {String}        The answer text itself
+         * answer_timestamp = "" {String}   The timestamp of the given answer
+         * answer_upvote_score = {Integer}  The score of the single answer
+         * question_author = "" {String}    The name of the question author
+         * question_id = "" {String}        The id of the question being asked
+         * question_text = "" {String}      The text of the question being askex
+         * question_timestamp = "" {String} The timestamp of the question
+         * question_upvote_score = {Integer} The upvote score of the appropriate question
          */
         _giveAnsweredQuestionsToAnsweredPanel = function (event, dataArray) {
             $(body).trigger("answered_Questions_To_DOM", [dataArray]);
@@ -61,7 +93,13 @@ IAMA_Extension.UIController = function () {
          * Whenever a refresh button on the (un)answered question panel gets clicked, this method will be triggered
          *
          * @param {event} event kind of event which is to be triggered
-         * @param {??} dataArray data which is to be triggered
+         * @param {[]} dataArray contains all filtering / sorting information for un & answered questions
+         * [0] (unanswered questions) [1] {answered questions}, both containing the values below:
+         * 0 = "" {String}  {Question filtering tier: all / 1 / x)
+         * 1 = "" {String}  (Question filtering compare: eql / grt / lrt)
+         * 2 = {Integer}    {Question score compare: any integer)
+         * 3 = "" {String}  {Question sorting type /author / creation / score / random}
+         * 4 = "" {String}  {Question sorting direction /asc / desc}
          */
         _refreshQuestionPanels = function (event, dataArray) {
             $(body).trigger("UI_To_Main_Refresh", [dataArray]);
@@ -72,8 +110,13 @@ IAMA_Extension.UIController = function () {
          *
          * Whenever a thread within the overview has been clicked this trigger gets fired up
          *
-         * @param {event} event kind of event which is to be triggered
-         * @param {??} dataArray data which is to be triggered
+         * @param {event} event which fires this trigger
+         * @param {[]} dataArray data which contains information about what kind of thread on the left side has been
+         * selected
+         *
+         * 0 = "" {String} id of thread
+         * [1] = Information about unanswered questions
+         * [1] = Information about answered questions
          */
         _onThreadClicked = function (event, dataArray) {
             $('body').trigger('thread_Selected', [dataArray]);
@@ -84,8 +127,15 @@ IAMA_Extension.UIController = function () {
          *
          * Whenever the website gets loaded for the first time this method will be executed
          *
-         * @param {event} event kind of event which is to be triggered
-         * @param {??} dataArray data which is to be triggered
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data:
+         * [0]
+         *      amount_answered = "" {Integer}
+         *      amount_of_questions = "" {Integer}
+         *      duration = "" {String}
+         *      thread_id = "" {String}
+         *      title = "" {String}
+         * [1], etc... (depends on the amount of threads on the left side panel)
          */
         _giveInitialThreadInformationToThreadOverView = function (event, dataArray) {
             $('body').trigger('UI_To_Thread_Overview_Initial', [dataArray]);
@@ -145,7 +195,6 @@ IAMA_Extension.UIController = function () {
          */
         _initVars = function () {
             body = $(document.body);
-            // TODO: Die Teile hier rausschmeissen ??
         };
 
     /**

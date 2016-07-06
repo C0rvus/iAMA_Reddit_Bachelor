@@ -38,7 +38,6 @@ IAMA_Extension.UIThreadOverview = function () {
 
                         // Triggers event -> UIController -> MainController -> RestController ->...
                         // This will load thread specific data to the website
-                        //TODO: Hier kommentieren, dass man zwei nuller arrays braucht, wegen der einen _getThreadDataFromDB methode
                         $(this).trigger('thread_Clicked_To_Load', [[$(this).attr('id'), [null], [null]]]);
 
                         // Shows a short warning message to prevent user interaction while receiving data
@@ -61,14 +60,18 @@ IAMA_Extension.UIThreadOverview = function () {
          * Whenever the webpage gets fired up, this method will be executed assigning data to the left side of the
          * panel
          *
-         * @params {event} {event}
-         * @params {??} {data}
+         * @params {event} event causes this method to fire
+         * @params {[]} data consists of following values, containing information about the actual selected thread
+         *      amount_answered =  {Integer}
+         *      amount_of_questions =  {Integer}
+         *      duration = "" {String}
+         *      thread_id = "" {String}
+         *      title = "" {String}
          * @private
          *
          */
         _assignThreadDataToPanel = function (event, data) {
             overview_Container.find("> li").remove();
-            // TODO: Hier die Beschreibung noch entsprechend überarbeiten
             // Iterates over every array within the received data object
             $.each(data['threads_information'], function (key, value) {
 
@@ -90,8 +93,7 @@ IAMA_Extension.UIThreadOverview = function () {
                 id_of_thread.appendTo(t_uber_li_element);
 
                 t_uber_li_element.appendTo(overview_Container);
-
-
+                
             });
 
             // Reassign click listener after filling thread panel data on the left side of the window panel
