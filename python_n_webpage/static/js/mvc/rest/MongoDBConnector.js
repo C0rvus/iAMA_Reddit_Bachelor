@@ -236,7 +236,7 @@ IAMA_Extension.MongoDBConnector = function () {
                 error: function () {
                     alert("Thread not found in database.. Please check ID of thread and DB consistency!");
                 },
-                timeout: 25000 // Throws an error after 25 seconds of inactivity
+                timeout: 35000 // Throws an error after 25 seconds of inactivity
             });
 
 

@@ -70,7 +70,7 @@ IAMA_Extension.UIThreadOverview = function () {
          * @private
          *
          */
-        _assignThreadDataToPanel = function (event, data) {
+        _assignThreadDataToPanel_Initial = function (event, data) {
             overview_Container.find("> li").remove();
             // Iterates over every array within the received data object
             $.each(data['threads_information'], function (key, value) {
@@ -103,6 +103,37 @@ IAMA_Extension.UIThreadOverview = function () {
 
         },
 
+    // TODO: Describe this class
+        _assignThreadDataToPanel = function (event, data) {
+
+            $.each(overview_Container.find("> li"), function (key, value) {
+
+                // Updates the subelements of the actually seleted thread (on the left side panel)
+                if ($(this).hasClass("thread_selected") === true) {
+                    console.log("FOUND ID", $(this).attr('id'));
+                    
+                    $(this).empty();
+
+                    var title = data['thread_title'],
+                        amount_answered = data['thread_amount_answered_questions'],
+                        amount_of_questions = data['thread_amount_questions'],
+                        duration = data['thread_duration'],
+                        thread_id = data['thread_id'];
+
+                    var thread_title = $("<i class='fa fa-th fa-fw'></i>" + title + "<br>"),
+                        answer_ratio = $("<i class='fa fa-question-circle fa-fw'></i>" + amount_answered + "/" + amount_of_questions + " answered" + "<br>"),
+                        thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + " days ago" + "<br>"),
+                        id_of_thread = $("<i class='fa fa-tag fa-fw'></i>" + thread_id + "<br>");
+
+                    thread_title.appendTo($(this));
+                    answer_ratio.appendTo($(this));
+                    thread_duration.appendTo($(this));
+                    id_of_thread.appendTo($(this));
+
+                }
+            });
+        },
+
         /**
          * Initializes all UI elements to get / receive data from
          * @private
@@ -118,7 +149,8 @@ IAMA_Extension.UIThreadOverview = function () {
          * @private
          */
         _initEvents = function () {
-            $(body).on('UI_To_Thread_Overview_Initial', _assignThreadDataToPanel);
+            $(body).on('UI_To_Thread_Overview', _assignThreadDataToPanel);
+            $(body).on('UI_To_Thread_Overview_Initial', _assignThreadDataToPanel_Initial);
         };
 
     /**

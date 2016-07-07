@@ -119,7 +119,7 @@ IAMA_Extension.UIController = function () {
          * [1] = Information about answered questions
          */
         _onThreadClicked = function (event, dataArray) {
-            $('body').trigger('thread_Selected', [dataArray]);
+            $(body).trigger('thread_Selected', [dataArray]);
         },
 
         /**
@@ -141,6 +141,27 @@ IAMA_Extension.UIController = function () {
             $('body').trigger('UI_To_Thread_Overview_Initial', [dataArray]);
         },
 
+    // TODO: printing of thread data here --> weiter triggern
+
+        /**
+         * Triggers data from MongoDBConnector to UIThreadOverview - class (UI)
+         *
+         * Whenever the refresh button got clicked or a thread got loaded the panel data will be refreshed
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the selected thread:
+         * [0]
+         *      thread_amount_questions = "" {Integer}
+         *      thread_amount_unanswered_questions = "" {Integer}
+         *      thread_duration = "" {String}
+         *      thread_id = "" {String}
+         *      thread_title = "" {String}
+         */
+        _giveThreadInformationToThreadOverview = function (event, data) {
+            console.log(data);
+            $(body).trigger('UI_To_Thread_Overview', data);
+        },
+
         /**
          * Initializes all "trigger" events the ui controller should listen to
          */
@@ -160,6 +181,9 @@ IAMA_Extension.UIController = function () {
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIAnsweredQuestions
             body.on('Main_To_UI_Answered_Questions', _giveAnsweredQuestionsToAnsweredPanel);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIThreadOverview
+            body.on('Main_To_UI_Thread_Overview', _giveThreadInformationToThreadOverview);
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIThreadOverview
             body.on('Main_To_UI_Thread_Initial_Load', _giveInitialThreadInformationToThreadOverView);

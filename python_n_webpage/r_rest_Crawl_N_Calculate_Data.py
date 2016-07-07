@@ -196,6 +196,12 @@ class r_rest_Crawl_N_Calculate_Data:
 
         """
 
+        # Necessary to wait 5 seconds, before we try to receive data from reddit
+        # This is because a real reddit live experience is not possible...
+        # Whenever you try to receive data directly after you have posted something on reddit, you will receive
+        # the old data.. (reddit is not that fast).. therefore we will wait a few seconds.
+        time.sleep(5)
+
         # Anonymous inner method to write comments into the database
         def write_comments_into_db(id_of_thread):
             """Writes all comments for all threads, the iAMA host created into the database.
@@ -1179,7 +1185,7 @@ class r_rest_Crawl_N_Calculate_Data:
         returned_json_thread_overview = [{
             "thread_title": thread_title,
             "thread_amount_questions": thread_amount_questions,
-            "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
+            "thread_amount_answered_questions": thread_amount_questions - thread_amount_unanswered_questions,
             "thread_duration": int(thread_duration / 86400),
             "thread_id": thread_id
         }]

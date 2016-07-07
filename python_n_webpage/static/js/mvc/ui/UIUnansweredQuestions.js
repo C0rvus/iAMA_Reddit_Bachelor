@@ -11,7 +11,7 @@
  *  4.(26.06.2016 @ 14:05) - http://stackoverflow.com/questions/1927593/cant-update-textarea-with-javascript-after-writing-to-it-manualy
  *  5.(27.06.2016 @ 17:27) - http://stackoverflow.com/questions/17414034/change-mouse-cursor-in-javascript-or-jquery
  *  6.(27.06.2016 @ 07:29) - https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
- *
+ *  7.(07.07.2016 @ 17:11) - http://stackoverflow.com/questions/7854820/sleep-pause-wait-in-javascript
  */
 IAMA_Extension.UIUnansweredQuestions = function () {
     var that = {},
