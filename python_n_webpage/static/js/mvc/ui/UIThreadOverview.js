@@ -103,10 +103,22 @@ IAMA_Extension.UIThreadOverview = function () {
 
         },
 
-    // TODO: Describe this class
+        /**
+         * Assigns thread data to the left panel, whenever a thread has been selected
+         *
+         * @params {event} event causes this method to fire
+         * @params {[]} data consists of following values, containing information about the actual selected thread
+         *      thread_title =  {Integer}
+         *      thread_amount_answered_questions =  {Integer}
+         *      thread_amount_questions = "" {Integer}
+         *      thread_duration = "" {Integer}
+         *      thread_id = "" {String}
+         * @private
+         *
+         */
         _assignThreadDataToPanel = function (event, data) {
 
-            $.each(overview_Container.find("> li"), function (key, value) {
+            $.each(overview_Container.find("> li"), function () {
 
                 // Updates the subelements of the actually seleted thread (on the left side panel)
                 if ($(this).hasClass("thread_selected") === true) {

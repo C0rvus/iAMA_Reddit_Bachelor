@@ -16,6 +16,7 @@ IAMA_Extension.MainController = function () {
          * Triggers data from MainController to UIThreadOverview - class (UI)
          * @param {event} event kind of event which is to be triggered
          * @param {[]} givenData contains data about all threads the author ever created
+         * @private
          */
         _onThreadOverviewToUIController = function(event, givenData) {
             $(body).trigger('Main_To_UI_Thread_Overview', givenData);
@@ -35,6 +36,8 @@ IAMA_Extension.MainController = function () {
          * thread_new_question_every_x_sec {String}
          * thread_question_top_score {Integer}
          * thread_time_stamp_last_question {Integer}
+         *
+         * @private
          */
         _onStatisticsPanelToUIController = function(event, givenData) {
             $(body).trigger('Main_To_UI_Statistics_Panel', givenData);
@@ -50,6 +53,8 @@ IAMA_Extension.MainController = function () {
          *  thread_duration = {Integer}
          *  thread_new_question_every_x_sec = {Integer}
          *  thread_ups = {Integer}
+         *
+         * @private
          */
         _onTopPanelToUIController = function(event, givenData) {
             $(body).trigger('Main_To_UI_Topbar', givenData);
@@ -69,6 +74,8 @@ IAMA_Extension.MainController = function () {
          * question_text = "" {String}      The text of the question being askex
          * question_timestamp = "" {String} The timestamp of the question
          * question_upvote_score = {Integer} The upvote score of the appropriate question
+         *
+         * @private
          */
         _onAnsweredQuestionsToUIController = function(event, dataArray) {
             $(body).trigger('Main_To_UI_Answered_Questions', [dataArray]);
@@ -84,6 +91,8 @@ IAMA_Extension.MainController = function () {
          * question_text = "" {String}  The question text itself
          * question_timestamp = "" {String} The (already prepared) timestamp
          * question_upvote_score = {Integer} The amount of upvotes
+         *
+         * @private
          */
         _onUnansweredQuestionsToUIController = function(event, dataArray) {
             $(body).trigger('Main_To_UI_Unanswered_Questions', [dataArray]);
@@ -102,6 +111,8 @@ IAMA_Extension.MainController = function () {
          * 0 = "" {String} id of thread
          * [1] = Information about unanswered questions
          * [1] = Information about answered questions
+         *
+         * @private
          */
         _onThreadSelected = function (event, givenData) {
             $(body).trigger('rest_Thread_Selected', [givenData]);
@@ -121,6 +132,8 @@ IAMA_Extension.MainController = function () {
          * 2 = {Integer}    {Question score compare: any integer)
          * 3 = "" {String}  {Question sorting type /author / creation / score / random}
          * 4 = "" {String}  {Question sorting direction /asc / desc}
+         *
+         * @private
          */
         _onRefreshToRest = function (event, dataArray) {
             $(body).trigger("Main_To_Rest_Refresh", [dataArray]);
@@ -141,13 +154,46 @@ IAMA_Extension.MainController = function () {
          *      thread_id = "" {String}
          *      title = "" {String}
          * [1], etc... (depends on the amount of threads on the left side panel)
+         *
+         * @private
          */
         _onThreadOverviewInitialToUIController = function (event, dataArray) {
             $(body).trigger("Main_To_UI_Thread_Initial_Load", [dataArray]);
         },
+        
+        /**
+         * Triggers data from UIUnansweredQuestions to MongoDBConnector - class (UI)
+         *
+         * Whenever the user pressed the "send" button, the answer text and the regarding question id, will be triggered
+         * to the MongoDBConnector to post that on reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the answered question:
+         * [0]  id_of_question {String}     The id of the question the answer text belongs to
+         * [1]  answer_text {String}        The answer text itself
+         * @private
+         */
+        _onPostingToMongoDBConnector = function (event, dataArray) {
+            $(body).trigger("Main_To_Rest_Post_To_Reddit", [dataArray]);
+        },
+        
+        /**
+         * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
+         *
+         * Whenever the upload of a posted answer (by the iAMA host) was successful, this method gets executed.
+         * It will refresh the (un)answered questions panel - by requesting new data from reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains "SUCCESS"
+         * @private
+         */
+        _onPostSuccessToUIController = function (event, data) {
+            $(body).trigger("Main_To_UI_Post_Successful", data);
+        },
 
         /**
          * Initializes all "trigger" events the main controller should listen to
+         * @private
          */
         _initEvents = function () {
 
@@ -175,12 +221,19 @@ IAMA_Extension.MainController = function () {
             // UI(Un)AnsweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
             body.on('UI_To_Main_Refresh', _onRefreshToRest);
 
+            // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('UI_To_Main_Post_To_Reddit', _onPostingToMongoDBConnector);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            body.on('Rest_To_Main_Post_Sucess', _onPostSuccessToUIController);
+
         },
 
         /**
          * Initializes all necessary controllers to work with.
          * uiController : necessary to operate with UI elements
          * restController : necessary to interact with local mongodb database
+         * @private
          */
         _initModules = function () {
             uiController = IAMA_Extension.UIController.init();
@@ -190,6 +243,7 @@ IAMA_Extension.MainController = function () {
         /**
          * Initializes necessary variables to work with.
          * Which is just the body document
+         * @private
          */
         _initVars = function () {
             body = $(document.body);

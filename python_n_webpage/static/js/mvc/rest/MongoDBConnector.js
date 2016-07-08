@@ -70,6 +70,8 @@ IAMA_Extension.MongoDBConnector = function () {
          *  "thread_question_top_score"
          *  "thread_time_stamp_last_question"
          *  "thread_average_reaction_time_host"
+         *
+         * @private
          */
         _onSuccessInitialCall = function (content) {
             // Closes all open BootStrapDialog dialoges
@@ -128,6 +130,8 @@ IAMA_Extension.MongoDBConnector = function () {
          *  "thread_question_top_score"
          *  "thread_time_stamp_last_question"
          *  "thread_average_reaction_time_host"
+         *
+         * @private
          */
         _onSuccess = function (content) {
             // Parses the JSON response into an java script accessable object
@@ -162,6 +166,8 @@ IAMA_Extension.MongoDBConnector = function () {
          * [0] {String} threadID
          * [1] {Array} Array containing filtering / sortings settings for answered questions
          * [2] {Array} Array containing filtering / sortings settings for unanswered questions
+         *
+         * @private
          */
         _getThreadDataFromDB = function (event, data) {
             var threadID = data[0],
@@ -243,8 +249,54 @@ IAMA_Extension.MongoDBConnector = function () {
         },
 
         /**
+         * Whenever the user clicked the "send" button, when he answered a question
+         *
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the answered question:
+         * [0]  id_of_question {String}     The id of the question the answer text belongs to
+         * [1]  answer_text {String}        The answer text itself
+         * @private
+         */
+        _submitDataToReddit = function (event, dataArray) {
+
+            var id_Of_Question = [dataArray][0][0][0],
+                text_To_Send = [dataArray][0][1][0];
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:5000/post_to_reddit/?c_id=" + id_Of_Question,
+                processData: false,
+                contentType: 'application/json',
+                data: text_To_Send, // this text data is already json - stringified
+                success: function () {
+                    // Closes all open BootStrapDialog windows
+                    _closeBootStrapDialog();
+
+                    // Triggers a success message to the unanswered questions panel
+                    // Which will result in refreshing the data there
+                    $(body).trigger('Rest_To_Unanswered_Posting_Success', "SUCCESS");
+                },
+                error: function () {
+                    // Close that previously opened BootStrapDialog dialog
+                    _closeBootStrapDialog();
+
+                    //noinspection JSCheckFunctionSignatures
+                    BootstrapDialog.show({
+                        title: 'Fatal error! Post could not be submitted!',
+                        message: 'Your answer could not be submitted to reddit. Please check online connectivity',
+                        type: BootstrapDialog.TYPE_WARNING,
+                        closable: true
+                    });
+                }
+            });
+            
+        },
+
+        /**
          * Initializes necessary variables to work with.
          * Which is just the body document
+         * @private
          */
         _initVars = function () {
             body = $(document.body);
@@ -252,13 +304,20 @@ IAMA_Extension.MongoDBConnector = function () {
 
         /**
          * Initializes all "trigger" events the MongoDBConnector should listen to
+         * @private
          */
         _initEvents = function () {
+
+            // UIThreadOverview -> UIController -> MainController -> RestController
             body.on('rest_Get_Data_From_DB', _getThreadDataFromDB);
+
+            // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('rest_Post_Message_To_Reddit', _submitDataToReddit);
         },
 
         /**
          * Does THE initial REST-Call to start the iAMA experience and retrieves data from mongoDB and reddit live
+         * @private
          */
         _initialRestCall = function () {
 
@@ -307,6 +366,7 @@ IAMA_Extension.MongoDBConnector = function () {
      * Initializes the MongoDBConnector itself
      *
      * @returns {object} MongoDBConnector object
+     * @public
      */
     that.init = function () {
 

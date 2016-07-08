@@ -29,6 +29,7 @@ IAMA_Extension.UIController = function () {
          * thread_new_question_every_x_sec {String}
          * thread_question_top_score {Integer}
          * thread_time_stamp_last_question {Integer}
+         * @private
          */
         _giveStatsToStatsPanel = function (event, data) {
             $(body).trigger("stats_Data_To_DOM", data);
@@ -45,6 +46,7 @@ IAMA_Extension.UIController = function () {
          *  thread_duration = {Integer}
          *  thread_new_question_every_x_sec = {Integer}
          *  thread_ups = {Integer}
+         * @private
          */
         _giveMiniStatsToTopBar = function (event, data) {
             $(body).trigger("top_Data_To_DOM", data);
@@ -61,6 +63,7 @@ IAMA_Extension.UIController = function () {
          * question_text = "" {String}  The question text itself
          * question_timestamp = "" {String} The (already prepared) timestamp
          * question_upvote_score = {Integer} The amount of upvotes
+         * @private
          */
         _giveUnansweredQuestionsToUnansweredPanel = function (event, dataArray) {
             $(body).trigger("unanswered_Questions_To_DOM", [dataArray]);
@@ -82,6 +85,7 @@ IAMA_Extension.UIController = function () {
          * question_text = "" {String}      The text of the question being askex
          * question_timestamp = "" {String} The timestamp of the question
          * question_upvote_score = {Integer} The upvote score of the appropriate question
+         * @private
          */
         _giveAnsweredQuestionsToAnsweredPanel = function (event, dataArray) {
             $(body).trigger("answered_Questions_To_DOM", [dataArray]);
@@ -100,6 +104,7 @@ IAMA_Extension.UIController = function () {
          * 2 = {Integer}    {Question score compare: any integer)
          * 3 = "" {String}  {Question sorting type /author / creation / score / random}
          * 4 = "" {String}  {Question sorting direction /asc / desc}
+         * @private
          */
         _refreshQuestionPanels = function (event, dataArray) {
             $(body).trigger("UI_To_Main_Refresh", [dataArray]);
@@ -117,6 +122,7 @@ IAMA_Extension.UIController = function () {
          * 0 = "" {String} id of thread
          * [1] = Information about unanswered questions
          * [1] = Information about answered questions
+         * @private
          */
         _onThreadClicked = function (event, dataArray) {
             $(body).trigger('thread_Selected', [dataArray]);
@@ -136,12 +142,11 @@ IAMA_Extension.UIController = function () {
          *      thread_id = "" {String}
          *      title = "" {String}
          * [1], etc... (depends on the amount of threads on the left side panel)
+         * @private
          */
         _giveInitialThreadInformationToThreadOverView = function (event, dataArray) {
             $('body').trigger('UI_To_Thread_Overview_Initial', [dataArray]);
         },
-
-    // TODO: printing of thread data here --> weiter triggern
 
         /**
          * Triggers data from MongoDBConnector to UIThreadOverview - class (UI)
@@ -149,21 +154,52 @@ IAMA_Extension.UIController = function () {
          * Whenever the refresh button got clicked or a thread got loaded the panel data will be refreshed
          *
          * @param {event} event which fires that trigger
-         * @param {[]} dataArray consists of following data for the selected thread:
+         * @param {[]} data consists of following data for the selected thread:
          * [0]
          *      thread_amount_questions = "" {Integer}
          *      thread_amount_unanswered_questions = "" {Integer}
          *      thread_duration = "" {String}
          *      thread_id = "" {String}
          *      thread_title = "" {String}
+         * @private
          */
         _giveThreadInformationToThreadOverview = function (event, data) {
-            console.log(data);
             $(body).trigger('UI_To_Thread_Overview', data);
         },
 
         /**
+         * Triggers data from UIUnansweredQuestions to MongoDBConnector - class (UI)
+         *
+         * Whenever the user pressed the "send" button, the answer text and the regarding question id, will be triggered
+         * to the MongoDBConnector to post that on reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the answered question:
+         * [0]  id_of_question {String}     The id of the question the answer text belongs to
+         * [1]  answer_text {String}        The answer text itself
+         * @private
+         */
+        _givePostMessageToMongoDBConnector = function (event, dataArray) {
+            $(body).trigger('UI_To_Main_Post_To_Reddit', [dataArray]);
+        },
+        
+        /**
+         * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
+         *
+         * Whenever the upload of a posted answer (by the iAMA host) was successful, this method gets executed.
+         * It will refresh the (un)answered questions panel - by requesting new data from reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains "SUCCESS"
+         * @private
+         */
+        _givePostSuccessfulToUnansweredPanel = function (event, data) {
+            $(body).trigger('UI_To_Unanswered_Questions_Post_Successful', data);
+        },
+
+        /**
          * Initializes all "trigger" events the ui controller should listen to
+         * @private
          */
         _initEvents = function () {
 
@@ -191,6 +227,12 @@ IAMA_Extension.UIController = function () {
             // UI(Un)AnsweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
             body.on('Refresh_To_UI', _refreshQuestionPanels);
 
+            // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Post_To_Reddit', _givePostMessageToMongoDBConnector);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            body.on('Main_To_UI_Post_Successful', _givePostSuccessfulToUnansweredPanel)
+
         },
 
         /**
@@ -201,6 +243,7 @@ IAMA_Extension.UIController = function () {
          * answered_Questions : necessary to interact with the answered questions panel
          * unanswered_Questions : necessary to interact with the unanswered questions panel
          * ui_Generic_Methods : necessary to make use of specific ui scripts (i.E. Resizing behaviour, etc..)
+         * @private
          */
         _initModules = function () {
 
@@ -216,6 +259,7 @@ IAMA_Extension.UIController = function () {
         /**
          * Initializes necessary variables to work with.
          * Which is just the body document
+         * @private
          */
         _initVars = function () {
             body = $(document.body);

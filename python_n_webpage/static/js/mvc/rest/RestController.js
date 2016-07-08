@@ -72,6 +72,7 @@ IAMA_Extension.RestController = function () {
          * question_text = "" {String}  The question text itself
          * question_timestamp = "" {String} The (already prepared) timestamp
          * question_upvote_score = {Integer} The amount of upvotes
+         * @private
          */
         _giveUnansweredQuestionsToMainController= function (event, dataArray){
             $(body).trigger('Rest_To_Main_UnansweredQuestions', [dataArray]);
@@ -87,9 +88,27 @@ IAMA_Extension.RestController = function () {
          * [0] {String} threadid
          * [1] {Array}  Filter / Sorting settings for unanswered questions
          * [2] {Array}  Filter / Sorting settings for answered questions
+         * @private
          */
         _getThreadDataFromDB = function (event, dataArray) {
             body.trigger('rest_Get_Data_From_DB', [dataArray]);
+        },
+        
+        /**
+         * Triggers data from UIUnansweredQuestions to MongoDBConnector - class (UI)
+         *
+         * Whenever the user pressed the "send" button, the answer text and the regarding question id, will be triggered
+         * to the MongoDBConnector to post that on reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the answered question:
+         * [0]  id_of_question {String}     The id of the question the answer text belongs to
+         * [1]  answer_text {String}        The answer text itself
+         * @private
+         *
+         */
+        _givePostMessageToMongoDBConnector = function (event, dataArray){
+            body.trigger('rest_Post_Message_To_Reddit', [dataArray]);
         },
         
         /**
@@ -107,13 +126,29 @@ IAMA_Extension.RestController = function () {
          *      thread_id = "" {String}
          *      title = "" {String}
          * [1], etc... (depends on the amount of threads on the left side panel)
+         * @private
          */
         _giveInitialThreadOverViewToMainController = function (event, dataArray) {
             body.trigger('Rest_To_Main_Thread_Overview_Initial', [dataArray]);
         },
 
         /**
+         * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
+         *
+         * Whenever the upload of a posted answer (by the iAMA host) was successful, this method gets executed.
+         * It will refresh the (un)answered questions panel - by requesting new data from reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains "SUCCESS"
+         * @private
+         */
+        _givePostSuccessMessageToMainController = function (event, data){
+            $(body).trigger('Rest_To_Main_Post_Sucess', data);
+        },
+
+        /**
          * Initializes all "trigger" events the rest controller should listen to
+         * @private
          */
         _initEvents = function () {
 
@@ -141,6 +176,11 @@ IAMA_Extension.RestController = function () {
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIThreadOverview
             body.on('rest_Initial_Thread_Overview_Array', _giveInitialThreadOverViewToMainController);
 
+            // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Main_To_Rest_Post_To_Reddit', _givePostMessageToMongoDBConnector);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            body.on('Rest_To_Unanswered_Posting_Success', _givePostSuccessMessageToMainController);
         },
 
         /**
@@ -154,6 +194,7 @@ IAMA_Extension.RestController = function () {
         /**
          * Initializes necessary variables to work with.
          * Which is just the body document
+         * @private
          */
         _initVars = function () {
             body = $(document.body);
@@ -163,6 +204,7 @@ IAMA_Extension.RestController = function () {
      * Initializes this MainController itself
      *
      * @returns {object} RestController object
+     * @public
      */
     that.init = function () {
 

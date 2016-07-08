@@ -112,7 +112,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
 
             // Correctly converts the "Sorting_Settings_Type" value into REST compatible information
-            switch(sorting_Selection_Answered_Found) {
+            switch (sorting_Selection_Answered_Found) {
 
                 case null:
                     answered_Sorting_Settings_Type = "random";
@@ -192,7 +192,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             }
 
             // Correctly converts the "Settings Type" value into REST compatible information
-            switch(unanswered_Sorting_Settings_Type) {
+            switch (unanswered_Sorting_Settings_Type) {
                 case null:
                     unanswered_Sorting_Settings_Type = "random";
                     // Setting it to asc or desc here does not matter, because it's random
@@ -253,35 +253,25 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @params: {String} id_of_question the id of the question the answer text blongs to
          * @private
          */
-        _appendOnClickListenerForSendButton = function(dom_Element, id_of_question) {
+        _appendOnClickListenerForSendButton = function (dom_Element, id_of_question) {
 
             return dom_Element.click("click", function () {
 
                 //noinspection JSJQueryEfficiency
-                var data = { "text" : $("#" + id_of_question + "_answer_box").val() };
-
+                var data = {"text": $("#" + id_of_question + "_answer_box").val()};
 
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Sending data to to reddit now...',
                     message: 'Your answer is beeing uploaded to reddit right now. Please wait a few seconds..',
                     type: BootstrapDialog.TYPE_WARNING,
-                    closable: false});
+                    closable: false
+                });
 
-                //TODO: Source this out to MongoDBConnector
-                $.ajax({
-                    type: "POST",
-                    url: "http://127.0.0.1:5000/post_to_reddit/?c_id=" + id_of_question,
-                    processData: false,
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    success: function() {
-                        // Closes all open BootStrapDialog windows
-                        _closeBootStrapDialog();
+                // Triggesr the id of the question which is to be answered and the appropriate text, already stringified
+                // to reddit
+                $(body).trigger('Post_To_Reddit', [[[id_of_question], [JSON.stringify(data)]]]);
 
-                        // Fake clicks the refresh button to trigger retrieval of new data
-                        unanswered_Refresh_Button.click();
-                    }});
             });
 
         },
@@ -338,7 +328,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                             answered_Uber_Div.addClass("col-lg-12");
 
                             // Turns the cursor into a crosshair for letting the user know to select a post now
-                            body.css('cursor','crosshair');
+                            body.css('cursor', 'crosshair');
 
                             // On click (answer selection) behaviour for all child elements <li> of the answer panel
                             $('#iAMA_Answer_Panel').find('> li').on('click', function () {
@@ -353,7 +343,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                                 answered_Uber_Div.addClass("col-lg-4");
 
                                 // Reverts the cursor behaviour back to normal
-                                body.css('cursor','default');
+                                body.css('cursor', 'default');
 
                                 // Appends the clicked id to the regarding answer text box
                                 //noinspection JSJQueryEfficiency
@@ -381,7 +371,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                                     answered_Uber_Div.addClass("col-lg-4");
 
                                     // Reverts the cursor behaviour back to normal
-                                    body.css('cursor','default');
+                                    body.css('cursor', 'default');
                                 }
                             });
 
@@ -409,7 +399,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @param {event} event
          * @param {[]} data information about every question
          * Each question gets represented by an array containing following information:
-         * 
+         *
          * question_author = "" {String} Information about the question author
          * question_id = "" {String}    The id of the question
          * question_text = "" {String}  The question text itself
@@ -533,7 +523,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     selected_Thread_ID = _getThreadID();
 
                 // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
-                $(body).trigger('Refresh_To_UI',[[selected_Thread_ID, [information_Unanswered_Questions],[information_Answered_Questions]]]);
+                $(body).trigger('Refresh_To_UI', [[selected_Thread_ID, [information_Unanswered_Questions], [information_Answered_Questions]]]);
 
                 // Shows a short warning message to prevent user interaction while receiving data
                 //noinspection JSCheckFunctionSignatures
@@ -541,11 +531,12 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     title: 'Fetching data from data base',
                     message: 'Please wait a few seconds until the newly loaded data arrives...',
                     type: BootstrapDialog.TYPE_WARNING,
-                    closable: false});
+                    closable: false
+                });
 
             });
         },
-        
+
         /**
          * This method contains logic for clicking 'filter' button within unanswered questions.
          * @private
@@ -576,7 +567,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 } else {
                     unanswered_Filter_Settings_Score_Value = $(this).val();
                 }
-                
+
             });
 
             // Defines the reset button for filtering methods
@@ -622,6 +613,19 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         },
 
         /**
+         * Whenever the upload of a comment to reddit was successful this function will be executed, which
+         * closes all open BootStrapDialog windows and fakes a refresh click for the unanswered question panel
+         * @private
+         */
+        _fakeClickRefreshButton = function () {
+            // Closes all open BootStrapDialog windows
+            _closeBootStrapDialog();
+
+            // Fake clicks the refresh button to trigger retrieval of new data
+            unanswered_Refresh_Button.click();
+        },
+
+        /**
          * Initializes all UI elements to retrieve data from
          *
          * @private
@@ -653,7 +657,12 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @private
          */
         _initEvents = function () {
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
             $(body).on('unanswered_Questions_To_DOM', _onQuestionsToDOM);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            $(body).on('UI_To_Unanswered_Questions_Post_Successful', _fakeClickRefreshButton);
         };
 
     /**
