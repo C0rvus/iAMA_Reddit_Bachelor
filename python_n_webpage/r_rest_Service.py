@@ -7,14 +7,14 @@
 # https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
 # 4. (08.07.2016 @ 12:40) -
 # https://flask-compress.readthedocs.io/en/latest/
+# 5. (08.07.2016 @ 22:08) -
+# http://arusahni.net/blog/categories/code.html
 
 import os                                       # Necessary to define paths for files to be returned via web
 from flask import Flask, send_from_directory    # Necessary to be able to return requested files
 from flask.ext.cors import CORS                 # Necessary to reduce "cross origin" errors during REST requests
 from flask.ext.compress import Compress         # Necessary to compress requests and reduce overhead
 from flask import request                       # Necessary to handle REST requests
-# from flask.ext.cache import Cache               # Necessary to control caching behaviour
-
 
 from r_rest_Crawl_N_Calculate_Data import r_rest_Crawl_N_Calculate_Data     # Ability to crawl and calculate data
 from r_rest_Thread_Overview import r_rest_Thread_Overview   # Ability to give back thread stats for better overview
@@ -22,13 +22,13 @@ from r_rest_Thread_Overview import r_rest_Thread_Overview   # Ability to give ba
 from r_rest_Login_Behaviour import r_rest_Login_Behaviour   # Ability to handle the login behaviour
 from r_rest_Post_Behaviour import r_rest_Post_Behaviour     # Ability to be able to post things on reddit
 
+from r_rest_No_Cache import nocache
+
 
 app = Flask(__name__, static_url_path='')       # Defines the flask service it self
-# app.config["CACHE_TYPE"] = "null"
 CORS(app)                                       # Removes cross origin problems from within the app
 Compress(app)                                   # Compresses all requests
 
-# app.cache = Cache(app)
 
 cData = r_rest_Crawl_N_Calculate_Data()         # Crawls and calculates Data
 tOverview = r_rest_Thread_Overview()            # Overview for thread information
@@ -36,8 +36,7 @@ tOverview = r_rest_Thread_Overview()            # Overview for thread informatio
 iLogin = r_rest_Login_Behaviour()               # The login behaviour is handled here
 pBehaviour = r_rest_Post_Behaviour()            # Ability to post things on reddit
 
-username_actually_logged_in = "uni_r_test_acc_1"                # The name, with which you have authorized yourself via OAuth2 on reddit
-# username_actually_logged_in = ""                # The name, with which you have authorized yourself via OAuth2 on reddit
+username_actually_logged_in = ""                # The name, with which you have authorized yourself via OAuth2 on reddit
 thread_actually_used = ""                       # The actually selected thread (necessary for calculation / retrieval)
 r_object = None                                 # The PRAW (r)-object, which allows authorization and posting
 
@@ -88,6 +87,7 @@ def use_signin_key():
 
 # REST: Crawl author data and prepare Q&A
 @app.route('/crawl_n_calculate/', methods=['GET'])
+@nocache
 def crawl_n_calculate_data():
     """Crawls author data, writes them into databases and prepares questions and answers depending on given parameters
 
@@ -219,14 +219,9 @@ def post_comment_to_reddit():
     # Extracts the id of the question the author replied to
     id_of_comment_replied_to = request.args.get('c_id')
 
-    # 1. Post that comment onto reddit
+    # Post that comment onto reddit
     pBehaviour.post_comment_on_reddit(r_object, thread_actually_used, id_of_comment_replied_to, json_text)
 
-    # 2. Recrawl all information from reddit
-    cData.get_n_write_author_information(str(username_actually_logged_in))
-
-    # Returns the following question ("success"). Which will trigger a "/crawl_n_calculate/" on JS side for correct
-    # display of the newly posted message
     return "Processed your posting request"
 
 
@@ -265,6 +260,38 @@ def return_js_files(js_file):
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/js'), js_file)
 
 
+# Webserver: Returns .js-map - files
+@app.route('/authorize_callback/js/<path:map_file>', methods=['GET'])
+def return_js_map_files(map_file):
+    """Whenever the webpage tries to access map files they will be returned to it
+    .map files are required by jquery.min
+    Args:
+        map_file (str): The path to the requested js.map file
+
+    Returns:
+        (File): The requested js.map file
+
+    """
+    root_dir = os.path.dirname(os.getcwd())
+    return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/js'), map_file)
+
+
+# Webserver: Returns .css map - files
+@app.route('/authorize_callback/css/<path:map_file>', methods=['GET'])
+def return_cs_map_files(map_file):
+    """Whenever the webpage tries to access .css.map files they will be returned to it
+
+    Args:
+       map_file (str): The path to the requested .css.map- file
+
+    Returns:
+        (File): The requested .css.map - file
+
+    """
+    root_dir = os.path.dirname(os.getcwd())
+    return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/css'), map_file)
+
+
 # Webserver: Returns .css - files
 @app.route('/authorize_callback/css/<path:css_file>', methods=['GET'])
 def return_css_files(css_file):
@@ -295,28 +322,6 @@ def return_img_files(img_file):
     """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/img'), img_file)
-
-
-# Webserver: Returns image - files
-@app.route('/website/img/<path:img_file>', methods=['GET'])
-def return_img_files_wrongly_directed(img_file):
-    """Whenever the webpage tries to access image files they will be returned to it
-
-        Due to a unknown bug the website requests image files from within that folder.
-        That folder is mentioned nowhere, either in .html nor in .js - files.
-        Therefore we have to build this 'extra' route
-
-    Args:
-        img_file (str): The path to the requested image file
-
-    Returns:
-        (File): The requested image file
-
-    """
-
-    root_dir = os.path.dirname(os.getcwd())
-    return send_from_directory(os.path.join(root_dir, 'python_n_webpage/static/img'), img_file)
-
 
 # Necessary to run the script on the local host
 if __name__ == '__main__':

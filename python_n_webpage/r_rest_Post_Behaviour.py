@@ -3,7 +3,7 @@
 # https://praw.readthedocs.io/en/stable/
 
 import praw             # Necessary to receive live data from reddit
-
+import time             # Necessary to wait a few seconds for correct posting / receiving behaviour
 
 # noinspection PyPep8Naming
 class r_rest_Post_Behaviour:
@@ -52,3 +52,5 @@ class r_rest_Post_Behaviour:
                 val.reply(comment_text)
             else:
                 pass
+
+        time.sleep(3)

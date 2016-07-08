@@ -76,6 +76,7 @@ IAMA_Extension.MongoDBConnector = function () {
         _onSuccessInitialCall = function (content) {
             // Closes all open BootStrapDialog dialoges
             _closeBootStrapDialog();
+            console.log("MONGODB on ERROR !");
             $(body).trigger('rest_Initial_Thread_Overview_Array', [content]);
         },
 
@@ -270,9 +271,6 @@ IAMA_Extension.MongoDBConnector = function () {
                 contentType: 'application/json',
                 data: text_To_Send, // this text data is already json - stringified
                 success: function () {
-                    // Closes all open BootStrapDialog windows
-                    _closeBootStrapDialog();
-
                     // Triggers a success message to the unanswered questions panel
                     // Which will result in refreshing the data there
                     $(body).trigger('Rest_To_Unanswered_Posting_Success', "SUCCESS");

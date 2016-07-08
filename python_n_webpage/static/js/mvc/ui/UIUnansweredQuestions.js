@@ -12,6 +12,8 @@
  *  5.(27.06.2016 @ 17:27) - http://stackoverflow.com/questions/17414034/change-mouse-cursor-in-javascript-or-jquery
  *  6.(27.06.2016 @ 07:29) - https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
  *  7.(07.07.2016 @ 17:11) - http://stackoverflow.com/questions/7854820/sleep-pause-wait-in-javascript
+ *  8.(08.07.2016 @ 22:14) - https://stackoverflow.com/a/16873849
+ *
  */
 IAMA_Extension.UIUnansweredQuestions = function () {
     var that = {},
@@ -40,9 +42,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         answered_Sorting_Settings_Type = null,
         answered_Sorting_Settings_Asc_Des = null,
 
-        amount_Questions_In_Panel_Before_Send = 0,
-        amount_Questions_In_Panel_After_Send = 0,
-
+        amount_Questions_Left_On_Send = null,
 
         /**
          * Closes an open BootstrapDialog
@@ -264,6 +264,24 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 //noinspection JSJQueryEfficiency
                 var data = {"text": $("#" + id_of_question + "_answer_box").val()};
 
+                /**
+                 *  Iterates over every question within the question panel
+                 *  This is necessary for checking the correctness of the returned data, because reddit, sometimes,
+                 *  does not refresh its data as fast as we want to be. Because after posting, we recrawl all that
+                 *  thread data (but very often reddit does yet only return old data, therefore we do counting checks)
+                 */
+
+                // Resets that value to 0
+                amount_Questions_Left_On_Send = 0;
+
+                // Iterates over all questions within the question panel
+                $('#iAMA_Question_Panel').find('li').each(function () {
+                    amount_Questions_Left_On_Send += 1;
+                });
+
+                // Subtract by one, because we have posted a message on reddit here
+                amount_Questions_Left_On_Send -= 1;
+
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Sending data to to reddit now...',
@@ -272,34 +290,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     closable: false
                 });
 
-                // Before uploading that data to reddit, count the amount of open questions
-                // This is necessary, because sometimes the reddit api is very slow and will return old data
-                // even when the post can already be seen on reddit
-                amount_Questions_In_Panel_Before_Send = 0;
-                _countAmountOfOpenQuestionsWithinQuestionPanel("before");
-
                 // Triggesr the id of the question which is to be answered and the appropriate text, already stringified
                 // to reddit
                 $(body).trigger('Post_To_Reddit', [[[id_of_question], [JSON.stringify(data)]]]);
-
-            });
-
-        },
-
-        _countAmountOfOpenQuestionsWithinQuestionPanel = function (beforeOrAfter) {
-
-            //noinspection JSValidateTypes
-            $("#iAMA_Question_Panel").children('li').each(function () {
-
-                if (beforeOrAfter === "before") {
-                    amount_Questions_In_Panel_Before_Send += 1;
-
-                } else if (beforeOrAfter === "after") {
-                    amount_Questions_In_Panel_After_Send += 1;
-
-                } else {
-                    // nothing to do in here
-                }
 
             });
 
@@ -438,7 +431,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          */
         _onQuestionsToDOM = function (event, data) {
 
-            // Closes all open BootStrapDialog dialogues
+            // Closes all open BootStrapDialog dialogues, whenever the correct amount of questions have been delivered
             _closeBootStrapDialog();
 
             // Removes the first example answer here
@@ -549,19 +542,29 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 // built
                 var information_Unanswered_Questions = _getDataForUnansweredQuestionsFromWebSite(),
                     information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite(),
-                    selected_Thread_ID = _getThreadID();
+                    selected_Thread_ID = _getThreadID(),
+                    amount_Of_Open_BootStrapDialogs = 0;
 
                 // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
                 $(body).trigger('Refresh_To_UI', [[selected_Thread_ID, [information_Unanswered_Questions], [information_Answered_Questions]]]);
 
-                // Shows a short warning message to prevent user interaction while receiving data
-                //noinspection JSCheckFunctionSignatures
-                BootstrapDialog.show({
-                    title: 'Fetching data from data base',
-                    message: 'Please wait a few seconds until the newly loaded data arrives...',
-                    type: BootstrapDialog.TYPE_WARNING,
-                    closable: false
+                // Iterates over all open BootStrapDialogWindows, making sure to not generate new windows over the old ones
+                // This prevents permanent window recreation and fading effects..
+                $.each(BootstrapDialog.dialogs, function(){
+                    amount_Of_Open_BootStrapDialogs += 1;
                 });
+
+                // Whenever there is no BootStrapDialogue open!
+                if (amount_Of_Open_BootStrapDialogs < 1) {
+                    // Shows a short warning message to prevent user interaction while receiving data
+                    //noinspection JSCheckFunctionSignatures
+                    BootstrapDialog.show({
+                        title: 'Fetching data from data base',
+                        message: 'Please wait a few seconds until the newly loaded data arrives...',
+                        type: BootstrapDialog.TYPE_WARNING,
+                        closable: false
+                    });
+                }
 
             });
         },
@@ -647,37 +650,77 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @private
          */
         _fakeClickRefreshButton = function () {
-            // Closes all open BootStrapDialog windows
-            _closeBootStrapDialog();
-
-            console.log("Ich wurde fake refreshed!!");
 
             // Fake clicks the refresh button to trigger retrieval of new data
             unanswered_Refresh_Button.click();
 
-            amount_Questions_In_Panel_After_Send = 0;
-            _countAmountOfOpenQuestionsWithinQuestionPanel("after");
+        },
 
-            console.log("Direkt nach FAkeRefresh", amount_Questions_In_Panel_Before_Send, amount_Questions_In_Panel_After_Send);
-
-            // Prevents off-by-one bug
-            if (amount_Questions_In_Panel_Before_Send !== 0) {
-
-                console.log("BIN IM IFFFFF");
-                console.log(amount_Questions_In_Panel_Before_Send, amount_Questions_In_Panel_After_Send);
-
-
-                while(amount_Questions_In_Panel_Before_Send === amount_Questions_In_Panel_After_Send) {
-
-                    amount_Questions_In_Panel_After_Send = 0;
-                    _countAmountOfOpenQuestionsWithinQuestionPanel("after");
-                    unanswered_Refresh_Button.click();
-
+        /**
+         * Puts the thread to sleep, to not flood the REST Service whenever the returned amount of questions is
+         * incorrect. It can be incorrect at sometimes when the reddit server does not response that fast...
+         *
+         * @param milliseconds {int} the amount of milliseconds the webpage should be delayed
+         * @private
+         */
+        _sleepNow = function(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                    break;
                 }
+            }
+        },
 
+        /**
+         * Checks whether the returned amount of questions is correct.
+         * This circumvents a bug due to the reddit api limitation. Because, whenever you post a comment via my tool
+         * on reddit, our tool immediately tries to recrawl thread and author data.
+         * Because the reddit API is not that fast ---> old data will be returned..
+         * This could disturb the user, because he would see questions he has already answered..
+         * Therefore, before displaying questions, we check if the amount of questions is the same with the amount it
+         * should be after the last comment had been posted on reddit.
+         *
+         * @param {event} event
+         * @param {[]} data information about every question
+         * Each question gets represented by an array containing following information:
+         *
+         * question_author = "" {String} Information about the question author
+         * question_id = "" {String}    The id of the question
+         * question_text = "" {String}  The question text itself
+         * question_timestamp = "" {String} The (already prepared) timestamp
+         * question_upvote_score = {Integer} The amount of upvotes
+         * @private
+         */
+        _checkIfQuestionRetrievalIsOk = function(event, data) {
+            var temp_Question_Checker = 0;
+
+            // Iterates over all questions within the received data array
+            $.each(data, function () {
+                temp_Question_Checker += 1;
+            });
+
+            // Whenever the amount of received questions is the same as the previously counted amount
+            if ((temp_Question_Checker === amount_Questions_Left_On_Send) ||
+                (amount_Questions_Left_On_Send === null)) {
+
+                // Give the questions to that method and display them on the page!
+                _onQuestionsToDOM(event, data);
+
+                // By switching between the threads resetting it to null is necessary, otherwise there would be an
+                // unlimited refresh
+                amount_Questions_Left_On_Send = null;
+
+                // Whenever we have received old data [old questions which have already been answered] request them anew
+            } else {
+                // Because this else tree gets executed like a while loop (I do not know why) I have included a
+                // 15 seconds pause to not flood the FLASK REST-Service... But it uses between 5 to 15 seconds randomly.
+                _sleepNow(15000);
+                _fakeClickRefreshButton();
             }
 
         },
+
 
         /**
          * Initializes all UI elements to retrieve data from
@@ -713,7 +756,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         _initEvents = function () {
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
-            $(body).on('unanswered_Questions_To_DOM', _onQuestionsToDOM);
+            $(body).on('unanswered_Questions_To_DOM', _checkIfQuestionRetrievalIsOk);
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
             $(body).on('UI_To_Unanswered_Questions_Post_Successful', _fakeClickRefreshButton);

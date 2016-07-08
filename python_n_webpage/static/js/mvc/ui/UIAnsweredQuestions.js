@@ -30,15 +30,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
         unanswered_Filter_Settings_Score_Value = null,
         unanswered_Sorting_Settings_Type = null,
         unanswered_Sorting_Settings_Asc_Des = null,
-
-        /**
-         * Closes an open BootstrapDialog
-         * @private
-         */
-        _closeBootStrapDialog = function () {
-            BootstrapDialog.closeAll()
-        },
-
+        
         /**
          * Retrieves the thread id of the thread which is actually in work.
          * This is necessary for correct REST calling behaviour.
@@ -363,9 +355,6 @@ IAMA_Extension.UIAnsweredQuestions = function () {
          * @private
          */
         _onAnswersToDOM = function (event, data) {
-
-            // Closes all open BootStrapDialog windows
-            _closeBootStrapDialog();
 
             // Removes the first example answer here
             $( "#iAMA_Answer_Panel").find("> li" ).remove();
