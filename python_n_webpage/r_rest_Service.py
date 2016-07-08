@@ -5,10 +5,13 @@
 # https://stackoverflow.com/a/11774434
 # 3. (01.07.2016 @ 12:48) -
 # https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
+# 4. (08.07.2016 @ 12:40) -
+# https://flask-compress.readthedocs.io/en/latest/
 
 import os                                       # Necessary to define paths for files to be returned via web
 from flask import Flask, send_from_directory    # Necessary to be able to return requested files
 from flask.ext.cors import CORS                 # Necessary to reduce "cross origin" errors during REST requests
+from flask.ext.compress import Compress         # Necessary to compress requests and reduce overhead
 from flask import request                       # Necessary to handle REST requests
 
 
@@ -21,6 +24,7 @@ from r_rest_Post_Behaviour import r_rest_Post_Behaviour     # Ability to be able
 
 app = Flask(__name__, static_url_path='')       # Defines the flask service it self
 CORS(app)                                       # Removes cross origin problems from within the app
+Compress(app)                                   # Compresses all requests
 
 cData = r_rest_Crawl_N_Calculate_Data()         # Crawls and calculates Data
 tOverview = r_rest_Thread_Overview()            # Overview for thread information
@@ -312,5 +316,6 @@ def return_img_files_wrongly_directed(img_file):
 
 # Necessary to run the script on the local host
 if __name__ == '__main__':
-    # iLogin.go_to_login_page()
-    app.run(host="0.0.0.0", debug=True)
+    iLogin.go_to_login_page()
+    # Added "threaded = True" here for better usage
+    app.run(host="0.0.0.0", threaded=True, debug=True)
