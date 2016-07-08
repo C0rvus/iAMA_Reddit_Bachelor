@@ -40,6 +40,10 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         answered_Sorting_Settings_Type = null,
         answered_Sorting_Settings_Asc_Des = null,
 
+        amount_Questions_In_Panel_Before_Send = 0,
+        amount_Questions_In_Panel_After_Send = 0,
+
+
         /**
          * Closes an open BootstrapDialog
          * @private
@@ -268,9 +272,34 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     closable: false
                 });
 
+                // Before uploading that data to reddit, count the amount of open questions
+                // This is necessary, because sometimes the reddit api is very slow and will return old data
+                // even when the post can already be seen on reddit
+                amount_Questions_In_Panel_Before_Send = 0;
+                _countAmountOfOpenQuestionsWithinQuestionPanel("before");
+
                 // Triggesr the id of the question which is to be answered and the appropriate text, already stringified
                 // to reddit
                 $(body).trigger('Post_To_Reddit', [[[id_of_question], [JSON.stringify(data)]]]);
+
+            });
+
+        },
+
+        _countAmountOfOpenQuestionsWithinQuestionPanel = function (beforeOrAfter) {
+
+            //noinspection JSValidateTypes
+            $("#iAMA_Question_Panel").children('li').each(function () {
+
+                if (beforeOrAfter === "before") {
+                    amount_Questions_In_Panel_Before_Send += 1;
+
+                } else if (beforeOrAfter === "after") {
+                    amount_Questions_In_Panel_After_Send += 1;
+
+                } else {
+                    // nothing to do in here
+                }
 
             });
 
@@ -621,8 +650,33 @@ IAMA_Extension.UIUnansweredQuestions = function () {
             // Closes all open BootStrapDialog windows
             _closeBootStrapDialog();
 
+            console.log("Ich wurde fake refreshed!!");
+
             // Fake clicks the refresh button to trigger retrieval of new data
             unanswered_Refresh_Button.click();
+
+            amount_Questions_In_Panel_After_Send = 0;
+            _countAmountOfOpenQuestionsWithinQuestionPanel("after");
+
+            console.log("Direkt nach FAkeRefresh", amount_Questions_In_Panel_Before_Send, amount_Questions_In_Panel_After_Send);
+
+            // Prevents off-by-one bug
+            if (amount_Questions_In_Panel_Before_Send !== 0) {
+
+                console.log("BIN IM IFFFFF");
+                console.log(amount_Questions_In_Panel_Before_Send, amount_Questions_In_Panel_After_Send);
+
+
+                while(amount_Questions_In_Panel_Before_Send === amount_Questions_In_Panel_After_Send) {
+
+                    amount_Questions_In_Panel_After_Send = 0;
+                    _countAmountOfOpenQuestionsWithinQuestionPanel("after");
+                    unanswered_Refresh_Button.click();
+
+                }
+
+            }
+
         },
 
         /**

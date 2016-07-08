@@ -13,6 +13,7 @@ from flask import Flask, send_from_directory    # Necessary to be able to return
 from flask.ext.cors import CORS                 # Necessary to reduce "cross origin" errors during REST requests
 from flask.ext.compress import Compress         # Necessary to compress requests and reduce overhead
 from flask import request                       # Necessary to handle REST requests
+# from flask.ext.cache import Cache               # Necessary to control caching behaviour
 
 
 from r_rest_Crawl_N_Calculate_Data import r_rest_Crawl_N_Calculate_Data     # Ability to crawl and calculate data
@@ -23,8 +24,11 @@ from r_rest_Post_Behaviour import r_rest_Post_Behaviour     # Ability to be able
 
 
 app = Flask(__name__, static_url_path='')       # Defines the flask service it self
+# app.config["CACHE_TYPE"] = "null"
 CORS(app)                                       # Removes cross origin problems from within the app
 Compress(app)                                   # Compresses all requests
+
+# app.cache = Cache(app)
 
 cData = r_rest_Crawl_N_Calculate_Data()         # Crawls and calculates Data
 tOverview = r_rest_Thread_Overview()            # Overview for thread information

@@ -122,8 +122,7 @@ IAMA_Extension.UIThreadOverview = function () {
 
                 // Updates the subelements of the actually seleted thread (on the left side panel)
                 if ($(this).hasClass("thread_selected") === true) {
-                    console.log("FOUND ID", $(this).attr('id'));
-                    
+
                     $(this).empty();
 
                     var title = data['thread_title'],

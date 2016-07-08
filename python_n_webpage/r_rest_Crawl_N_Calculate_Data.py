@@ -200,7 +200,7 @@ class r_rest_Crawl_N_Calculate_Data:
         # This is because a real reddit live experience is not possible...
         # Whenever you try to receive data directly after you have posted something on reddit, you will receive
         # the old data.. (reddit is not that fast).. therefore we will wait a few seconds.
-        time.sleep(5)
+        # time.sleep(5)
 
         # Anonymous inner method to write comments into the database
         def write_comments_into_db(id_of_thread):
