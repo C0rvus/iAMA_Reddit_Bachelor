@@ -639,6 +639,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     var text_Of_Clicked_Element = $.trim($(this).text());
                     if (text_Of_Clicked_Element !== "Close dropdown") {
                         unanswered_Sorting_Settings_Type = text_Of_Clicked_Element;
+
+                        // Triggers to write meta data !!
+                        _sendUsageMetaData(unanswered_Sorting_Settings_Type);
                     }
                 })
             })
@@ -719,6 +722,21 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 _fakeClickRefreshButton();
             }
 
+        },
+
+        /**
+         * Whenever metadata got tracked
+         * @param given_usage_text contains information about the usage context
+         * @private
+         */
+        _sendUsageMetaData = function (given_usage_text) {
+            console.log("executing testtrigger");
+
+            var data_to_send = [JSON.stringify({"text": given_usage_text})];
+
+
+            $(body).trigger('Write_MetaData', data_to_send);
+            console.log("nach triggering !!!");
         },
 
 

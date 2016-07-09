@@ -291,6 +291,30 @@ IAMA_Extension.MongoDBConnector = function () {
             
         },
 
+        _writeMetaDataFile = function (event, data) {
+
+            console.log("BIN IM Metadatawriter", data);
+
+
+            // TODO: Hier reinhauen, wenn data != null [ist bei initialiiseriung so...]
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:5000/write_meta_data/",
+                processData: false,
+                contentType: 'application/json',
+                data: data, // this text data is already json - stringified
+                success: function () {
+                    console.log("SUCCESS meta data");
+                },
+                error: function () {
+                    console.log("FAILURE in meta data");
+                }
+            });
+
+
+
+        },
+
         /**
          * Initializes necessary variables to work with.
          * Which is just the body document
@@ -311,6 +335,9 @@ IAMA_Extension.MongoDBConnector = function () {
 
             // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
             body.on('rest_Post_Message_To_Reddit', _submitDataToReddit);
+
+            // AnyUIClass -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Write_MetaData', _writeMetaDataFile);
         },
 
         /**

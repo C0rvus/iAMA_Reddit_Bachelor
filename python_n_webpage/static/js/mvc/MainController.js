@@ -191,6 +191,10 @@ IAMA_Extension.MainController = function () {
             $(body).trigger("Main_To_UI_Post_Successful", data);
         },
 
+        _onMetaDataWriteToMongoDBConnector = function (event, data) {
+            $(body).trigger("Main_To_Rest_Write_MetaData", data);
+        },
+
         /**
          * Initializes all "trigger" events the main controller should listen to
          * @private

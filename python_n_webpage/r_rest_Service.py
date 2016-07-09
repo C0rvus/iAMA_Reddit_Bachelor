@@ -21,6 +21,7 @@ from r_rest_Thread_Overview import r_rest_Thread_Overview   # Ability to give ba
 
 from r_rest_Login_Behaviour import r_rest_Login_Behaviour   # Ability to handle the login behaviour
 from r_rest_Post_Behaviour import r_rest_Post_Behaviour     # Ability to be able to post things on reddit
+from r_rest_Meta_Logger import r_rest_Meta_Logger           # Ability to write meta data text file
 
 from r_rest_No_Cache import nocache
 
@@ -35,6 +36,8 @@ tOverview = r_rest_Thread_Overview()            # Overview for thread informatio
 
 iLogin = r_rest_Login_Behaviour()               # The login behaviour is handled here
 pBehaviour = r_rest_Post_Behaviour()            # Ability to post things on reddit
+
+mWriter = r_rest_Meta_Logger()                  # Ability to create a meta data file for analyzing purposes
 
 username_actually_logged_in = ""                # The name, with which you have authorized yourself via OAuth2 on reddit
 thread_actually_used = ""                       # The actually selected thread (necessary for calculation / retrieval)
@@ -183,6 +186,31 @@ def crawl_n_calculate_data():
                                                  extracted_an_filter_tier, extracted_an_filter_score_equals,
                                                  extracted_an_filter_score_numeric, extracted_an_sorting_direction,
                                                  extracted_an_sorting_type)
+
+
+# REST: Write user meta data to text file
+@app.route('/write_meta_data/', methods=['POST'])
+def write_meta_data_file():
+    """Handles the call, whenever the user clicked something on the webpage
+
+        Whenever the user clicked something on the webpage (i.e. buttons) it will be written down into a text file.
+
+        This will collect meta data and help us analyzing and improving our iAMA experience
+
+    Args:
+        request.json['author'] : The name of the currently logged on user
+        request.json['text'] : The description of what the user actually clicked
+
+    Returns:
+        'done' : Just some text to fulfill the return principles
+
+    """
+
+    json_text = str(request.json['text'])
+
+    mWriter.write_data_into_file(username_actually_logged_in, json_text)
+
+    return "done"
 
 
 # REST: Post comment to reddit
