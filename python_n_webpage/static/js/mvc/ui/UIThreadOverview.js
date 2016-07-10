@@ -25,6 +25,9 @@ IAMA_Extension.UIThreadOverview = function () {
                 // Click listener for every iterated item
                 $(this).click(function () {
 
+                    // Triggers to write meta data text file
+                    _sendUsageMetaData("ThreadOverview: clicked '" + "'" + $(this).attr('id'));
+
                     // Removes "thread_selected" - class from every element
                     (overview_Container).children('li').each(function () {
                         $(this).removeClass("thread_selected");
@@ -143,6 +146,18 @@ IAMA_Extension.UIThreadOverview = function () {
 
                 }
             });
+        },
+
+        /**
+         * Whenever metadata needs to be written down into a text file
+         * @param given_usage_text contains information about the usage context
+         * @private
+         */
+        _sendUsageMetaData = function (given_usage_text) {
+            var data_to_send = [JSON.stringify({"text": given_usage_text})];
+
+            // Here -> UIController -> MainController -> RestController -> MongoDBConnector
+            $(body).trigger('MetaData_To_File', data_to_send);
         },
 
         /**

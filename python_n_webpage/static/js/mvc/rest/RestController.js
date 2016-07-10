@@ -145,6 +145,20 @@ IAMA_Extension.RestController = function () {
         _givePostSuccessMessageToMainController = function (event, data){
             $(body).trigger('Rest_To_Main_Post_Sucess', data);
         },
+        
+        /**
+         * Triggers data from any UIClass to MongoDBConnector - class
+         *
+         * Whenever the user clicked on any UI event within the page it will be trigered to the MongoDBConnector
+         * which will write that information into a text file which is to be analyzed later on.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains Information about the clicked UI element
+         * @private
+         */
+        _giveMetaDataToMongoDBConnector = function (event, data) {
+            $(body).trigger('rest_Write_MetaData_Into_TextFile', data);
+        },
 
         /**
          * Initializes all "trigger" events the rest controller should listen to
@@ -181,6 +195,9 @@ IAMA_Extension.RestController = function () {
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
             body.on('Rest_To_Unanswered_Posting_Success', _givePostSuccessMessageToMainController);
+
+            // AnyUIClass -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Main_To_Rest_Write_MetaData', _giveMetaDataToMongoDBConnector);
         },
 
         /**

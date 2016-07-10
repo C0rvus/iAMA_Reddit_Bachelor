@@ -261,6 +261,10 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
             return dom_Element.click("click", function () {
 
+                // Triggers to write meta data text file
+                //noinspection JSJQueryEfficiency
+                _sendUsageMetaData("(unanswered) Clicked SEND Button for '" + id_of_question + "' with following text: " + $("#" + id_of_question + "_answer_box").val());
+
                 //noinspection JSJQueryEfficiency
                 var data = {"text": $("#" + id_of_question + "_answer_box").val()};
 
@@ -322,6 +326,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
             //noinspection JSUnresolvedFunction
             return dom_Element.click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Already answered(unanswered): clicked");
+
+
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Important information',
@@ -375,11 +384,17 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                                 // Whenever the click has been set, unbind that given behaviour
                                 $('#iAMA_Answer_Panel').find('> li').unbind("click");
 
+                                // Triggers to write meta data text file
+                                _sendUsageMetaData("Already answered(unanswered): selected question_id: " + id_Of_Question);
+
                             });
 
                             // Whenever ESC has been pressed revert to original view
                             $(document).on('keyup', function (e) {
                                 if (e.keyCode === 27) {
+
+                                    // Triggers to write meta data text file
+                                    _sendUsageMetaData("Already answered(unanswered): pressed ESC selected question_id: " + id_Of_Question);
 
                                     $('#iAMA_Answer_Panel').find('> li').unbind("click");
 
@@ -407,6 +422,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                         label: 'Close',
                         action: function (dialogRef) {
                             dialogRef.close();
+
+                            // Triggers to write meta data text file
+                            _sendUsageMetaData("Already answered(unanswered): closed selection dialogue");
                         }
                     }]
                 });
@@ -537,6 +555,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         _onRefreshClicked = function () {
             unanswered_Refresh_Button.click(function () {
 
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Refresh(unanswered): clicked");
+
                 // Defines two arrays which will contain information about the various statemenets
                 // Necessary to also get information for the answered questions, due to the way the REST mechanism was
                 // built
@@ -550,7 +571,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 // Iterates over all open BootStrapDialogWindows, making sure to not generate new windows over the old ones
                 // This prevents permanent window recreation and fading effects..
-                $.each(BootstrapDialog.dialogs, function(){
+                $.each(BootstrapDialog.dialogs, function () {
                     amount_Of_Open_BootStrapDialogs += 1;
                 });
 
@@ -575,17 +596,33 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          */
         _onFilterClicked = function () {
 
+            // Appends a click listener to the generic filtering button
+            $('#iAMA_Unanswered_Filtering_Opening_Button').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Clicked filtering Button");
+
+            });
+
             // Defines the click listener for tier selection
             $('#iAMA_Unanswered_Filtering_Tier_Selection').click(function () {
                 unanswered_Filter_Settings_Tier = $(this).find('option:selected').text();
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Filter selected: " + unanswered_Filter_Settings_Tier);
+
             });
 
             // Defines the click listener for score comparison selection
             $('#iAMA_Unanswered_Filtering_Score_Selection').click(function () {
                 unanswered_Filter_Settings_Score_Compare = $(this).find('option:selected').text();
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Score compare selected: " + unanswered_Filter_Settings_Score_Compare);
             });
 
             // Defines the concrete numeric value to be input into the score field
+            //noinspection JSJQueryEfficiency
             $('#iAMA_Unanswered_Filtering_Score_Concrete').click(function () {
 
                 // Whenever nothing has been initially selected
@@ -598,12 +635,27 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 } else {
                     unanswered_Filter_Settings_Score_Value = $(this).val();
+
+                    // Triggers to write meta data text file
+                    _sendUsageMetaData("Filtering(unanswered): Score concrete input: " + unanswered_Filter_Settings_Score_Value);
                 }
+
+            });
+
+            // Whenever the value input changes it will be written down into a text file
+            //noinspection JSJQueryEfficiency
+            $('#iAMA_Unanswered_Filtering_Score_Concrete').on('input', function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Score concrete input: " + $('#iAMA_Unanswered_Filtering_Score_Concrete').val());
 
             });
 
             // Defines the reset button for filtering methods
             $('#iAMA_Unanswered_Filtering_Reset').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Reset");
 
                 // Reset the values within the code to null here
                 unanswered_Filter_Settings_Tier = null;
@@ -616,6 +668,14 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 $('#iAMA_Unanswered_Filtering_Score_Concrete').val(null);
 
             });
+
+            // Whenever the filtering dropdown menu gets closed protocol that
+            $('#iAMA_Unanswered_Filtering_Close_Dropdown').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(unanswered): Closed Dropdown");
+            });
+
         },
 
         /**
@@ -624,6 +684,16 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @private
          */
         _onSortingClicked = function () {
+
+            // Defines the click listener for the generic sorting button
+            $('#iAMA_Unanswered_Sorting_Opening_Button').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Sorting(unanswered): Clicked sorting Button");
+
+            });
+
+
             // Appends a click listener for every dom element
             unanswered_Sorting_Button.find("li").each(function () {
                 $(this).click(function () {
@@ -637,11 +707,12 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     $(this).addClass("sorting_Selected");
 
                     var text_Of_Clicked_Element = $.trim($(this).text());
+
+                    // Triggers to write meta data text file
+                    _sendUsageMetaData("Sorting(unanswered): selected: " + text_Of_Clicked_Element);
+
                     if (text_Of_Clicked_Element !== "Close dropdown") {
                         unanswered_Sorting_Settings_Type = text_Of_Clicked_Element;
-
-                        // Triggers to write meta data !!
-                        _sendUsageMetaData(unanswered_Sorting_Settings_Type);
                     }
                 })
             })
@@ -666,10 +737,10 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @param milliseconds {int} the amount of milliseconds the webpage should be delayed
          * @private
          */
-        _sleepNow = function(milliseconds) {
+        _sleepNow = function (milliseconds) {
             var start = new Date().getTime();
             for (var i = 0; i < 1e7; i++) {
-                if ((new Date().getTime() - start) > milliseconds){
+                if ((new Date().getTime() - start) > milliseconds) {
                     break;
                 }
             }
@@ -695,7 +766,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * question_upvote_score = {Integer} The amount of upvotes
          * @private
          */
-        _checkIfQuestionRetrievalIsOk = function(event, data) {
+        _checkIfQuestionRetrievalIsOk = function (event, data) {
             var temp_Question_Checker = 0;
 
             // Iterates over all questions within the received data array
@@ -725,20 +796,16 @@ IAMA_Extension.UIUnansweredQuestions = function () {
         },
 
         /**
-         * Whenever metadata got tracked
+         * Whenever metadata needs to be written down into a text file
          * @param given_usage_text contains information about the usage context
          * @private
          */
         _sendUsageMetaData = function (given_usage_text) {
-            console.log("executing testtrigger");
-
             var data_to_send = [JSON.stringify({"text": given_usage_text})];
 
-
-            $(body).trigger('Write_MetaData', data_to_send);
-            console.log("nach triggering !!!");
+            // Here -> UIController -> MainController -> RestController -> MongoDBConnector
+            $(body).trigger('MetaData_To_File', data_to_send);
         },
-
 
         /**
          * Initializes all UI elements to retrieve data from

@@ -76,7 +76,6 @@ IAMA_Extension.MongoDBConnector = function () {
         _onSuccessInitialCall = function (content) {
             // Closes all open BootStrapDialog dialoges
             _closeBootStrapDialog();
-            console.log("MONGODB on ERROR !");
             $(body).trigger('rest_Initial_Thread_Overview_Array', [content]);
         },
 
@@ -290,25 +289,30 @@ IAMA_Extension.MongoDBConnector = function () {
             });
             
         },
-
+        /**
+         * Writes data, which is triggered from any UI class to here down into a text file
+         *
+         * Whenever the user clicked on any UI event within the page it will be trigered to the MongoDBConnector
+         * which will write that information into a text file which is to be analyzed later on.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains Information about the clicked UI element
+         * @private
+         */
         _writeMetaDataFile = function (event, data) {
 
-            console.log("BIN IM Metadatawriter", data);
-
-
-            // TODO: Hier reinhauen, wenn data != null [ist bei initialiiseriung so...]
             $.ajax({
                 type: "POST",
                 url: "http://127.0.0.1:5000/write_meta_data/",
                 processData: false,
                 contentType: 'application/json',
-                data: data, // this text data is already json - stringified
-                success: function () {
-                    console.log("SUCCESS meta data");
-                },
-                error: function () {
-                    console.log("FAILURE in meta data");
-                }
+                data: data // this text data is already json - stringified
+                // success: function () {
+                //     console.log("SUCCESS meta data");
+                // },
+                // error: function () {
+                //     console.log("FAILURE in meta data");
+                // }
             });
 
 
@@ -337,7 +341,7 @@ IAMA_Extension.MongoDBConnector = function () {
             body.on('rest_Post_Message_To_Reddit', _submitDataToReddit);
 
             // AnyUIClass -> UIController -> MainController -> RestController -> MongoDBConnector
-            body.on('Write_MetaData', _writeMetaDataFile);
+            body.on('rest_Write_MetaData_Into_TextFile', _writeMetaDataFile);
         },
 
         /**

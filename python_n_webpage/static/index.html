@@ -55,28 +55,28 @@
 
         </div>
 
-        <!-- Navigation bar buttons -->
-        <ul class="nav navbar-top-links navbar-right">
+        <!--&lt;!&ndash; Navigation bar buttons &ndash;&gt;-->
+        <!--<ul class="nav navbar-top-links navbar-right">-->
 
-            <!-- User profile icon -->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
+            <!--&lt;!&ndash; User profile icon &ndash;&gt;-->
+            <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+                    <!--<i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>-->
+                <!--</a>-->
 
-                <!-- Menu entries for user profile icon -->
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                    </li>
-                </ul>
-            </li>
+                <!--&lt;!&ndash; Menu entries for user profile icon &ndash;&gt;-->
+                <!--<ul class="dropdown-menu dropdown-user">-->
+                    <!--<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>-->
+                    <!--</li>-->
+                    <!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
 
-        </ul>
+        <!--</ul>-->
 
         <!-- Left side bar -->
         <div class="navbar-default sidebar" role="navigation">
@@ -325,7 +325,7 @@
                         <!-- Sorting drop down -->
                         <div class="btn-group pull-right" id="iAMA_Unanswered_Sorting">
 
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" id="iAMA_Unanswered_Sorting_Opening_Button">
                                 <i class="fa fa-sort-numeric-asc"></i>
                             </button>
 
@@ -400,7 +400,7 @@
                         <!-- Filter drop down -->
                         <div class="btn-group pull-right" id="iAMA_Unanswered_Filter">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle"
-                                    data-toggle="dropdown">
+                                    data-toggle="dropdown" id="iAMA_Unanswered_Filtering_Opening_Button">
                                 <i class="fa fa-filter"></i>
                             </button>
                             <ul class="dropdown-menu slidedown">
@@ -446,7 +446,7 @@
                                 <!-- Divides the view -->
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="iAMA_Unanswered_Filtering_Close_Dropdown">
                                         <i class="fa fa-sign-out fa-fw"></i> Close dropdown
                                     </a>
                                 </li>
@@ -578,7 +578,7 @@
 
                         <!-- Sorting drop down -->
                         <div class="btn-group pull-right" id="iAMA_Answered_Sorting">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" id="iAMA_Answered_Sorting_Opening_Button">
                                 <i class="fa fa-sort-numeric-asc"></i>
                             </button>
                             <ul class="dropdown-menu slidedown">
@@ -649,7 +649,7 @@
                         <!-- Filter drop down -->
                         <div class="btn-group pull-right" id="iAMA_Answered_Filter">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle"
-                                    data-toggle="dropdown">
+                                    data-toggle="dropdown" id="iAMA_Answered_Filtering_Opening_Button">
                                 <i class="fa fa-filter"></i>
                             </button>
                             <ul class="dropdown-menu slidedown">
@@ -695,7 +695,7 @@
                                 <!-- Divides the view -->
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="iAMA_Answered_Filtering_Close_Dropdown">
                                         <i class="fa fa-sign-out fa-fw"></i> Close dropdown
                                     </a>
                                 </li>

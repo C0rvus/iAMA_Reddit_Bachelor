@@ -198,6 +198,20 @@ IAMA_Extension.UIController = function () {
         },
 
         /**
+         * Triggers data from any UIClass to MongoDBConnector - class
+         *
+         * Whenever the user clicked on any UI event within the page it will be trigered to the MongoDBConnector
+         * which will write that information into a text file which is to be analyzed later on.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains Information about the clicked UI element
+         * @private
+         */
+        _giveMetaDataToMongoDBConnecot = function (event, data) {
+            $(body).trigger('MetaData_To_TextFile', data);
+        },
+
+        /**
          * Initializes all "trigger" events the ui controller should listen to
          * @private
          */
@@ -232,6 +246,9 @@ IAMA_Extension.UIController = function () {
 
             // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
             body.on('Main_To_UI_Post_Successful', _givePostSuccessfulToUnansweredPanel)
+
+            // AnyUIClass -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('MetaData_To_File', _giveMetaDataToMongoDBConnecot)
 
         },
 

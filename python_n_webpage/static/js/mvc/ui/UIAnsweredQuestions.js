@@ -241,6 +241,9 @@ IAMA_Extension.UIAnsweredQuestions = function () {
         _onRefreshClicked = function () {
             answered_Refresh_Button.click(function () {
 
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Refresh(answered): clicked");
+
                 // Defines two arrays which will contain information about the various statemenets
                 // Necessary to also get information for the answered questions, due to the way the REST mechanism was
                 // built
@@ -248,7 +251,6 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                     information_Answered_Questions = _getDataForAnsweredQuestionsFromWebSite(),
                     selected_Thread_ID = _getThreadID();
 
-                // TODO: Give that trigger to MongoDB-RestConnector
 
                 $(body).trigger('Refresh_To_UI',[[selected_Thread_ID, [information_Unanswered_Questions],[information_Answered_Questions]]]);
 
@@ -269,6 +271,15 @@ IAMA_Extension.UIAnsweredQuestions = function () {
          * @private
          */
         _onSortingClicked = function () {
+
+            // Defines the click listener for the generic sorting button
+            $('#iAMA_Answered_Sorting_Opening_Button').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Sorting(answered): Clicked sorting Button");
+
+            });
+
             // Appends a click listener for every dom element
             answered_Sorting_Button.find("li").each(function () {
                 $(this).click(function () {
@@ -282,6 +293,10 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                     $(this).addClass("sorting_Selected");
 
                     var text_Of_Clicked_Element = $.trim($(this).text());
+
+                    // Triggers to write meta data text file
+                    _sendUsageMetaData("Sorting(answered): selected: " + text_Of_Clicked_Element);
+
                     if (text_Of_Clicked_Element !== "Close dropdown") {
                         answered_Sorting_Settings_Type = text_Of_Clicked_Element;
                     }
@@ -295,14 +310,28 @@ IAMA_Extension.UIAnsweredQuestions = function () {
          */
         _onFilterClicked = function () {
 
+            // Appends a click listener to the generic filtering button
+            $('#iAMA_Answered_Filtering_Opening_Button').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Clicked filtering Button");
+
+            });
+
             // Defines the click listener for tier selection
             $('#iAMA_Answered_Filtering_Tier_Selection').click(function () {
                 answered_Filter_Settings_Tier = $(this).find('option:selected').text();
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Filter selected: " + answered_Filter_Settings_Tier);
             });
 
             // Defines the click listener for score comparison selection
             $('#iAMA_Answered_Filtering_Score_Selection').click(function () {
                 answered_Filter_Settings_Score_Compare = $(this).find('option:selected').text();
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Score compare selected: " + answered_Filter_Settings_Score_Compare);
             });
 
             // Defines the concrete numeric value to be input into the score field
@@ -317,11 +346,28 @@ IAMA_Extension.UIAnsweredQuestions = function () {
 
                 } else {
                     answered_Filter_Settings_Score_Value = $(this).val();
+
+                    // Triggers to write meta data text file
+                    _sendUsageMetaData("Filtering(answered): Score concrete input: " + answered_Filter_Settings_Score_Value);
                 }
             });
 
+            // Whenever the value input changes it will be written down into a text file
+            //noinspection JSJQueryEfficiency
+            $('#iAMA_Answered_Filtering_Score_Concrete').on('input', function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Score concrete input: " + $('#iAMA_Answered_Filtering_Score_Concrete').val());
+
+            });
+
+            
             // Defines the reset button for filtering methods
             $('#iAMA_Answered_Filtering_Reset').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Reset");
+
                 // Reset the values within the code to null here
                 answered_Filter_Settings_Tier = null;
                 answered_Filter_Settings_Score_Compare = null;
@@ -332,6 +378,13 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 $('#iAMA_Answered_Filtering_Score_Selection').val("eql");
                 $('#iAMA_Answered_Filtering_Score_Concrete').val(null);
 
+            });
+
+            // Whenever the filtering dropdown menu gets closed protocol that
+            $('#iAMA_Answered_Filtering_Close_Dropdown').click(function () {
+
+                // Triggers to write meta data text file
+                _sendUsageMetaData("Filtering(answered): Closed Dropdown");
             });
 
         },
@@ -443,6 +496,18 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 // Adds that combination to the answer panel
                 answer_Panel.append(li_top);
             });
+        },
+
+        /**
+         * Whenever metadata needs to be written down into a text file
+         * @param given_usage_text contains information about the usage context
+         * @private
+         */
+        _sendUsageMetaData = function (given_usage_text) {
+            var data_to_send = [JSON.stringify({"text": given_usage_text})];
+
+            // Here -> UIController -> MainController -> RestController -> MongoDBConnector
+            $(body).trigger('MetaData_To_File', data_to_send);
         },
 
         /**

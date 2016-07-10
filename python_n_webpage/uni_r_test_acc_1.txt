@@ -1,2 +1,94 @@
-9.7.2016 @ 17:20:47 ;;; uni_r_test_acc_1 ;;; Author name ascending
-9.7.2016 @ 17:20:55 ;;; uni_r_test_acc_1 ;;; Creation time descending
+10.7.2016 @ 16:11:55 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked 4ql7dd
+10.7.2016 @ 16:12:19 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:12:20 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: all
+10.7.2016 @ 16:12:21 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: 1
+10.7.2016 @ 16:12:21 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: equal
+10.7.2016 @ 16:12:22 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: greater or equal
+10.7.2016 @ 16:12:24 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Reset
+10.7.2016 @ 16:12:25 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:12:26 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: all
+10.7.2016 @ 16:12:27 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: all
+10.7.2016 @ 16:12:27 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: equal
+10.7.2016 @ 16:12:28 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: greater or equal
+10.7.2016 @ 16:12:29 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: greater or equal
+10.7.2016 @ 16:12:29 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score compare selected: lesser or equal
+10.7.2016 @ 16:12:31 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Closed Dropdown
+10.7.2016 @ 16:12:52 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked 'already answered'
+10.7.2016 @ 16:13:09 ;;; uni_r_test_acc_1 ;;; (unanswered) Already answered selected question_id: d4ttxh4
+10.7.2016 @ 16:13:26 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): Clicked sorting Button
+10.7.2016 @ 16:13:26 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): selected: Author name ascending
+10.7.2016 @ 16:13:27 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): Clicked sorting Button
+10.7.2016 @ 16:13:27 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): selected: Author name descending
+10.7.2016 @ 16:13:27 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): Clicked sorting Button
+10.7.2016 @ 16:13:28 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): selected: Random
+10.7.2016 @ 16:13:28 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): Clicked sorting Button
+10.7.2016 @ 16:13:29 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): selected: Close dropdown
+10.7.2016 @ 16:13:30 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:13:44 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for question_id: d4ttxh4
+10.7.2016 @ 16:13:44 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for 'd4ttxh4' with following text: test
+10.7.2016 @ 16:13:49 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:14:45 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Clicked filtering Button
+10.7.2016 @ 16:14:46 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Filter selected: all
+10.7.2016 @ 16:14:47 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Filter selected: 1
+10.7.2016 @ 16:14:47 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Score compare selected: equal
+10.7.2016 @ 16:14:47 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Score compare selected: greater or equal
+10.7.2016 @ 16:14:48 ;;; uni_r_test_acc_1 ;;; Filtering(answered): Closed Dropdown
+10.7.2016 @ 16:14:49 ;;; uni_r_test_acc_1 ;;; Sorting(answered): Clicked sorting Button
+10.7.2016 @ 16:14:51 ;;; uni_r_test_acc_1 ;;; Sorting(answered): selected: Author name descending
+10.7.2016 @ 16:14:52 ;;; uni_r_test_acc_1 ;;; Refresh(answered): clicked
+10.7.2016 @ 16:15:03 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked 4qm737
+10.7.2016 @ 16:15:21 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked 'already answered'
+10.7.2016 @ 16:15:40 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked 'already answered'
+10.7.2016 @ 16:18:47 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4ql7dd
+10.7.2016 @ 16:18:54 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4qm737
+10.7.2016 @ 16:19:04 ;;; uni_r_test_acc_1 ;;; Already answered(unanswered): clicked
+10.7.2016 @ 16:19:06 ;;; uni_r_test_acc_1 ;;; Already answered(unanswered): closed selection dialogue
+10.7.2016 @ 16:19:10 ;;; uni_r_test_acc_1 ;;; Already answered(unanswered): clicked
+10.7.2016 @ 16:19:13 ;;; uni_r_test_acc_1 ;;; Already answered(unanswered): closed selection dialogue
+10.7.2016 @ 16:19:38 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:24:12 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4ql7dd
+10.7.2016 @ 16:24:25 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:24:27 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1
+10.7.2016 @ 16:24:30 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12
+10.7.2016 @ 16:24:36 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:24:37 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123141341351
+10.7.2016 @ 16:24:40 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:24:41 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: all
+10.7.2016 @ 16:24:43 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Filter selected: 1
+10.7.2016 @ 16:26:11 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4ql7dd
+10.7.2016 @ 16:26:16 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:27:56 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4ql7dd
+10.7.2016 @ 16:28:38 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Clicked filtering Button
+10.7.2016 @ 16:28:40 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1
+10.7.2016 @ 16:28:41 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12
+10.7.2016 @ 16:28:41 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123
+10.7.2016 @ 16:28:41 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234
+10.7.2016 @ 16:28:41 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123451
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234512
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345125
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123451251
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234512512
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345125125
+10.7.2016 @ 16:28:42 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123451251258
+10.7.2016 @ 16:28:43 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345125125
+10.7.2016 @ 16:28:43 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234512512
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123451251
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345125
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234512
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 123451
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 12345
+10.7.2016 @ 16:28:44 ;;; uni_r_test_acc_1 ;;; Filtering(unanswered): Score concrete input: 1234
+10.7.2016 @ 16:31:06 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4ql7dd
+10.7.2016 @ 16:34:43 ;;; uni_r_test_acc_1 ;;; ThreadOverview: clicked ''4qm737
+10.7.2016 @ 16:34:56 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): Clicked sorting Button
+10.7.2016 @ 16:34:56 ;;; uni_r_test_acc_1 ;;; Sorting(unanswered): selected: Creation time descending
+10.7.2016 @ 16:34:59 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for question_id: d4wija1
+10.7.2016 @ 16:34:59 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for 'd4wija1' with following text: test123
+10.7.2016 @ 16:35:05 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:35:13 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for question_id: d4wiize
+10.7.2016 @ 16:35:13 ;;; uni_r_test_acc_1 ;;; (unanswered) Clicked SEND Button for 'd4wiize' with following text: test123134141
+10.7.2016 @ 16:35:16 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:35:18 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:35:20 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
+10.7.2016 @ 16:35:25 ;;; uni_r_test_acc_1 ;;; Refresh(unanswered): clicked
