@@ -420,6 +420,17 @@ The year which is to be used for the calculation and represents when the calcula
     python d_create_Big_CSV.py 2009 2012
     python d_create_Big_CSV.py 2012 2013
 
-## Usage of overhaul:
+## Usage of webpage:
 
-This is actually not in development yet.
+Before you start using the website make sure the following pre-requisites are fufilled:
+
+- Successful running instance of mongoDB
+- Installation of Python (3.5.1) with all necessary libraries [i.e. pymongo, praw, etc] (used within my classes)
+- Creation of a iAMA thread within /r/Gigan - subreddit (I haven't been granted with the rights to create a subreddit
+of my own, therefore we use an empty / abandoned subreddit here)
+
+If those pre-requisistes are fulfilled, navigte to "python_n_webpage" - folder and simply execute:
+
+    python r_rest_Service.py
+
+Just follow the onscreen instructions and have fun!
