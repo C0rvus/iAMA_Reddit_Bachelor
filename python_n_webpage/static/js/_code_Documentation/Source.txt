@@ -1,1 +1,0 @@
-03.07.2016 @ 17.16 Uhr : http://www.jfuerwentsches.de/weblog/artikel/javascript-code-dokumentation-mit-doxygen/

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui/UIController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui/UIController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *  @class UIController
+ *  The UIController is necessary to
+ *  - give trigger data to specific UI elements
+ *  - give trigger data from UI elements (requests) to mo the MongoDBConnector
+ */
+IAMA_Extension.UIController = function () {
+    var that = {},
+
+        body,
+        topbar,
+        thread_Overview,
+        stats_Overview,
+        unanswered_Questions,
+        answered_Questions,
+        ui_Generic_Methods,
+
+        /**
+         * Triggers data from MongoDBConnector to UIStatsOverview - class (UI)
+         * @param {event} event kind of event which is to be triggered
+         * @param {[]} data contains following information about the statistics on the left side of the page:
+         *
+         * thread_amount_questions {Integer}
+         * thread_amount_questions_tier_1 {Integer}
+         * thread_amount_questions_tier_x {Integer}
+         * thread_amount_unanswered_questions {Integer}
+         * thread_average_question_score {String}
+         * thread_average_reaction_time_host {String}
+         * thread_new_question_every_x_sec {String}
+         * thread_question_top_score {Integer}
+         * thread_time_stamp_last_question {Integer}
+         * @private
+         */
+        _giveStatsToStatsPanel = function (event, data) {
+            $(body).trigger("stats_Data_To_DOM", data);
+        },
+
+        /**
+         * Triggers data from MongoDBConnector to UITopBar - class (UI)
+         *
+         * @param {event} event kind of event which is to be triggered
+         * @param {[]} data contains some stats data about the clicked thread
+         *  thread_amount_questioners = {Integer}
+         *  thread_amount_unanswered_questions = {Integer}
+         *  thread_downs = {Integer}
+         *  thread_duration = {Integer}
+         *  thread_new_question_every_x_sec = {Integer}
+         *  thread_ups = {Integer}
+         * @private
+         */
+        _giveMiniStatsToTopBar = function (event, data) {
+            $(body).trigger("top_Data_To_DOM", data);
+        },
+
+        /**
+         * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
+         *
+         * @param {event} event kind of event which is to be triggered
+         * @param {[]} dataArray contains information about questions which have to be answered by the iama host
+         * Each question gets represented by an array containing following information:
+         * question_author = "" {String} Information about the question author
+         * question_id = "" {String}    The id of the question
+         * question_text = "" {String}  The question text itself
+         * question_timestamp = "" {String} The (already prepared) timestamp
+         * question_upvote_score = {Integer} The amount of upvotes
+         * @private
+         */
+        _giveUnansweredQuestionsToUnansweredPanel = function (event, dataArray) {
+            $(body).trigger("unanswered_Questions_To_DOM", [dataArray]);
+
+        },
+
+        /**
+         * Triggers data from MongoDBConnector to UIAnsweredQuestions - class (UI)
+         *
+         * @param {event} event kind of event which is to be triggered
+         * @param {[]} dataArray contains arrays containg the following values:
+         *
+         * answer_id = "" {String}          The id of the answer
+         * answer_text = "" {String}        The answer text itself
+         * answer_timestamp = "" {String}   The timestamp of the given answer
+         * answer_upvote_score = {Integer}  The score of the single answer
+         * question_author = "" {String}    The name of the question author
+         * question_id = "" {String}        The id of the question being asked
+         * question_text = "" {String}      The text of the question being askex
+         * question_timestamp = "" {String} The timestamp of the question
+         * question_upvote_score = {Integer} The upvote score of the appropriate question
+         * @private
+         */
+        _giveAnsweredQuestionsToAnsweredPanel = function (event, dataArray) {
+            $(body).trigger("answered_Questions_To_DOM", [dataArray]);
+        },
+
+        /**
+         * Triggers data from UI(Un)AnsweredQuestions to MongoDBConnector - class (REST)
+         *
+         * Whenever a refresh button on the (un)answered question panel gets clicked, this method will be triggered
+         *
+         * @param {event} event kind of event which is to be triggered
+         * @param {[]} dataArray contains all filtering / sorting information for un &amp; answered questions
+         * [0] (unanswered questions) [1] {answered questions}, both containing the values below:
+         * 0 = "" {String}  {Question filtering tier: all / 1 / x)
+         * 1 = "" {String}  (Question filtering compare: eql / grt / lrt)
+         * 2 = {Integer}    {Question score compare: any integer)
+         * 3 = "" {String}  {Question sorting type /author / creation / score / random}
+         * 4 = "" {String}  {Question sorting direction /asc / desc}
+         * @private
+         */
+        _refreshQuestionPanels = function (event, dataArray) {
+            $(body).trigger("UI_To_Main_Refresh", [dataArray]);
+        },
+
+        /**
+         * Triggers data from UIThreadOverview to MongoDBConnector - class (REST)
+         *
+         * Whenever a thread within the overview has been clicked this trigger gets fired up
+         *
+         * @param {event} event which fires this trigger
+         * @param {[]} dataArray data which contains information about what kind of thread on the left side has been
+         * selected
+         *
+         * 0 = "" {String} id of thread
+         * [1] = Information about unanswered questions
+         * [1] = Information about answered questions
+         * @private
+         */
+        _onThreadClicked = function (event, dataArray) {
+            $(body).trigger('thread_Selected', [dataArray]);
+        },
+
+        /**
+         * Triggers data from MongoDBConnector to UIThreadOverview - class (UI)
+         *
+         * Whenever the website gets loaded for the first time this method will be executed
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data:
+         * [0]
+         *      amount_answered = "" {Integer}
+         *      amount_of_questions = "" {Integer}
+         *      duration = "" {String}
+         *      thread_id = "" {String}
+         *      title = "" {String}
+         * [1], etc... (depends on the amount of threads on the left side panel)
+         * @private
+         */
+        _giveInitialThreadInformationToThreadOverView = function (event, dataArray) {
+            $('body').trigger('UI_To_Thread_Overview_Initial', [dataArray]);
+        },
+
+        /**
+         * Triggers data from MongoDBConnector to UIThreadOverview - class (UI)
+         *
+         * Whenever the refresh button got clicked or a thread got loaded the panel data will be refreshed
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} data consists of following data for the selected thread:
+         * [0]
+         *      thread_amount_questions = "" {Integer}
+         *      thread_amount_unanswered_questions = "" {Integer}
+         *      thread_duration = "" {String}
+         *      thread_id = "" {String}
+         *      thread_title = "" {String}
+         * @private
+         */
+        _giveThreadInformationToThreadOverview = function (event, data) {
+            $(body).trigger('UI_To_Thread_Overview', data);
+        },
+
+        /**
+         * Triggers data from UIUnansweredQuestions to MongoDBConnector - class (UI)
+         *
+         * Whenever the user pressed the "send" button, the answer text and the regarding question id, will be triggered
+         * to the MongoDBConnector to post that on reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {[]} dataArray consists of following data for the answered question:
+         * [0]  id_of_question {String}     The id of the question the answer text belongs to
+         * [1]  answer_text {String}        The answer text itself
+         * @private
+         */
+        _givePostMessageToMongoDBConnector = function (event, dataArray) {
+            $(body).trigger('UI_To_Main_Post_To_Reddit', [dataArray]);
+        },
+        
+        /**
+         * Triggers data from MongoDBConnector to UIUnansweredQuestions - class (UI)
+         *
+         * Whenever the upload of a posted answer (by the iAMA host) was successful, this method gets executed.
+         * It will refresh the (un)answered questions panel - by requesting new data from reddit.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains "SUCCESS"
+         * @private
+         */
+        _givePostSuccessfulToUnansweredPanel = function (event, data) {
+            $(body).trigger('UI_To_Unanswered_Questions_Post_Successful', data);
+        },
+
+        /**
+         * Triggers data from any UIClass to MongoDBConnector - class
+         *
+         * Whenever the user clicked on any UI event within the page it will be trigered to the MongoDBConnector
+         * which will write that information into a text file which is to be analyzed later on.
+         *
+         * @param {event} event which fires that trigger
+         * @param {String} data contains Information about the clicked UI element
+         * @private
+         */
+        _giveMetaDataToMongoDBConnecot = function (event, data) {
+            $(body).trigger('MetaData_To_TextFile', data);
+        },
+
+        /**
+         * Initializes all "trigger" events the ui controller should listen to
+         * @private
+         */
+        _initEvents = function () {
+
+            // UIThreadOverview -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('thread_Clicked_To_Load', _onThreadClicked);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UITopBar
+            body.on('Main_To_UI_Topbar', _giveMiniStatsToTopBar);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIStatsOverview
+            body.on('Main_To_UI_Statistics_Panel', _giveStatsToStatsPanel);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            body.on('Main_To_UI_Unanswered_Questions', _giveUnansweredQuestionsToUnansweredPanel);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIAnsweredQuestions
+            body.on('Main_To_UI_Answered_Questions', _giveAnsweredQuestionsToAnsweredPanel);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIThreadOverview
+            body.on('Main_To_UI_Thread_Overview', _giveThreadInformationToThreadOverview);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIThreadOverview
+            body.on('Main_To_UI_Thread_Initial_Load', _giveInitialThreadInformationToThreadOverView);
+
+            // UI(Un)AnsweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Refresh_To_UI', _refreshQuestionPanels);
+
+            // UIUnansweredQuestions -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('Post_To_Reddit', _givePostMessageToMongoDBConnector);
+
+            // MongoDBConnector -> RestController -> MainController -> UIController -> UIUnansweredQuestions
+            body.on('Main_To_UI_Post_Successful', _givePostSuccessfulToUnansweredPanel)
+
+            // AnyUIClass -> UIController -> MainController -> RestController -> MongoDBConnector
+            body.on('MetaData_To_File', _giveMetaDataToMongoDBConnecot)
+
+        },
+
+        /**
+         * Initializes all ui elements to work with
+         * topbar : necessary to give data to the top panel of the website
+         * thread_Overview : necessary to give data to the thread overview of the website
+         * stats_Overview : necessary to give statistics data to the statistics panel
+         * answered_Questions : necessary to interact with the answered questions panel
+         * unanswered_Questions : necessary to interact with the unanswered questions panel
+         * ui_Generic_Methods : necessary to make use of specific ui scripts (i.E. Resizing behaviour, etc..)
+         * @private
+         */
+        _initModules = function () {
+
+            topbar = IAMA_Extension.UITopBar.init();
+            thread_Overview = IAMA_Extension.UIThreadOverview.init();
+            stats_Overview = IAMA_Extension.UIStatsOverview.init();
+            answered_Questions = IAMA_Extension.UIAnsweredQuestions.init();
+            unanswered_Questions = IAMA_Extension.UIUnansweredQuestions.init();
+            ui_Generic_Methods = IAMA_Extension.UIGenericMethods.init();
+
+        },
+
+        /**
+         * Initializes necessary variables to work with.
+         * Which is just the body document
+         * @private
+         */
+        _initVars = function () {
+            body = $(document.body);
+        };
+
+    /**
+     * Initializes this UIController itself
+     *
+     * @returns {object} UIController
+     */
+    that.init = function () {
+
+        _initVars();
+        _initEvents();
+        _initModules();
+
+        return that;
+    };
+    return that;
+}();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="IAMA_Extension.html">IAMA_Extension</a></li><li><a href="IAMA_Extension.MainController.html">MainController</a></li><li><a href="IAMA_Extension.MongoDBConnector.html">MongoDBConnector</a></li><li><a href="IAMA_Extension.RestController.html">RestController</a></li><li><a href="IAMA_Extension.UIAnsweredQuestions.html">UIAnsweredQuestions</a></li><li><a href="IAMA_Extension.UIController.html">UIController</a></li><li><a href="IAMA_Extension.UIGenericMethods.html">UIGenericMethods</a></li><li><a href="IAMA_Extension.UIStatsOverview.html">UIStatsOverview</a></li><li><a href="IAMA_Extension.UIThreadOverview.html">UIThreadOverview</a></li><li><a href="IAMA_Extension.UITopBar.html">UITopBar</a></li><li><a href="IAMA_Extension.UIUnansweredQuestions.html">UIUnansweredQuestions</a></li></ul><h3>Global</h3><ul><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jul 10 2016 17:01:14 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

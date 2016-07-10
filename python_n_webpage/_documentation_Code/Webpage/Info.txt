@@ -1,0 +1,5 @@
+To create the documentation [on Windows] please do the following things:
+
+1. Install 'jsdoc' via npm install -g jsdoc
+2. Place the script 'create_Documentation.bat' into the following folder: "..\python_n_webpage\static\js\mvc\"
+3. Run that script
