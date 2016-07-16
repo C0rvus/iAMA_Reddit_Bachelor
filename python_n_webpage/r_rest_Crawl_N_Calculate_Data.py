@@ -55,6 +55,7 @@ thread_time_stamp_last_question = 0  # Value received by (MongoDB - offline)
 thread_average_question_score = 0  # Value received by (MongoDB - offline)
 thread_average_reaction_time_host = 0  # Value received by (MongoDB - offline)
 thread_new_question_every_x_sec = 0  # Value received by (MongoDB - offline)
+thread_new_answer_every_x_sec = 0   # Value received by (MongoDB - offline)
 
 thread_amount_questions_tier_1 = 0  # Value received by (MongoDB - offline)
 thread_amount_questions_tier_x = 0  # Value received by (MongoDB - offline)
@@ -331,6 +332,7 @@ class r_rest_Crawl_N_Calculate_Data:
         global thread_average_question_score
         global thread_average_reaction_time_host
         global thread_new_question_every_x_sec
+        global thread_new_answer_every_x_sec
         global thread_amount_questions_tier_1
         global thread_amount_questions_tier_x
         global thread_question_top_score
@@ -374,6 +376,7 @@ class r_rest_Crawl_N_Calculate_Data:
         thread_average_question_score = 0
         thread_average_reaction_time_host = 0
         thread_new_question_every_x_sec = 0
+        thread_new_answer_every_x_sec = 0
 
         thread_amount_questions_tier_1 = 0
         thread_amount_questions_tier_x = 0
@@ -581,6 +584,7 @@ class r_rest_Crawl_N_Calculate_Data:
         global thread_average_question_score
         global thread_average_reaction_time_host
         global thread_new_question_every_x_sec
+        global thread_new_answer_every_x_sec
         global thread_amount_questioners
 
         # Will contain all scores of every question
@@ -591,6 +595,8 @@ class r_rest_Crawl_N_Calculate_Data:
         question_every_x_sec_timestamp_holder = [thread_created_utc]
         # Will contain the actual concrete time difference in seconds
         question_every_x_sec = []
+        # Will contain the actual concrete time difference of answers in seconds
+        answers_every_x_sec = []
 
         # Will contain questioners of every question
         questioner_holder = []
@@ -641,6 +647,15 @@ class r_rest_Crawl_N_Calculate_Data:
                     self.calculate_time_difference(question_every_x_sec_timestamp_holder[i + 1],
                                                    question_every_x_sec_timestamp_holder[i]))
 
+        # Iterates over every answer calculating the arithmetic mean answer time in seconds
+        for i in range(0, len(thread_answers_of_host)):
+
+            # Avoids index out of bounds error message
+            if i != len(thread_answers_of_host) - 1:
+                answers_every_x_sec.append(
+                    self.calculate_time_difference(thread_answers_of_host [i].get("created_utc"),
+                                                   thread_answers_of_host [i + 1].get("created_utc")))
+
         # Assigns necessary values for correct calculation
         if len(question_scores) == 0:
             thread_average_question_score = 0
@@ -659,6 +674,12 @@ class r_rest_Crawl_N_Calculate_Data:
             thread_new_question_every_x_sec = 0
         else:
             thread_new_question_every_x_sec = np.mean(question_every_x_sec)
+
+        # Whenever no answer has been posted at all
+        if len(answers_every_x_sec) == 0:
+            thread_new_answer_every_x_sec = 0
+        else:
+            thread_new_answer_every_x_sec = np.mean(answers_every_x_sec)
 
         thread_amount_questioners = len(questioner_holder)
 
@@ -1184,11 +1205,28 @@ class r_rest_Crawl_N_Calculate_Data:
             "thread_id": thread_id
         }]
 
+        # Whenever no question has been asked at all
+        if thread_new_question_every_x_sec == 0:
+            new_question_per_hour_converted = 0
+        else:
+            # Replaces the dot with comma notation
+            new_question_per_hour_converted = str("%.3f" % (1 / (int(thread_new_question_every_x_sec) / 3600)))
+            new_question_per_hour_converted = new_question_per_hour_converted.replace(".", ",")
+
+        # Whenever no answer has been given at all
+        if thread_new_answer_every_x_sec == 0:
+            new_answer_per_hour_converted = 0
+        else:
+            # Replaces the dot with comma notation
+            new_answer_per_hour_converted = str("%.3f" % (1 / (int(thread_new_answer_every_x_sec) / 3600)))
+            new_answer_per_hour_converted = new_answer_per_hour_converted.replace(".", ",")
+
         returned_json_top_panel = [{
             "thread_ups": thread_ups,
             "thread_downs": thread_downs,
             "thread_duration": int(thread_duration / 86400),
-            "thread_new_question_every_x_sec": int(thread_new_question_every_x_sec),
+            "thread_new_question_per_hour": new_question_per_hour_converted,
+            "thread_new_answer_per_hour": new_answer_per_hour_converted,
             "thread_amount_questioners": thread_amount_questioners,
             "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
             "thread_amount_questions": thread_amount_questions

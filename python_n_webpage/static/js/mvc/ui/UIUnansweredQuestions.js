@@ -500,7 +500,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                     q_answer_buttons_uber_container = $("<div class='input-group-btn'> </div>"),
                     q_answer_buttons_template_container = $("<div class='chat_template_button'>"),
-                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' data-toggle='dropdown'>Already answered</button>"),
+                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' data-toggle='dropdown'>Already answered >> HERE << </button>"),
 
                     q_answer_buttons_send_container = $("<div class='chat_send_button'></div>"),
                     q_answer_buttons_send_button = $("<button class='btn btn-warning btn-sm'>Answer</button>");
