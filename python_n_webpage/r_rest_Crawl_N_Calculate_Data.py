@@ -1190,7 +1190,8 @@ class r_rest_Crawl_N_Calculate_Data:
             "thread_duration": int(thread_duration / 86400),
             "thread_new_question_every_x_sec": int(thread_new_question_every_x_sec),
             "thread_amount_questioners": thread_amount_questioners,
-            "thread_amount_unanswered_questions": thread_amount_unanswered_questions
+            "thread_amount_unanswered_questions": thread_amount_unanswered_questions,
+            "thread_amount_questions": thread_amount_questions
         }]
 
         returned_json_statistics_panel = [{

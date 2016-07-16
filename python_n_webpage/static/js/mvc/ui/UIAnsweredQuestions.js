@@ -461,7 +461,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                     q_p_username = $("<p class='pull-left primary-font strong'>" + question_author + "</p>"),
                     q_p_posting_time = $("<p class='pull-right text-muted small chat-answered-questions'>" + question_timestamp + "<i class='fa fa-clock-o fa-fw'></i> </p> <br>"),
                     q_p_score = $("<p class='pull-right text-muted small chat-answered-questions'>" + question_upvote_score + "<i class='fa fa-bullseye fa-fw'> </i> </p> <br>"),
-                    q_p_question_id = $("<p class='pull-right text-muted small chat-answered-questions'>" + question_id + "<i class='fa fa-bookmark fa-fw'> </i> </p> <br> <br>"),
+                    // q_p_question_id = $("<p class='pull-right text-muted small chat-answered-questions'>" + question_id + "<i class='fa fa-bookmark fa-fw'> </i> </p> <br> <br>"),
                     q_p_text = $("<p class='chat-alignment-left'>" + question_text + "</p>"),
 
                     a_uber_container = $("<div class='right clearfix'></div>"),
@@ -469,7 +469,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                     a_p_username = $("<p class='pull-right primary-font strong'>" + "You" + "</p><br>"),
                     a_p_posting_time = $("<p class='pull-left text-muted small chat-answered-questions'><i class='fa fa-clock-o fa-fw'></i>" + answer_timestamp + "</p><br>"),
                     a_p_score = $("<p class='pull-left text-muted small chat-answered-questions'><i class='fa fa-bullseye fa-fw'></i>" + answer_upvote_score + "</p><br>"),
-                    a_p_answer_id = $("<p class='pull-left text-muted small chat-answered-questions'><i class='fa fa-bookmark fa-fw'></i>" + answer_id + "</p><br><br>"),
+                    // a_p_answer_id = $("<p class='pull-left text-muted small chat-answered-questions'><i class='fa fa-bookmark fa-fw'></i>" + answer_id + "</p><br><br>"),
                     a_p_text = $("<p class='chat-alignment-right'>" + answer_text + "</p>");
 
                 // Chains the question objects all together
@@ -477,7 +477,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 q_p_username.appendTo(q_header);
                 q_p_posting_time.appendTo(q_header);
                 q_p_score.appendTo(q_header);
-                q_p_question_id.appendTo(q_header);
+                // q_p_question_id.appendTo(q_header);
                 q_p_text.appendTo(q_header);
 
                 // Chains the answer objects all together
@@ -485,7 +485,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 a_p_username.appendTo(a_header);
                 a_p_posting_time.appendTo(a_header);
                 a_p_score.appendTo(a_header);
-                a_p_answer_id.appendTo(a_header);
+                // a_p_answer_id.appendTo(a_header);
                 a_p_text.appendTo(a_header);
 
                 // Appends all container objects to the top level DOM <li> element

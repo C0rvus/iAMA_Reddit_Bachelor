@@ -9,9 +9,9 @@ IAMA_Extension.UITopBar = function () {
     var that = {},
         body,
 
-        unanswered_Q = null,
+        open_Q = null,
         questioners = null,
-        upvotes = null,
+        votes = null,
         new_Q_Every_X = null,
         duration_D = null,
         /**
@@ -28,15 +28,21 @@ IAMA_Extension.UITopBar = function () {
         _onTopToDOM = function (event, data) {
 
             var thread_amount_unanswered_questions = data['thread_amount_unanswered_questions'],
+                thread_amount_questions = data['thread_amount_questions'],
                 thread_new_question_every_x_sec = data['thread_new_question_every_x_sec'],
                 thread_duration = data['thread_duration'],
                 thread_downs = data['thread_downs'],
                 thread_ups = data['thread_ups'],
                 thread_amount_questioners = data['thread_amount_questioners'];
 
-            unanswered_Q.text(thread_amount_unanswered_questions);
+            open_Q.text(thread_amount_questions - thread_amount_unanswered_questions + " / " + thread_amount_questions);
             questioners.text(thread_amount_questioners);
-            upvotes.text(thread_ups);
+
+            // Because the up- / downvotes element is rather complex we have to create it dynamically here
+            var votes_dom_element = $("<i class='fa fa-thumbs-o-up'></i> " + thread_ups + " / " + thread_downs + " <i class='fa fa-thumbs-o-down'></i>");
+            votes.empty();
+            votes.append(votes_dom_element);
+
             new_Q_Every_X.text(thread_new_question_every_x_sec);
             duration_D.text(thread_duration);
         },
@@ -46,9 +52,9 @@ IAMA_Extension.UITopBar = function () {
      */
         _initUI = function () {
 
-            unanswered_Q = $("#iAMA_Top_Unanswered_Q");
+            open_Q = $("#iAMA_Top_Open_Q");
             questioners = $("#iAMA_Top_Amount_Q");
-            upvotes = $("#iAMA_Top_Upvotes");
+            votes = $("#iAMA_Votes_Score");
             new_Q_Every_X = $("#iAMA_Top_New_Q_Every_X");
             duration_D = $("#iAMA_Top_Duration_D");
 

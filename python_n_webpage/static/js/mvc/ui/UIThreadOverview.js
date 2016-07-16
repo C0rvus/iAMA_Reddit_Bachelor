@@ -87,13 +87,11 @@ IAMA_Extension.UIThreadOverview = function () {
                 var t_uber_li_element = $("<li id='" + thread_id + "'>" + "</li>"),
                     thread_title = $("<i class='fa fa-th fa-fw'></i>" + title + "<br>"),
                     answer_ratio = $("<i class='fa fa-question-circle fa-fw'></i>" + amount_answered + "/" + amount_of_questions + " answered" + "<br>"),
-                    thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + "<br>"),
-                    id_of_thread = $("<i class='fa fa-tag fa-fw'></i>" + thread_id + "<br>");
+                    thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + "<br>");
 
                 thread_title.appendTo(t_uber_li_element);
                 answer_ratio.appendTo(t_uber_li_element);
                 thread_duration.appendTo(t_uber_li_element);
-                id_of_thread.appendTo(t_uber_li_element);
 
                 t_uber_li_element.appendTo(overview_Container);
                 
@@ -136,13 +134,11 @@ IAMA_Extension.UIThreadOverview = function () {
 
                     var thread_title = $("<i class='fa fa-th fa-fw'></i>" + title + "<br>"),
                         answer_ratio = $("<i class='fa fa-question-circle fa-fw'></i>" + amount_answered + "/" + amount_of_questions + " answered" + "<br>"),
-                        thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + " days ago" + "<br>"),
-                        id_of_thread = $("<i class='fa fa-tag fa-fw'></i>" + thread_id + "<br>");
+                        thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + " days ago" + "<br>");
 
                     thread_title.appendTo($(this));
                     answer_ratio.appendTo($(this));
                     thread_duration.appendTo($(this));
-                    id_of_thread.appendTo($(this));
 
                 }
             });

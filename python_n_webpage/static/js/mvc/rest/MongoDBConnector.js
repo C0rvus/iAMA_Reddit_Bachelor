@@ -372,7 +372,6 @@ IAMA_Extension.MongoDBConnector = function () {
                  * the thread overview, I do a generic REST call here, which also includes calculation of other things
                  * which will be discarded
                  */
-                // url: "http://127.0.0.1:5000/crawl_n_calculate/?an=uni_r_test_acc_1&t_id=&u_f_t=all&u_s_e=grt&u_s_n=-99999&u_s_d=asc&u_s_t=author&a_f_t=all&a_s_e=grt&a_s_n=-99999&a_s_d=asc&a_s_t=random",
                 url: "http://127.0.0.1:5000/crawl_n_calculate/?an=&t_id=&u_f_t=all&u_s_e=grt&u_s_n=-99999&u_s_d=asc&u_s_t=author&a_f_t=all&a_s_e=grt&a_s_n=-99999&a_s_d=asc&a_s_t=random",
                 success: _onSuccessInitialCall,
                 error: function () {
@@ -403,7 +402,7 @@ IAMA_Extension.MongoDBConnector = function () {
 
         _initVars();
         _initEvents();
-        _initialRestCall();
+        // _initialRestCall();
 
     };
     return that;

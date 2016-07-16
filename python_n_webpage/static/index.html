@@ -55,29 +55,6 @@
 
         </div>
 
-        <!--&lt;!&ndash; Navigation bar buttons &ndash;&gt;-->
-        <!--<ul class="nav navbar-top-links navbar-right">-->
-
-            <!--&lt;!&ndash; User profile icon &ndash;&gt;-->
-            <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
-                    <!--<i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>-->
-                <!--</a>-->
-
-                <!--&lt;!&ndash; Menu entries for user profile icon &ndash;&gt;-->
-                <!--<ul class="dropdown-menu dropdown-user">-->
-                    <!--<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>-->
-                    <!--</li>-->
-                    <!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
-                    <!--</li>-->
-                    <!--<li class="divider"></li>-->
-                    <!--<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</li>-->
-
-        <!--</ul>-->
-
         <!-- Left side bar -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
@@ -96,7 +73,11 @@
                         <i class="fa fa-clock-o  fa-fw"></i> thread_duration
                         <br>
 
-                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
+                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <br>
+
+
+
                     </li>
 
                     <!-- iAMA thread 2 -->
@@ -110,7 +91,6 @@
                         <i class="fa fa-clock-o  fa-fw"></i> thread_duration
                         <br>
 
-                        <i class="fa fa-tag  fa-fw"></i> id_thread_1
                     </li>
 
                 </ul>
@@ -206,8 +186,8 @@
 
                             <!-- Panel text (question) -->
                             <div class="col-xs-9 text-center">
-                                <div class="huge" id="iAMA_Top_Unanswered_Q">xxx</div>
-                                <div align="center">Unanswered questions</div>
+                                <div class="huge" id="iAMA_Top_Open_Q">xxx / zzz</div>
+                                <div align="center">Questions answered</div>
                             </div>
                         </div>
                     </div>
@@ -215,7 +195,7 @@
             </div>
 
             <!-- Questioners symbol -->
-            <div class="col-lg-3">
+            <div class="col-lg-2">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
@@ -234,21 +214,21 @@
                 </div>
             </div>
 
-            <!-- Scores symbol -->
-            <div class="col-lg-2">
+            <!-- Up / Dopwnvotes - Scores symbol -->
+            <div class="col-lg-3">
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
-                            <!-- Panel icon (upvotes) -->
-                            <div class="col-xs-3">
-                                <i class="fa fa-thumbs-o-up fa-5x"></i>
+
+                            <div class="col-xs-12 text-center">
+                                <div class="huge" id="iAMA_Votes_Score">
+                                    <i class="fa fa-thumbs-o-up"></i>
+                                    xx / zz
+                                    <i class="fa fa-thumbs-o-down"></i>
+                                </div>
+                                <div>Up - / Down votes</div>
                             </div>
 
-                            <!-- Panel text (upvotes) -->
-                            <div class="col-xs-9 text-center">
-                                <div class="huge" id="iAMA_Top_Upvotes">zz</div>
-                                <div>Upvotes</div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -489,10 +469,6 @@
 
                                         <br>
 
-                                        <!-- Question ID -->
-                                        <p class="pull-right text-muted small">
-                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </p>
                                     </div>
 
                                     <br>
@@ -516,7 +492,7 @@
                                 <div class="chat-body">
 
                                     <!-- Input field to enter your message -->
-                                    <textarea class="custom_chat" rows="3">Type your answer here...</textarea>
+                                    <textarea class="custom_chat" rows="3" placeholder="Type your answer here.."></textarea>
 
                                     <!-- Container which contains template and send button -->
                                     <div class="input-group-btn">
@@ -525,14 +501,13 @@
                                         <div class="chat_template_button">
 
                                             <button class="btn btn-warning btn-sm dropdown-toggle" id="btn-template_1"
-                                                    data-toggle="dropdown">Already answered
-                                                <i class="fa fa-check fa-fw"></i></button>
+                                                    data-toggle="dropdown">Already answered</button>
 
                                         </div>
 
                                         <!-- Send button to send that message -->
                                         <div class="chat_send_button">
-                                            <button class="btn btn-warning btn-sm " id="btn-chat_5">Send</button>
+                                            <button class="btn btn-warning btn-sm " id="btn-chat_5">Answer</button>
                                         </div>
 
                                     </div>
@@ -730,12 +705,6 @@
                                             xxx points <i class="fa fa-bullseye fa-fw"></i>
                                         </p>
                                         <br>
-
-                                        <!-- Question ID -->
-                                        <p class="pull-right text-muted small chat-answered-questions">
-                                            abcdefg - ID <i class="fa fa-bookmark fa-fw"></i>
-                                        </p>
-                                        <br>
                                         <br>
 
                                         <!-- The question text per se -->
@@ -767,12 +736,6 @@
                                         <!--Score -->
                                         <p class="pull-left text-muted small chat-answered-questions">
                                             <i class="fa fa-bullseye fa-fw"></i> xxx points
-                                        </p>
-                                        <br>
-
-                                        <!-- Question ID -->
-                                        <p class="pull-left text-muted small chat-answered-questions">
-                                            <i class="fa fa-bookmark fa-fw"></i> abcdefg - ID
                                         </p>
                                         <br>
                                         <br>

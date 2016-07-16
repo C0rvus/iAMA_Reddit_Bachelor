@@ -378,7 +378,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                                 // Appends the clicked id to the regarding answer text box
                                 //noinspection JSJQueryEfficiency
-                                $('#' + id_Of_Question + '_answer_box').val($('#' + id_Of_Question + '_answer_box').val() + "\n" +
+                                $('#' + id_Of_Question + '_answer_box').val("I have already answered your question. Please look it up under the following link: " + $('#' + id_Of_Question + '_answer_box').val() + "\n" +
                                     "https://www.reddit.com/r/Gigan/comments/" + id_of_actual_selected_thread + "/-/" + this.id);
 
                                 // Whenever the click has been set, unbind that given behaviour
@@ -492,25 +492,24 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                     q_p_username = $("<p class='primary-font strong'>" + question_author + "</p>"),
                     q_p_posting_time = $("<p class='pull-right text-muted small'>" + question_timestamp + "<i class='fa fa-clock-o fa-fw'></i> </p> <br>"),
                     q_p_score = $("<p class='pull-right text-muted small'>" + question_upvote_score + "<i class='fa fa-bullseye fa-fw'> </i> </p> <br>"),
-                    q_p_question_id = $("<p class='pull-right text-muted small'>" + question_id + "<i class='fa fa-bookmark fa-fw'> </i> </p>"),
+                    // q_p_question_id = $("<p class='pull-right text-muted small'>" + question_id + "<i class='fa fa-bookmark fa-fw'> </i> </p>"),
                     q_p_text = $("<br> <p>" + question_text + "</p>"),
 
                     q_answer_uber_container = $("<div class='chat-body'></div>"),
-                    q_answer_text_area = $("<textarea class='custom_chat' id=" + question_id + "_answer_box" + " rows='3'>Type your answer here...</textarea>"),
+                    q_answer_text_area = $("<textarea class='custom_chat' id=" + question_id + "_answer_box" + " rows='3' placeholder='Type your answer here..'></textarea>"),
 
                     q_answer_buttons_uber_container = $("<div class='input-group-btn'> </div>"),
                     q_answer_buttons_template_container = $("<div class='chat_template_button'>"),
-                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' data-toggle='dropdown'>Already answered <i class='fa fa-check fa-fw'></i></button>"),
+                    q_answer_buttons_template_button = $("<button class='btn btn-warning btn-sm dropdown-toggle' data-toggle='dropdown'>Already answered</button>"),
 
                     q_answer_buttons_send_container = $("<div class='chat_send_button'></div>"),
-                    q_answer_buttons_send_button = $("<button class='btn btn-warning btn-sm'>Send</button>");
+                    q_answer_buttons_send_button = $("<button class='btn btn-warning btn-sm'>Answer</button>");
 
                 // Chains the question objects all together
                 q_header.appendTo(q_uber_container);
                 q_p_username.appendTo(q_header);
                 q_p_posting_time.appendTo(q_header);
                 q_p_score.appendTo(q_header);
-                q_p_question_id.appendTo(q_header);
                 q_p_text.appendTo(q_header);
 
 
