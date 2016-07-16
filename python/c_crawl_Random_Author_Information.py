@@ -333,6 +333,12 @@ def get_author_information(name_of_author):
         return None
     # </editor-fold>
 
+    # To avoid lurkers we skip all authors who have created no thread at all
+    if amount_creation_other_threads == 0:
+        return None
+    else:
+        pass
+
     # Sort the content of the lists descending, which is necessary for correct time calculation
     timestamps_threads.sort(key=float, reverse=True)
     timestamps_comments.sort(key=float, reverse=True)

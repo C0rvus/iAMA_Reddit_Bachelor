@@ -146,6 +146,8 @@ def write_csv_data():
     else:
         file_name_csv = str(os.path.basename(__file__))[0:len(os.path.basename(__file__)) - 3] + '_random.csv'
 
+    print(str(file_name_csv))
+
     # The csv writer gets referenced here
     with open(file_name_csv, 'w', newline='') as fp:
 
@@ -177,6 +179,8 @@ argument_db_to_choose = ""
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Methods which are to be called are here
 
+# Checks necessary scripts arguments
+check_script_arguments()
 
 # Initializes the mongoDB with the arguments given via command line
 initialize_mongo_db_parameters()
