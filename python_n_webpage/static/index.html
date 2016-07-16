@@ -18,6 +18,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom CSS -->
+
     <link href="css/buttons.css" rel="stylesheet" type="text/css">
     <link href="css/chat.css" rel="stylesheet" type="text/css">
     <link href="css/misc.css" rel="stylesheet" type="text/css">
@@ -64,8 +65,10 @@
 
                     <!-- iAMA thread 1 -->
                     <li id="3yypuk">
-                        <i class="fa fa-th fa-fw"></i> thread_title_1
-                        <br>
+
+                        <div class="formatted_Thread">
+                            <strong>thread_title_1</strong>
+                        </div>
 
                         <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
                         <br>
@@ -73,17 +76,15 @@
                         <i class="fa fa-clock-o  fa-fw"></i> thread_duration
                         <br>
 
-                        <i class="fa fa-clock-o  fa-fw"></i> thread_duration
+                        <i class="fa fa-external-link"><a href="#"> View it on Reddit.com</a></i>
                         <br>
-
-
-
                     </li>
 
                     <!-- iAMA thread 2 -->
                     <li id="3z1znd">
-                        <i class="fa fa-th fa-fw"></i> thread_title_1
-                        <br>
+                        <div class="formatted_Thread">
+                            <strong>thread_title_2</strong>
+                        </div>
 
                         <i class="fa fa-question-circle fa-fw"></i> xx / yy answered
                         <br>
@@ -91,6 +92,8 @@
                         <i class="fa fa-clock-o  fa-fw"></i> thread_duration
                         <br>
 
+                        <i class="fa fa-external-link"><a href="#"> View it on Reddit.com</a></i>
+                        <br>
                     </li>
 
                 </ul>
@@ -174,8 +177,8 @@
         <!-- 1st row containing signal symbols -->
         <div class="row small" id="iAMA_Top_Bar_Div">
 
-            <!-- New questions symbol -->
-            <div class="col-lg-3">
+            <!-- Questions answered symbol -->
+            <div class="col-lg-2">
                 <div class="panel panel-red">
                     <div class="panel-heading">
                         <div class="row">
@@ -186,7 +189,7 @@
 
                             <!-- Panel text (question) -->
                             <div class="col-xs-9 text-center">
-                                <div class="huge" id="iAMA_Top_Open_Q">xxx / zzz</div>
+                                <div class="huge" id="iAMA_Top_Open_Q">xx / zz</div>
                                 <div align="center">Questions answered</div>
                             </div>
                         </div>
@@ -195,7 +198,7 @@
             </div>
 
             <!-- Questioners symbol -->
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
@@ -235,7 +238,7 @@
             </div>
 
             <!-- New question every x sec -->
-            <div class="col-lg-2">
+            <div class="col-lg-4">
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
                         <div class="row">
@@ -255,24 +258,24 @@
             </div>
 
             <!-- Thread duration symbol -->
-            <div class="col-lg-2">
-                <div class="panel panel-yellow-alternative">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <!-- Panel icon (questioners) -->
-                            <div class="col-xs-3">
-                                <i class="fa fa-clock-o fa-5x text-center"></i>
-                            </div>
+            <!--<div class="col-lg-2">-->
+                <!--<div class="panel panel-yellow-alternative">-->
+                    <!--<div class="panel-heading">-->
+                        <!--<div class="row">-->
+                            <!--&lt;!&ndash; Panel icon (questioners) &ndash;&gt;-->
+                            <!--<div class="col-xs-3">-->
+                                <!--<i class="fa fa-clock-o fa-5x text-center"></i>-->
+                            <!--</div>-->
 
-                            <!-- Panel text (questioners) -->
-                            <div class="col-xs-9 text-center">
-                                <div class="huge" id="iAMA_Top_Duration_D">xxx</div>
-                                <div>Duration (days)</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            <!--&lt;!&ndash; Panel text (questioners) &ndash;&gt;-->
+                            <!--<div class="col-xs-9 text-center">-->
+                                <!--<div class="huge" id="iAMA_Top_Duration_D"> x </div>-->
+                                <!--<div>Duration (days)</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 
         </div>
 

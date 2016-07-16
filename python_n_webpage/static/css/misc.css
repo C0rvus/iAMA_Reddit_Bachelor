@@ -86,8 +86,6 @@ body {
 }
 
 
-/*Nur zum Testn von paar Funktionen da*/
-
 .chat-answered-questions {
     margin: 0;
 }
@@ -98,4 +96,21 @@ body {
 
 .sorting_Selected {
     background-color: lightskyblue;
+}
+
+#iAMA_Thread_Overview {
+    font-size: 15px;
+}
+
+#iAMA_Thread_Overview li:hover {
+    cursor: pointer;
+    color: blue;
+}
+
+.formatted_Thread {
+    font-size: 20px;
+    font-weight:bold;
+    white-space:pre-line;
+    text-align: center;
+    margin-bottom: 10px;
 }
