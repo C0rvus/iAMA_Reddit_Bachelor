@@ -45,6 +45,36 @@
     border-radius: 10px;
 }
 
+.chat-message-question {
+    background: whitesmoke;
+    border-radius: 10px;
+}
+
+.chat-message-answer {
+    background: palegreen;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+#iAMA_Answer_Panel hr{
+    margin-bottom: 15px;
+}
+
+#iAMA_Answer_Panel li {
+    border: 1px dashed lightgreen;
+    border-radius: 5px;
+    border-spacing: 2px;
+}
+
+.iAMA_Answer_Panel_QA_Overview {
+    background: aliceblue;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    padding-right: 20px;
+
+}
+
 .chat-alignment-right {
     text-align: right;
 }
@@ -61,6 +91,7 @@
 .chat_template_button {
     float:left;
 }
+
 .chat_send_button {
     float:right;
     overflow: hidden;
