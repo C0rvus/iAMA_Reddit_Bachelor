@@ -653,8 +653,8 @@ class r_rest_Crawl_N_Calculate_Data:
             # Avoids index out of bounds error message
             if i != len(thread_answers_of_host) - 1:
                 answers_every_x_sec.append(
-                    self.calculate_time_difference(thread_answers_of_host [i].get("created_utc"),
-                                                   thread_answers_of_host [i + 1].get("created_utc")))
+                    self.calculate_time_difference(thread_answers_of_host[i].get("created_utc"),
+                                                   thread_answers_of_host[i + 1].get("created_utc")))
 
         # Assigns necessary values for correct calculation
         if len(question_scores) == 0:
@@ -1069,7 +1069,10 @@ class r_rest_Crawl_N_Calculate_Data:
                 "answer_id": None,
                 "answer_timestamp": None,
                 "answer_upvote_score": None,
-                "answer_text": None
+                "answer_text": None,
+
+                "overview_followup_questions": None,
+                "overview_followup_comments": None
             }
 
             # Iterates over every answer of the host
@@ -1086,11 +1089,62 @@ class r_rest_Crawl_N_Calculate_Data:
                     temp_list_q_n_a["answer_upvote_score"] = val_2.get('ups')
                     temp_list_q_n_a["answer_text"] = val_2.get('answer_text')
 
+                    # Hier nochmal drueber iterieren und schauen, welche val_2 wieviele sub comments hat
+                    array_followup_q_a = self.count_amount_follow_up_reactions(self, val_2.get('id_of_answer'))
+
+                    # Assigns the amount of follow up questions to the object to be returned
+                    temp_list_q_n_a["overview_followup_questions"] = array_followup_q_a[0]
+                    temp_list_q_n_a["overview_followup_comments"] = array_followup_q_a[1]
+
                     # Append that q & a combination to the global list
                     thread_questions_n_answers.append(temp_list_q_n_a)
 
                 else:
                     pass
+
+    @staticmethod
+    def count_amount_follow_up_reactions(self, id_of_answer):
+        """Counts the amount of follow up reactions
+
+            This method counts the amount of follow up questions regarding to the given answer.
+
+        Args:
+            self : Self reference - necessary to use methods within this class
+            id_of_answer : Id of the answer
+
+        Returns:
+            [amount_of_follow_up_questions, amount_of_follow_up_comments] : Amount of follow reactions
+
+        """
+        amount_of_follow_up_questions = 0
+        amount_of_follow_up_comments = 0
+
+        db_document_to_iterate_over = list(copy.copy(mongo_db_author_comments_instance[str(thread_id)].find()))
+
+        # Iterates over all reactions made regarding to that thread
+        for j, val_2 in enumerate(db_document_to_iterate_over):
+
+            # Whenever a reaction to the answer has been made, which is not from the thread author
+            if val_2.get('parent_id') == id_of_answer and val_2.get('author') != thread_author:
+
+                is_text_a_question = self.checker_comment_is_question(val_2.get('body'))
+
+                # Checks for text behaviour if it is a question or a comment
+                if is_text_a_question is True:
+                    amount_of_follow_up_questions += 1
+                else:
+                    amount_of_follow_up_comments += 1
+
+                # Recursive calling of method to check for reactions in the deeper hierarchies
+                check_for_afterwards_reactions = self.count_amount_follow_up_reactions(self, val_2.get('name'))
+
+                amount_of_follow_up_questions += check_for_afterwards_reactions[0]
+                amount_of_follow_up_comments += check_for_afterwards_reactions[1]
+
+            else:
+                pass
+
+        return [amount_of_follow_up_questions, amount_of_follow_up_comments]
 
     @staticmethod
     def prepare_unanswered_questions(self):

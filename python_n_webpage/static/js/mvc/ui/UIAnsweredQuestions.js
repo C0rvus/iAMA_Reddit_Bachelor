@@ -416,7 +416,9 @@ IAMA_Extension.UIAnsweredQuestions = function () {
             // Iterates over every q&a combination and patches the DOM elements together
             $.each( data, function( key, value ) {
 
-                var answer_id = value['answer_id'],
+                var overview_followup_questions = value['overview_followup_questions'],
+                    overview_followup_comments = value['overview_followup_comments'],
+                    answer_id = value['answer_id'],
                     answer_text = value['answer_text'].replace(new RegExp('\r?\n','g'), '<br>'),
                     answer_timestamp = value['answer_timestamp'],
                     answer_upvote_score = value['answer_upvote_score'],
@@ -446,6 +448,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 var separator_q_n_a = $("<hr class='ruler-answered-questions'>"),
 
                     li_top = $("<li class='left clearfix' id='" + answer_id + "'" + "> </li>"),
+                    qa_overview = $("<div class='iAMA_Answer_Panel_QA_Overview'><br>This answer lead to <br> <br> <strong>" + overview_followup_questions + " follow up questions <br> " + overview_followup_comments + " follow up comments</strong> </div>"),
 
                     // Building question containers here
                     q_uber_container = $("<div class='left clearfix chat-message-question'></div>"),
@@ -479,6 +482,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 a_p_text.appendTo(a_header);
 
                 // Appends all container objects to the top level DOM <li> element
+                qa_overview.appendTo(li_top);
                 q_uber_container.appendTo(li_top);
                 a_uber_container.appendTo(li_top);
 

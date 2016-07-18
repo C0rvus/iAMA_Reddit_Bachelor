@@ -402,7 +402,7 @@ IAMA_Extension.MongoDBConnector = function () {
 
         _initVars();
         _initEvents();
-        // _initialRestCall();
+        _initialRestCall();
 
     };
     return that;
