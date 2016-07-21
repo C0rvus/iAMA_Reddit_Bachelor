@@ -652,9 +652,10 @@ class r_rest_Crawl_N_Calculate_Data:
 
             # Avoids index out of bounds error message
             if i != len(thread_answers_of_host) - 1:
-                answers_every_x_sec.append(
-                    self.calculate_time_difference(thread_answers_of_host[i].get("created_utc"),
-                                                   thread_answers_of_host[i + 1].get("created_utc")))
+                # Necessary to get absolute number here, because calculation is distorted somehow
+                answers_every_x_sec.append(abs(
+                    self.calculate_time_difference(thread_answers_of_host[i + 1].get("created_utc"),
+                                                   thread_answers_of_host[i].get("created_utc"))))
 
         # Assigns necessary values for correct calculation
         if len(question_scores) == 0:
@@ -1248,6 +1249,8 @@ class r_rest_Crawl_N_Calculate_Data:
           """
 
         global json_object_to_return
+        global thread_average_reaction_time_host
+        global thread_new_question_every_x_sec
 
         data = {}
 
@@ -1275,6 +1278,34 @@ class r_rest_Crawl_N_Calculate_Data:
             new_answer_per_hour_converted = str("%.3f" % (1 / (int(thread_new_answer_every_x_sec) / 3600)))
             new_answer_per_hour_converted = new_answer_per_hour_converted.replace(".", ",")
 
+        # Converts the average reaction time of the host into days
+        if thread_average_reaction_time_host != 0:
+
+            # Whenever the amount of reaction time of the host exceeds 24 hours
+            # noinspection PyTypeChecker
+            if (thread_average_reaction_time_host / 3600) > 24:
+                # Converts the average reaction time of the host into days
+                thread_average_reaction_time_host = "%.2f" % (thread_average_reaction_time_host / 86400) + " days"
+
+            else:
+                thread_average_reaction_time_host = "%.2f" % (thread_average_reaction_time_host / 3600) + " hours"
+        else:
+            pass
+
+        # Converts the average reaction time of the host into days
+        if thread_new_question_every_x_sec != 0:
+
+            # Whenever the amount of reaction time of the host exceeds 24 hours
+            # noinspection PyTypeChecker
+            if (thread_new_question_every_x_sec / 3600) > 24:
+                # Converts the average reaction time of the host into days
+                thread_new_question_every_x_sec = "%.2f" % (thread_new_question_every_x_sec / 86400) + " days"
+
+            else:
+                thread_new_question_every_x_sec = "%.2f" % (thread_new_question_every_x_sec / 3600) + " hours"
+        else:
+            pass
+
         returned_json_top_panel = [{
             "thread_ups": thread_ups,
             "thread_downs": thread_downs,
@@ -1289,8 +1320,8 @@ class r_rest_Crawl_N_Calculate_Data:
         returned_json_statistics_panel = [{
             "thread_time_stamp_last_question": thread_time_stamp_last_question,
             "thread_average_question_score": "%.2f" % thread_average_question_score,
-            "thread_average_reaction_time_host": "%.2f" % thread_average_reaction_time_host,
-            "thread_new_question_every_x_sec": "%.2f" % thread_new_question_every_x_sec,
+            "thread_average_reaction_time_host": thread_average_reaction_time_host,
+            "thread_new_question_every_x_hours": thread_new_question_every_x_sec,
             "thread_amount_questions_tier_1": thread_amount_questions_tier_1,
             "thread_amount_questions_tier_x": thread_amount_questions_tier_x,
             "thread_question_top_score": thread_question_top_score,
