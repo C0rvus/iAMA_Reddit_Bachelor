@@ -26,7 +26,7 @@ IAMA_Extension.UIThreadOverview = function () {
                 $(this).click(function () {
 
                     // Triggers to write meta data text file
-                    _sendUsageMetaData("ThreadOverview: clicked '" + "'" + $(this).attr('id'));
+                    _sendUsageMetaData("ThreadOverview: clicked " + $(this).attr('id'));
 
                     // Removes "thread_selected" - class from every element
                     (overview_Container).children('li').each(function () {

@@ -257,13 +257,13 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @params: {String} id_of_question the id of the question the answer text blongs to
          * @private
          */
-        _appendOnClickListenerForSendButton = function (dom_Element, id_of_question) {
+        _appendOnClickListenerForSendButton = function (dom_Element, id_of_question, given_Question_Text) {
 
             return dom_Element.click("click", function () {
 
                 // Triggers to write meta data text file
                 //noinspection JSJQueryEfficiency
-                _sendUsageMetaData("(unanswered) Clicked SEND Button for '" + id_of_question + "' with following text: " + $("#" + id_of_question + "_answer_box").val());
+                _sendUsageMetaData("(unanswered) Clicked SEND Button for question '" + given_Question_Text + "' with following answer: " + $("#" + id_of_question + "_answer_box").val());
 
                 //noinspection JSJQueryEfficiency
                 var data = {"text": $("#" + id_of_question + "_answer_box").val()};
@@ -312,7 +312,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * answered questions
          *
          */
-        _appendOnClickListenerForAlreadyAnswered = function (dom_Element, id_Of_Question) {
+        _appendOnClickListenerForAlreadyAnswered = function (dom_Element, id_Of_Question, text_Of_Selected_Question) {
 
             var id_of_actual_selected_thread = "";
 
@@ -378,14 +378,15 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                                 // Appends the clicked id to the regarding answer text box
                                 //noinspection JSJQueryEfficiency
-                                $('#' + id_Of_Question + '_answer_box').val("I have already answered your question. Please look it up under the following link: " + $('#' + id_Of_Question + '_answer_box').val() + "\n" +
+                                $('#' + id_Of_Question + '_answer_box').val("Ich habe deine Frage bereits hier beantwortet: " + $('#' + id_Of_Question + '_answer_box').val() + "\n" +
                                     "https://www.reddit.com/r/Gigan/comments/" + id_of_actual_selected_thread + "/-/" + this.id);
 
                                 // Whenever the click has been set, unbind that given behaviour
                                 $('#iAMA_Answer_Panel').find('> li').unbind("click");
 
                                 // Triggers to write meta data text file
-                                _sendUsageMetaData("Already answered(unanswered): selected question_id: " + id_Of_Question);
+                                // _sendUsageMetaData("Already answered(unanswered): selected question_id: " + id_Of_Question);
+                                _sendUsageMetaData("Already answered(unanswered): selected question_text: " + text_Of_Selected_Question);
 
                             });
 
@@ -528,11 +529,11 @@ IAMA_Extension.UIUnansweredQuestions = function () {
 
                 // Appends an onclick listener to the "already answered button here"
                 //noinspection JSUnusedAssignment
-                q_answer_buttons_template_container = _appendOnClickListenerForAlreadyAnswered(q_answer_buttons_template_container, question_id);
+                q_answer_buttons_template_container = _appendOnClickListenerForAlreadyAnswered(q_answer_buttons_template_container, question_id, question_text);
 
                 // Appends an onclick listener for the send button
                 //noinspection JSUnusedAssignment
-                q_answer_buttons_send_button = _appendOnClickListenerForSendButton(q_answer_buttons_send_button, question_id);
+                q_answer_buttons_send_button = _appendOnClickListenerForSendButton(q_answer_buttons_send_button, question_id, question_text);
 
 
                 // Appends all container objects to the top level DOM <li> element
