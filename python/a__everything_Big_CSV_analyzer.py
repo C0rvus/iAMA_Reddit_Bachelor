@@ -13,6 +13,8 @@
 # https://stackoverflow.com/questions/12838993/scipy-normaltest-how-is-it-used
 # 7. (16.07.2016 @ 15:34) -
 # https://stackoverflow.com/a/17171819
+# 8. (23.07.2016 @ 18:42) -
+# https://stackoverflow.com/questions/13404468/t-test-in-pandas-python
 
 import copy  # Necessary to copy value of the starting year - needed for correct csv file name
 import pandas  # Necessary to do statistical calculation
@@ -20,6 +22,7 @@ import numpy as np  # Necessary to do statistical calculations
 from scipy.stats import pearsonr  # Necessary to calculate pearson correlation
 from scipy.stats import spearmanr  # Necessary to calculate spearman correlation
 from scipy.stats import kendalltau  # Necessary to calculate kendall correlation
+from scipy.stats import ttest_ind   # Necessary to do some t tests
 
 # By looking at all generated csv files we can use the following parameters for calculating various things:
 # [some depend on the tier they have been calculated from]
@@ -81,6 +84,8 @@ author_information_iama = pandas.read_csv(
 author_information_iama_sampleset_randomized = author_information_iama.ix[np.random.choice
 (author_information_iama.index.values, 10000)]
 
+
+
 # Reads the .csv file containing information about all, randomly chosen authors to the given database date
 author_information_random = pandas.read_csv(
     'a_author_Information_random.csv',
@@ -90,6 +95,8 @@ author_information_random = pandas.read_csv(
 # Randomly picks a given amount of rows from the dataset
 author_information_random_sampleset_randomized = author_information_random.ix[np.random.choice
 (author_information_random.index.values, 10000)]
+
+
 
 
 
@@ -3446,54 +3453,156 @@ def median_of_values_f_authors():
     print("Median - author_amount_creation_iama_threads: " + str(
         author_amount_creation_iama_threads_randomized.median()))
 
+    print("(std derivation): Median - author_amount_creation_iama_threads: " + str(
+        np.std(author_amount_creation_iama_threads_randomized)))
+
     print("Median - author_amount_creation_other_threads: " + str(
         author_amount_creation_other_threads_randomized.median()))
+
+    print("(std derivation): Median - author_amount_creation_other_threads: " + str(
+        np.std(author_amount_creation_other_threads_randomized)))
 
     print("Median - author_amount_of_comments_except_iama: " + str(
         author_amount_of_comments_except_iama_randomized.median()))
 
+    print("(std derivation): Median - author_amount_of_comments_except_iama: " + str(
+        np.std(author_amount_of_comments_except_iama_randomized)))
+
     print("Median - author_amount_of_comments_iama: " + str(
         author_amount_of_comments_iama_randomized.median()))
+
+    print("(std derivation): Median - author_amount_of_comments_iama: " + str(
+        np.std(author_amount_of_comments_iama_randomized)))
 
     print("Median - author_author_comment_karma_amount: " + str(
         author_author_comment_karma_amount_randomized.median()))
 
+    print("(std derivation): Median - author_author_comment_karma_amount: " + str(
+        np.std(author_author_comment_karma_amount_randomized)))
+
     print("Median - author_author_link_karma_amount: " + str(
         author_author_link_karma_amount_randomized.median()))
 
-    print("Median - author_time_acc_birth_first_iama_thread: " + str(
-        author_time_acc_birth_first_iama_thread_randomized.median()))
+    print("(std derivation): Median - author_author_link_karma_amount: " + str(
+        np.std(author_author_link_karma_amount_randomized)))
 
     print("----")
-    print("Skipping all NaN values here and calculating the remaining data means")
+    print("-- 1st thread stories")
+    print("----")
+
+    print("Median - author_time_acc_birth_first_iama_thread_randomized: " + str(
+        author_time_acc_birth_first_iama_thread_randomized.median()))
+
+    print("Arr. Mean - author_time_acc_birth_first_iama_thread_randomized: " + str(
+        author_time_acc_birth_first_iama_thread_randomized.mean()))
+
+    print("Median - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        author_time_diff_acc_creation_n_first_thread_randomized.median()))
+
+    print("Arr. Mean - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        author_time_diff_acc_creation_n_first_thread_randomized.mean()))
     print("----")
     print("----")
-    print("Calculating arithmetic medians for the 'iAMA' author here  (randomized!!)")
-    print("")
+    print("----")
     print("Median - random_author_amount_creation_iama_threads: " + str(
         random_author_amount_creation_iama_threads_randomized.median()))
 
-    print("Median - random_author_amount_creation_other_threads: " + str(
+    print("(std derivation) Median - random_author_amount_creation_iama_threads: " + str(
+        random_author_amount_creation_iama_threads_randomized.median()))
+
+    print(" Median - random_author_amount_creation_other_threads: " + str(
         random_author_amount_creation_other_threads_randomized.median()))
+
+    print("(std derivation): Median - random_author_amount_creation_other_threads: " + str(
+        np.std(random_author_amount_creation_other_threads_randomized)))
 
     print("Median - random_author_amount_of_comments_except_iama: " + str(
         random_author_amount_of_comments_except_iama_randomized.median()))
 
+    print("(std derivation): Median - random_author_amount_of_comments_except_iama: " + str(
+        np.std(random_author_amount_of_comments_except_iama_randomized)))
+
     print("Median - random_author_amount_of_comments_iama: " + str(
         random_author_amount_of_comments_iama_randomized.median()))
+
+    print("(std derivation): Median - random_author_amount_of_comments_iama: " + str(
+        np.std(random_author_amount_of_comments_iama_randomized)))
 
     print("Median - random_author_author_comment_karma_amount: " + str(
         random_author_author_comment_karma_amount_randomized.median()))
 
+    print("(std derivation) Median - random_author_author_comment_karma_amount: " + str(
+        np.std(random_author_author_comment_karma_amount_randomized)))
+
     print("Median - random_author_author_link_karma_amount: " + str(
         random_author_author_link_karma_amount_randomized.median()))
 
-    print("Median - random_author_time_acc_birth_first_iama_thread: " + str(
+    print("(std derivation): Median - random_author_author_link_karma_amount: " + str(
+        np.std(random_author_author_link_karma_amount_randomized)))
+
+    print("----")
+    print("-- 1st thread stories")
+    print("----")
+
+    print("Median - random_author_time_acc_birth_first_iama_thread_randomized: " + str(
         random_author_time_acc_birth_first_iama_thread_randomized.median()))
 
-    print("----")
-    print("Skipping all NaN values here and calculating the remaining data means")
-    print("----")
+    print("Arr. Mean - random_author_time_acc_birth_first_iama_thread_randomized: " + str(
+        random_author_time_acc_birth_first_iama_thread_randomized.mean()))
+
+    print("Median - random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        random_author_time_diff_acc_creation_n_first_thread_randomized.median()))
+
+    print("Arr. Mean - random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        random_author_time_diff_acc_creation_n_first_thread_randomized.mean()))
 
 
-median_of_values_f_authors()
+def calculate_t_tests_of_author_values():
+    print("calculating t-tests")
+
+    author_information_iama_sampleset_randomized_2 = author_information_iama.ix[np.random.choice(author_information_iama.index.values, 10000)]
+    author_information_random_sampleset_randomized_2 = author_information_random.ix[np.random.choice(author_information_random.index.values, 10000)]
+
+    # Variables regarding 'iAMA' authors are defined here (randomized!!)
+    author_amount_creation_iama_threads_randomized_2 = author_information_iama_sampleset_randomized_2['amount_creation_iama_threads']
+    author_amount_creation_other_threads_randomized_2 = author_information_iama_sampleset_randomized_2['amount_creation_other_threads']
+    author_amount_of_comments_except_iama_randomized_2 = author_information_iama_sampleset_randomized_2['amount_of_comments_except_iama']
+    author_amount_of_comments_iama_randomized_2 = author_information_iama_sampleset_randomized_2['amount_of_comments_iama']
+    author_author_birth_date_randomized_2 = author_information_iama_sampleset_randomized_2['author_birth_date']
+    author_author_comment_karma_amount_randomized_2 = author_information_iama_sampleset_randomized_2['author_comment_karma_amount']
+    author_author_link_karma_amount_randomized_2 = author_information_iama_sampleset_randomized_2['author_link_karma_amount']
+    author_author_name_randomized_2 = author_information_iama_sampleset_randomized_2['author_name']
+    author_comment_creation_every_x_sec_randomized_2 = author_information_iama_sampleset_randomized_2['comment_creation_every_x_sec']
+    author_thread_creation_every_x_sec_randomized_2 = author_information_iama_sampleset_randomized_2['thread_creation_every_x_sec']
+    author_time_acc_birth_first_iama_thread_randomized_2 = author_information_iama_sampleset_randomized_2['time_acc_birth_first_iama_thread']
+    author_time_diff_acc_creation_n_first_comment_randomized_2 = author_information_iama_sampleset_randomized_2['time_diff_acc_creation_n_first_comment']
+    author_time_diff_acc_creation_n_first_thread_randomized_2 = author_information_iama_sampleset_randomized_2['time_diff_acc_creation_n_first_thread']
+
+    # Variables regarding all random authors, who are not involved in 'iAMA' posts are made here (randomized!!)
+    random_author_amount_creation_iama_threads_randomized_2 = author_information_random_sampleset_randomized_2['amount_creation_iama_threads']
+    random_author_amount_creation_other_threads_randomized_2 = author_information_random_sampleset_randomized_2['amount_creation_other_threads']
+    random_author_amount_of_comments_except_iama_randomized_2 = author_information_random_sampleset_randomized_2['amount_of_comments_except_iama']
+    random_author_amount_of_comments_iama_randomized_2 = author_information_random_sampleset_randomized_2['amount_of_comments_iama']
+    random_author_author_birth_date_randomized_2 = author_information_random_sampleset_randomized_2['author_birth_date']
+    random_author_author_comment_karma_amount_randomized_2 = author_information_random_sampleset_randomized_2['author_comment_karma_amount']
+    random_author_author_link_karma_amount_randomized_2 = author_information_random_sampleset_randomized_2['author_link_karma_amount']
+    random_author_author_name_randomized_2 = author_information_random_sampleset_randomized_2['author_name']
+    random_author_comment_creation_every_x_sec_randomized_2 = author_information_random_sampleset_randomized_2['comment_creation_every_x_sec']
+    random_author_thread_creation_every_x_sec_randomized_2 = author_information_random_sampleset_randomized_2['thread_creation_every_x_sec']
+    random_author_time_acc_birth_first_iama_thread_randomized_2 = author_information_random_sampleset_randomized_2['time_acc_birth_first_iama_thread']
+    random_author_time_diff_acc_creation_n_first_comment_randomized_2 = author_information_random_sampleset_randomized_2['time_diff_acc_creation_n_first_comment']
+    random_author_time_diff_acc_creation_n_first_thread_randomized_2 = author_information_random_sampleset_randomized_2['time_diff_acc_creation_n_first_thread']
+
+    print("T-Test iAMA-Authors (randomized) : amount creation of iama threads", str(ttest_ind(author_amount_creation_iama_threads_randomized, author_amount_creation_iama_threads_randomized_2)))
+    print("T-Test iAMA-Authors (randomized) : amount creation of other threads", str(ttest_ind(author_amount_creation_other_threads_randomized, author_amount_creation_other_threads_randomized_2)))
+
+    print("T-Test iAMA-Authors (randomized) : amount of comments in iama threads", str(ttest_ind(author_amount_of_comments_iama_randomized, author_amount_of_comments_iama_randomized_2)))
+    print("T-Test iAMA-Authors (randomized) : amount of comments in other threads", str(ttest_ind(author_amount_of_comments_except_iama_randomized, author_amount_of_comments_except_iama_randomized_2)))
+
+    print("T-Test iAMA-Authors (randomized) : amount comment carma", str(ttest_ind(author_author_comment_karma_amount_randomized, author_author_comment_karma_amount_randomized_2)))
+
+    print("T-Test iAMA-Authors (randomized) : amount link karma", str(ttest_ind(author_author_link_karma_amount_randomized, author_author_link_karma_amount_randomized_2)))
+
+
+# median_of_values_f_authors()
+calculate_t_tests_of_author_values()
