@@ -13,11 +13,11 @@ password_for_all_test_accs = ""
 
 array_of_login_data = [
     ['C0rvuss', password_for_all_test_accs],
-    # ['uni_r_test_acc_2', password_for_all_test_accs],
-    # ['mister_Univerise_MEI', password_for_all_test_accs],
-    # ['de_dood_of_MEI', password_for_all_test_accs],
-    # ['muscle_Manager_XXX', password_for_all_test_accs],
-    # ['AlQaholic_1337', password_for_all_test_accs]
+    ['uni_r_test_acc_2', password_for_all_test_accs],
+    ['mister_Univerise_MEI', password_for_all_test_accs],
+    ['de_dood_of_MEI', password_for_all_test_accs],
+    ['muscle_Manager_XXX', password_for_all_test_accs],
+    ['AlQaholic_1337', password_for_all_test_accs]
 ]
 
 amount_of_questions_to_be_asked = 50
@@ -49,6 +49,7 @@ def get_questions_from_text_file():
 
             # Whenever the randomly picked line is not within the questions_to_be_asked - array : add it
             if randomized_line not in questions_to_be_asked:
+                print("Bin noch ned drinnen!")
                 questions_to_be_asked.append(randomized_line)
             else:
                 pass
@@ -71,10 +72,10 @@ def get_random_account():
 
     # Makes it possibly, that an account won't be selected for a second time
     # Due to some posting regarding limitations (allowance to only post every 9 minutes...)
-    if currently_selected_acc_data[0] != 'C0rvuss':
-        array_of_login_data.remove(currently_selected_acc_data)
-    else:
-        pass
+    # if currently_selected_acc_data[0] != 'C0rvuss':
+    #     array_of_login_data.remove(currently_selected_acc_data)
+    # else:
+    #     pass
 
 
 def log_in_with_acc_data():
@@ -85,7 +86,7 @@ def log_in_with_acc_data():
 def get_submission():
     global currently_selected_submission
 
-    currently_selected_submission = r.get_submission(submission_id="4ql7dd")
+    currently_selected_submission = r.get_submission(submission_id="4uzkmv")
 
 
 def post_question():
@@ -106,8 +107,9 @@ def post_question():
 
         # Whenever there are questions left to be asked
         if len(questions_to_be_asked) > 0:
-            comment.reply(questions_to_be_asked[0])
+            comment.reply("Und " + questions_to_be_asked[0])
             print("I have tried to respond / ask the following: " + str(questions_to_be_asked[0]))
+            questions_to_be_asked.pop(0)
         else:
             pass
 
@@ -122,10 +124,12 @@ def wait_random_amount_of_seconds():
 
 get_questions_from_text_file()
 
-for x in range(amount_of_questions_to_be_asked):
-    redefine_r_object()
-    get_random_account()
-    log_in_with_acc_data()
-    get_submission()
-    post_question()
-    wait_random_amount_of_seconds()
+print(questions_to_be_asked)
+
+# for x in range(amount_of_questions_to_be_asked):
+#     redefine_r_object()
+#     get_random_account()
+#     log_in_with_acc_data()
+#     get_submission()
+#     post_question()
+#     wait_random_amount_of_seconds()
