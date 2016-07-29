@@ -20,7 +20,7 @@ array_of_login_data = [
     ['AlQaholic_1337', password_for_all_test_accs]
 ]
 
-amount_of_questions_to_be_asked = 50
+amount_of_questions_to_be_asked = 25
 currently_selected_acc_data = None
 currently_selected_submission = None
 
@@ -38,18 +38,17 @@ def get_questions_from_text_file():
     global questions_to_be_asked
 
     # Opens the textfile and reads in line by line
-    read_file = open('w_posting_Bot_Questions.txt', 'r')
+    read_file = open('Proband_1.txt', 'r')
     lines = read_file.read().splitlines()
 
     # Try to iterate as often as possible over the randomly picked lines
     try:
-        for some_iter in range(10000):
+        for some_iter in range(9000000):
 
             randomized_line = random.choice(lines)
 
             # Whenever the randomly picked line is not within the questions_to_be_asked - array : add it
             if randomized_line not in questions_to_be_asked:
-                print("Bin noch ned drinnen!")
                 questions_to_be_asked.append(randomized_line)
             else:
                 pass
@@ -86,7 +85,7 @@ def log_in_with_acc_data():
 def get_submission():
     global currently_selected_submission
 
-    currently_selected_submission = r.get_submission(submission_id="4uzkmv")
+    currently_selected_submission = r.get_submission(submission_id="4v65th")
 
 
 def post_question():
@@ -124,7 +123,7 @@ def wait_random_amount_of_seconds():
 
 get_questions_from_text_file()
 
-print(questions_to_be_asked)
+print(str(len(questions_to_be_asked)), questions_to_be_asked)
 
 # for x in range(amount_of_questions_to_be_asked):
 #     redefine_r_object()

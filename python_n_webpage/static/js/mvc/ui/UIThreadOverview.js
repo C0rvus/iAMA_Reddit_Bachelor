@@ -88,7 +88,7 @@ IAMA_Extension.UIThreadOverview = function () {
                     thread_title = $("<div class='formatted_Thread'><strong>" + title + "</strong></div>"),
                     answer_ratio = $("<i class='fa fa-question-circle fa-fw'></i>" + amount_answered + " / " + amount_of_questions + " answered" + "<br>"),
                     thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + "<br>"),
-                    thread_link = $("<i class='fa fa-external-link'><a href='https://www.reddit.com/r/Gigan/comments/" + thread_id + "/' " + " target='_blank'> View it on Reddit.com</a></i><br>");
+                    thread_link = $("<i class='fa fa-external-link'><a href='https://www.reddit.com/r/miregensburg/comments/" + thread_id + "/' " + " target='_blank'> View it on Reddit.com</a></i><br>");
 
                 thread_title.appendTo(t_uber_li_element);
                 answer_ratio.appendTo(t_uber_li_element);
@@ -137,7 +137,7 @@ IAMA_Extension.UIThreadOverview = function () {
                     var thread_title = $("<div class='formatted_Thread'><strong>" + title + "</strong></div>"),
                         answer_ratio = $("<i class='fa fa-question-circle fa-fw'></i>" + amount_answered + " / " + amount_of_questions + " answered" + "<br>"),
                         thread_duration = $("<i class='fa fa-clock-o fa-fw'></i>" + duration + " days ago" + "<br>"),
-                        thread_link = $("<i class='fa fa-external-link'><a href='https://www.reddit.com/r/Gigan/comments/" + thread_id + "/' " + " target='_blank'> View it on Reddit.com</a></i><br>");
+                        thread_link = $("<i class='fa fa-external-link'><a href='https://www.reddit.com/r/miregensburg/comments/" + thread_id + "/' " + " target='_blank'> View it on Reddit.com</a></i><br>");
 
                     thread_title.appendTo($(this));
                     answer_ratio.appendTo($(this));

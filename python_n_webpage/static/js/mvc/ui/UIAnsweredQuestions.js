@@ -448,7 +448,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 var separator_q_n_a = $("<hr class='ruler-answered-questions'>"),
 
                     li_top = $("<li class='left clearfix' id='" + answer_id + "'" + "> </li>"),
-                    qa_overview = $("<div class='iAMA_Answer_Panel_QA_Overview'><br>This answer lead to <br> <br> <strong>" + overview_followup_questions + " follow up questions <br> " + overview_followup_comments + " follow up comments</strong> </div>"),
+                    // qa_overview = $("<div class='iAMA_Answer_Panel_QA_Overview'><br>This answer lead to <br> <br> <strong>" + overview_followup_questions + " follow up questions <br> " + overview_followup_comments + " follow up comments</strong> </div>"),
 
                     // Building question containers here
                     q_uber_container = $("<div class='left clearfix chat-message-question'></div>"),
@@ -482,7 +482,7 @@ IAMA_Extension.UIAnsweredQuestions = function () {
                 a_p_text.appendTo(a_header);
 
                 // Appends all container objects to the top level DOM <li> element
-                qa_overview.appendTo(li_top);
+                // qa_overview.appendTo(li_top);
                 q_uber_container.appendTo(li_top);
                 a_uber_container.appendTo(li_top);
 

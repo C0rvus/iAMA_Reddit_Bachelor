@@ -379,7 +379,7 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                                 // Appends the clicked id to the regarding answer text box
                                 //noinspection JSJQueryEfficiency
                                 $('#' + id_Of_Question + '_answer_box').val("Ich habe deine Frage bereits hier beantwortet: " + $('#' + id_Of_Question + '_answer_box').val() + "\n" +
-                                    "https://www.reddit.com/r/Gigan/comments/" + id_of_actual_selected_thread + "/-/" + this.id);
+                                    "https://www.reddit.com/r/miregensburg/comments/" + id_of_actual_selected_thread + "/-/" + this.id);
 
                                 // Whenever the click has been set, unbind that given behaviour
                                 $('#iAMA_Answer_Panel').find('> li').unbind("click");

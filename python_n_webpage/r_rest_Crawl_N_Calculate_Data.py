@@ -290,6 +290,7 @@ class r_rest_Crawl_N_Calculate_Data:
         # Sorts the list in alphabetically order
         amount_of_threads.sort()
 
+
         # The dict to be returned
         dict_to_be_returned = {
             "threads": amount_of_threads,

@@ -426,7 +426,7 @@ Before you start using the website make sure the following pre-requisites are fu
 
 - Successful running instance of mongoDB
 - Installation of Python (3.5.1) with all necessary libraries [i.e. pymongo, praw, etc] (used within my classes)
-- Creation of a iAMA thread within /r/Gigan - subreddit (I haven't been granted with the rights to create a subreddit
+- Creation of a iAMA thread within /r/miregensburg - subreddit (I haven't been granted with the rights to create a subreddit
 of my own, therefore we use an empty / abandoned subreddit here)
 
 If those pre-requisistes are fulfilled, navigte to "python_n_webpage" - folder and simply execute:
