@@ -3446,7 +3446,7 @@ def average_means_of_values_f_authors():
 # question_overall_correlation()
 
 
-def median_of_values_f_authors():
+def median_of_values_f_authors_randomized():
     print("----")
     print("Calculating arithmetic medians for the 'iAMA' author here (randomized!!)")
     print("")
@@ -3493,14 +3493,30 @@ def median_of_values_f_authors():
     print("Median - author_time_acc_birth_first_iama_thread_randomized: " + str(
         author_time_acc_birth_first_iama_thread_randomized.median()))
 
+    print("std derivation) Median - author_time_acc_birth_first_iama_thread_randomized: " + str(
+        np.std(author_time_acc_birth_first_iama_thread_randomized.median())))
+    print("----")
+
     print("Arr. Mean - author_time_acc_birth_first_iama_thread_randomized: " + str(
         author_time_acc_birth_first_iama_thread_randomized.mean()))
+
+    print("std derivation) Arr. Mean - author_time_acc_birth_first_iama_thread_randomized: " + str(
+        np.std(author_time_acc_birth_first_iama_thread_randomized.mean())))
+    print("----")
 
     print("Median - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
         author_time_diff_acc_creation_n_first_thread_randomized.median()))
 
+    print("std derivation) Median - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        np.std(author_time_diff_acc_creation_n_first_thread_randomized.median())))
+    print("----")
+
     print("Arr. Mean - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
         author_time_diff_acc_creation_n_first_thread_randomized.mean()))
+
+    print("std derivation) Arr. Mean - author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+        np.std(author_time_diff_acc_creation_n_first_thread_randomized.mean())))
+
     print("----")
     print("----")
     print("----")
@@ -3557,6 +3573,147 @@ def median_of_values_f_authors():
         random_author_time_diff_acc_creation_n_first_thread_randomized.mean()))
 
 
+def median_of_values_f_authors():
+    print("----")
+    print("Calculating arithmetic medians for the 'iAMA' author here")
+    print("")
+    print("Median - author_amount_creation_iama_threads: " + str(
+        author_amount_creation_iama_threads.median()))
+
+    print("(std derivation): Median - author_amount_creation_iama_threads: " + str(
+        np.std(author_amount_creation_iama_threads)))
+    print("")
+    print("Median - author_amount_creation_other_threads: " + str(
+        author_amount_creation_other_threads.median()))
+
+    print("(std derivation): Median - author_amount_creation_other_threads: " + str(
+        np.std(author_amount_creation_other_threads)))
+    print("")
+    print("Median - author_amount_of_comments_except_iama: " + str(
+        author_amount_of_comments_except_iama.median()))
+
+    print("(std derivation): Median - author_amount_of_comments_except_iama: " + str(
+        np.std(author_amount_of_comments_except_iama)))
+    print("")
+    print("Median - author_amount_of_comments_iama: " + str(
+        author_amount_of_comments_iama.median()))
+
+    print("(std derivation): Median - author_amount_of_comments_iama: " + str(
+        np.std(author_amount_of_comments_iama)))
+    print("")
+    print("Median - author_author_comment_karma_amount: " + str(
+        author_author_comment_karma_amount.median()))
+
+    print("(std derivation): Median - author_author_comment_karma_amount: " + str(
+        np.std(author_author_comment_karma_amount)))
+    print("")
+    print("Median - author_author_link_karma_amount: " + str(
+        author_author_link_karma_amount.median()))
+
+    print("(std derivation): Median - author_author_link_karma_amount: " + str(
+        np.std(author_author_link_karma_amount)))
+    print("")
+    print("----")
+    print("-- 1st thread stories")
+    print("----")
+
+    print("Median - author_time_acc_birth_first_iama_thread: " + str(
+        author_time_acc_birth_first_iama_thread.median()))
+
+    print("std derivation) Median - author_time_acc_birth_first_iama_thread: " + str(
+        np.std(author_time_acc_birth_first_iama_thread.median())))
+    print("----")
+
+    print("Arr. Mean - author_time_acc_birth_first_iama_thread: " + str(
+        author_time_acc_birth_first_iama_thread.mean()))
+
+    print("std derivation) Arr. Mean - author_time_acc_birth_first_iama_thread: " + str(
+        np.std(author_time_acc_birth_first_iama_thread.mean())))
+    print("----")
+
+    print("Median - author_time_diff_acc_creation_n_first_thread: " + str(
+        author_time_diff_acc_creation_n_first_thread.median()))
+
+    print("std derivation) Median - author_time_diff_acc_creation_n_first_thread: " + str(
+        np.std(author_time_diff_acc_creation_n_first_thread.median())))
+    print("----")
+
+    print("Arr. Mean - author_time_diff_acc_creation_n_first_thread: " + str(
+        author_time_diff_acc_creation_n_first_thread.mean()))
+
+    print("std derivation) Arr. Mean - author_time_diff_acc_creation_n_first_thread: " + str(
+        np.std(author_time_diff_acc_creation_n_first_thread.mean())))
+
+    # print("----")
+    # print("----")
+    # print("----")
+    # print("Median - random_author_amount_creation_iama_threads: " + str(
+    #     random_author_amount_creation_iama_threads.median()))
+    #
+    # print("(std derivation) Median - random_author_amount_creation_iama_threads: " + str(
+    #     random_author_amount_creation_iama_threads.median()))
+    # print("")
+    # print(" Median - random_author_amount_creation_other_threads: " + str(
+    #     random_author_amount_creation_other_threads.median()))
+    #
+    # print("(std derivation): Median - random_author_amount_creation_other_threads: " + str(
+    #     np.std(random_author_amount_creation_other_threads)))
+    # print("")
+    # print("Median - random_author_amount_of_comments_except_iama: " + str(
+    #     random_author_amount_of_comments_except_iama.median()))
+    #
+    # print("(std derivation): Median - random_author_amount_of_comments_except_iama: " + str(
+    #     np.std(random_author_amount_of_comments_except_iama)))
+    # print("")
+    # print("Median - random_author_amount_of_comments_iama: " + str(
+    #     random_author_amount_of_comments_iama.median()))
+    #
+    # print("(std derivation): Median - random_author_amount_of_comments_iama: " + str(
+    #     np.std(random_author_amount_of_comments_iama)))
+    # print("")
+    # print("Median - random_author_author_comment_karma_amount: " + str(
+    #     random_author_author_comment_karma_amount.median()))
+    #
+    # print("(std derivation) Median - random_author_author_comment_karma_amount: " + str(
+    #     np.std(random_author_author_comment_karma_amount)))
+    # print("")
+    # print("Median - random_author_author_link_karma_amount: " + str(
+    #     random_author_author_link_karma_amount.median()))
+    #
+    # print("(std derivation): Median - random_author_author_link_karma_amount: " + str(
+    #     np.std(random_author_author_link_karma_amount)))
+    #
+    # print("----")
+    # print("-- 1st thread stories")
+    # print("----")
+    #
+    # print("Median - random_author_time_acc_birth_first_iama_thread_randomized: " + str(
+    #     random_author_time_acc_birth_first_iama_thread.median()))
+    # print("(std derivation): Median - random_author_time_acc_birth_first_iama_thread: " + str(
+    #     np.std(random_author_time_acc_birth_first_iama_thread.median())))
+    # print("----")
+    #
+    # print("Arr. Mean - random_author_time_acc_birth_first_iama_thread: " + str(
+    #     random_author_time_acc_birth_first_iama_thread.mean()))
+    # print("(std derivation): Arr. Mean - random_author_time_diff_acc_creation_n_first_thread: " + str(
+    #     np.std(random_author_time_acc_birth_first_iama_thread.mean())))
+    # print("----")
+    #
+    # print("Median - random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+    #     random_author_time_diff_acc_creation_n_first_thread.median()))
+    # print("(std derivation) Median - random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+    #     np.std(random_author_time_diff_acc_creation_n_first_thread.median())))
+    # print("----")
+    #
+    # print("Arr. Mean - random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+    #     random_author_time_diff_acc_creation_n_first_thread.mean()))
+    # print("(std derivation) Arr. Mean- random_author_time_diff_acc_creation_n_first_thread_randomized: " + str(
+    #     np.std(random_author_time_diff_acc_creation_n_first_thread.mean())))
+    # print("----")
+
+
+    print("")
+
 def calculate_t_tests_of_author_values():
     print("calculating t-tests")
 
@@ -3604,5 +3761,5 @@ def calculate_t_tests_of_author_values():
     print("T-Test iAMA-Authors (randomized) : amount link karma", str(ttest_ind(author_author_link_karma_amount_randomized, author_author_link_karma_amount_randomized_2)))
 
 
-# median_of_values_f_authors()
-calculate_t_tests_of_author_values()
+median_of_values_f_authors()
+# calculate_t_tests_of_author_values()

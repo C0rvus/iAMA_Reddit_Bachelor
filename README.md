@@ -391,6 +391,39 @@ The year which is to be used for the calculation and represents when the calcula
     python a_thread_Lifespan_N_Average_Commenttime 2009 2010 lifespan minutes
 
 
+## a\_thread\_Lifespan\_N\_Average\_Questiontime.py
+This script calculates two things
+
+1. The average lifespan of a thread until the last reaction had been done (last question / comment posted)
+
+2. The average reaction time between posted questions 
+(so you can say.. in the year 2009 ever X seconds a new question has been posted)
+
+It also creates .csv-values with all values for the currently processed year (and all years) and additionally
+ creates an interactive chart which gives you some visual insight into the data and relations.
+
+    python a_thread_Lifespan_N_Average_Questiontime.py {year_beginning} {year_ending} {calc_type} {time}
+
+    
+* **year_beginning** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]** 
+The year which is to be used for the calculation
+
+* **year_ending** = **[2009 || 2010 || 2011 || 2012 || 2013 || 2014 || 2015 || 2016]**
+The year which is to be used for the calculation and represents when the calculation should stop
+
+* **calc** = **[lifespan || questions]** The type of data you want to calculate 
+
+* **time** = **[minutes || hours || days]** The time units in which the calculated values will be seperated into..
+ (necessary for graph plotting)
+
+
+*Usage examples shown down below*
+
+    python a_thread_Lifespan_N_Average_Questiontime 2009 2016 lifespan days
+    python a_thread_Lifespan_N_Average_Questiontime 2009 2012 comment hours
+    python a_thread_Lifespan_N_Average_Questiontime 2009 2010 lifespan minutes
+    
+
 # Generate one big data file:
 
 ## d\_create\_Big\_CSV.py
