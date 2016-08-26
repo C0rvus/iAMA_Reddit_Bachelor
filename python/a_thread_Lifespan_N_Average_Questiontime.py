@@ -509,6 +509,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     temp_thread = mongo_DB_Threads_Instance[id_of_thread]
     temp_thread_ups = temp_thread.find()[0].get("ups")
     temp_thread_downs = temp_thread.find()[0].get("downs")
+    temp_author = temp_thread.find()[0].get("author")
 
     # Contains the creation date of every comment in epoch time format
     time_list = []
@@ -558,7 +559,7 @@ def calculate_time_difference(id_of_thread, creation_date_of_thread):
     for i, val in enumerate(comments_cursor):
 
         # Whenever the iterated comment was created by user "AutoModerator" skip it
-        if (val.get("author")) != "AutoModerator":
+        if (val.get("author")) != "AutoModerator" and (val.get("author") != temp_author):
             if val.get("body") is not None:
                 if "?" in val.get("body"):
                     time_list.append(val.get("created_utc"))
@@ -724,8 +725,9 @@ def write_csv(list_with_information):
                  'Thread ups',
                  'Thread downs',
                  'Thread comments',
-                 'Thread life span (sec)',
-                 'Thread average comment reaction time (sec)',
+                 'Thread life span (sec) to last question',
+                 'Thread average question time (sec) arr',
+                 'Thread average question time (sec) median',
                  'Link to Thread']]
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
@@ -737,6 +739,7 @@ def write_csv(list_with_information):
                          str(item.get("Thread_num_comments")),
                          str(item.get("Thread_life_span")),
                          str(item.get("Arithmetic_mean_response_time")),
+                         str(item.get("Median_Response_Time")),
                          'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)

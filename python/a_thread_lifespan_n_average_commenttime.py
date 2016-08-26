@@ -716,8 +716,9 @@ def write_csv(list_with_information):
                  'Thread ups',
                  'Thread downs',
                  'Thread comments',
-                 'Thread life span (sec)',
-                 'Thread average comment reaction time (sec)',
+                 'Thread life span (sec) to last reaction of anyone',
+                 'Thread average mean comment reaction time (sec)',
+                 'Thread median comment reaction time (sec)',
                  'Link to Thread']]
 
         # Iterates over that generated sorted and counts the amount of questions which have not been answered
@@ -729,6 +730,7 @@ def write_csv(list_with_information):
                          str(item.get("Thread_num_comments")),
                          str(item.get("Thread_life_span")),
                          str(item.get("Arithmetic_mean_response_time")),
+                         str(item.get("Median_Response_Time")),
                          'https://www.reddit.com/r/IAma/' + str(item.get("Thread_id"))
                          ]
             data.append(temp_list)
