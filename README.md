@@ -106,6 +106,8 @@ containing the following information:
 
 >	"body"		=		The text of the comment
 
+>	"created_utc"=		The timestamp when that comment has been created (timestamp is in unix epoch formatation)
+
 >	"name"		=		The id of the thread within the hierarchy [i.e. t1_c09vabt]
 
 >	"parent_id"	=		The id to which that comment relates to in the hierarchy [i.e. t3_8nron]

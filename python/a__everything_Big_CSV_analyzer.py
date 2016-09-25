@@ -102,7 +102,7 @@ author_information_random_sampleset_randomized = author_information_random.ix[np
 
 # Reads the .csv file which will contain information about all iAMA threads posted
 thread_information = pandas.read_csv(
-    'd_create_Big_CSV_2009_until_2016_BIGDATA_ALL.csv',
+    'all.csv',
     sep=',',
     na_values="None")
 
@@ -114,9 +114,9 @@ question_information = pandas.read_csv(
     low_memory=False)
 
 # Would replace NaN with zeroes:
-# thread_information.fillna(0, inplace=True)
+thread_information.fillna(0, inplace=True)
 # thread_information.dropna(0, inplace=True)
-# question_information.fillna(0, inplace=True)
+question_information.fillna(0, inplace=True)
 
 # Skips NaN-Values here which is necessary for correct t-test (significance) calculation
 # NaN-Values for authors won't be skipped here, because there are many authors who only create one iAMA thread
@@ -195,107 +195,109 @@ random_author_time_diff_acc_creation_n_first_comment_randomized = \
 random_author_time_diff_acc_creation_n_first_thread_randomized = author_information_random_sampleset_randomized[
     'time_diff_acc_creation_n_first_thread']
 
+question_ups = question_information['Question ups']
+question_answered_by_iAMA_host = question_information['Question answered by iAMA host']
 
 
 # Variables regarding all 'iAMA' threads are defined here
-# thread_year = thread_information['Year']
-# thread_id = thread_information['Thread id']
-# thread_author = thread_information['Thread author']
-# thread_ups = thread_information['Thread ups']
-# thread_downs = thread_information['Thread downs']
-# thread_creation_time_stamp = thread_information['Thread creation time stamp']
-#
-# thread_average_comment_vote_score_total = thread_information[
-#     'Thread average comment vote score total']
-#
-# thread_average_comment_vote_score_tier_1 = thread_information[
-#     'Thread average comment vote score tier 1']
-# thread_average_comment_vote_score_tier_x = thread_information[
-#     'Thread average comment vote score tier x']
-#
-# thread_average_question_vote_score_total = thread_information[
-#     'Thread average question vote score total']
-# thread_average_question_vote_score_tier_1 = thread_information[
-#     'Thread average question vote score tier 1']
-# thread_average_question_vote_score_tier_x = thread_information[
-#     'Thread average question vote score tier x']
-#
-# thread_num_comments_total_skewed = thread_information[
-#     'Thread num comments total skewed']
-# thread_num_comments_total = thread_information['Thread num comments total']
-# thread_num_comments_tier_1 = thread_information['Thread num comments tier 1']
-# thread_num_comments_tier_x = thread_information['Thread num comments tier x']
-#
-# thread_num_questions_total = thread_information['Thread num questions total']
-# thread_num_questions_tier_1 = thread_information['Thread num questions tier 1']
-# thread_num_questions_tier_x = thread_information['Thread num questions tier x']
-#
-# thread_num_questions_answered_by_iama_host_total = thread_information[
-#     'Thread num questions answered by iama host total']
-# thread_num_questions_answered_by_iama_host_tier_1 = thread_information[
-#     'Thread num questions answered by iama host tier 1']
-# thread_num_questions_answered_by_iama_host_tier_x = thread_information[
-#     'Thread num questions answered by iama host tier x']
-#
-# thread_num_comments_answered_by_iama_host_total = thread_information[
-#     'Thread num comments answered by iama host total']
-# thread_num_comments_answered_by_iama_host_tier_1 = thread_information[
-#     'Thread num comments answered by iama host tier 1']
-# thread_num_comments_answered_by_iama_host_tier_x = thread_information[
-#     'Thread num comments answered by iama host tier x']
-#
-# thread_average_reaction_time_between_comments_total = thread_information[
-#     'Thread average reaction time between comments total']
-# thread_average_reaction_time_between_comments_tier_1 = thread_information[
-#     'Thread average reaction time between comments tier 1']
-# thread_average_reaction_time_between_comments_tier_x = thread_information[
-#     'Thread average reaction time between comments tier x']
-#
-# thread_average_reaction_time_between_questions_total = thread_information[
-#     'Thread average reaction time between questions total']
-# thread_average_reaction_time_between_questions_tier_1 = thread_information[
-#     'Thread average reaction time between questions tier 1']
-# thread_average_reaction_time_between_questions_tier_x = thread_information[
-#     'Thread average reaction time between questions tier x']
-#
-# thread_average_response_to_comment_time_iama_host_total = thread_information[
-#     'Thread average response to comment time iama host total']
-# thread_average_response_to_comment_time_iama_host_tier_1 = thread_information[
-#     'Thread average response to comment time iama host tier 1']
-# thread_average_response_to_comment_time_iama_host_tier_x = thread_information[
-#     'Thread average response to comment time iama host tier x']
-#
-# thread_average_response_to_question_time_iama_host_total = thread_information[
-#     'Thread average response to question time iama host total']
-# thread_average_response_to_question_time_iama_host_tier_1 = thread_information[
-#     'Thread average response to question time iama host tier 1']
-# thread_average_response_to_question_time_iama_host_tier_x = thread_information[
-#     'Thread average response to question time iama host tier x']
-#
-# thread_amount_of_questioners_total = thread_information[
-#     'Thread amount of questioners total']
-# thread_amount_of_questioners_tier_1 = thread_information[
-#     'Thread amount of questioners tier 1']
-# thread_amount_of_questioners_tier_x = thread_information[
-#     'Thread amount of questioners tier x']
-#
-# thread_amount_of_commentators_total = thread_information[
-#     'Thread amount of commentators total']
-# thread_amount_of_commentators_tier_1 = thread_information[
-#     'Thread amount of commentators tier 1']
-# thread_amount_of_commentators_tier_x = thread_information[
-#     'Thread amount of commentators tier x']
-#
-#
-# thread_life_span_until_last_comment = thread_information[
-#     'Thread life span until last comment']
-# thread_life_span_until_last_question = thread_information[
-#     'Thread life span until last question']
-#
-# # Variables regarding all 'iAMA' questions are defined here
-# question_ups = question_information['Question ups']
-# question_answered_by_iAMA_host = question_information[
-#     'Question answered by iAMA host']
+thread_year = thread_information['Year']
+thread_id = thread_information['Thread id']
+thread_author = thread_information['Thread author']
+thread_ups = thread_information['Thread ups']
+thread_downs = thread_information['Thread downs']
+thread_creation_time_stamp = thread_information['Thread creation time stamp']
+
+thread_average_comment_vote_score_total = thread_information[
+    'Thread average comment vote score total']
+
+thread_average_comment_vote_score_tier_1 = thread_information[
+    'Thread average comment vote score tier 1']
+thread_average_comment_vote_score_tier_x = thread_information[
+    'Thread average comment vote score tier x']
+
+thread_average_question_vote_score_total = thread_information[
+    'Thread average question vote score total']
+thread_average_question_vote_score_tier_1 = thread_information[
+    'Thread average question vote score tier 1']
+thread_average_question_vote_score_tier_x = thread_information[
+    'Thread average question vote score tier x']
+
+thread_num_comments_total_skewed = thread_information[
+    'Thread num comments total skewed']
+thread_num_comments_total = thread_information['Thread num comments total']
+thread_num_comments_tier_1 = thread_information['Thread num comments tier 1']
+thread_num_comments_tier_x = thread_information['Thread num comments tier x']
+
+thread_num_questions_total = thread_information['Thread num questions total']
+thread_num_questions_tier_1 = thread_information['Thread num questions tier 1']
+thread_num_questions_tier_x = thread_information['Thread num questions tier x']
+
+thread_num_questions_answered_by_iama_host_total = thread_information[
+    'Thread num questions answered by iama host total']
+thread_num_questions_answered_by_iama_host_tier_1 = thread_information[
+    'Thread num questions answered by iama host tier 1']
+thread_num_questions_answered_by_iama_host_tier_x = thread_information[
+    'Thread num questions answered by iama host tier x']
+
+thread_num_comments_answered_by_iama_host_total = thread_information[
+    'Thread num comments answered by iama host total']
+thread_num_comments_answered_by_iama_host_tier_1 = thread_information[
+    'Thread num comments answered by iama host tier 1']
+thread_num_comments_answered_by_iama_host_tier_x = thread_information[
+    'Thread num comments answered by iama host tier x']
+
+thread_average_reaction_time_between_comments_total = thread_information[
+    'Thread average reaction time between comments total']
+thread_average_reaction_time_between_comments_tier_1 = thread_information[
+    'Thread average reaction time between comments tier 1']
+thread_average_reaction_time_between_comments_tier_x = thread_information[
+    'Thread average reaction time between comments tier x']
+
+thread_average_reaction_time_between_questions_total = thread_information[
+    'Thread average reaction time between questions total']
+thread_average_reaction_time_between_questions_tier_1 = thread_information[
+    'Thread average reaction time between questions tier 1']
+thread_average_reaction_time_between_questions_tier_x = thread_information[
+    'Thread average reaction time between questions tier x']
+
+thread_average_response_to_comment_time_iama_host_total = thread_information[
+    'Thread average response to comment time iama host total']
+thread_average_response_to_comment_time_iama_host_tier_1 = thread_information[
+    'Thread average response to comment time iama host tier 1']
+thread_average_response_to_comment_time_iama_host_tier_x = thread_information[
+    'Thread average response to comment time iama host tier x']
+
+thread_average_response_to_question_time_iama_host_total = thread_information[
+    'Thread average response to question time iama host total']
+thread_average_response_to_question_time_iama_host_tier_1 = thread_information[
+    'Thread average response to question time iama host tier 1']
+thread_average_response_to_question_time_iama_host_tier_x = thread_information[
+    'Thread average response to question time iama host tier x']
+
+thread_amount_of_questioners_total = thread_information[
+    'Thread amount of questioners total']
+thread_amount_of_questioners_tier_1 = thread_information[
+    'Thread amount of questioners tier 1']
+thread_amount_of_questioners_tier_x = thread_information[
+    'Thread amount of questioners tier x']
+
+thread_amount_of_commentators_total = thread_information[
+    'Thread amount of commentators total']
+thread_amount_of_commentators_tier_1 = thread_information[
+    'Thread amount of commentators tier 1']
+thread_amount_of_commentators_tier_x = thread_information[
+    'Thread amount of commentators tier x']
+
+
+thread_life_span_until_last_comment = thread_information[
+    'Thread life span until last comment']
+thread_life_span_until_last_question = thread_information[
+    'Thread life span until last question']
+
+# Variables regarding all 'iAMA' questions are defined here
+question_ups = question_information['Question ups']
+question_answered_by_iAMA_host = question_information[
+    'Question answered by iAMA host']
 
 
 # Correlation question upvotes <-> amount of questions answered by the
@@ -313,16 +315,16 @@ def relation_question_upvotes_with_amount_of_questions_answered_by_iama_host():
     print("----")
     print("Calculating correlation between 'question_ups' and 'question_answered_by_iAMA_host':")
     print("")
+    #
+    # print("Pearson correlation coefficient: " +
+    #       str(pearsonr(question_ups, question_answered_by_iAMA_host) [0]))
+    # print("Pearson correlation p-value: " +
+    #       str(pearsonr(question_ups, question_answered_by_iAMA_host) [1]))
 
-    print("Pearson correlation coefficient: " +
-          str(pearsonr(question_ups, question_answered_by_iAMA_host) [0]))
-    print("Pearson correlation p-value: " +
-          str(pearsonr(question_ups, question_answered_by_iAMA_host) [1]))
-
-    print("Kendall correlation coefficient: " +
-          str(kendalltau(question_ups, question_answered_by_iAMA_host) [0]))
-    print("Kendall correlation p-value: " +
-          str(kendalltau(question_ups, question_answered_by_iAMA_host) [1]))
+    # print("Kendall correlation coefficient: " +
+    #       str(kendalltau(question_ups, question_answered_by_iAMA_host) [0]))
+    # print("Kendall correlation p-value: " +
+    #       str(kendalltau(question_ups, question_answered_by_iAMA_host) [1]))
 
     print("Spearman correlation coefficient: " +
           str(spearmanr(question_ups, question_answered_by_iAMA_host) [0]))
@@ -3397,55 +3399,6 @@ def average_means_of_values_f_authors():
         #
         # print("Average arithmetic mean - random_author_time_diff_acc_creation_n_first_thread: " + str(
         #     random_author_time_diff_acc_creation_n_first_thread.mean()))
-
-
-# Start that calculation
-
-# relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
-#
-# average_means_of_values_f_threads()
-#
-# average_means_of_values_f_authors()
-#
-#
-# relation_thread_upvotes_with_amount_of_comments()
-# relation_thread_upvotes_with_amount_of_questions()
-# relation_thread_downvotes_with_amount_of_comments()
-# relation_thread_downvotes_with_amount_of_questions()
-#
-# relation_thread_upvotes_and_iama_host_response_time_comments()
-# relation_thread_upvotes_and_iama_host_response_time_questions()
-# relation_thread_downvotes_and_iama_host_response_time_comments()
-# relation_thread_downvotes_and_iama_host_response_time_questions()
-#
-# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
-# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
-# relation_thread_lifespan_to_last_question_and_amount_of_comments()
-# relation_thread_lifespan_to_last_question_and_amount_of_question()
-#
-# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
-# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
-# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
-# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
-#
-# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
-# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
-# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
-# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
-#
-# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
-# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
-# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
-# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
-#
-# relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
-#
-# relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
-#
-# thread_overall_correlation()
-# question_overall_correlation()
-
-
 def median_of_values_f_authors_randomized():
     print("----")
     print("Calculating arithmetic medians for the 'iAMA' author here (randomized!!)")
@@ -3905,4 +3858,56 @@ def calculate_t_tests_of_author_values():
 
 # median_of_values_f_authors()
 # calculate_t_tests_of_author_values()
-arr_of_values_f_authors()
+# arr_of_values_f_authors()
+
+# Start that calculation
+
+relation_question_upvotes_with_amount_of_questions_answered_by_iama_host()
+#
+# average_means_of_values_f_threads()
+#
+# average_means_of_values_f_authors()
+#
+#
+# relation_thread_upvotes_with_amount_of_comments()
+# relation_thread_upvotes_with_amount_of_questions()
+# relation_thread_downvotes_with_amount_of_comments()
+# relation_thread_downvotes_with_amount_of_questions()
+# ------------
+
+# relation_thread_upvotes_and_iama_host_response_time_comments()
+# relation_thread_upvotes_and_iama_host_response_time_questions()
+# relation_thread_downvotes_and_iama_host_response_time_comments()
+# relation_thread_downvotes_and_iama_host_response_time_questions()
+#
+# relation_thread_lifespan_to_last_comment_and_amount_of_comments()
+# relation_thread_lifespan_to_last_comment_and_amount_of_questions()
+# relation_thread_lifespan_to_last_question_and_amount_of_comments()
+# relation_thread_lifespan_to_last_question_and_amount_of_question()
+#
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_comment_and_iama_host_response_time_to_questions()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_comments()
+# relation_thread_lifespan_to_last_question_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_comments_and_iama_host_response_time_to_questions()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_comments()
+# relation_thread_reaction_time_questions_and_iama_host_response_time_to_questions()
+#
+# relation_thread_reaction_time_comments_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_comments_and_amount_of_questions_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_comments_the_iama_host_answered_to()
+# relation_thread_reaction_time_questions_and_amount_of_questions_the_iama_host_answered_to()
+
+
+# --------
+
+# relation_thread_amount_of_questioners_total_and_num_questions_answered_by_iama_host()
+#
+# relation_thread_amount_of_questions_and_amount_questions_answered_by_iama_host()
+#
+# thread_overall_correlation()
+# question_overall_correlation()
+
+

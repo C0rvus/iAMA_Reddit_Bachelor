@@ -286,6 +286,12 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 // Subtract by one, because we have posted a message on reddit here
                 amount_Questions_Left_On_Send -= 1;
 
+                // $('#' + id_of_question).hide();
+                // $('#' + id_of_question).remove();
+                $('#' + id_of_question).fadeOut("slow", function() {
+                    // Animation complete.
+                });
+
                 //noinspection JSCheckFunctionSignatures
                 BootstrapDialog.show({
                     title: 'Sending data to to reddit now...',
@@ -297,6 +303,9 @@ IAMA_Extension.UIUnansweredQuestions = function () {
                 // Triggesr the id of the question which is to be answered and the appropriate text, already stringified
                 // to reddit
                 $(body).trigger('Post_To_Reddit', [[[id_of_question], [JSON.stringify(data)]]]);
+
+
+
 
             });
 
@@ -767,31 +776,32 @@ IAMA_Extension.UIUnansweredQuestions = function () {
          * @private
          */
         _checkIfQuestionRetrievalIsOk = function (event, data) {
-            var temp_Question_Checker = 0;
-
-            // Iterates over all questions within the received data array
-            $.each(data, function () {
-                temp_Question_Checker += 1;
-            });
-
-            // Whenever the amount of received questions is the same as the previously counted amount
-            if ((temp_Question_Checker === amount_Questions_Left_On_Send) ||
-                (amount_Questions_Left_On_Send === null)) {
-
-                // Give the questions to that method and display them on the page!
+            // var temp_Question_Checker = 0;
+            //
+            // // Iterates over all questions within the received data array
+            // $.each(data, function () {
+            //     temp_Question_Checker += 1;
+            // });
+            //
+            // // Whenever the amount of received questions is the same as the previously counted amount
+            // if ((temp_Question_Checker === amount_Questions_Left_On_Send) ||
+            //     (amount_Questions_Left_On_Send === null)) {
+            //
+            //     // Give the questions to that method and display them on the page!
                 _onQuestionsToDOM(event, data);
-
-                // By switching between the threads resetting it to null is necessary, otherwise there would be an
-                // unlimited refresh
-                amount_Questions_Left_On_Send = null;
-
-                // Whenever we have received old data [old questions which have already been answered] request them anew
-            } else {
-                // Because this else tree gets executed like a while loop (I do not know why) I have included a
-                // 15 seconds pause to not flood the FLASK REST-Service... But it uses between 5 to 15 seconds randomly.
-                _sleepNow(15000);
-                _fakeClickRefreshButton();
-            }
+            //
+            //     // By switching between the threads resetting it to null is necessary, otherwise there would be an
+            //     // unlimited refresh
+            //     amount_Questions_Left_On_Send = null;
+            //
+            //     // Whenever we have received old data [old questions which have already been answered] request them anew
+            // } else {
+            //     // Because this else tree gets executed like a while loop (I do not know why) I have included a
+            //     // 15 seconds pause to not flood the FLASK REST-Service... But it uses between 5 to 15 seconds randomly.
+            //     console.log("BIN in While loop hier !!!");
+            //     _sleepNow(30000);
+            //     _fakeClickRefreshButton();
+            // }
 
         },
 

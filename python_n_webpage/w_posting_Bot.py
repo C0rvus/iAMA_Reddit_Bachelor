@@ -20,7 +20,7 @@ array_of_login_data = [
     ['AlQaholic_1337', password_for_all_test_accs]
 ]
 
-amount_of_questions_to_be_asked = 25
+amount_of_questions_to_be_asked = 35
 currently_selected_acc_data = None
 currently_selected_submission = None
 
@@ -38,7 +38,7 @@ def get_questions_from_text_file():
     global questions_to_be_asked
 
     # Opens the textfile and reads in line by line
-    read_file = open('Proband_1.txt', 'r')
+    read_file = open('Proband_11.txt', 'r')
     lines = read_file.read().splitlines()
 
     # Try to iterate as often as possible over the randomly picked lines
@@ -85,7 +85,7 @@ def log_in_with_acc_data():
 def get_submission():
     global currently_selected_submission
 
-    currently_selected_submission = r.get_submission(submission_id="4v65th")
+    currently_selected_submission = r.get_submission(submission_id="53hyuc")
 
 
 def post_question():
@@ -114,7 +114,7 @@ def post_question():
 
 
 def wait_random_amount_of_seconds():
-    time_to_sleep = random.randint(10, 30)
+    time_to_sleep = random.randint(15, 35)
     print("Waiting " + str(time_to_sleep) + " seconds")
 
     time.sleep(time_to_sleep)
@@ -123,12 +123,10 @@ def wait_random_amount_of_seconds():
 
 get_questions_from_text_file()
 
-print(str(len(questions_to_be_asked)), questions_to_be_asked)
-
-# for x in range(amount_of_questions_to_be_asked):
-#     redefine_r_object()
-#     get_random_account()
-#     log_in_with_acc_data()
-#     get_submission()
-#     post_question()
-#     wait_random_amount_of_seconds()
+for x in range(amount_of_questions_to_be_asked):
+    redefine_r_object()
+    get_random_account()
+    log_in_with_acc_data()
+    get_submission()
+    post_question()
+    wait_random_amount_of_seconds()
